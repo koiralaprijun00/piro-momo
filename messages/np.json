@@ -1,5 +1,6 @@
 {
   "Translations": {
+    "homePageTagline": "सँगै खेल्दै नेपालसँगको आत्मीयता बढाउनुहोस्!",
       "guessTemple": {
         "title": "मन्दिर चिन्नुहोस्",
         "description": "नेपाली मन्दिर र पवित्र स्थलहरूको ज्ञान परीक्षण गर्नुहोस्!",
@@ -313,6 +314,7 @@
     "nextFestival": "अर्को चाड",
     "correct": "सही!",
     "geography": "भूगोल",
+    "nameDistrictTitleHomePage": "नेपालका जिल्लाहरू चिन्नुहुन्छ?",
     "nameDistrictTitle": "नेपालका ७७ जिल्लाहरूको नाम भन्नुहोस्",
     "nameDistrictDescription": "नक्सामा देखिएको जिल्लाको नाम टाइप गर्नुहोस्",
     "selectFromOptions": "विकल्पहरूबाट छान्नुहोस्:",

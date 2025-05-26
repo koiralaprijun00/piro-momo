@@ -1,23 +1,21 @@
-'use client'
+'use client';
 
-import Link from "next/link";
-import Image from "next/image";
+import Link from 'next/link';
+import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
-import AdSense from "../components/AdSenseGoogle";
 
 // Dynamically import non-critical components
-const FeedbackButton = dynamic(() => import("../components/FeedbackButton"), {
-  ssr: false
+const FeedbackButton = dynamic(() => import('../components/FeedbackButton'), {
+  ssr: false,
 });
 
 // Centralized card data
 const cards = [
   {
     href: '/spend',
-    gradient: 'from-purple-700 to-pink-700',
-    badge: { icon: '💰', key: 'billionaireBadge', color: 'purple' },
+    gradient: 'from-purple-600 to-pink-500', // Adjusted gradient for a softer look
     image: '/spend-money.png',
     titleKey: 'spendBinodTitle',
     descKey: 'spendBinodDescription',
@@ -26,8 +24,7 @@ const cards = [
   },
   {
     href: '/guess-festival',
-    gradient: 'from-red-700 to-amber-600',
-    badge: { icon: '✨', key: 'quizBadge', color: 'orange' },
+    gradient: 'from-red-500 to-amber-400', // Adjusted gradient
     image: '/guess-the-festival.png',
     titleKey: 'games.guessFestival.title',
     descKey: 'games.guessFestival.description',
@@ -36,8 +33,7 @@ const cards = [
   },
   {
     href: '/kings-of-nepal',
-    gradient: 'from-teal-700 to-blue-500',
-    badge: { icon: '👑', key: 'kingsOfNepal.badge', color: 'blue' },
+    gradient: 'from-teal-600 to-blue-500', // Adjusted gradient
     image: '/kings-of-nepal.png',
     titleKey: 'kingsOfNepal.title',
     descKey: 'kingsOfNepal.description',
@@ -46,18 +42,16 @@ const cards = [
   },
   {
     href: '/name-districts',
-    gradient: 'from-cyan-700 to-emerald-500',
-    badge: { icon: '🗺️', key: 'geography', color: 'blue' },
+    gradient: 'from-cyan-600 to-emerald-500', // Adjusted gradient
     image: '/guess-district.png',
-    titleKey: 'nameDistrictTitle',
+    titleKey: 'nameDistrictTitleHomePage',
     descKey: 'nameDistrictDescription',
     loading: 'lazy',
     focusRing: 'blue',
   },
   {
     href: '/gau-khane-katha',
-    gradient: 'from-lime-700 to-cyan-500',
-    badge: { icon: '🔍', key: 'RiddlesGame.badgeTitle', color: 'green' },
+    gradient: 'from-lime-600 to-cyan-500', // Adjusted gradient
     image: '/gau-khane-katha.png',
     titleKey: 'RiddlesGame.title',
     descKey: 'RiddlesGame.subtitle',
@@ -66,8 +60,7 @@ const cards = [
   },
   {
     href: '/general-knowledge',
-    gradient: 'from-indigo-700 to-lime-600',
-    badge: { icon: '🧠', key: 'quizBadge', color: 'blue' },
+    gradient: 'from-indigo-600 to-lime-500', // Adjusted gradient
     image: '/gk-nepal.png',
     titleKey: 'nepalGk.titleshort',
     descKey: 'nepalGk.shortdescription',
@@ -76,8 +69,7 @@ const cards = [
   },
   {
     href: '/chineu-ta',
-    gradient: 'from-purple-700 to-pink-500',
-    badge: { icon: '🎨', key: 'logoQuiz.badge', color: 'purple' },
+    gradient: 'from-purple-600 to-pink-500', // Adjusted gradient
     image: '/logo-chineu.png',
     titleKey: 'logoQuiz.title',
     descKey: 'logoQuiz.subtitle',
@@ -86,8 +78,7 @@ const cards = [
   },
   {
     href: '/first-of-nepal',
-    gradient: 'from-amber-700 to-violet-500',
-    badge: { icon: '✨', key: 'firstofNepalBadge', color: 'orange' },
+    gradient: 'from-amber-600 to-violet-500', // Adjusted gradient
     image: '/first-of-nepal.png',
     titleKey: 'firstofNepalTitle',
     descKey: 'firstofNepalShortSubtitle',
@@ -96,8 +87,7 @@ const cards = [
   },
   {
     href: '/yo-ki-tyo',
-    gradient: 'from-purple-700 to-pink-500',
-    badge: { icon: '🤔', key: 'wouldYouRather.badge', color: 'purple' },
+    gradient: 'from-purple-600 to-pink-500', // Adjusted gradient
     image: '/yo-ki-tyo.png',
     titleKey: 'wouldYouRather.title',
     descKey: 'wouldYouRather.shortDescription',
@@ -108,34 +98,47 @@ const cards = [
 
 // Add type for Card props
 interface CardProps {
-  data: any;
+  data: (typeof cards)[0]; // Use typeof cards[0] for better type inference
   t: any;
 }
 
 function Card({ data, t }: CardProps) {
-  const { href, gradient, badge, image, titleKey, descKey, priority, loading = 'lazy', focusRing } = data;
+  const { href, gradient, image, titleKey, descKey, priority, loading = 'lazy', focusRing } = data;
   return (
-    <Link href={href} className={`block transform transition hover:scale-105 focus:outline-none focus:ring-4 focus:ring-${focusRing}-300 rounded-3xl`}>
-      <div className={`relative px-6 py-12 bg-gradient-to-br ${gradient} rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl`}>
-        <div className={`absolute top-3 right-3 bg-white text-${badge.color}-600 font-bold text-xs py-1 px-3 rounded-full shadow-md flex items-center gap-1`}>
-          <span>{badge.icon}</span>
-          <span>{t(badge.key)}</span>
+    <Link
+      href={href}
+      className={`block transform transition-all duration-300 hover:scale-[1.03] focus:outline-none focus:ring-4 focus:ring-${focusRing}-400 rounded-xl group`}
+    >
+      <div
+        className={`relative p-6 sm:p-8 bg-gradient-to-br ${gradient} rounded-xl shadow-lg overflow-hidden transition-all duration-300 group-hover:shadow-2xl group-hover:brightness-110`}
+      >
+        {/* Background elements for visual flair */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+        
+          <div className="absolute bottom-0 right-0 w-32 h-32 bg-white rounded-full mix-blend-overlay transform translate-x-1/2 translate-y-1/2"></div>
         </div>
-        <div className="flex items-center relative z-10">
-          <div className="w-20 h-20 flex items-center justify-center rounded-full bg-white shadow-md mr-4">
+
+        <div className="flex items-start relative z-10">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 flex flex-shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm shadow-md mr-2 p-2">
+            {' '}
+            {/* Adjusted size and added blur */}
             <Image
               src={image}
               alt={t(titleKey)}
               width={64}
               height={64}
               priority={!!priority}
-              loading={priority ? undefined : loading}
-              className="object-cover"
+              loading={priority ? undefined : (loading as 'lazy' | 'eager')}
+              className="object-contain" // Use object-contain to ensure image fits without cropping
             />
           </div>
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-white drop-shadow-sm">{t(titleKey)}</h2>
-            <p className="mt-1 text-white text-opacity-90">{t(descKey)}</p>
+            <h2 className="text-xl font-extrabold text-white leading-tight drop-shadow-md">
+              {t(titleKey)}
+            </h2>
+            <p className="mt-1 text-white text-opacity-90 text-sm sm:text-base">
+              {t(descKey)}
+            </p>
           </div>
         </div>
       </div>
@@ -144,35 +147,42 @@ function Card({ data, t }: CardProps) {
 }
 
 export default function HomePage() {
-  const t = useTranslations("Translations"); 
+  const t = useTranslations('Translations');
 
-  // Check current language (assuming 'ne' for Nepali and 'en' for English)
   const language = useLocale();
 
   return (
-    <main className="min-h-screen">
-      <div className="relative z-10 container mx-auto flex flex-col items-start justify-between px-4">
-        {/* Header Section - Simplified animation for better performance */}
-        <div className="py-4 w-full">
-        <h1
-  className={`nepali-text-title relative inline font-extrabold text-left bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent ${
-    language === 'np' 
-      ? "font-rozha text-4xl md:text-7xl" 
-      : "font-capso text-3xl md:text-6xl"
-  }`}
->
-  {t('piromomo')}
-</h1>
+    <main className="bg-gray-50 dark:bg-gray-900 overflow-visible relative">
+
+      <div className="relative z-10 container mx-auto flex flex-col items-center justify-start py-8 px-4 sm:px-6 lg:px-8">
+        {/* Header Section */}
+        <div className="w-full text-center overflow-visible mb-4 md:mb-6">
+          <h1
+      className={`
+      relative inline-block overflow-visible bg-gradient-to-r
+      from-purple-500 to-pink-500 bg-clip-text text-transparent leading-tight mb-1
+      ${
+        language === 'np'
+          ? 'font-rozha text-7xl md:text-8xl'
+          : 'font-capso text-6xl md:text-7xl'
+      }
+    `}
+          >
+            {t('piromomo')}
+          </h1>
+          <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mt-0">
+            {t('homePageTagline')}
+          </p>
         </div>
 
-        {/* Fun Card Section - Prioritize content and add loading strategy */}
-        <div className="w-full mb-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl">
+        {/* Fun Card Section */}
+        <div className="w-full mb-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 max-w-7xl">
           {cards.map((card, idx) => (
             <Card key={idx} data={card} t={t} />
           ))}
         </div>
       </div>
-      
+
       {/* Lazy load Feedback Button */}
       <Suspense fallback={null}>
         <FeedbackButton />
