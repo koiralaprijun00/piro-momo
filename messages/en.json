@@ -42,7 +42,8 @@
     "categoryGandaki": "Province 4 - Gandaki",
     "categoryLumbini": "Province 5 - Lumbini",
     "categoryKarnali": "Province 6 - Karnali",
-    "categorySudurpashchim": "Province 7 - Sudurpashchim"
+    "categorySudurpashchim": "Province 7 - Sudurpashchim",
+    "shuffle": "Shuffle Temple"
   },
     "signInOnly": "Sign In",
      "loginSuccess": "Successfully logged in!",
