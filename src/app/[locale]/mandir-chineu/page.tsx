@@ -6,19 +6,44 @@ import { getTemplesByLocale } from '../../data/guess-temple/getTemples';
 import { Temple } from '../../data/guess-temple/temple';
 import AdSenseGoogle from '../../components/AdSenseGoogle';
 import GameButton from '../../components/ui/GameButton';
-import { CheckCircleIcon, XCircleIcon, RefreshCwIcon, AwardIcon } from 'lucide-react';
+import { CheckCircleIcon, XCircleIcon, RefreshCwIcon, AwardIcon, ShuffleIcon } from 'lucide-react';
 import Image from 'next/image';
 
 // Define categories
 const CATEGORIES = {
   ALL: 'all',
   KATHMANDU_VALLEY: 'kathmandu_valley',
+  PROVINCE_1: 'province_1',
+  PROVINCE_2: 'province_2', 
+  BAGMATI: 'bagmati',
+  GANDAKI: 'gandaki',
+  LUMBINI: 'lumbini',
+  KARNALI: 'karnali',
+  SUDURPASHCHIM: 'sudurpashchim'
 };
 
-// Add locale-aware mapping inside the component, after locale is defined
-const KATHMANDU_VALLEY_DISTRICTS = {
-  en: ['Kathmandu', 'Lalitpur', 'Bhaktapur'],
-  np: ['काठमाडौं', 'ललितपुर', 'भक्तपुर']
+// District mappings for each category
+const DISTRICT_MAPPINGS = {
+  en: {
+    kathmandu_valley: ['Kathmandu', 'Lalitpur', 'Bhaktapur'],
+    province_1: ['Taplejung', 'Panchthar', 'Ilam', 'Jhapa', 'Morang', 'Sunsari', 'Dhankuta', 'Terhathum', 'Sankhuwasabha', 'Bhojpur', 'Solukhumbu', 'Okhaldhunga', 'Khotang', 'Udayapur'],
+    province_2: ['Saptari', 'Siraha', 'Dhanusha', 'Mahottari', 'Sarlahi', 'Bara', 'Parsa', 'Rautahat'],
+    bagmati: ['Kathmandu', 'Lalitpur', 'Bhaktapur', 'Sindhuli', 'Ramechhap', 'Dolakha', 'Sindhupalchok', 'Kavrepalanchok', 'Rasuwa', 'Nuwakot', 'Dhading', 'Chitwan', 'Makwanpur'],
+    gandaki: ['Gorkha', 'Lamjung', 'Tanahu', 'Syangja', 'Kaski', 'Manang', 'Mustang', 'Myagdi', 'Parbat', 'Baglung', 'Nawalpur'],
+    lumbini: ['Kapilvastu', 'Parasi', 'Rupandehi', 'Palpa', 'Arghakhanchi', 'Gulmi', 'Banke', 'Bardiya', 'Pyuthan', 'Rolpa', 'Eastern Rukum', 'Dang'],
+    karnali: ['Western Rukum', 'Salyan', 'Dolpa', 'Humla', 'Jumla', 'Kalikot', 'Mugu', 'Surkhet', 'Dailekh', 'Jajarkot'],
+    sudurpashchim: ['Bajura', 'Bajhang', 'Achham', 'Doti', 'Kailali', 'Kanchanpur', 'Dadeldhura', 'Baitadi', 'Darchula']
+  },
+  np: {
+    kathmandu_valley: ['काठमाडौं', 'ललितपुर', 'भक्तपुर'],
+    province_1: ['ताप्लेजुङ', 'पाँचथर', 'इलाम', 'झापा', 'मोरङ', 'सुनसरी', 'धनकुटा', 'तेह्रथुम', 'सङ्खुवासभा', 'भोजपुर', 'सोलुखुम्बु', 'ओखलढुङ्गा', 'खोटाङ', 'उदयपुर'],
+    province_2: ['सप्तरी', 'सिराहा', 'धनुषा', 'महोत्तरी', 'सर्लाही', 'बारा', 'पर्सा', 'रौतहट'],
+    bagmati: ['काठमाडौं', 'ललितपुर', 'भक्तपुर', 'सिन्धुली', 'रामेछाप', 'दोलखा', 'सिन्धुपाल्चोक', 'काभ्रेपलाञ्चोक', 'रसुवा', 'नुवाकोट', 'धादिङ', 'चितवन', 'मकवानपुर'],
+    gandaki: ['गोरखा', 'लमजुङ', 'तनहुँ', 'स्याङ्जा', 'कास्की', 'मनाङ', 'मुस्ताङ', 'म्याग्दी', 'पर्वत', 'बागलुङ', 'नवलपुर'],
+    lumbini: ['कपिलवस्तु', 'परासी', 'रुपन्देही', 'पाल्पा', 'अर्घाखाँची', 'गुल्मी', 'बाँके', 'बर्दिया', 'प्युठान', 'रोल्पा', 'पूर्वी रुकुम', 'दाङ'],
+    karnali: ['पश्चिमी रुकुम', 'सल्यान', 'डोल्पा', 'हुम्ला', 'जुम्ला', 'कालिकोट', 'मुगु', 'सुर्खेत', 'दैलेख', 'जाजरकोट'],
+    sudurpashchim: ['बाजुरा', 'बझाङ', 'अछाम', 'डोटी', 'कैलाली', 'कञ्चनपुर', 'डडेल्धुरा', 'बैतडी', 'दार्चुला']
+  }
 };
 
 // Main Component
@@ -30,16 +55,31 @@ export default function GuessTempleGame() {
   const [selectedCategory, setSelectedCategory] = useState<string>(CATEGORIES.ALL);
 
   const filteredTemples = React.useMemo(() => {
-    if (selectedCategory === CATEGORIES.KATHMANDU_VALLEY) {
-      const districtsForLocale = KATHMANDU_VALLEY_DISTRICTS[(locale as 'en' | 'np')] || KATHMANDU_VALLEY_DISTRICTS.en;
-      return allTemplesFromLocale.filter(temple =>
-        districtsForLocale.includes(temple.district)
-      );
+    if (selectedCategory === CATEGORIES.ALL) {
+      return allTemplesFromLocale;
     }
-    return allTemplesFromLocale;
+    
+    const districtsForLocale = DISTRICT_MAPPINGS[locale as 'en' | 'np'] || DISTRICT_MAPPINGS.en;
+    const categoryDistricts = districtsForLocale[selectedCategory as keyof typeof districtsForLocale];
+    
+    if (!categoryDistricts) {
+      return allTemplesFromLocale;
+    }
+    
+    return allTemplesFromLocale.filter(temple =>
+      categoryDistricts.includes(temple.district)
+    );
   }, [allTemplesFromLocale, selectedCategory, locale]);
 
   const templeIds = React.useMemo(() => filteredTemples.map((temple) => temple.id), [filteredTemples]);
+
+  const [currentTempleId, setCurrentTempleId] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Improved shuffling state management
+  const [shuffledTempleIds, setShuffledTempleIds] = useState<string[]>([]);
+  const [currentShuffleIndex, setCurrentShuffleIndex] = useState<number>(0);
+  const [completedRounds, setCompletedRounds] = useState<number>(0);
 
   const normalizeSpelling = (text: string): string => {
     return text
@@ -54,14 +94,69 @@ export default function GuessTempleGame() {
       .trim();
   };
 
-  const getRandomTempleId = useCallback(() => {
-    if (templeIds.length === 0) return '';
-    const randomIndex = Math.floor(Math.random() * templeIds.length);
-    return templeIds[randomIndex];
-  }, [templeIds]);
+  // Fisher-Yates shuffle algorithm for proper randomization
+  const shuffleArray = useCallback((array: string[]): string[] => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }, []);
 
-  const [currentTempleId, setCurrentTempleId] = useState<string | null>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
+  // Initialize or reshuffle temples when category changes
+  const initializeShuffledTemples = useCallback(() => {
+    if (templeIds.length > 0) {
+      const shuffled = shuffleArray(templeIds);
+      setShuffledTempleIds(shuffled);
+      setCurrentShuffleIndex(0);
+      setCompletedRounds(0);
+      return shuffled[0];
+    }
+    return null;
+  }, [templeIds, shuffleArray]);
+
+  // Get next temple from shuffled array
+  const getNextShuffledTemple = useCallback(() => {
+    if (shuffledTempleIds.length === 0) return null;
+    
+    let nextIndex = currentShuffleIndex;
+    
+    // If we've reached the end of current shuffle, create a new shuffle
+    if (nextIndex >= shuffledTempleIds.length) {
+      const newShuffled = shuffleArray(templeIds);
+      setShuffledTempleIds(newShuffled);
+      setCurrentShuffleIndex(1); // Move to second item since we'll return first
+      setCompletedRounds(prev => prev + 1);
+      return newShuffled[0];
+    }
+    
+    // Return current temple and increment index
+    const currentTempleId = shuffledTempleIds[nextIndex];
+    setCurrentShuffleIndex(nextIndex + 1);
+    return currentTempleId;
+  }, [shuffledTempleIds, currentShuffleIndex, templeIds, shuffleArray]);
+
+  // Manual shuffle function (for shuffle button)
+  const handleManualShuffle = useCallback(() => {
+    if (templeIds.length === 0) return;
+    
+    // Create new shuffle excluding current temple if possible
+    let availableTemples = templeIds;
+    if (templeIds.length > 1 && currentTempleId) {
+      availableTemples = templeIds.filter(id => id !== currentTempleId);
+    }
+    
+    const newShuffled = shuffleArray(availableTemples);
+    setShuffledTempleIds(newShuffled);
+    setCurrentShuffleIndex(1); // Move to second item since we'll show first
+    setCurrentTempleId(newShuffled[0]);
+    
+    // Reset game state for new temple
+    setIsAnswered(false);
+    setIsCorrect(false);
+    setCurrentGuess('');
+  }, [templeIds, shuffleArray, currentTempleId]);
 
   const currentTemple = React.useMemo(() =>
     filteredTemples.find(temple => temple.id === currentTempleId),
@@ -71,16 +166,16 @@ export default function GuessTempleGame() {
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
-  const [templeHistory, setTempleHistory] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState<string>('');
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [gameWon, setGameWon] = useState<boolean>(false);
 
-  // Initialize or reset temple when category or templeIds change
+  // Initialize temples when category or templeIds change
   useEffect(() => {
-    if (templeIds.length > 0) {
-      const newTempleId = getRandomTempleId();
-      setCurrentTempleId(newTempleId);
+    const firstTempleId = initializeShuffledTemples();
+    if (firstTempleId) {
+      setCurrentTempleId(firstTempleId);
+      setCurrentShuffleIndex(1); // Already showing first temple
       setIsAnswered(false);
       setIsCorrect(false);
       setCurrentGuess('');
@@ -90,7 +185,7 @@ export default function GuessTempleGame() {
     } else {
       setCurrentTempleId(null);
     }
-  }, [templeIds, getRandomTempleId]);
+  }, [templeIds, initializeShuffledTemples, isInitialized]);
 
   useEffect(() => {
     if (isInitialized && !isAnswered && !gameWon) {
@@ -118,10 +213,6 @@ export default function GuessTempleGame() {
       newScore = score + points;
       setScore(newScore);
       setIsCorrect(true);
-      setTempleHistory((prev) => {
-        const trimmed = prev.length >= 100 ? prev.slice(1) : prev;
-        return [...trimmed, currentTempleId];
-      });
       if (newScore >= 100) {
         setGameWon(true);
       }
@@ -137,42 +228,32 @@ export default function GuessTempleGame() {
   }, [currentGuess, handleGuess, gameWon]);
 
   const handleNextTemple = useCallback(() => {
-    if (!currentTempleId || gameWon) return;
+    if (gameWon) return;
 
-    let availableTempleIds = templeIds.filter(
-      (id) => !templeHistory.slice(-Math.min(templeIds.length > 1 ? 3 : 0, templeIds.length - 1)).includes(id)
-    );
+    const nextTempleId = getNextShuffledTemple();
     
-    if (availableTempleIds.length === 0 && templeIds.length > 0) {
-      setTempleHistory(prev => prev.length > 0 ? [prev[prev.length -1]] : []);
-      availableTempleIds = templeIds.filter((id) => id !== currentTempleId);
-      if(availableTempleIds.length === 0) availableTempleIds = [currentTempleId];
-    }
-
-    if (availableTempleIds.length > 0) {
-      const nextIndex = Math.floor(Math.random() * availableTempleIds.length);
-      const newTempleId = availableTempleIds[nextIndex];
-      setCurrentTempleId(newTempleId);
-    } else if (templeIds.length > 0) {
-      setCurrentTempleId(templeIds[0]);
+    if (nextTempleId) {
+      setCurrentTempleId(nextTempleId);
     }
 
     setIsAnswered(false);
     setIsCorrect(false);
     setCurrentGuess('');
-  }, [templeIds, templeHistory, currentTempleId, gameWon]);
+  }, [getNextShuffledTemple, gameWon]);
 
   const restartGame = useCallback(() => {
     setScore(0);
-    setTempleHistory([]);
     setIsAnswered(false);
     setIsCorrect(false);
     setCurrentGuess('');
     setGameWon(false);
 
-    const newTempleId = getRandomTempleId();
-    setCurrentTempleId(newTempleId);
-  }, [getRandomTempleId]);
+    const firstTempleId = initializeShuffledTemples();
+    if (firstTempleId) {
+      setCurrentTempleId(firstTempleId);
+      setCurrentShuffleIndex(1);
+    }
+  }, [initializeShuffledTemples]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -194,12 +275,12 @@ export default function GuessTempleGame() {
 
   const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(event.target.value);
-    setTempleHistory([]);
     setIsAnswered(false);
     setIsCorrect(false);
     setCurrentGuess('');
     setScore(0);
     setGameWon(false);
+    // initializeShuffledTemples will be called by useEffect when templeIds changes
   };
 
   const handleShareScore = async () => {
@@ -259,9 +340,10 @@ export default function GuessTempleGame() {
             {t('guessTemple.noTemplesInCategoryMessage', { defaultValue: 'There are no temples available for the selected category. Please select a different category or add temple data.' })}
           </p>
           <select
+            id="category-select"
             value={selectedCategory}
             onChange={handleCategoryChange}
-            className="w-full max-w-xs mx-auto px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+            className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
             aria-label={t('guessTemple.selectCategory', { defaultValue: 'Select Category' })}
           >
             <option value={CATEGORIES.ALL}>
@@ -269,6 +351,27 @@ export default function GuessTempleGame() {
             </option>
             <option value={CATEGORIES.KATHMANDU_VALLEY}>
               {t('guessTemple.categoryKathmanduValley', { defaultValue: 'Kathmandu Valley' })}
+            </option>
+            <option value={CATEGORIES.PROVINCE_1}>
+              {t('guessTemple.categoryProvince1', { defaultValue: 'Province 1 (Koshi)' })}
+            </option>
+            <option value={CATEGORIES.PROVINCE_2}>
+              {t('guessTemple.categoryProvince2', { defaultValue: 'Province 2 (Madhesh)' })}
+            </option>
+            <option value={CATEGORIES.BAGMATI}>
+              {t('guessTemple.categoryBagmati', { defaultValue: 'Bagmati Province' })}
+            </option>
+            <option value={CATEGORIES.GANDAKI}>
+              {t('guessTemple.categoryGandaki', { defaultValue: 'Gandaki Province' })}
+            </option>
+            <option value={CATEGORIES.LUMBINI}>
+              {t('guessTemple.categoryLumbini', { defaultValue: 'Lumbini Province' })}
+            </option>
+            <option value={CATEGORIES.KARNALI}>
+              {t('guessTemple.categoryKarnali', { defaultValue: 'Karnali Province' })}
+            </option>
+            <option value={CATEGORIES.SUDURPASHCHIM}>
+              {t('guessTemple.categorySudurpashchim', { defaultValue: 'Sudurpashchim Province' })}
             </option>
           </select>
         </div>
@@ -313,14 +416,25 @@ export default function GuessTempleGame() {
                         <span className="text-xs sm:text-sm text-gray-600 mr-2">{t('score', { defaultValue: 'Score' })}:</span>
                         <span className="text-lg sm:text-xl font-bold text-blue-700">{score}</span>
                       </div>
-                      <button
-                        onClick={restartGame}
-                        className="bg-gray-100 p-1.5 sm:p-2 rounded-lg hover:bg-gray-200"
-                        title={t('guessTemple.restart', { defaultValue: 'Restart Game' })}
-                        aria-label={t('guessTemple.restart', { defaultValue: 'Restart Game' })}
-                      >
-                        <RefreshCwIcon className="h-4 w-4" />
-                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={handleManualShuffle}
+                          className="bg-yellow-100 p-1.5 sm:p-2 rounded-lg hover:bg-yellow-200 transition-colors"
+                          title={t('guessTemple.shuffle', { defaultValue: 'Shuffle Temple' })}
+                          aria-label={t('guessTemple.shuffle', { defaultValue: 'Shuffle Temple' })}
+                          disabled={gameWon}
+                        >
+                          <ShuffleIcon className="h-4 w-4 text-yellow-700" />
+                        </button>
+                        <button
+                          onClick={restartGame}
+                          className="bg-gray-100 p-1.5 sm:p-2 rounded-lg hover:bg-gray-200 transition-colors"
+                          title={t('guessTemple.restart', { defaultValue: 'Restart Game' })}
+                          aria-label={t('guessTemple.restart', { defaultValue: 'Restart Game' })}
+                        >
+                          <RefreshCwIcon className="h-4 w-4" />
+                        </button>
+                      </div>
                     </div>
                     <div className="w-full sm:w-auto">
                       <label htmlFor="category-select" className="sr-only">
@@ -339,9 +453,46 @@ export default function GuessTempleGame() {
                         <option value={CATEGORIES.KATHMANDU_VALLEY}>
                           {t('guessTemple.categoryKathmanduValley', { defaultValue: 'Kathmandu Valley' })}
                         </option>
+                        <option value={CATEGORIES.PROVINCE_1}>
+                          {t('guessTemple.categoryProvince1', { defaultValue: 'Province 1 (Koshi)' })}
+                        </option>
+                        <option value={CATEGORIES.PROVINCE_2}>
+                          {t('guessTemple.categoryProvince2', { defaultValue: 'Province 2 (Madhesh)' })}
+                        </option>
+                        <option value={CATEGORIES.BAGMATI}>
+                          {t('guessTemple.categoryBagmati', { defaultValue: 'Bagmati Province' })}
+                        </option>
+                        <option value={CATEGORIES.GANDAKI}>
+                          {t('guessTemple.categoryGandaki', { defaultValue: 'Gandaki Province' })}
+                        </option>
+                        <option value={CATEGORIES.LUMBINI}>
+                          {t('guessTemple.categoryLumbini', { defaultValue: 'Lumbini Province' })}
+                        </option>
+                        <option value={CATEGORIES.KARNALI}>
+                          {t('guessTemple.categoryKarnali', { defaultValue: 'Karnali Province' })}
+                        </option>
+                        <option value={CATEGORIES.SUDURPASHCHIM}>
+                          {t('guessTemple.categorySudurpashchim', { defaultValue: 'Sudurpashchim Province' })}
+                        </option>
                       </select>
                     </div>
                   </div>
+
+                  {/* Progress indicator */}
+                  {templeIds.length > 1 && (
+                    <div className="mb-4 text-center">
+                      <div className="text-xs text-gray-500">
+                        Round {completedRounds + 1} • Temple {Math.min(currentShuffleIndex, templeIds.length)} of {templeIds.length}
+                        {completedRounds > 0 && ` (${completedRounds} round${completedRounds > 1 ? 's' : ''} completed)`}
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                        <div 
+                          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${(Math.min(currentShuffleIndex, templeIds.length) / templeIds.length) * 100}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  )}
 
                   {gameWon ? (
                     <div className="text-center space-y-6 py-8">
@@ -462,7 +613,6 @@ export default function GuessTempleGame() {
                           </h4>
 
                           <div className="space-y-2 text-sm text-gray-600 mb-4">
-                            <p><strong>{t('guessTemple.location', { defaultValue: 'Location' })}:</strong> {currentTemple.location}</p>
                             {currentTemple.district && <p><strong>{t('guessTemple.district', { defaultValue: 'District' })}:</strong> {currentTemple.district}</p>}
                             <p><strong>{t('guessTemple.type', { defaultValue: 'Type' })}:</strong> {currentTemple.type}</p>
                             {currentTemple.built && (

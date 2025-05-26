@@ -272,6 +272,265 @@ export const templesEn: Temple[] = [
     imagePath: "/images/temples/barahachhetra.jpg",
     acceptableAnswers: ["barahachhetra", "baraha temple", "barahachhetra temple"],
     points: 10
+  },
+  {
+    id: "nyatapola-temple",
+    name: "Nyatapola Temple",
+    district: "Bhaktapur",
+    type: "Hindu Temple",
+    built: "1702 AD",
+    deity: "Goddess Siddhi Lakshmi",
+    description: "A famous five-tiered pagoda temple and an iconic example of Newari architecture in Bhaktapur.",
+    imagePath: "/images/temples/nyatapola.jpg",
+    acceptableAnswers: ["nyatapola", "nyatapola temple", "nyatapola temple bhaktapur"],
+    points: 10
+  },
+  {
+    id: "taleju-bhawani-temple",
+    name: "Taleju Bhawani Temple",
+    district: "Kathmandu",
+    type: "Hindu Temple",
+    deity: "Goddess Taleju Bhawani",
+    description: "A historic royal temple located inside the Hanuman Dhoka Durbar Square in Kathmandu.",
+    imagePath: "/images/temples/taleju-bhawani.jpg",
+    acceptableAnswers: ["taleju", "taleju bhawani", "taleju temple"],
+    points: 10
+  },
+  {
+    id: "jagannath-temple",
+    name: "Jagannath Temple",
+    district: "Kathmandu",
+    type: "Hindu Temple",
+    deity: "Lord Jagannath",
+    description: "Known for its huge chariot festival (Rath Yatra) celebrated every year in Kathmandu.",
+    imagePath: "/images/temples/jagannath.jpg",
+    acceptableAnswers: ["jagannath", "jagannath temple", "rath yatra temple"],
+    points: 10
+  },
+  {
+    id: "ashok-binayak-temple",
+    name: "Ashok Binayak Temple",
+    district: "Kathmandu",
+    type: "Hindu Temple",
+    deity: "Lord Ganesh",
+    description: "A well-known Hindu temple dedicated to Lord Ganesh located in Kathmandu.",
+    imagePath: "/images/temples/ashok-binayak.jpg",
+    acceptableAnswers: ["ashok binayak", "ashok binayak temple", "ganesh temple kathmandu"],
+    points: 10
+  },
+  {
+    id: "kumari-ghar",
+    name: "Kumari Ghar",
+    district: "Kathmandu",
+    type: "Religious Residence",
+    deity: "Living Goddess Kumari",
+    description: "The residence of the living goddess Kumari in Kathmandu Durbar Square.",
+    imagePath: "/images/temples/kumari-ghar.jpg",
+    acceptableAnswers: ["kumari ghar", "living goddess", "kumari temple"],
+    points: 10
+  },
+  {
+    id: "machhendranath-temple",
+    name: "Machhendranath Temple",
+    district: "Lalitpur",
+    type: "Hindu Temple",
+    deity: "Lord Machhendranath",
+    description: "Dedicated to the rain god, this temple is central to the Rato Machhendranath chariot festival.",
+    imagePath: "/images/temples/machhendranath.jpg",
+    acceptableAnswers: ["machhendranath", "rato machhendranath", "machhendranath temple"],
+    points: 10
+  },
+  {
+    id: "pharping-cave-monastery",
+    name: "Pharping Cave Monastery",
+    district: "Kathmandu",
+    type: "Buddhist Monastery",
+    description: "A Tibetan Buddhist monastery famous for its sacred caves near Kathmandu.",
+    imagePath: "/images/temples/pharping-cave.jpg",
+    acceptableAnswers: ["pharping", "pharping cave monastery"],
+    points: 10
+  },
+  {
+    id: "budha-subba-temple",
+    name: "Budha Subba Temple",
+    district: "Sunsari",
+    type: "Kirat Temple",
+    description: "A cultural and spiritual Kirat site in eastern Nepal.",
+    imagePath: "/images/temples/budha-subba.jpg",
+    acceptableAnswers: ["budha subba", "budha subba temple"],
+    points: 10
+  },
+  {
+    id: "mai-pokhari-temple",
+    name: "Mai Pokhari Temple",
+    district: "Ilam",
+    type: "Hindu Temple",
+    description: "A sacred pond and temple, important pilgrimage destination in Ilam district.",
+    imagePath: "/images/temples/mai-pokhari.jpg",
+    acceptableAnswers: ["mai pokhari", "mai pokhari temple"],
+    points: 10
+  },
+  {
+    id: "dantakali-temple",
+    name: "Dantakali Temple",
+    district: "Sindhuli",
+    type: "Hindu Temple",
+    deity: "Goddess Kali",
+    description: "A hilltop temple dedicated to Goddess Kali with panoramic views.",
+    imagePath: "/images/temples/dantakali.jpg",
+    acceptableAnswers: ["dantakali", "dantakali temple"],
+    points: 10
+  },
+  {
+    id: "jaleshwor-mahadev-temple",
+    name: "Jaleshwor Mahadev Temple",
+    district: "Mahottari",
+    type: "Hindu Temple",
+    deity: "Lord Shiva",
+    description: "An important Shiva temple in Mahottari district.",
+    imagePath: "/images/temples/jaleshwor-mahadev.jpg",
+    acceptableAnswers: ["jaleshwor", "jaleshwor mahadev", "jaleshwor mahadev temple"],
+    points: 10
+  },
+  {
+    id: "gadhimai-temple",
+    name: "Gadhimai Temple",
+    district: "Bara",
+    type: "Hindu Temple",
+    deity: "Goddess Gadhimai",
+    description: "Famous for the large-scale Gadhimai festival held every five years.",
+    imagePath: "/images/temples/gadhimai.jpg",
+    acceptableAnswers: ["gadhimai", "gadhimai temple"],
+    points: 10
+  },
+  {
+    id: "kankalini-temple",
+    name: "Kankalini Temple",
+    district: "Saptari",
+    type: "Hindu Temple",
+    deity: "Goddess Kankalini",
+    description: "A Shakti Peetha dedicated to Goddess Kankalini.",
+    imagePath: "/images/temples/kankalini.jpeg",
+    acceptableAnswers: ["kankalini", "kankalini temple"],
+    points: 10
+  },
+  {
+    id: "chhinnamasta-bhagawati-temple",
+    name: "Chhinnamasta Bhagawati Temple",
+    district: "Saptari",
+    type: "Hindu Temple",
+    deity: "Goddess Chhinnamasta",
+    description: "A powerful Shakti Peetha in Saptari district.",
+    imagePath: "/images/temples/chhinnamasta-bhagawati.jpg",
+    acceptableAnswers: ["chhinnamasta", "chhinnamasta bhagawati", "chhinnamasta temple"],
+    points: 10
+  },
+  {
+    id: "halesi-mahadev-temple",
+    name: "Halesi Mahadev Temple",
+    district: "Khotang",
+    type: "Hindu and Buddhist Temple",
+    deity: "Lord Shiva",
+    description: "A famous pilgrimage site revered by both Hindus and Buddhists.",
+    imagePath: "/images/temples/halesi-mahadev.jpg",
+    acceptableAnswers: ["halesi", "halesi mahadev", "halesi temple"],
+    points: 10
+  },
+  {
+    id: "seti-devi-temple",
+    name: "Seti Devi Temple",
+    district: "Pokhara",
+    type: "Hindu Temple",
+    deity: "Goddess Seti Devi",
+    description: "Historic temple near the Seti River in Pokhara.",
+    imagePath: "/images/temples/seti-devi.jpg",
+    acceptableAnswers: ["seti devi", "seti devi temple", "seti temple"],
+    points: 10
+  },
+  {
+    id: "ruru-temple",
+    name: "Ruru Temple",
+    district: "Gandaki",
+    type: "Hindu Temple",
+    deity: "Lord Vishnu",
+    description: "Pilgrimage site near Ruru village in Gandaki region.",
+    imagePath: "/images/temples/ruru.jpg",
+    acceptableAnswers: ["ruru", "ruru temple"],
+    points: 10
+  },
+  {
+    id: "lumbini",
+    name: "Lumbini",
+    district: "Rupandehi",
+    type: "Buddhist Pilgrimage Site",
+    description: "Birthplace of Lord Buddha, with many temples and stupas.",
+    imagePath: "/images/temples/lumbini.jpg",
+    acceptableAnswers: ["lumbini", "lumbini buddhist site"],
+    points: 10
+  },
+
+  {
+    id: "madan-kudan-stupa",
+    name: "Kudan Stupa",
+    district: "Rupandehi",
+    type: "Buddhist Site",
+    description: "Important Buddhist pilgrimage site near Lumbini.",
+    imagePath: "/images/temples/kudan-stupa.jpg",
+    acceptableAnswers: ["kudan", "kudan stupa"],
+    points: 10
+  },
+  {
+    id: "khaptad-baba-ashram",
+    name: "Khaptad Baba Ashram",
+    district: "Doti",
+    type: "Hindu Hermitage and Temple",
+    description: "Sacred hermitage with temples in Doti district.",
+    imagePath: "/images/temples/khaptad-baba-ashram.jpg",
+    acceptableAnswers: ["khaptad baba", "khaptad ashram", "khaptad temple"],
+    points: 10
+  },
+  {
+    id: "badimalika-temple",
+    name: "Badimalika Temple",
+    district: "Achham",
+    type: "Hindu Temple",
+    deity: "Goddess Badimalika",
+    description: "Major Shakti Peetha pilgrimage site in Achham district.",
+    imagePath: "/images/temples/badimalika.jpg",
+    acceptableAnswers: ["badimalika", "badimalika temple"],
+    points: 10
+  },
+  {
+    id: "malikarjun-temple",
+    name: "Malikarjun Temple",
+    district: "Doti",
+    type: "Hindu Temple",
+    deity: "Lord Shiva",
+    description: "Popular religious site in Doti district.",
+    imagePath: "/images/temples/malikarjun.jpg",
+    acceptableAnswers: ["malikarjun", "malikarjun temple"],
+    points: 10
+  },
+  {
+    id: "gosaikunda-temple",
+    name: "Gosaikunda Temple",
+    district: "Rasuwa",
+    type: "Hindu Temple",
+    deity: "Lord Shiva",
+    description: "Sacred lake temple in the Langtang region, a famous pilgrimage site especially during Janai Purnima festival.",
+    imagePath: "/images/temples/gosaikunda.jpg",
+    acceptableAnswers: ["gosaikunda", "gosaikunda temple", "gosainkunda", "gosainkunda temple"],
+    points: 10
+  },
+  {
+    id: "rani-mahal",
+    name: "Rani Mahal",
+    district: "Palpa",
+    type: "Historical Palace with Temple",
+    description: "Also known as the Taj Mahal of Nepal, this palace complex includes a temple nearby and is a notable heritage site.",
+    imagePath: "/images/temples/rani-mahal.jpg",
+    acceptableAnswers: ["rani mahal", "rani mahal palpa", "palpa rani mahal"],
+    points: 10
   }
 ];
 
@@ -547,6 +806,187 @@ export const templesNp: Temple[] = [
     description: "कोशी नदीको नजिकै अवस्थित भगवान विष्णुको बराह अवतारलाई समर्पित एक प्राचीन मन्दिर र तीर्थस्थल।",
     imagePath: "/images/temples/barahachhetra.jpg",
     acceptableAnswers: ["बराहक्षेत्र", "बराह मन्दिर", "बराहक्षेत्र मन्दिर"],
+    points: 10
+  },
+  {
+    id: "budha-subba-temple",
+    name: "बुढा सुब्बा मन्दिर",
+    district: "सुनसरी",
+    type: "किरात मन्दिर",
+    description: "पूर्वी नेपालको सांस्कृतिक र आध्यात्मिक किरात स्थल।",
+    imagePath: "/images/temples/budha-subba.jpg",
+    acceptableAnswers: ["बुढा सुब्बा", "बुढा सुब्बा मन्दिर"],
+    points: 10
+  },
+  {
+    id: "mai-pokhari-temple",
+    name: "माई पोखरी मन्दिर",
+    district: "इलाम",
+    type: "हिन्दू मन्दिर",
+    description: "इलाम जिल्लाको महत्वपूर्ण तीर्थस्थल, पवित्र पोखरी र मन्दिर।",
+    imagePath: "/images/temples/mai-pokhari.jpg",
+    acceptableAnswers: ["माई पोखरी", "माई पोखरी मन्दिर"],
+    points: 10
+  },
+  {
+    id: "dantakali-temple",
+    name: "दन्ताकाली मन्दिर",
+    district: "सिन्धुली",
+    type: "हिन्दू मन्दिर",
+    deity: "देवी काली",
+    description: "पानोरामिक दृश्यसहितको पहाडीमा अवस्थित देवी कालीलाई समर्पित मन्दिर।",
+    imagePath: "/images/temples/dantakali.jpg",
+    acceptableAnswers: ["दन्ताकाली", "दन्ताकाली मन्दिर"],
+    points: 10
+  },
+  {
+    id: "jaleshwor-mahadev-temple",
+    name: "जलेश्वर महादेव मन्दिर",
+    district: "महोत्तरी",
+    type: "हिन्दू मन्दिर",
+    deity: "भगवान शिव",
+    description: "महोत्तरी जिल्लाको महत्वपूर्ण शिव मन्दिर।",
+    imagePath: "/images/temples/jaleshwor-mahadev.jpg",
+    acceptableAnswers: ["जलेश्वर", "जलेश्वर महादेव", "जलेश्वर महादेव मन्दिर"],
+    points: 10
+  },
+  {
+    id: "gadhimai-temple",
+    name: "गढीमाई मन्दिर",
+    district: "बारा",
+    type: "हिन्दू मन्दिर",
+    deity: "देवी गढीमाई",
+    description: "हरेक पाँच वर्षमा आयोजना हुने विशाल गढीमाई पर्वका लागि प्रसिद्ध।",
+    imagePath: "/images/temples/gadhimai.jpg",
+    acceptableAnswers: ["गढीमाई", "गढीमाई मन्दिर"],
+    points: 10
+  },
+  {
+    id: "kankalini-temple",
+    name: "कंकालिनी मन्दिर",
+    district: "सप्तरी",
+    type: "हिन्दू मन्दिर",
+    deity: "देवी कंकालिनी",
+    description: "देवी कंकालिनीलाई समर्पित शक्तिपीठ।",
+    imagePath: "/images/temples/kankalini.jpg",
+    acceptableAnswers: ["कंकालिनी", "कंकालिनी मन्दिर"],
+    points: 10
+  },
+  {
+    id: "chhinnamasta-bhagawati-temple",
+    name: "छिन्नमस्ता भगवती मन्दिर",
+    district: "सप्तरी",
+    type: "हिन्दू मन्दिर",
+    deity: "देवी छिन्नमस्ता",
+    description: "सप्तरी जिल्लाको शक्तिशाली शक्तिपीठ।",
+    imagePath: "/images/temples/chhinnamasta-bhagawati.jpg",
+    acceptableAnswers: ["छिन्नमस्ता", "छिन्नमस्ता भगवती", "छिन्नमस्ता मन्दिर"],
+    points: 10
+  },
+  {
+    id: "halesi-mahadev-temple",
+    name: "हलेसी महादेव मन्दिर",
+    district: "खोटाङ",
+    type: "हिन्दू र बौद्ध मन्दिर",
+    deity: "भगवान शिव",
+    description: "हिन्दू र बौद्ध दुवैका लागि प्रसिद्ध तीर्थस्थल।",
+    imagePath: "/images/temples/halesi-mahadev.jpg",
+    acceptableAnswers: ["हलेसी", "हलेसी महादेव", "हलेसी मन्दिर"],
+    points: 10
+  },
+  {
+    id: "seti-devi-temple",
+    name: "सेती देवी मन्दिर",
+    district: "पोखरा",
+    type: "हिन्दू मन्दिर",
+    deity: "देवी सेती",
+    description: "पोखराको सेती नदी नजिकैको ऐतिहासिक मन्दिर।",
+    imagePath: "/images/temples/seti-devi.jpg",
+    acceptableAnswers: ["सेती देवी", "सेती देवी मन्दिर", "सेती मन्दिर"],
+    points: 10
+  },
+  {
+    id: "ruru-temple",
+    name: "रुरु मन्दिर",
+    district: "गण्डकी",
+    type: "हिन्दू मन्दिर",
+    deity: "भगवान विष्णु",
+    description: "गण्डकी क्षेत्रको रुरु गाउँ नजिकैको तीर्थस्थल।",
+    imagePath: "/images/temples/ruru.jpg",
+    acceptableAnswers: ["रुरु", "रुरु मन्दिर"],
+    points: 10
+  },
+  {
+    id: "lumbini",
+    name: "लुम्बिनी",
+    district: "रुपन्देही",
+    type: "बौद्ध तीर्थस्थल",
+    description: "भगवान बुद्धको जन्मस्थल, धेरै मन्दिर र स्तुपहरू सहित।",
+    imagePath: "/images/temples/lumbini.jpg",
+    acceptableAnswers: ["लुम्बिनी", "लुम्बिनी बौद्ध स्थल"],
+    points: 10
+  },
+  {
+    id: "madan-kudan-stupa",
+    name: "कुदन स्तुप",
+    district: "रुपन्देही",
+    type: "बौद्ध स्थल",
+    description: "लुम्बिनी नजिकैको महत्वपूर्ण बौद्ध तीर्थस्थल।",
+    imagePath: "/images/temples/kudan-stupa.jpg",
+    acceptableAnswers: ["कुदन", "कुदन स्तुप"],
+    points: 10
+  },
+  {
+    id: "khaptad-baba-ashram",
+    name: "खप्तड बाबा आश्रम",
+    district: "डोटी",
+    type: "हिन्दू आश्रम र मन्दिर",
+    description: "डोटी जिल्लामा अवस्थित पवित्र आश्रम र मन्दिरहरू।",
+    imagePath: "/images/temples/khaptad-baba-ashram.jpg",
+    acceptableAnswers: ["खप्तड बाबा", "खप्तड आश्रम", "खप्तड मन्दिर"],
+    points: 10
+  },
+  {
+    id: "badimalika-temple",
+    name: "बडीमालिका मन्दिर",
+    district: "अछाम",
+    type: "हिन्दू मन्दिर",
+    deity: "देवी बडीमालिका",
+    description: "अछाम जिल्लाको प्रमुख शक्तिपीठ तीर्थस्थल।",
+    imagePath: "/images/temples/badimalika.jpg",
+    acceptableAnswers: ["बडीमालिका", "बडीमालिका मन्दिर"],
+    points: 10
+  },
+  {
+    id: "malikarjun-temple",
+    name: "मालिकार्जुन मन्दिर",
+    district: "डोटी",
+    type: "हिन्दू मन्दिर",
+    deity: "भगवान शिव",
+    description: "डोटी जिल्लाको लोकप्रिय धार्मिक स्थल।",
+    imagePath: "/images/temples/malikarjun.jpg",
+    acceptableAnswers: ["मालिकार्जुन", "मालिकार्जुन मन्दिर"],
+    points: 10
+  },
+  {
+    id: "gosaikunda-temple",
+    name: "गोसाइँकुण्ड मन्दिर",
+    district: "रसुवा",
+    type: "हिन्दू मन्दिर",
+    deity: "भगवान शिव",
+    description: "लाङटाङ क्षेत्रमा अवस्थित पवित्र ताल मन्दिर, विशेष गरी जनै पूर्णिमामा प्रसिद्ध तीर्थस्थल।",
+    imagePath: "/images/temples/gosaikunda.jpg",
+    acceptableAnswers: ["गोसाइँकुण्ड", "गोसाइँकुण्ड मन्दिर", "गोसाईं कुण्ड", "गोसाईं कुण्ड मन्दिर"],
+    points: 10
+  },
+  {
+    id: "rani-mahal",
+    name: "रानी महल",
+    district: "पाल्पा",
+    type: "ऐतिहासिक दरबार र मन्दिर",
+    description: "नेपालको ताजमहलका रूपमा चिनिने यो दरबार परिसरमा नजिकै मन्दिर पनि छ र यो एक महत्वपूर्ण सम्पदा स्थल हो।",
+    imagePath: "/images/temples/rani-mahal.jpg",
+    acceptableAnswers: ["रानी महल", "पाल्पा रानी महल", "रानी महल पाल्पा"],
     points: 10
   }
 ];

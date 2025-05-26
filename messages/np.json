@@ -35,7 +35,15 @@
         "playAgain": "फेरि खेल्नुहोस्",
         "shareYourVictory": "आफ्नो विजय साझा गर्नुहोस्!",
         "correctAnswerWas": "सही उत्तर थियो: {answer}",
-        "district": "जिल्ला"
+        "district": "जिल्ला",
+        "categoryBagmati": "बागमती प्रदेश",
+        "categoryGandaki": "गण्डकी प्रदेश",
+        "categoryProvince1": "प्रदेश १",
+        "categoryProvince2": "प्रदेश २",
+        "categoryLumbini": "लुम्बिनी प्रदेश",
+        "categoryKarnali": "कर्णाली प्रदेश",
+        "categorySudurpashchim": "सुदूरपश्चिम प्रदेश",
+        "shuffle": "मन्दिर फेरि छान्नुहोस्"
     },
     "signInOnly": "साइन इन गर्नुहोस्",
     "loginSuccess": "सफलतापूर्वक लगइन भयो!",
