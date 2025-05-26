@@ -341,16 +341,6 @@ export const templesEn: Temple[] = [
     points: 10
   },
   {
-    id: "nagarjun-temple",
-    name: "Nagarjun Temple",
-    district: "Kathmandu",
-    type: "Hindu Temple",
-    description: "A hilltop temple complex dedicated to Nagarjun, located in the outskirts of Kathmandu.",
-    imagePath: "/images/temples/nagarjun.jpg",
-    acceptableAnswers: ["nagarjun", "nagarjun temple"],
-    points: 10
-  },
-  {
     id: "pharping-cave-monastery",
     name: "Pharping Cave Monastery",
     district: "Kathmandu",
@@ -358,17 +348,6 @@ export const templesEn: Temple[] = [
     description: "A Tibetan Buddhist monastery famous for its sacred caves near Kathmandu.",
     imagePath: "/images/temples/pharping-cave.jpg",
     acceptableAnswers: ["pharping", "pharping cave monastery"],
-    points: 10
-  },
-  {
-    id: "shivapuri-mahadev-temple",
-    name: "Shivapuri Mahadev Temple",
-    district: "Kathmandu",
-    type: "Hindu Temple",
-    deity: "Lord Shiva",
-    description: "A popular Shiva temple and hiking destination near Shivapuri National Park.",
-    imagePath: "/images/temples/shivapuri-mahadev.jpg",
-    acceptableAnswers: ["shivapuri", "shivapuri mahadev", "shivapuri temple"],
     points: 10
   },
   {
@@ -392,17 +371,6 @@ export const templesEn: Temple[] = [
     points: 10
   },
   {
-    id: "barah-temple",
-    name: "Barah Temple",
-    district: "Dhankuta",
-    type: "Hindu Temple",
-    deity: "Lord Vishnu (Varaha Avatar)",
-    description: "Dedicated to Lord Vishnu's boar incarnation, located in Dhankuta.",
-    imagePath: "/images/temples/barah.jpg",
-    acceptableAnswers: ["barah", "barah temple", "barah temple dhankuta"],
-    points: 10
-  },
-  {
     id: "dantakali-temple",
     name: "Dantakali Temple",
     district: "Sindhuli",
@@ -411,27 +379,6 @@ export const templesEn: Temple[] = [
     description: "A hilltop temple dedicated to Goddess Kali with panoramic views.",
     imagePath: "/images/temples/dantakali.jpg",
     acceptableAnswers: ["dantakali", "dantakali temple"],
-    points: 10
-  },
-  {
-    id: "singha-durbar-ganesh-temple",
-    name: "Singha Durbar Ganesh Temple",
-    district: "Sunsari",
-    type: "Hindu Temple",
-    deity: "Lord Ganesh",
-    description: "Historic Ganesh temple located in Sunsari district.",
-    imagePath: "/images/temples/singha-durbar-ganesh.jpg",
-    acceptableAnswers: ["singha durbar ganesh", "ganesh temple sunsari"],
-    points: 10
-  },
-  {
-    id: "sikles-monastery",
-    name: "Sikles Monastery",
-    district: "Kaski",
-    type: "Buddhist Monastery",
-    description: "An old Buddhist monastery located in the Mustang region.",
-    imagePath: "/images/temples/sikles-monastery.jpg",
-    acceptableAnswers: ["sikles", "sikles monastery"],
     points: 10
   },
   {
@@ -490,17 +437,6 @@ export const templesEn: Temple[] = [
     points: 10
   },
   {
-    id: "bhaleshwar-mahadev-temple",
-    name: "Bhaleshwar Mahadev Temple",
-    district: "Lamjung",
-    type: "Hindu Temple",
-    deity: "Lord Shiva",
-    description: "An ancient Shiva temple in Lamjung district.",
-    imagePath: "/images/temples/bhaleshwar-mahadev.jpg",
-    acceptableAnswers: ["bhaleshwar", "bhaleshwar mahadev", "bhaleshwar mahadev temple"],
-    points: 10
-  },
-  {
     id: "seti-devi-temple",
     name: "Seti Devi Temple",
     district: "Pokhara",
@@ -532,16 +468,7 @@ export const templesEn: Temple[] = [
     acceptableAnswers: ["lumbini", "lumbini buddhist site"],
     points: 10
   },
-  {
-    id: "devdaha-temple",
-    name: "Devdaha Temple",
-    district: "Rupandehi",
-    type: "Buddhist Site",
-    description: "Birthplace of Queen Mayadevi, mother of Lord Buddha.",
-    imagePath: "/images/temples/devdaha.jpg",
-    acceptableAnswers: ["devdaha", "devdaha temple"],
-    points: 10
-  },
+
   {
     id: "madan-kudan-stupa",
     name: "Kudan Stupa",
@@ -550,69 +477,6 @@ export const templesEn: Temple[] = [
     description: "Important Buddhist pilgrimage site near Lumbini.",
     imagePath: "/images/temples/kudan-stupa.jpg",
     acceptableAnswers: ["kudan", "kudan stupa"],
-    points: 10
-  },
-  {
-    id: "maya-devi-temple",
-    name: "Maya Devi Temple",
-    district: "Rupandehi",
-    type: "Buddhist Temple",
-    description: "Ancient temple marking the birthplace of Lord Buddha.",
-    imagePath: "/images/temples/maya-devi.jpg",
-    acceptableAnswers: ["maya devi", "maya devi temple"],
-    points: 10
-  },
-  {
-    id: "maitri-buddha-statue",
-    name: "Maitri Buddha Statue",
-    district: "Rupandehi",
-    type: "Buddhist Statue Complex",
-    description: "A large statue complex near Lumbini dedicated to Buddha.",
-    imagePath: "/images/temples/maitri-buddha.jpg",
-    acceptableAnswers: ["maitri buddha", "maitri buddha statue"],
-    points: 10
-  },
-  {
-    id: "rara-lake-temple",
-    name: "Rara Lake Temple",
-    district: "Mugu",
-    type: "Hindu Temple",
-    description: "Small temples near Rara Lake, a natural and spiritual attraction.",
-    imagePath: "/images/temples/rara-lake.jpg",
-    acceptableAnswers: ["rara", "rara lake temple"],
-    points: 10
-  },
-  {
-    id: "karnali-devi-temple",
-    name: "Karnali Devi Temple",
-    district: "Surkhet",
-    type: "Hindu Temple",
-    deity: "Goddess Karnali Devi",
-    description: "Local deity temple important to Karnali region residents.",
-    imagePath: "/images/temples/karnali-devi.jpg",
-    acceptableAnswers: ["karnali devi", "karnali devi temple"],
-    points: 10
-  },
-  {
-    id: "baijnath-temple",
-    name: "Baijnath Temple",
-    district: "Dailekh",
-    type: "Hindu Temple",
-    deity: "Lord Shiva",
-    description: "Ancient Shiva temple in Dailekh district.",
-    imagePath: "/images/temples/baijnath.jpg",
-    acceptableAnswers: ["baijnath", "baijnath temple"],
-    points: 10
-  },
-  {
-    id: "chandaneshwor-mahadev-temple",
-    name: "Chandaneshwor Mahadev Temple",
-    district: "Jajarkot",
-    type: "Hindu Temple",
-    deity: "Lord Shiva",
-    description: "Notable Shiva temple in Jajarkot district.",
-    imagePath: "/images/temples/chandaneshwor-mahadev.jpg",
-    acceptableAnswers: ["chandaneshwor", "chandaneshwor mahadev", "chandaneshwor mahadev temple"],
     points: 10
   },
   {
@@ -626,27 +490,6 @@ export const templesEn: Temple[] = [
     points: 10
   },
   {
-    id: "shaileshwar-mahadev-temple",
-    name: "Shaileshwar Mahadev Temple",
-    district: "Darchula",
-    type: "Hindu Temple",
-    deity: "Lord Shiva",
-    description: "Important Shiva temple in Darchula district.",
-    imagePath: "/images/temples/shaileshwar-mahadev.jpg",
-    acceptableAnswers: ["shaileshwar", "shaileshwar mahadev", "shaileshwar mahadev temple"],
-    points: 10
-  },
-  {
-    id: "kotila-temple",
-    name: "Kotila Temple",
-    district: "Bajura",
-    type: "Hindu Temple",
-    description: "Historical temple complex in Bajura district.",
-    imagePath: "/images/temples/kotila.jpg",
-    acceptableAnswers: ["kotila", "kotila temple"],
-    points: 10
-  },
-  {
     id: "badimalika-temple",
     name: "Badimalika Temple",
     district: "Achham",
@@ -655,17 +498,6 @@ export const templesEn: Temple[] = [
     description: "Major Shakti Peetha pilgrimage site in Achham district.",
     imagePath: "/images/temples/badimalika.jpg",
     acceptableAnswers: ["badimalika", "badimalika temple"],
-    points: 10
-  },
-  {
-    id: "rameshwar-mahadev-temple",
-    name: "Rameshwar Mahadev Temple",
-    district: "Bajhang",
-    type: "Hindu Temple",
-    deity: "Lord Shiva",
-    description: "Ancient Shiva temple in Bajhang district.",
-    imagePath: "/images/temples/rameshwar-mahadev.jpg",
-    acceptableAnswers: ["rameshwar", "rameshwar mahadev", "rameshwar mahadev temple"],
     points: 10
   },
   {
@@ -688,28 +520,6 @@ export const templesEn: Temple[] = [
     description: "Sacred lake temple in the Langtang region, a famous pilgrimage site especially during Janai Purnima festival.",
     imagePath: "/images/temples/gosaikunda.jpg",
     acceptableAnswers: ["gosaikunda", "gosaikunda temple", "gosainkunda", "gosainkunda temple"],
-    points: 10
-  },
-  {
-    id: "ram-janaki-temple",
-    name: "Ram Janaki Temple",
-    district: "Mahottari",
-    type: "Hindu Temple",
-    deity: "Lord Rama and Goddess Sita",
-    description: "Important temple dedicated to Lord Rama and Goddess Sita, significant for devotees in the Terai region.",
-    imagePath: "/images/temples/ram-janaki.jpg",
-    acceptableAnswers: ["ram janaki", "ram janaki temple", "ram sita temple"],
-    points: 10
-  },
-  {
-    id: "narayani-temple",
-    name: "Narayani Temple",
-    district: "Chitwan",
-    type: "Hindu Temple",
-    deity: "Goddess Narayani (Durga)",
-    description: "Popular Hindu temple near Chitwan National Park, frequented by locals and tourists alike.",
-    imagePath: "/images/temples/narayani.jpg",
-    acceptableAnswers: ["narayani", "narayani temple", "narayani mandir"],
     points: 10
   },
   {
@@ -1019,17 +829,6 @@ export const templesNp: Temple[] = [
     points: 10
   },
   {
-    id: "barah-temple",
-    name: "बराह मन्दिर (धनकुटा)",
-    district: "धनकुटा",
-    type: "हिन्दू मन्दिर",
-    deity: "भगवान विष्णु (बराह अवतार)",
-    description: "धनकुटामा अवस्थित भगवान विष्णुको बराह अवतारलाई समर्पित मन्दिर।",
-    imagePath: "/images/temples/barah.jpg",
-    acceptableAnswers: ["बराह", "बराह मन्दिर", "धनकुटा बराह मन्दिर"],
-    points: 10
-  },
-  {
     id: "dantakali-temple",
     name: "दन्ताकाली मन्दिर",
     district: "सिन्धुली",
@@ -1038,27 +837,6 @@ export const templesNp: Temple[] = [
     description: "पानोरामिक दृश्यसहितको पहाडीमा अवस्थित देवी कालीलाई समर्पित मन्दिर।",
     imagePath: "/images/temples/dantakali.jpg",
     acceptableAnswers: ["दन्ताकाली", "दन्ताकाली मन्दिर"],
-    points: 10
-  },
-  {
-    id: "singha-durbar-ganesh-temple",
-    name: "सिंहदरबार गणेश मन्दिर",
-    district: "सुनसरी",
-    type: "हिन्दू मन्दिर",
-    deity: "भगवान गणेश",
-    description: "सुनसरी जिल्लामा अवस्थित ऐतिहासिक गणेश मन्दिर।",
-    imagePath: "/images/temples/singha-durbar-ganesh.jpg",
-    acceptableAnswers: ["सिंहदरबार गणेश", "गणेश मन्दिर सुनसरी"],
-    points: 10
-  },
-  {
-    id: "sikles-monastery",
-    name: "सिक्लेस गुम्बा",
-    district: "कास्की",
-    type: "बौद्ध गुम्बा",
-    description: "मुस्ताङ क्षेत्रमा अवस्थित पुरानो बौद्ध गुम्बा।",
-    imagePath: "/images/temples/sikles-monastery.jpg",
-    acceptableAnswers: ["सिक्लेस", "सिक्लेस गुम्बा"],
     points: 10
   },
   {
@@ -1117,17 +895,6 @@ export const templesNp: Temple[] = [
     points: 10
   },
   {
-    id: "bhaleshwar-mahadev-temple",
-    name: "भलेश्वर महादेव मन्दिर",
-    district: "लमजुङ",
-    type: "हिन्दू मन्दिर",
-    deity: "भगवान शिव",
-    description: "लमजुङ जिल्लाको प्राचीन शिव मन्दिर।",
-    imagePath: "/images/temples/bhaleshwar-mahadev.jpg",
-    acceptableAnswers: ["भलेश्वर", "भलेश्वर महादेव", "भलेश्वर महादेव मन्दिर"],
-    points: 10
-  },
-  {
     id: "seti-devi-temple",
     name: "सेती देवी मन्दिर",
     district: "पोखरा",
@@ -1160,16 +927,6 @@ export const templesNp: Temple[] = [
     points: 10
   },
   {
-    id: "devdaha-temple",
-    name: "देवदह मन्दिर",
-    district: "रुपन्देही",
-    type: "बौद्ध स्थल",
-    description: "भगवान बुद्धकी आमा मायादेवीको जन्मस्थल।",
-    imagePath: "/images/temples/devdaha.jpg",
-    acceptableAnswers: ["देवदह", "देवदह मन्दिर"],
-    points: 10
-  },
-  {
     id: "madan-kudan-stupa",
     name: "कुदन स्तुप",
     district: "रुपन्देही",
@@ -1177,69 +934,6 @@ export const templesNp: Temple[] = [
     description: "लुम्बिनी नजिकैको महत्वपूर्ण बौद्ध तीर्थस्थल।",
     imagePath: "/images/temples/kudan-stupa.jpg",
     acceptableAnswers: ["कुदन", "कुदन स्तुप"],
-    points: 10
-  },
-  {
-    id: "maya-devi-temple",
-    name: "मायादेवी मन्दिर",
-    district: "रुपन्देही",
-    type: "बौद्ध मन्दिर",
-    description: "भगवान बुद्धको जन्मस्थल चिनाउने प्राचीन मन्दिर।",
-    imagePath: "/images/temples/maya-devi.jpg",
-    acceptableAnswers: ["मायादेवी", "मायादेवी मन्दिर"],
-    points: 10
-  },
-  {
-    id: "maitri-buddha-statue",
-    name: "मैत्री बुद्ध मूर्ति",
-    district: "रुपन्देही",
-    type: "बौद्ध मूर्ति परिसर",
-    description: "लुम्बिनी नजिकैको ठूलो बुद्ध मूर्ति परिसर।",
-    imagePath: "/images/temples/maitri-buddha.jpg",
-    acceptableAnswers: ["मैत्री बुद्ध", "मैत्री बुद्ध मूर्ति"],
-    points: 10
-  },
-  {
-    id: "rara-lake-temple",
-    name: "रारा ताल मन्दिर",
-    district: "मुगु",
-    type: "हिन्दू मन्दिर",
-    description: "रारा ताल नजिकैका साना मन्दिरहरू, प्राकृतिक र आध्यात्मिक आकर्षण।",
-    imagePath: "/images/temples/rara-lake.jpg",
-    acceptableAnswers: ["रारा", "रारा ताल मन्दिर"],
-    points: 10
-  },
-  {
-    id: "karnali-devi-temple",
-    name: "कर्णाली देवी मन्दिर",
-    district: "सुर्खेत",
-    type: "हिन्दू मन्दिर",
-    deity: "देवी कर्णाली",
-    description: "कर्णाली क्षेत्रका बासिन्दाहरूका लागि महत्वपूर्ण स्थानीय देवी मन्दिर।",
-    imagePath: "/images/temples/karnali-devi.jpg",
-    acceptableAnswers: ["कर्णाली देवी", "कर्णाली देवी मन्दिर"],
-    points: 10
-  },
-  {
-    id: "baijnath-temple",
-    name: "बैजनाथ मन्दिर",
-    district: "दैलेख",
-    type: "हिन्दू मन्दिर",
-    deity: "भगवान शिव",
-    description: "दैलेख जिल्लाको प्राचीन शिव मन्दिर।",
-    imagePath: "/images/temples/baijnath.jpg",
-    acceptableAnswers: ["बैजनाथ", "बैजनाथ मन्दिर"],
-    points: 10
-  },
-  {
-    id: "chandaneshwor-mahadev-temple",
-    name: "चन्दनेश्वर महादेव मन्दिर",
-    district: "जाजरकोट",
-    type: "हिन्दू मन्दिर",
-    deity: "भगवान शिव",
-    description: "जाजरकोट जिल्लाको उल्लेखनीय शिव मन्दिर।",
-    imagePath: "/images/temples/chandaneshwor-mahadev.jpg",
-    acceptableAnswers: ["चन्दनेश्वर", "चन्दनेश्वर महादेव", "चन्दनेश्वर महादेव मन्दिर"],
     points: 10
   },
   {
@@ -1253,27 +947,6 @@ export const templesNp: Temple[] = [
     points: 10
   },
   {
-    id: "shaileshwar-mahadev-temple",
-    name: "शैलेश्वर महादेव मन्दिर",
-    district: "दार्चुला",
-    type: "हिन्दू मन्दिर",
-    deity: "भगवान शिव",
-    description: "दार्चुला जिल्लाको महत्वपूर्ण शिव मन्दिर।",
-    imagePath: "/images/temples/shaileshwar-mahadev.jpg",
-    acceptableAnswers: ["शैलेश्वर", "शैलेश्वर महादेव", "शैलेश्वर महादेव मन्दिर"],
-    points: 10
-  },
-  {
-    id: "kotila-temple",
-    name: "कोटिला मन्दिर",
-    district: "बाजुरा",
-    type: "हिन्दू मन्दिर",
-    description: "बाजुरा जिल्लाको ऐतिहासिक मन्दिर परिसर।",
-    imagePath: "/images/temples/kotila.jpg",
-    acceptableAnswers: ["कोटिला", "कोटिला मन्दिर"],
-    points: 10
-  },
-  {
     id: "badimalika-temple",
     name: "बडीमालिका मन्दिर",
     district: "अछाम",
@@ -1282,17 +955,6 @@ export const templesNp: Temple[] = [
     description: "अछाम जिल्लाको प्रमुख शक्तिपीठ तीर्थस्थल।",
     imagePath: "/images/temples/badimalika.jpg",
     acceptableAnswers: ["बडीमालिका", "बडीमालिका मन्दिर"],
-    points: 10
-  },
-  {
-    id: "rameshwar-mahadev-temple",
-    name: "रामेश्वर महादेव मन्दिर",
-    district: "बझाङ",
-    type: "हिन्दू मन्दिर",
-    deity: "भगवान शिव",
-    description: "बझाङ जिल्लाको प्राचीन शिव मन्दिर।",
-    imagePath: "/images/temples/rameshwar-mahadev.jpg",
-    acceptableAnswers: ["रामेश्वर", "रामेश्वर महादेव", "रामेश्वर महादेव मन्दिर"],
     points: 10
   },
   {
@@ -1315,28 +977,6 @@ export const templesNp: Temple[] = [
     description: "लाङटाङ क्षेत्रमा अवस्थित पवित्र ताल मन्दिर, विशेष गरी जनै पूर्णिमामा प्रसिद्ध तीर्थस्थल।",
     imagePath: "/images/temples/gosaikunda.jpg",
     acceptableAnswers: ["गोसाइँकुण्ड", "गोसाइँकुण्ड मन्दिर", "गोसाईं कुण्ड", "गोसाईं कुण्ड मन्दिर"],
-    points: 10
-  },
-  {
-    id: "ram-janaki-temple",
-    name: "राम जानकी मन्दिर",
-    district: "महोत्तरी",
-    type: "हिन्दू मन्दिर",
-    deity: "भगवान राम र देवी सीता",
-    description: "तराई क्षेत्रका भक्तहरूका लागि महत्वपूर्ण राम र सीतालाई समर्पित मन्दिर।",
-    imagePath: "/images/temples/ram-janaki.jpg",
-    acceptableAnswers: ["राम जानकी", "राम जानकी मन्दिर", "राम सीता मन्दिर"],
-    points: 10
-  },
-  {
-    id: "narayani-temple",
-    name: "नारायणी मन्दिर",
-    district: "चितवन",
-    type: "हिन्दू मन्दिर",
-    deity: "देवी नारायणी (दुर्गा)",
-    description: "चितवन राष्ट्रिय निकुञ्ज नजिकैको लोकप्रिय हिन्दू मन्दिर, स्थानीय र पर्यटकहरूका लागि प्रिय।",
-    imagePath: "/images/temples/narayani.jpg",
-    acceptableAnswers: ["नारायणी", "नारायणी मन्दिर", "नारायणी मन्दिर"],
     points: 10
   },
   {
