@@ -15,7 +15,11 @@ const CATEGORIES = {
   KATHMANDU_VALLEY: 'kathmandu_valley',
 };
 
-const KATHMANDU_VALLEY_DISTRICTS = ['Kathmandu', 'Lalitpur', 'Bhaktapur']; // Case-sensitive
+// Add locale-aware mapping inside the component, after locale is defined
+const KATHMANDU_VALLEY_DISTRICTS = {
+  en: ['Kathmandu', 'Lalitpur', 'Bhaktapur'],
+  np: ['काठमाडौं', 'ललितपुर', 'भक्तपुर']
+};
 
 // Main Component
 export default function GuessTempleGame() {
@@ -27,12 +31,13 @@ export default function GuessTempleGame() {
 
   const filteredTemples = React.useMemo(() => {
     if (selectedCategory === CATEGORIES.KATHMANDU_VALLEY) {
+      const districtsForLocale = KATHMANDU_VALLEY_DISTRICTS[(locale as 'en' | 'np')] || KATHMANDU_VALLEY_DISTRICTS.en;
       return allTemplesFromLocale.filter(temple =>
-        KATHMANDU_VALLEY_DISTRICTS.includes(temple.district)
+        districtsForLocale.includes(temple.district)
       );
     }
     return allTemplesFromLocale;
-  }, [allTemplesFromLocale, selectedCategory]);
+  }, [allTemplesFromLocale, selectedCategory, locale]);
 
   const templeIds = React.useMemo(() => filteredTemples.map((temple) => temple.id), [filteredTemples]);
 
