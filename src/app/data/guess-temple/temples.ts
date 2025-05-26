@@ -89,7 +89,8 @@ export const templesEn: Temple[] = [
     description: "A sacred site for both Hindus and Buddhists, known for its natural gas flames and 108 water spouts.",
     imagePath: "/images/temples/muktinath.jpg",
     alternativeNames: ["Chumig Gyatsa"],
-    acceptableAnswers: ["muktinath", "mukti nath", "mukti nath temple", "muktinath temple", "chumig gyatsa"]
+    acceptableAnswers: ["muktinath", "mukti nath", "mukti nath temple", "muktinath temple", "chumig gyatsa"],
+    points: 10
   },
   {
     id: "janaki-mandir",
@@ -102,7 +103,8 @@ export const templesEn: Temple[] = [
     description: "A beautiful temple dedicated to Goddess Sita, the birthplace of Sita and a significant pilgrimage site.",
     imagePath: "/images/temples/janaki-mandir.jpg",
     alternativeNames: ["Nau Lakha Mandir"],
-    acceptableAnswers: ["janaki mandir", "janaki temple", "nau lakha mandir", "nau lakha temple"]
+    acceptableAnswers: ["janaki mandir", "janaki temple", "nau lakha mandir", "nau lakha temple"],
+    points: 10
   },
   {
     id: "gorkha-durbar",
@@ -113,7 +115,8 @@ export const templesEn: Temple[] = [
     deity: "Goddess Kali and Gorakhnath",
     description: "A historical fort and temple complex with significant religious and historical importance.",
     imagePath: "/images/temples/gorkha-durbar.jpg",
-    acceptableAnswers: ["gorkha durbar", "gorkha palace", "gorkha temple"]
+    acceptableAnswers: ["gorkha durbar", "gorkha palace", "gorkha temple"],
+    points: 10
   },
   {
     id: "pathivara-devi-temple",
@@ -124,7 +127,8 @@ export const templesEn: Temple[] = [
     deity: "Goddess Pathivara",
     description: "A highly revered pilgrimage site believed to fulfill the wishes of devotees.",
     imagePath: "/images/temples/pathivara.jpg",
-    acceptableAnswers: ["pathivara", "pathibara", "pathivara devi", "pathibara devi", "pathivara temple", "pathibara temple"]
+    acceptableAnswers: ["pathivara", "pathibara", "pathivara devi", "pathibara devi", "pathivara temple", "pathibara temple"],
+    points: 10
   },
   {
     id: "bindhyabasini-temple",
@@ -135,7 +139,8 @@ export const templesEn: Temple[] = [
     deity: "Goddess Bindhyabasini",
     description: "A significant Shakti Peetha in Pokhara, dedicated to Goddess Bindhyabasini.",
     imagePath: "/images/temples/bindhyabasini.jpg",
-    acceptableAnswers: ["bindhyabasini", "bindhyabasini", "bindhyabasini temple", "bindhya basini", "bindhya basini temple"]
+    acceptableAnswers: ["bindhyabasini", "bindhyabasini", "bindhyabasini temple", "bindhya basini", "bindhya basini temple"],
+    points: 10
   },
   {
     id: "tal-barahi-temple",
@@ -147,7 +152,8 @@ export const templesEn: Temple[] = [
     description: "A two-storied pagoda temple located on a small island in Phewa Lake.",
     imagePath: "/images/temples/tal-barahi.jpg",
     alternativeNames: ["Lake Temple"],
-    acceptableAnswers: ["tal barahi", "tal barahi temple", "lake temple", "phewa lake temple"]
+    acceptableAnswers: ["tal barahi", "tal barahi temple", "lake temple", "phewa lake temple"],
+    points: 10
   },
   {
     id: "doleshwor-mahadev-temple",
@@ -158,7 +164,9 @@ export const templesEn: Temple[] = [
     deity: "Lord Shiva",
     description: "Believed by some to be the head part of the Kedarnath Jyotirlinga.",
     imagePath: "/images/temples/doleshwor-mahadev.jpg",
-    acceptableAnswers: ["doleshwor mahadev",  "doleshwor", "doleshwor temple", "doleshwor mahadev temple"]
+    acceptableAnswers: ["doleshwor mahadev",  "doleshwor", "doleshwor temple", "doleshwor mahadev temple"],
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "koteshwor-mahadev-temple",
@@ -231,7 +239,8 @@ export const templesEn: Temple[] = [
     deity: "Goddess Manakamana",
     description: "A famous temple dedicated to Goddess Manakamana, believed to grant wishes to devotees. Accessible by cable car.",
     imagePath: "/images/temples/manakamana.jpg",
-    acceptableAnswers: ["manakamana", "manakamana temple"]
+    acceptableAnswers: ["manakamana", "manakamana temple"],
+    points: 10
   },
   {
     id: "kalinchowk-bhagwati",
@@ -242,7 +251,8 @@ export const templesEn: Temple[] = [
     deity: "Goddess Bhagwati",
     description: "A popular hilltop temple dedicated to Goddess Bhagwati, visited especially during winter pilgrimage.",
     imagePath: "/images/temples/kalinchowk-bhagwati.jpg",
-    acceptableAnswers: ["kalinchowk", "kalinchowk temple", "kalinchowk bhagwati"]
+    acceptableAnswers: ["kalinchowk", "kalinchowk temple", "kalinchowk bhagwati"],
+    points: 10
   },
   {
     id: "namo-buddha",
@@ -252,7 +262,8 @@ export const templesEn: Temple[] = [
     type: "Buddhist Monastery",
     description: "A major Buddhist pilgrimage site featuring a large stupa and serene surroundings.",
     imagePath: "/images/temples/namo-buddha.jpg",
-    acceptableAnswers: ["namo buddha", "namo buddha monastery"]
+    acceptableAnswers: ["namo buddha", "namo buddha monastery"],
+    points: 10
   },
   {
     id: "krishna-mandir-patan",
@@ -275,7 +286,8 @@ export const templesEn: Temple[] = [
     deity: "Goddess Bageshwori",
     description: "An important temple in western Nepal dedicated to Goddess Bageshwori, drawing many devotees especially during festivals.",
     imagePath: "/images/temples/bageshwori.jpg",
-    acceptableAnswers: ["bageshwori", "bageshwori temple"]
+    acceptableAnswers: ["bageshwori", "bageshwori temple"],
+    points: 10
   },
   {
     id: "barahachhetra",
@@ -463,7 +475,7 @@ export const templesNp: Temple[] = [
     description: "कसै-कसैले यसलाई केदारनाथ ज्योतिर्लिंगको टाउको भाग मानेका छन्।",
     imagePath: "/images/temples/doleshwor-mahadev.jpg",
     acceptableAnswers: ["डोलेश्वर महादेव", "डोलेश्वर", "डोलेश्वर मन्दिर", "डोलेश्वर महादेव मन्दिर"],
-    category: "all",
+    category: "kathmandu_valley",
     points: 10
   },
   {
