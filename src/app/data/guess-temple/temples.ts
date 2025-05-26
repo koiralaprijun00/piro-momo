@@ -40,7 +40,8 @@ export const templesEn: Temple[] = [
     description: "One of the largest stupas in Nepal and a UNESCO World Heritage Site.",
     imagePath: "/images/temples/boudhanath.jpg",
     acceptableAnswers: ["boudhanath", "boudha", "boudhha", "boudha stupa", "boudhanath stupa"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "changu-narayan",
@@ -53,7 +54,8 @@ export const templesEn: Temple[] = [
     description: "The oldest Hindu temple in the Kathmandu Valley, dedicated to Lord Vishnu.",
     imagePath: "/images/temples/changu-narayan.jpg",
     acceptableAnswers: ["changu narayan", "changu", "changu temple", "changu narayan temple"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "dakshinkali",
@@ -65,7 +67,8 @@ export const templesEn: Temple[] = [
     description: "A significant temple dedicated to the goddess Kali, known for its animal sacrifices.",
     imagePath: "/images/temples/dakshinkali.jpg",
     acceptableAnswers: ["dakshinkali", "dakshin kali", "dakshin kali temple", "dakshinkali temple"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "budhanilkantha",
@@ -77,7 +80,8 @@ export const templesEn: Temple[] = [
     description: "Famous for its large reclining statue of Lord Vishnu floating in a tank of water.",
     imagePath: "/images/temples/budhanilkantha.jpg",
     acceptableAnswers: ["budhanilkantha", "budha nilkantha", "budha nilkantha temple", "budhanilkantha temple"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "muktinath",
@@ -178,7 +182,8 @@ export const templesEn: Temple[] = [
     description: "A popular Shiva temple in the eastern part of Kathmandu.",
     imagePath: "/images/temples/koteshwor-mahadev.jpg",
     acceptableAnswers: ["koteshwor mahadev", "koteshwor", "koteshwor temple", "koteshwor mahadev temple", "koteshwor mahadev temple"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "uma-maheshwor-temple",
@@ -190,7 +195,8 @@ export const templesEn: Temple[] = [
     description: "A beautiful Newari-style temple offering panoramic views of the Kathmandu Valley.",
     imagePath: "/images/temples/uma-maheshwor-kirtipur.jpg",
     acceptableAnswers: ["uma maheshwor", "uma", "uma maheshwor temple", "kirtipur uma maheshwor", "kirtipur temple"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "chandragiri-temple",
@@ -216,7 +222,8 @@ export const templesEn: Temple[] = [
     imagePath: "/images/temples/hiranya-varna-mahavihar.jpg",
     alternativeNames: ["Golden Temple"],
     acceptableAnswers: ["hiranya varna mahavihar", "hiranya", "hiranya varna", "golden temple", "hiranya varna temple"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "guhyeshwari",
@@ -228,7 +235,8 @@ export const templesEn: Temple[] = [
     description: "A sacred temple dedicated to Goddess Guhyeshwari, closely associated with Pashupatinath and important in tantric worship.",
     imagePath: "/images/temples/guhyeshwari.jpg",
     acceptableAnswers: ["guhyeshwari", "guhyeshwari temple"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "manakamana",
@@ -275,7 +283,8 @@ export const templesEn: Temple[] = [
     description: "A historic temple located in Patan Durbar Square, dedicated to Lord Krishna with exquisite stone carvings.",
     imagePath: "/images/temples/krishna-mandir-patan.jpg",
     acceptableAnswers: ["krishna mandir", "krishna mandir patan", "patan krishna temple"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "bageshwori",
@@ -344,7 +353,8 @@ export const templesNp: Temple[] = [
     description: "नेपालको सबैभन्दा ठूलो स्तुपहरू मध्ये एक र युनेस्को विश्व सम्पदा स्थल।",
     imagePath: "/images/temples/boudhanath.jpg",
     acceptableAnswers: ["बौद्धनाथ", "बौद्धा", "बौद्धा स्तुप", "बौद्धनाथ स्तुप"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "changu-narayan",
@@ -357,7 +367,8 @@ export const templesNp: Temple[] = [
     description: "काठमाडौं उपत्यकाको सबैभन्दा पुरानो हिन्दू मन्दिर, भगवान विष्णुलाई समर्पित।",
     imagePath: "/images/temples/changu-narayan.jpg",
     acceptableAnswers: ["चाँगुनारायण", "चाँगु", "चाँगु मन्दिर", "चाँगुनारायण मन्दिर"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "dakshinkali",
@@ -369,7 +380,8 @@ export const templesNp: Temple[] = [
     description: "देवी कालीलाई समर्पित एक महत्त्वपूर्ण मन्दिर, जुन यसको पशुबलिको लागि परिचित छ।",
     imagePath: "/images/temples/dakshinkali.jpg",
     acceptableAnswers: ["दक्षिणकाली", "दक्षिण काली", "दक्षिण काली मन्दिर", "दक्षिणकाली मन्दिर"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "budhanilkantha",
@@ -381,7 +393,8 @@ export const templesNp: Temple[] = [
     description: "पानीको ट्याङ्कीमा तैरिरहेको भगवान विष्णुको ठूलो मूर्ति लागि प्रसिद्ध।",
     imagePath: "/images/temples/budhanilkantha.jpg",
     acceptableAnswers: ["बुढानीलकण्ठ", "बुढा नीलकण्ठ", "बुढा नीलकण्ठ मन्दिर", "बुढानीलकण्ठ मन्दिर"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "muktinath",
@@ -488,7 +501,8 @@ export const templesNp: Temple[] = [
     description: "काठमाडौंको पूर्वी भागमा अवस्थित एक लोकप्रिय शिव मन्दिर।",
     imagePath: "/images/temples/koteshwor-mahadev.jpg",
     acceptableAnswers: ["कोटेश्वर महादेव", "कोटेश्वर", "कोटेश्वर मन्दिर", "कोटेश्वर महादेव मन्दिर"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "uma-maheshwor-temple",
@@ -500,7 +514,8 @@ export const templesNp: Temple[] = [
     description: "काठमाडौं उपत्यकाको मनोरम दृश्य प्रदान गर्ने एक सुन्दर नेवारी शैलीको मन्दिर।",
     imagePath: "/images/temples/uma-maheshwor-kirtipur.jpg",
     acceptableAnswers: ["उमा महेश्वर", "उमा महेश्वर मन्दिर", "कीर्तिपुर उमा महेश्वर", "कीर्तिपुर मन्दिर"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "chandragiri-temple",
@@ -527,7 +542,8 @@ export const templesNp: Temple[] = [
     imagePath: "/images/temples/hiranya-varna-mahavihar.jpg",
     alternativeNames: ["Golden Temple"],
     acceptableAnswers: ["हिरण्यवर्ण महाविहार", "हिरण्यवर्ण", "सुनको मन्दिर", "हिरण्यवर्ण मन्दिर"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "guhyeshwari",
@@ -539,7 +555,8 @@ export const templesNp: Temple[] = [
     description: "देवी गुह्येश्वरीलाई समर्पित एक पवित्र मन्दिर, पशुपतिनाथसँग नजिकै सम्बन्धित र तान्त्रिक पूजाको लागि महत्त्वपूर्ण।",
     imagePath: "/images/temples/guhyeshwari.jpg",
     acceptableAnswers: ["गुह्येश्वरी", "गुह्येश्वरी मन्दिर"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "manakamana",
@@ -589,7 +606,8 @@ export const templesNp: Temple[] = [
     description: "पाटन दरबार क्षेत्रमा अवस्थित एक ऐतिहासिक मन्दिर, भगवान कृष्णलाई समर्पित र उत्कृष्ट पत्थरको नक्कासी भएको।",
     imagePath: "/images/temples/krishna-mandir-patan.jpg",
     acceptableAnswers: ["कृष्ण मन्दिर", "कृष्ण मन्दिर पाटन", "पाटन कृष्ण मन्दिर"],
-    category: "kathmandu_valley"
+    category: "kathmandu_valley",
+    points: 10
   },
   {
     id: "bageshwori",
