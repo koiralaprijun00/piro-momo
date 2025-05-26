@@ -365,16 +365,28 @@ export default function GuessTempleGame() {
                     <div className="space-y-4">
                       {currentTemple && (
                         <>
-                          {/* Temple Image */}
-                          <div className="relative aspect-[16/9] max-h-[300px] w-full rounded-lg overflow-hidden shadow-md">
-                            <Image
-                              src={currentTemple.imagePath}
-                              alt={t('guessTemple.templeToGuess', { defaultValue: 'Temple to guess' })}
-                              fill
-                              className="object-cover"
-                              sizes="(max-width: 768px) 100vw, 67vw"
-                              priority
-                            />
+                          {/* Enhanced Temple Image */}
+                          <div className="relative group">
+                            <div className="relative aspect-[16/9] max-h-[350px] w-full rounded-xl overflow-hidden shadow-xl bg-gradient-to-r from-blue-100 to-purple-100 border border-white/20">
+                              {/* Loading Skeleton */}
+                              <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse rounded-xl" />
+                              
+                              <Image
+                                src={currentTemple.imagePath}
+                                alt={t('guessTemple.templeToGuess', { defaultValue: 'Temple to guess' })}
+                                fill
+                                className="object-cover transition-all duration-500 group-hover:scale-105"
+                                sizes="(max-width: 768px) 100vw, 67vw"
+                                priority
+                                onLoad={(e) => {
+                                  // Hide loading skeleton
+                                  e.currentTarget.previousElementSibling?.classList.add('hidden');
+                                }}
+                              />
+
+                              {/* Hover Overlay */}
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            </div>
                           </div>
 
                           {/* Input Method */}
