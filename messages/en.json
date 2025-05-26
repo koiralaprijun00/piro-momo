@@ -35,7 +35,14 @@
     "playAgain": "Play Again",
     "shareYourVictory": "Share Your Victory!",
     "correctAnswerWas": "The correct answer was: {answer}",
-    "district": "District"
+    "district": "District",
+    "categoryProvince1": "Province 1",
+    "categoryProvince2": "Province 2",
+    "categoryBagmati": "Province 3 - Bagmati",
+    "categoryGandaki": "Province 4 - Gandaki",
+    "categoryLumbini": "Province 5 - Lumbini",
+    "categoryKarnali": "Province 6 - Karnali",
+    "categorySudurpashchim": "Province 7 - Sudurpashchim"
   },
     "signInOnly": "Sign In",
      "loginSuccess": "Successfully logged in!",

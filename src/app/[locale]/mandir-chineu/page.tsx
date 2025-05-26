@@ -13,12 +13,37 @@ import Image from 'next/image';
 const CATEGORIES = {
   ALL: 'all',
   KATHMANDU_VALLEY: 'kathmandu_valley',
+  PROVINCE_1: 'province_1',
+  PROVINCE_2: 'province_2', 
+  BAGMATI: 'bagmati',
+  GANDAKI: 'gandaki',
+  LUMBINI: 'lumbini',
+  KARNALI: 'karnali',
+  SUDURPASHCHIM: 'sudurpashchim'
 };
 
-// Add locale-aware mapping inside the component, after locale is defined
-const KATHMANDU_VALLEY_DISTRICTS = {
-  en: ['Kathmandu', 'Lalitpur', 'Bhaktapur'],
-  np: ['काठमाडौं', 'ललितपुर', 'भक्तपुर']
+// District mappings for each category
+const DISTRICT_MAPPINGS = {
+  en: {
+    kathmandu_valley: ['Kathmandu', 'Lalitpur', 'Bhaktapur'],
+    province_1: ['Taplejung', 'Panchthar', 'Ilam', 'Jhapa', 'Morang', 'Sunsari', 'Dhankuta', 'Terhathum', 'Sankhuwasabha', 'Bhojpur', 'Solukhumbu', 'Okhaldhunga', 'Khotang', 'Udayapur'],
+    province_2: ['Saptari', 'Siraha', 'Dhanusha', 'Mahottari', 'Sarlahi', 'Bara', 'Parsa', 'Rautahat'],
+    bagmati: ['Kathmandu', 'Lalitpur', 'Bhaktapur', 'Sindhuli', 'Ramechhap', 'Dolakha', 'Sindhupalchok', 'Kavrepalanchok', 'Rasuwa', 'Nuwakot', 'Dhading', 'Chitwan', 'Makwanpur'],
+    gandaki: ['Gorkha', 'Lamjung', 'Tanahu', 'Syangja', 'Kaski', 'Manang', 'Mustang', 'Myagdi', 'Parbat', 'Baglung', 'Nawalpur'],
+    lumbini: ['Kapilvastu', 'Parasi', 'Rupandehi', 'Palpa', 'Arghakhanchi', 'Gulmi', 'Banke', 'Bardiya', 'Pyuthan', 'Rolpa', 'Eastern Rukum', 'Dang'],
+    karnali: ['Western Rukum', 'Salyan', 'Dolpa', 'Humla', 'Jumla', 'Kalikot', 'Mugu', 'Surkhet', 'Dailekh', 'Jajarkot'],
+    sudurpashchim: ['Bajura', 'Bajhang', 'Achham', 'Doti', 'Kailali', 'Kanchanpur', 'Dadeldhura', 'Baitadi', 'Darchula']
+  },
+  np: {
+    kathmandu_valley: ['काठमाडौं', 'ललितपुर', 'भक्तपुर'],
+    province_1: ['ताप्लेजुङ', 'पाँचथर', 'इलाम', 'झापा', 'मोरङ', 'सुनसरी', 'धनकुटा', 'तेह्रथुम', 'सङ्खुवासभा', 'भोजपुर', 'सोलुखुम्बु', 'ओखलढुङ्गा', 'खोटाङ', 'उदयपुर'],
+    province_2: ['सप्तरी', 'सिराहा', 'धनुषा', 'महोत्तरी', 'सर्लाही', 'बारा', 'पर्सा', 'रौतहट'],
+    bagmati: ['काठमाडौं', 'ललितपुर', 'भक्तपुर', 'सिन्धुली', 'रामेछाप', 'दोलखा', 'सिन्धुपाल्चोक', 'काभ्रेपलाञ्चोक', 'रसुवा', 'नुवाकोट', 'धादिङ', 'चितवन', 'मकवानपुर'],
+    gandaki: ['गोरखा', 'लमजुङ', 'तनहुँ', 'स्याङ्जा', 'कास्की', 'मनाङ', 'मुस्ताङ', 'म्याग्दी', 'पर्वत', 'बागलुङ', 'नवलपुर'],
+    lumbini: ['कपिलवस्तु', 'परासी', 'रुपन्देही', 'पाल्पा', 'अर्घाखाँची', 'गुल्मी', 'बाँके', 'बर्दिया', 'प्युठान', 'रोल्पा', 'पूर्वी रुकुम', 'दाङ'],
+    karnali: ['पश्चिमी रुकुम', 'सल्यान', 'डोल्पा', 'हुम्ला', 'जुम्ला', 'कालिकोट', 'मुगु', 'सुर्खेत', 'दैलेख', 'जाजरकोट'],
+    sudurpashchim: ['बाजुरा', 'बझाङ', 'अछाम', 'डोटी', 'कैलाली', 'कञ्चनपुर', 'डडेल्धुरा', 'बैतडी', 'दार्चुला']
+  }
 };
 
 // Main Component
@@ -30,13 +55,20 @@ export default function GuessTempleGame() {
   const [selectedCategory, setSelectedCategory] = useState<string>(CATEGORIES.ALL);
 
   const filteredTemples = React.useMemo(() => {
-    if (selectedCategory === CATEGORIES.KATHMANDU_VALLEY) {
-      const districtsForLocale = KATHMANDU_VALLEY_DISTRICTS[(locale as 'en' | 'np')] || KATHMANDU_VALLEY_DISTRICTS.en;
-      return allTemplesFromLocale.filter(temple =>
-        districtsForLocale.includes(temple.district)
-      );
+    if (selectedCategory === CATEGORIES.ALL) {
+      return allTemplesFromLocale;
     }
-    return allTemplesFromLocale;
+    
+    const districtsForLocale = DISTRICT_MAPPINGS[locale as 'en' | 'np'] || DISTRICT_MAPPINGS.en;
+    const categoryDistricts = districtsForLocale[selectedCategory as keyof typeof districtsForLocale];
+    
+    if (!categoryDistricts) {
+      return allTemplesFromLocale;
+    }
+    
+    return allTemplesFromLocale.filter(temple =>
+      categoryDistricts.includes(temple.district)
+    );
   }, [allTemplesFromLocale, selectedCategory, locale]);
 
   const templeIds = React.useMemo(() => filteredTemples.map((temple) => temple.id), [filteredTemples]);
@@ -259,9 +291,10 @@ export default function GuessTempleGame() {
             {t('guessTemple.noTemplesInCategoryMessage', { defaultValue: 'There are no temples available for the selected category. Please select a different category or add temple data.' })}
           </p>
           <select
+            id="category-select"
             value={selectedCategory}
             onChange={handleCategoryChange}
-            className="w-full max-w-xs mx-auto px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+            className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
             aria-label={t('guessTemple.selectCategory', { defaultValue: 'Select Category' })}
           >
             <option value={CATEGORIES.ALL}>
@@ -269,6 +302,27 @@ export default function GuessTempleGame() {
             </option>
             <option value={CATEGORIES.KATHMANDU_VALLEY}>
               {t('guessTemple.categoryKathmanduValley', { defaultValue: 'Kathmandu Valley' })}
+            </option>
+            <option value={CATEGORIES.PROVINCE_1}>
+              {t('guessTemple.categoryProvince1', { defaultValue: 'Province 1 (Koshi)' })}
+            </option>
+            <option value={CATEGORIES.PROVINCE_2}>
+              {t('guessTemple.categoryProvince2', { defaultValue: 'Province 2 (Madhesh)' })}
+            </option>
+            <option value={CATEGORIES.BAGMATI}>
+              {t('guessTemple.categoryBagmati', { defaultValue: 'Bagmati Province' })}
+            </option>
+            <option value={CATEGORIES.GANDAKI}>
+              {t('guessTemple.categoryGandaki', { defaultValue: 'Gandaki Province' })}
+            </option>
+            <option value={CATEGORIES.LUMBINI}>
+              {t('guessTemple.categoryLumbini', { defaultValue: 'Lumbini Province' })}
+            </option>
+            <option value={CATEGORIES.KARNALI}>
+              {t('guessTemple.categoryKarnali', { defaultValue: 'Karnali Province' })}
+            </option>
+            <option value={CATEGORIES.SUDURPASHCHIM}>
+              {t('guessTemple.categorySudurpashchim', { defaultValue: 'Sudurpashchim Province' })}
             </option>
           </select>
         </div>
@@ -338,6 +392,27 @@ export default function GuessTempleGame() {
                         </option>
                         <option value={CATEGORIES.KATHMANDU_VALLEY}>
                           {t('guessTemple.categoryKathmanduValley', { defaultValue: 'Kathmandu Valley' })}
+                        </option>
+                        <option value={CATEGORIES.PROVINCE_1}>
+                          {t('guessTemple.categoryProvince1', { defaultValue: 'Province 1 (Koshi)' })}
+                        </option>
+                        <option value={CATEGORIES.PROVINCE_2}>
+                          {t('guessTemple.categoryProvince2', { defaultValue: 'Province 2 (Madhesh)' })}
+                        </option>
+                        <option value={CATEGORIES.BAGMATI}>
+                          {t('guessTemple.categoryBagmati', { defaultValue: 'Bagmati Province' })}
+                        </option>
+                        <option value={CATEGORIES.GANDAKI}>
+                          {t('guessTemple.categoryGandaki', { defaultValue: 'Gandaki Province' })}
+                        </option>
+                        <option value={CATEGORIES.LUMBINI}>
+                          {t('guessTemple.categoryLumbini', { defaultValue: 'Lumbini Province' })}
+                        </option>
+                        <option value={CATEGORIES.KARNALI}>
+                          {t('guessTemple.categoryKarnali', { defaultValue: 'Karnali Province' })}
+                        </option>
+                        <option value={CATEGORIES.SUDURPASHCHIM}>
+                          {t('guessTemple.categorySudurpashchim', { defaultValue: 'Sudurpashchim Province' })}
                         </option>
                       </select>
                     </div>
@@ -462,7 +537,6 @@ export default function GuessTempleGame() {
                           </h4>
 
                           <div className="space-y-2 text-sm text-gray-600 mb-4">
-                            <p><strong>{t('guessTemple.location', { defaultValue: 'Location' })}:</strong> {currentTemple.location}</p>
                             {currentTemple.district && <p><strong>{t('guessTemple.district', { defaultValue: 'District' })}:</strong> {currentTemple.district}</p>}
                             <p><strong>{t('guessTemple.type', { defaultValue: 'Type' })}:</strong> {currentTemple.type}</p>
                             {currentTemple.built && (
