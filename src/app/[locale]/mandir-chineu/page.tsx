@@ -114,8 +114,8 @@ export default function GuessTempleGame() {
       setScore(newScore);
       setIsCorrect(true);
       setTempleHistory((prev) => {
-        const newHistory = [...prev, currentTempleId];
-        return newHistory.slice(-100);
+        const trimmed = prev.length >= 100 ? prev.slice(1) : prev;
+        return [...trimmed, currentTempleId];
       });
       if (newScore >= 100) {
         setGameWon(true);
@@ -155,8 +155,6 @@ export default function GuessTempleGame() {
     setIsAnswered(false);
     setIsCorrect(false);
     setCurrentGuess('');
-
-    setTimeout(() => inputRef.current?.focus(), 0);
   }, [templeIds, templeHistory, currentTempleId, gameWon]);
 
   const restartGame = useCallback(() => {
@@ -169,7 +167,6 @@ export default function GuessTempleGame() {
 
     const newTempleId = getRandomTempleId();
     setCurrentTempleId(newTempleId);
-    setTimeout(() => inputRef.current?.focus(), 0);
   }, [getRandomTempleId]);
 
   useEffect(() => {
@@ -196,6 +193,7 @@ export default function GuessTempleGame() {
     setIsAnswered(false);
     setIsCorrect(false);
     setCurrentGuess('');
+    setScore(0);
     setGameWon(false);
   };
 
