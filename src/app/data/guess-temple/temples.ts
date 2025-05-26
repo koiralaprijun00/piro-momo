@@ -410,7 +410,7 @@ export const templesEn: Temple[] = [
     type: "Hindu Temple",
     deity: "Goddess Kankalini",
     description: "A Shakti Peetha dedicated to Goddess Kankalini.",
-    imagePath: "/images/temples/kankalini.jpg",
+    imagePath: "/images/temples/kankalini.jpeg",
     acceptableAnswers: ["kankalini", "kankalini temple"],
     points: 10
   },
