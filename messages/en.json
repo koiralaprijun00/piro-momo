@@ -1,5 +1,6 @@
 {
   "Translations":{
+    "homePageTagline": "Reconnect with Nepal, One Game at a Time.",
     "guessTemple": {
     "title": "Guess the Temple",
     "description": "Test your knowledge of Nepali temples and sacred sites!",
@@ -338,6 +339,7 @@
     "homepage": "Homepage",
     "about": "About",
     "geography": "Geography",
+    "nameDistrictTitleHomePage": "Name the District",
     "nameDistrictTitle": "Name the District",
     "nameDistrictDescription": "Can you name all 77 districts of Nepal?",
     "yourClue": "Clues",
