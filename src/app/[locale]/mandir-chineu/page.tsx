@@ -394,9 +394,9 @@ export default function GuessTempleGame() {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 max-w-2xl mx-auto px-4 py-8">
-          <div className="min-h-screen w-full py-4 px-4 md:px-6">
-            <div className="max-w-xl mx-auto">
+        <div className="flex-1 max-w-2xl mx-auto px-2 sm:px-4 py-8">
+          <div className="min-h-screen w-full py-1 px-0 sm:px-4 md:px-6">
+            <div className="max-w-3xl mx-auto">
               {/* Main Game Card */}
               <div className="bg-gradient-to-br from-blue-600 to-purple-500 p-1 rounded-xl shadow-lg mb-4">
                 <div className="box-border px-4 py-6 text-white">
