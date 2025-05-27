@@ -199,7 +199,7 @@ export default function RiddlesGamePage() {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 max-w-4xl mx-auto px-4 py-8">
+        <div className="flex-1 max-w-4xl mx-auto px-0 sm:px-4 py-8">
           <div className="bg-white py-6 sm:py-12">
             <div className="container mx-auto px-3 sm:px-6 lg:px-8 max-w-4xl">
               <div className="bg-gradient-to-br from-blue-600 to-red-500 p-1 rounded-xl shadow-lg mb-6">
