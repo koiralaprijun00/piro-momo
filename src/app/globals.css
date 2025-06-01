@@ -386,3 +386,116 @@ a {
 .gradient-btn:hover {
   opacity: 0.9; /* Slightly reduced opacity for better visibility */
 }
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    /* Default font is Geist Sans (from layout), Devanagari specific fonts applied via class */
+    font-feature-settings: "rlig" 1, "calt" 1; /* Common OpenType features */
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-english;
+  }
+}
+
+/* Custom font classes */
+.font-devanagari {
+  font-family: 'Noto Sans Devanagari', 'Arial Unicode MS', var(--font-geist-sans), sans-serif;
+}
+
+.font-english {
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+/* Enhanced UI Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+@keyframes float-delayed {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(-180deg); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 8s ease-in-out infinite;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* Gradient utilities */
+.from-gradient-yellow {
+  --tw-gradient-from: hsl(var(--gradient-yellow));
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
+.via-gradient-orange {
+  --tw-gradient-stops: var(--tw-gradient-from), hsl(var(--gradient-orange)), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
+.to-gradient-magenta {
+  --tw-gradient-to: hsl(var(--gradient-magenta));
+}
+
+.jhole-title-gradient {
+  font-size: 1.25rem; /* text-xl */
+  line-height: 1.75rem; /* text-xl */
+  font-weight: 700; /* font-bold */
+  background-image: linear-gradient(to right, #FFD700, #FFA500, #FF00FF); /* bg-gradient-to-r from-gradient-yellow via-gradient-orange to-gradient-magenta */
+  -webkit-background-clip: text;
+  background-clip: text; /* bg-clip-text */
+  color: transparent; /* text-transparent */
+  text-align: center; /* text-center */
+}
+
+@media (min-width: 640px) { /* sm breakpoint */
+  .jhole-title-gradient {
+    text-align: left; /* sm:text-left */
+  }
+}
+
+.dialog-title-jhole-gradient {
+  font-size: 1.5rem; /* text-2xl */
+  line-height: 2rem; /* text-2xl */
+  font-weight: 700; /* font-bold */
+  background-image: linear-gradient(to right, #FFD700, #FFA500, #FF00FF); /* bg-gradient-to-r from-gradient-yellow via-gradient-orange to-gradient-magenta */
+  -webkit-background-clip: text;
+  background-clip: text; /* bg-clip-text */
+  color: transparent; /* text-transparent */
+}
+
+.game-setup-dialog-content {
+  background: linear-gradient(to bottom right, #e0e7ff, #c7d2fe); /* Default light indigo gradient */
+  padding: 1.5rem; /* Default padding (p-6) */
+  border-width: 1px; /* Replicates Tailwind 'border' class */
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); /* Replicates Tailwind 'shadow-lg' */
+}
+
+@media (min-width: 640px) { /* sm breakpoint */
+  .game-setup-dialog-content {
+    border-radius: 0.5rem; /* Replicates Tailwind 'sm:rounded-lg' */
+  }
+}
