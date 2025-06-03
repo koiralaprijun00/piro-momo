@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Card, CardContent } from './ui/card';
 import { Progress } from './ui/progress';
 import { cn } from '../lib/utils';
@@ -73,68 +73,43 @@ const WordMeaningContent: React.FC<{ wordData: { roman: string; meaning_nepali: 
 export const WordCard: React.FC = () => {
   const { state } = useGameState();
   const finalAssessment = useFinalAssessment();
-  const [cardFlipped, setCardFlipped] = useState(false);
-
-  useEffect(() => {
-    if (state.currentWord && !state.isLoadingWord) {
-      setCardFlipped(false); // Reset flip state when new word comes
-    } 
-  }, [state.currentWord, state.isLoadingWord]);
-
-  useEffect(() => {
-    if (state.meaningsVisible) {
-      setCardFlipped(true);
-    }
-  }, [state.meaningsVisible]);
 
   if (state.isLoadingWord || !state.currentWord) {
     return <LoadingWordCard isLoadingWord={state.isLoadingWord} />;
   }
-  
+
   const { currentWord, timeLeft, timerDuration, meaningsVisible, assessmentDone } = state;
   const urgencyLevel = timeLeft <= 3 ? 'urgent' : timeLeft <= 7 ? 'warning' : 'normal';
 
   return (
-    <div className="relative w-full perspective-1000 space-y-4" style={{ perspective: '1000px' }}>
-      <div 
+    <div className="space-y-4">
+      <Card
         className={cn(
-          "relative w-full h-96 transition-transform duration-700 transform-style-preserve-3d",
-          cardFlipped && "rotate-y-180"
+          "w-full shadow-2xl bg-gradient-to-br from-blue-600 to-red-500 p-1",
+          urgencyLevel === 'urgent' && "shadow-red-500/50"
         )}
-        style={{ transformStyle: 'preserve-3d' }}
       >
-        {/* Front of card - Word */}
-        <Card
-          className={cn(
-            "absolute inset-0 shadow-2xl backface-hidden bg-gradient-to-br from-blue-600 to-red-500 p-1 transition-all duration-300",
-            urgencyLevel === 'urgent' && "shadow-red-500/50"
+        <CardContent className="bg-card p-8 rounded-md h-full flex flex-col items-center justify-center space-y-6">
+          {meaningsVisible ? (
+            <WordMeaningContent
+              wordData={{
+                roman: currentWord.roman,
+                meaning_nepali: currentWord.meaning_nepali,
+                meaning_english: currentWord.meaning_english,
+              }}
+            />
+          ) : (
+            <>
+              <WordDisplayContent word={currentWord.nepali} timeLeft={timeLeft} />
+              <WordTimerContent timeLeft={timeLeft} timerDuration={timerDuration} meaningsVisible={meaningsVisible} />
+            </>
           )}
-        >
-          <CardContent className="bg-card p-8 rounded-md h-full flex flex-col items-center justify-center relative overflow-hidden">
-            <WordDisplayContent word={currentWord.nepali} timeLeft={timeLeft} />
-            <WordTimerContent timeLeft={timeLeft} timerDuration={timerDuration} meaningsVisible={meaningsVisible} />
-          </CardContent>
-        </Card>
+        </CardContent>
+      </Card>
 
-        {/* Back of card - Meanings */}
-        <Card
-          className={cn(
-            "absolute inset-0 shadow-2xl rotate-y-180 backface-hidden bg-gradient-to-br from-red-500 to-blue-600 p-1"
-          )}
-        >
-          <CardContent className="bg-card p-8 rounded-md h-full flex flex-col justify-center relative overflow-hidden">
-            <WordMeaningContent wordData={{
-              roman: currentWord.roman,
-              meaning_nepali: currentWord.meaning_nepali,
-              meaning_english: currentWord.meaning_english
-            }} />
-          </CardContent>
-        </Card>
-      </div>
-      {/* Assessment Controls - Rendered outside and below the flipping card */}
       {meaningsVisible && !assessmentDone && (
         <AssessmentControls onAssess={finalAssessment} disabled={assessmentDone} />
       )}
     </div>
   );
-}; 
+};

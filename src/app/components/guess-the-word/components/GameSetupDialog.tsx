@@ -51,9 +51,9 @@ export const GameSetupDialog: React.FC = () => { // Renamed component
   }, [state.sessionStarted, handleConfirmSettingsAndStart]); // Ensure handleConfirmSettingsAndStart is stable or in deps
 
   return (
-    <Dialog 
-      open={!state.sessionStarted} 
-      onOpenChange={() => {}} // Prevents closing via X or overlay click
+    <Dialog
+      open={!state.sessionStarted && !state.showEndSessionConfirm}
+      onOpenChange={() => {}}
     >
       <DialogContentNoClose className="sm:max-w-[480px] game-setup-dialog-content">
         <DialogHeader className="p-6 pb-4">

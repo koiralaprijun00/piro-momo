@@ -10,7 +10,7 @@ export const GameHeader: React.FC = () => {
   const { state, actions } = useGameState();
   const { knownWords, unknownWords, totalWords, sessionStarted, timerDuration, difficulty } = state;
 
-  if (!sessionStarted) {
+  if (!sessionStarted || state.showEndSessionConfirm) {
     return null;
   }
 

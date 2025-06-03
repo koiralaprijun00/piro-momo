@@ -11,6 +11,7 @@ export const KeyboardNavigationHandler: React.FC = () => {
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
+      if (state.showEndSessionConfirm) return;
       if (state.meaningsVisible && !state.assessmentDone) {
         if (e.key === 'y' || e.key === 'Y') {
           finalAssessment(true);
@@ -30,7 +31,8 @@ export const KeyboardNavigationHandler: React.FC = () => {
     state.meaningsVisible, 
     state.assessmentDone, 
     state.isTimerRunning,
-    state.sessionStarted, // Added sessionStarted to deps
+    state.sessionStarted,
+    state.showEndSessionConfirm,
     finalAssessment, 
     selectNextWord
   ]);
