@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent } from './ui/card';
 import { Progress } from './ui/progress';
 import { cn } from '../lib/utils';
@@ -74,6 +74,37 @@ export const WordCard: React.FC = () => {
   const { state } = useGameState();
   const finalAssessment = useFinalAssessment();
 
+  const [flipped, setFlipped] = useState(false);
+  const [pendingAssessment, setPendingAssessment] = useState<null | boolean>(null);
+  const prevWordId = React.useRef<number | null>(null);
+
+  // When the word changes, reset the flip
+  useEffect(() => {
+    if (state.currentWord && state.currentWord.id !== prevWordId.current) {
+      setFlipped(false);
+      setPendingAssessment(null);
+      prevWordId.current = state.currentWord.id;
+    }
+  }, [state.currentWord]);
+
+  // Handler to trigger flip and then call assessment
+  const handleAssessWithFlip = useCallback((knewIt: boolean) => {
+    setPendingAssessment(knewIt);
+    setFlipped(true);
+  }, []);
+
+  // After flip animation, call assessment and load next word
+  useEffect(() => {
+    if (flipped && pendingAssessment !== null) {
+      const timeout = setTimeout(() => {
+        finalAssessment(pendingAssessment);
+        setFlipped(false); // reset for next word
+        setPendingAssessment(null);
+      }, 500); // match the flip duration
+      return () => clearTimeout(timeout);
+    }
+  }, [flipped, pendingAssessment, finalAssessment]);
+
   if (state.isLoadingWord || !state.currentWord) {
     return <LoadingWordCard isLoadingWord={state.isLoadingWord} />;
   }
@@ -83,33 +114,61 @@ export const WordCard: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <Card
-        className={cn(
-          "w-full shadow-2xl bg-gradient-to-br from-blue-600 to-red-500 p-1",
-          urgencyLevel === 'urgent' && "shadow-red-500/50"
-        )}
-      >
-        <CardContent className="bg-card p-8 rounded-md h-full flex flex-col items-center justify-center space-y-6">
-          {meaningsVisible ? (
-            <WordMeaningContent
-              wordData={{
-                roman: currentWord.roman,
-                meaning_nepali: currentWord.meaning_nepali,
-                meaning_english: currentWord.meaning_english,
-              }}
-            />
-          ) : (
-            <>
-              <WordDisplayContent word={currentWord.nepali} timeLeft={timeLeft} />
-              <WordTimerContent timeLeft={timeLeft} timerDuration={timerDuration} meaningsVisible={meaningsVisible} />
-            </>
+      <div className="perspective-1000">
+        <div
+          className={cn(
+            "relative w-full h-full transition-transform duration-500",
+            flipped ? 'rotate-y-180' : ''
           )}
-        </CardContent>
-      </Card>
-
-      {meaningsVisible && !assessmentDone && (
-        <AssessmentControls onAssess={finalAssessment} disabled={assessmentDone} />
-      )}
+          style={{ minHeight: 340 }}
+        >
+          {/* Card Front */}
+          <div
+            className={cn(
+              "absolute inset-0 w-full h-full z-10",
+              "[backface-visibility:hidden]"
+            )}
+          >
+            <Card className={cn(
+              "w-full shadow-2xl bg-white p-1 h-full flex flex-col",
+              urgencyLevel === 'urgent' && "shadow-red-500/50"
+            )}>
+              <CardContent className="bg-white p-8 rounded-md h-full flex flex-col items-center justify-center space-y-6">
+                <WordDisplayContent word={currentWord.nepali} timeLeft={timeLeft} />
+                <WordTimerContent timeLeft={timeLeft} timerDuration={timerDuration} meaningsVisible={meaningsVisible} />
+              </CardContent>
+            </Card>
+          </div>
+          {/* Card Back */}
+          <div
+            className={cn(
+              "absolute inset-0 w-full h-full z-20 rotate-y-180",
+              "[backface-visibility:hidden]"
+            )}
+          >
+            <Card className="w-full shadow-2xl bg-white p-1 h-full flex flex-col">
+              <CardContent className="bg-white p-8 rounded-md h-full flex flex-col items-center justify-center space-y-6">
+                <WordMeaningContent
+                  wordData={{
+                    roman: currentWord.roman,
+                    meaning_nepali: currentWord.meaning_nepali,
+                    meaning_english: currentWord.meaning_english,
+                  }}
+                />
+                <AssessmentControls
+                  onAssess={handleAssessWithFlip}
+                  disabled={!!pendingAssessment}
+                />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
+
+// Add CSS for perspective and flip animation
+// .perspective-1000 { perspective: 1000px; }
+// .rotate-y-180 { transform: rotateY(180deg); }
+// [backface-visibility:hidden] { backface-visibility: hidden; }

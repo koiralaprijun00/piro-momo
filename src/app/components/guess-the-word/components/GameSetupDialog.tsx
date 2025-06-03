@@ -55,7 +55,7 @@ export const GameSetupDialog: React.FC = () => { // Renamed component
       open={!state.sessionStarted && !state.showEndSessionConfirm}
       onOpenChange={() => {}}
     >
-      <DialogContentNoClose className="sm:max-w-[480px] game-setup-dialog-content">
+      <DialogContentNoClose className="sm:max-w-[480px] game-setup-dialog-content bg-white">
         <DialogHeader className="p-6 pb-4">
           <DialogTitle className="dialog-title-jhole-gradient">
             Jhole Nepali Shabda
