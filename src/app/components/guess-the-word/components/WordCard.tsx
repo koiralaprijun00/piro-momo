@@ -106,6 +106,7 @@ export const WordCard: React.FC = () => {
           )}
         </CardContent>
       </Card>
+
       {meaningsVisible && !assessmentDone && (
         <AssessmentControls onAssess={finalAssessment} disabled={assessmentDone} />
       )}
