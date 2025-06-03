@@ -464,7 +464,7 @@ a {
   font-size: 1.25rem; /* text-xl */
   line-height: 1.75rem; /* text-xl */
   font-weight: 700; /* font-bold */
-  background-image: linear-gradient(to right, #FFD700, #FFA500, #FF00FF); /* bg-gradient-to-r from-gradient-yellow via-gradient-orange to-gradient-magenta */
+  background-image: linear-gradient(to right, #2563EB, #DC2626); /* blue to red gradient */
   -webkit-background-clip: text;
   background-clip: text; /* bg-clip-text */
   color: transparent; /* text-transparent */
@@ -481,14 +481,14 @@ a {
   font-size: 1.5rem; /* text-2xl */
   line-height: 2rem; /* text-2xl */
   font-weight: 700; /* font-bold */
-  background-image: linear-gradient(to right, #FFD700, #FFA500, #FF00FF); /* bg-gradient-to-r from-gradient-yellow via-gradient-orange to-gradient-magenta */
+  background-image: linear-gradient(to right, #2563EB, #DC2626); /* blue to red gradient */
   -webkit-background-clip: text;
   background-clip: text; /* bg-clip-text */
   color: transparent; /* text-transparent */
 }
 
 .game-setup-dialog-content {
-  background: linear-gradient(to bottom right, #e0e7ff, #c7d2fe); /* Default light indigo gradient */
+  background: linear-gradient(to bottom right, #bfdbfe, #fecaca); /* blue-200 to red-200 gradient */
   padding: 1.5rem; /* Default padding (p-6) */
   border-width: 1px; /* Replicates Tailwind 'border' class */
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); /* Replicates Tailwind 'shadow-lg' */

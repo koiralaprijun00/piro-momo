@@ -104,10 +104,12 @@ export const WordCard: React.FC = () => {
         style={{ transformStyle: 'preserve-3d' }}
       >
         {/* Front of card - Word */}
-        <Card className={cn(
-          "absolute inset-0 shadow-2xl backface-hidden bg-gradient-to-br from-gradient-yellow via-gradient-orange to-gradient-magenta p-1 transition-all duration-300",
-          urgencyLevel === 'urgent' && "shadow-red-500/50"
-        )}>
+        <Card
+          className={cn(
+            "absolute inset-0 shadow-2xl backface-hidden bg-gradient-to-br from-blue-600 to-red-500 p-1 transition-all duration-300",
+            urgencyLevel === 'urgent' && "shadow-red-500/50"
+          )}
+        >
           <CardContent className="bg-card p-8 rounded-md h-full flex flex-col items-center justify-center relative overflow-hidden">
             <WordDisplayContent word={currentWord.nepali} timeLeft={timeLeft} />
             <WordTimerContent timeLeft={timeLeft} timerDuration={timerDuration} meaningsVisible={meaningsVisible} />
@@ -115,9 +117,11 @@ export const WordCard: React.FC = () => {
         </Card>
 
         {/* Back of card - Meanings */}
-        <Card className={cn(
-          "absolute inset-0 shadow-2xl rotate-y-180 backface-hidden bg-gradient-to-br from-gradient-magenta via-gradient-orange to-gradient-yellow p-1"
-        )}>
+        <Card
+          className={cn(
+            "absolute inset-0 shadow-2xl rotate-y-180 backface-hidden bg-gradient-to-br from-red-500 to-blue-600 p-1"
+          )}
+        >
           <CardContent className="bg-card p-8 rounded-md h-full flex flex-col justify-center relative overflow-hidden">
             <WordMeaningContent wordData={{
               roman: currentWord.roman,
