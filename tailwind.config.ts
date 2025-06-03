@@ -6,6 +6,12 @@ export default {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    'border-blue-100',
+    'border-red-100',
+    'text-blue-800',
+    'text-red-800'
+  ],
   theme: {
     extend: {
       fontFamily: {
