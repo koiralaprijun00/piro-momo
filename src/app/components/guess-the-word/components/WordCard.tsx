@@ -87,15 +87,28 @@ export const WordCard: React.FC = () => {
     }
   }, [state.currentWord]);
 
+  // Automatically flip the card when meanings become visible (timer ended)
+  useEffect(() => {
+    if (
+      state.meaningsVisible &&
+      !state.assessmentDone &&
+      pendingAssessment === null &&
+      !flipped
+    ) {
+      setFlipped(true);
+    }
+  }, [state.meaningsVisible, state.assessmentDone, pendingAssessment, flipped]);
+
   // Handler to trigger flip and then call assessment
   const handleAssessWithFlip = useCallback((knewIt: boolean) => {
     setPendingAssessment(knewIt);
-    setFlipped(true);
+    // Toggle the flip state so the card animates back to the front
+    setFlipped(prev => !prev);
   }, []);
 
   // After flip animation, call assessment and load next word
   useEffect(() => {
-    if (flipped && pendingAssessment !== null) {
+    if (pendingAssessment !== null) {
       const timeout = setTimeout(() => {
         finalAssessment(pendingAssessment);
         setFlipped(false); // reset for next word
@@ -103,7 +116,7 @@ export const WordCard: React.FC = () => {
       }, 500); // match the flip duration
       return () => clearTimeout(timeout);
     }
-  }, [flipped, pendingAssessment, finalAssessment]);
+  }, [pendingAssessment, finalAssessment]);
 
   if (state.isLoadingWord || !state.currentWord) {
     return <LoadingWordCard isLoadingWord={state.isLoadingWord} />;
