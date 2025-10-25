@@ -20,6 +20,7 @@ export const EndSessionDialog: React.FC = () => { // Renamed component
     actions.showEndSessionConfirm(false);
     
     resetSessionData({});
+    srSystem.resetWordStats();
 
     actions.endSession();
   };

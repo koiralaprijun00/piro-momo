@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useReducer, useMemo, useEffect } from 'react';
-import type { GameState, GameActions } from './types';
+import type { GameState, GameActions, WordDifficulty } from './types';
 import { gameReducer, initialGameState } from './reducer'; // Updated path
 import { initialWordList } from './data';
 import { useSessionPersistence, useSpacedRepetition, type SpacedRepetitionSystem } from './hooks';
@@ -17,6 +17,9 @@ interface GameStateContextValue {
 }
 
 const GameStateContext = createContext<GameStateContextValue | undefined>(undefined);
+
+const getTotalWordCountForDifficulty = (difficulty: WordDifficulty) =>
+  initialWordList.filter(word => word.difficulty === difficulty).length;
 
 export const useGameState = () => {
   const context = useContext(GameStateContext);
@@ -39,8 +42,9 @@ export const GameStateProvider: React.FC<GameStateProviderProps> = ({ children }
 
   const actions = useMemo<GameActions>(() => ({
     startSession: (duration: number, difficulty) => {
+      const totalWordCount = getTotalWordCountForDifficulty(difficulty);
       dispatch({ type: 'START_SESSION', payload: { duration, difficulty } });
-      dispatch({ type: 'SET_TOTAL_WORDS', payload: { count: initialWordList.length } });
+      dispatch({ type: 'SET_TOTAL_WORDS', payload: { count: totalWordCount } });
     },
     selectNextWord: () => {
       dispatch({ type: 'SELECT_NEXT_WORD' });

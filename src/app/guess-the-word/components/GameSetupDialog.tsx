@@ -8,7 +8,7 @@ import { Dialog, DialogContentNoClose, DialogHeader, DialogTitle, DialogDescript
 import type { WordDifficulty } from '../types'; // Corrected path
 
 export const GameSetupDialog: React.FC = () => { // Renamed component
-  const { state, actions, resetSessionData, srSystem } = useGameState();
+  const { state, actions, resetSessionData } = useGameState();
   const selectNextWord = useWordSelection();
 
   // State for TimerSelector
@@ -21,7 +21,7 @@ export const GameSetupDialog: React.FC = () => { // Renamed component
     gameSettingsRef.current = { timerDuration: selectedTimer, difficulty: selectedDifficulty };
     actions.startSession(selectedTimer, selectedDifficulty);
     resetSessionData({});
-  }, [selectedTimer, selectedDifficulty, actions, resetSessionData, srSystem]);
+  }, [selectedTimer, selectedDifficulty, actions, resetSessionData]);
 
   useEffect(() => {
     if (state.sessionStarted && gameSettingsRef.current) {

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Clock, Star, Brain, Zap, Play } from 'lucide-react';
 import { Button } from './ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import type { WordDifficulty } from '../types';
+import { cn } from '../lib/utils';
 
 interface TimerSelectorProps {
   selectedTimer: number;
@@ -58,23 +58,30 @@ export default function TimerSelector({
             <div className="space-y-2">
               {DIFFICULTY_OPTIONS.map((option) => {
                 const IconComponent = option.icon;
+                const isActive = selectedDifficulty === option.value;
                 return (
-                  <div
+                  <button
                     key={option.value}
-                    className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                      selectedDifficulty === option.value
-                        ? 'border-purple-500 bg-purple-50'
-                        : 'border-gray-200 hover:border-purple-300'
-                    }`}
+                    type="button"
                     onClick={() => onDifficultyChange(option.value)}
+                    aria-pressed={isActive}
+                    className={cn(
+                      'w-full p-3 rounded-lg border-2 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-purple-500',
+                      isActive
+                        ? 'border-purple-500 bg-purple-50 shadow-sm'
+                        : 'border-gray-200 hover:border-purple-300'
+                    )}
                   >
                     <div className="flex items-center gap-3">
-                      <IconComponent className={`h-4 w-4 ${
-                        selectedDifficulty === option.value ? 'text-purple-600' : 'text-gray-500'
-                      }`} />
+                      <IconComponent
+                        className={cn(
+                          'h-4 w-4',
+                          isActive ? 'text-purple-600' : 'text-gray-500'
+                        )}
+                      />
                       <span className="font-medium text-gray-900">{option.label}</span>
                     </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -86,21 +93,27 @@ export default function TimerSelector({
               Time Per Word
             </h3>
             <div className="space-y-2">
-              {TIMER_OPTIONS.map((option) => (
-                <div
-                  key={option.value}
-                  className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                    selectedTimer === option.value
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-blue-300'
-                  }`}
-                  onClick={() => onTimerChange(option.value)}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium text-gray-900">{option.label}</span>
-                  </div>
-                </div>
-              ))}
+              {TIMER_OPTIONS.map((option) => {
+                const isActive = selectedTimer === option.value;
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => onTimerChange(option.value)}
+                    aria-pressed={isActive}
+                    className={cn(
+                      'w-full p-3 rounded-lg border-2 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500',
+                      isActive
+                        ? 'border-blue-500 bg-blue-50 shadow-sm'
+                        : 'border-gray-200 hover:border-blue-300'
+                    )}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-gray-900">{option.label}</span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>

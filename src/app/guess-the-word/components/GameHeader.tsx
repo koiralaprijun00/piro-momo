@@ -59,7 +59,7 @@ export const GameHeader: React.FC = () => {
               className="bg-white/20 text-white border border-white/30 font-semibold px-6 py-2 rounded-md shadow-sm hover:bg-white/30 transition-colors"
               onClick={() => actions.showEndSessionConfirm(true)}
             >
-              Restart Game
+              End Session
             </Button>
           </div>
         </div>

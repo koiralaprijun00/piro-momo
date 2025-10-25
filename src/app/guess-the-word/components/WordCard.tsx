@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from './ui/card';
 import { Progress } from './ui/progress';
-import { cn } from '../lib/utils';
 import { Clock } from 'lucide-react';
 import { useGameState } from '../context';
 import { useFinalAssessment } from '../hooks';
@@ -33,7 +32,7 @@ const WordDisplayContent: React.FC<{ word: string; timeLeft: number }> = ({ word
         style={{
           fontSize: '3.75rem', // text-6xl
           fontWeight: 700,
-          color: urgencyLevel === 'urgent' ? '#dc2626' : 'var(--foreground)',
+          color: urgencyLevel === 'urgent' ? '#dc2626' : 'hsl(var(--foreground))',
           transition: 'all 0.3s',
           lineHeight: 1.1,
           cursor: 'default',
@@ -63,8 +62,8 @@ const WordTimerContent: React.FC<{ timeLeft: number; timerDuration: number; mean
         }}></div>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-        <Clock style={{ width: 16, height: 16, color: urgencyLevel === 'urgent' ? '#ef4444' : urgencyLevel === 'warning' ? '#f59e42' : 'var(--muted-foreground)', transition: 'color 0.3s' }} />
-        <span style={{ fontSize: '1.125rem', fontFamily: 'monospace', fontWeight: 600, color: urgencyLevel === 'urgent' ? '#ef4444' : urgencyLevel === 'warning' ? '#f59e42' : 'var(--muted-foreground)', transition: 'color 0.3s' }}>
+        <Clock style={{ width: 16, height: 16, color: urgencyLevel === 'urgent' ? '#ef4444' : urgencyLevel === 'warning' ? '#f59e42' : 'hsl(var(--muted-foreground))', transition: 'color 0.3s' }} />
+        <span style={{ fontSize: '1.125rem', fontFamily: 'monospace', fontWeight: 600, color: urgencyLevel === 'urgent' ? '#ef4444' : urgencyLevel === 'warning' ? '#f59e42' : 'hsl(var(--muted-foreground))', transition: 'color 0.3s' }}>
           {timeLeft}s
         </span>
       </div>
@@ -76,7 +75,7 @@ const WordTimerContent: React.FC<{ timeLeft: number; timerDuration: number; mean
 const WordMeaningContent: React.FC<{ wordData: { roman: string; meaning_nepali: string; meaning_english: string } }> = ({ wordData }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', textAlign: 'center' }}>
-      <div className="font-english" style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--muted-foreground)' }}>{wordData.roman}</div>
+      <div className="font-english" style={{ fontSize: '1.5rem', fontWeight: 600, color: 'hsl(var(--muted-foreground))' }}>{wordData.roman}</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <div style={{
           padding: 16,
@@ -85,7 +84,7 @@ const WordMeaningContent: React.FC<{ wordData: { roman: string; meaning_nepali: 
           border: '1px solid #bfdbfe',
         }}>
           <div style={{ fontSize: '0.875rem', fontWeight: 500, color: '#2563eb', marginBottom: 8 }}>नेपाली अर्थ</div>
-          <div className="font-devanagari" style={{ fontSize: '1.125rem', color: 'var(--foreground)', lineHeight: 1.6 }}>{wordData.meaning_nepali}</div>
+          <div className="font-devanagari" style={{ fontSize: '1.125rem', color: 'hsl(var(--foreground))', lineHeight: 1.6 }}>{wordData.meaning_nepali}</div>
         </div>
         <div style={{
           padding: 16,
@@ -94,7 +93,7 @@ const WordMeaningContent: React.FC<{ wordData: { roman: string; meaning_nepali: 
           border: '1px solid #bbf7d0',
         }}>
           <div style={{ fontSize: '0.875rem', fontWeight: 500, color: '#16a34a', marginBottom: 8 }}>English Meaning</div>
-          <div className="font-english" style={{ fontSize: '1.125rem', color: 'var(--foreground)', lineHeight: 1.6 }}>{wordData.meaning_english}</div>
+          <div className="font-english" style={{ fontSize: '1.125rem', color: 'hsl(var(--foreground))', lineHeight: 1.6 }}>{wordData.meaning_english}</div>
         </div>
       </div>
     </div>
