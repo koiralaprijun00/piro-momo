@@ -1,6 +1,6 @@
 // src/app/api/would-you-rather/submit/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import clientPromise from '@/app/lib/mongodb';
+import getMongoClient from '@/app/lib/mongodb';
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Connect to MongoDB
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db();
     
     // Store the question submission

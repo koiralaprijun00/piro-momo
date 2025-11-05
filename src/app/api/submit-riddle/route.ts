@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import clientPromise from '@/app/lib/mongodb';
+import getMongoClient from '@/app/lib/mongodb';
 import { z } from 'zod';
 
 // Input validation schema
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     const validatedData = RiddleSubmissionSchema.parse(body);
 
     // Connect to MongoDB
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db();
 
     // Check rate limiting

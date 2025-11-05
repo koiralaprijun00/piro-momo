@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import clientPromise from '../../lib/mongodb';
+import getMongoClient from '../../lib/mongodb';
 
 export async function POST(request: Request) {
   try {
     const { feedback, email } = await request.json();
     
     // Connect to MongoDB using your existing client
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db('geo-nepal'); // Using your existing database
     
     // Create a new collection for feedback if it doesn't exist

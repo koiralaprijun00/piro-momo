@@ -1,6 +1,6 @@
 // src/app/api/would-you-rather/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import clientPromise from '@/app/lib/mongodb';
+import getMongoClient from '@/app/lib/mongodb';
 
 // Get vote counts for a specific question
 export async function GET(request: NextRequest) {
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Question ID is required' }, { status: 400 });
     }
     
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db();
     
     // Get vote counts for this question
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
     }
     
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db();
     
     // Get the IP address of the user to prevent duplicate votes
