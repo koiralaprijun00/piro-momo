@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                             children: <Widget>[
                               Expanded(
                                 child: GameCard(
-                                  game: homeGames.first,
+                                  game: homeGames.first,CleanShot 2025-11-06 at 13.38.44@2x.jpg
                                   onTap: () =>
                                       context.push(homeGames.first.routePath),
                                 ),
@@ -115,64 +115,43 @@ class _HeroBanner extends StatelessWidget {
     final theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
 
-    final ColorScheme colorScheme = theme.colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          width: 64,
-          height: 64,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: <Color>[Color(0xFFE0ECFF), Color(0xFFF2E8FF)],
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: isWide ? 8 : 0,
+        vertical: isWide ? 12 : 8,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                homeGames.first.icon,
+                size: isWide ? 32 : 28,
+                color: theme.colorScheme.onBackground,
+              ),
+              const SizedBox(width: 14),
+              Text(
+                'Piro Momo',
+                style: textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.4,
+                  color: theme.colorScheme.onBackground,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Built for curious minds across the diaspora\nStay connected to Nepali culture wherever you are.',
+            style: textTheme.bodyLarge?.copyWith(
+              color: theme.colorScheme.onBackground.withOpacity(0.72),
+              height: 1.45,
             ),
-            shape: BoxShape.circle,
           ),
-          child: Icon(
-            homeGames.first.icon,
-            size: 30,
-            color: colorScheme.onBackground,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Text(
-          'सुप्रभात!',
-          style: textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.4,
-            color: colorScheme.onBackground.withOpacity(0.75),
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 12),
-        Text(
-          'Piro Momo Games',
-          style: textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.w700,
-            letterSpacing: -0.4,
-            color: colorScheme.onBackground,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Built for curious minds across the diaspora\nStay connected to Nepali culture wherever you are.',
-          style: textTheme.bodyLarge?.copyWith(
-            color: colorScheme.onBackground.withOpacity(0.72),
-            height: 1.45,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 16),
-        Divider(
-          height: 1,
-          thickness: 1,
-          color: colorScheme.outlineVariant.withOpacity(0.5),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
