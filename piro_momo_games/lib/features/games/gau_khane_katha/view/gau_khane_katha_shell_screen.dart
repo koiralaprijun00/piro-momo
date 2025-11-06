@@ -138,10 +138,16 @@ class _RiddleGameBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final question = state.currentRiddle;
 
     if (state.isLoading && state.deck.isEmpty) {
       return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state.showOnboarding) {
+      return _RiddleOnboarding(
+        controller: controller,
+        isLoading: state.isLoading,
+      );
     }
 
     if (state.hasError) {
@@ -165,6 +171,7 @@ class _RiddleGameBody extends StatelessWidget {
       );
     }
 
+    final question = state.currentRiddle;
     if (question == null) {
       return const Center(child: Text('No riddles found.'));
     }
@@ -228,6 +235,81 @@ class _RiddleGameBody extends StatelessWidget {
           ),
           const SizedBox(height: 48),
         ],
+      ),
+    );
+  }
+}
+
+class _RiddleOnboarding extends StatelessWidget {
+  const _RiddleOnboarding({required this.controller, required this.isLoading});
+
+  final RiddleGameController controller;
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final game = homeGames.last;
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.secondary.withOpacity(0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                game.icon,
+                size: 40,
+                color: theme.colorScheme.secondary,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              game.title,
+              style: theme.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              game.description,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: theme.colorScheme.onBackground.withOpacity(0.75),
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 28),
+            FilledButton(
+              onPressed: isLoading ? null : controller.startGame,
+              style: FilledButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 36,
+                  vertical: 16,
+                ),
+                textStyle: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.3,
+                ),
+              ),
+              child: isLoading
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2.5),
+                    )
+                  : const Text('Play'),
+            ),
+          ],
+        ),
       ),
     );
   }

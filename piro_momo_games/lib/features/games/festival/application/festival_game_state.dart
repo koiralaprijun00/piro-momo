@@ -17,6 +17,7 @@ class FestivalGameState {
     this.incorrectCount = 0,
     this.streak = 0,
     this.bestStreak = 0,
+    this.showOnboarding = true,
   });
 
   factory FestivalGameState.initial() {
@@ -32,6 +33,7 @@ class FestivalGameState {
       incorrectCount: 0,
       streak: 0,
       bestStreak: 0,
+      showOnboarding: true,
     );
   }
 
@@ -49,6 +51,7 @@ class FestivalGameState {
   final int incorrectCount;
   final int streak;
   final int bestStreak;
+  final bool showOnboarding;
 
   FestivalQuestion? get currentQuestion {
     if (deck.isEmpty || currentIndex >= deck.length) {
@@ -76,6 +79,7 @@ class FestivalGameState {
     int? incorrectCount,
     int? streak,
     int? bestStreak,
+    bool? showOnboarding,
     bool clearError = false,
     bool clearSelection = false,
   }) {
@@ -96,6 +100,7 @@ class FestivalGameState {
       incorrectCount: incorrectCount ?? this.incorrectCount,
       streak: streak ?? this.streak,
       bestStreak: bestStreak ?? this.bestStreak,
+      showOnboarding: showOnboarding ?? this.showOnboarding,
     );
   }
 }

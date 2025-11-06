@@ -75,6 +75,7 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
         completed: false,
         submissionStatus: SubmissionStatus.idle,
         isCorrect: null,
+        showOnboarding: state.showOnboarding,
       );
     } catch (error) {
       state = state.copyWith(isLoading: false, errorMessage: error.toString());
@@ -87,6 +88,9 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
 
   void submitAnswer() {
     if (state.isLoading || state.showAnswer) {
+      return;
+    }
+    if (state.showOnboarding) {
       return;
     }
 
@@ -168,7 +172,7 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
 
   void revealAnswer() {
     final RiddleEntry? current = state.currentRiddle;
-    if (current == null || state.showAnswer) {
+    if (current == null || state.showAnswer || state.showOnboarding) {
       return;
     }
 
@@ -195,6 +199,9 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
 
   void nextRiddle() {
     if (state.deck.isEmpty) {
+      return;
+    }
+    if (state.showOnboarding) {
       return;
     }
 
@@ -262,6 +269,7 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
       completed: false,
       submissionStatus: SubmissionStatus.idle,
       isCorrect: null,
+      showOnboarding: state.showOnboarding,
     );
   }
 
@@ -315,5 +323,17 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
       return <String>[raw.toLowerCase().trim()];
     }
     return splits;
+  }
+
+  void startGame() {
+    if (state.showOnboarding) {
+      if (state.deck.isEmpty) {
+        loadDeck(locale: state.locale).then((_) {
+          state = state.copyWith(showOnboarding: false);
+        });
+      } else {
+        state = state.copyWith(showOnboarding: false);
+      }
+    }
   }
 }

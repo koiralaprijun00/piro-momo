@@ -22,6 +22,7 @@ class RiddleGameState {
     this.errorMessage,
     this.isCorrect,
     this.submissionStatus = SubmissionStatus.idle,
+    this.showOnboarding = true,
   });
 
   factory RiddleGameState.initial() {
@@ -41,6 +42,7 @@ class RiddleGameState {
       bestStreak: 0,
       completed: false,
       submissionStatus: SubmissionStatus.idle,
+      showOnboarding: true,
     );
   }
 
@@ -61,6 +63,7 @@ class RiddleGameState {
   final String? errorMessage;
   final bool? isCorrect;
   final SubmissionStatus submissionStatus;
+  final bool showOnboarding;
 
   RiddleEntry? get currentRiddle {
     if (deck.isEmpty || currentIndex >= deck.length) {
@@ -92,6 +95,7 @@ class RiddleGameState {
     String? errorMessage,
     bool? isCorrect,
     SubmissionStatus? submissionStatus,
+    bool? showOnboarding,
     bool clearError = false,
   }) {
     return RiddleGameState(
@@ -112,6 +116,7 @@ class RiddleGameState {
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
       isCorrect: isCorrect ?? this.isCorrect,
       submissionStatus: submissionStatus ?? this.submissionStatus,
+      showOnboarding: showOnboarding ?? this.showOnboarding,
     );
   }
 }

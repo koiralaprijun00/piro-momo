@@ -64,6 +64,7 @@ class FestivalGameController extends StateNotifier<FestivalGameState> {
         incorrectCount: 0,
         streak: 0,
         bestStreak: persistedBest,
+        showOnboarding: state.showOnboarding,
       );
     } catch (error) {
       state = state.copyWith(isLoading: false, errorMessage: error.toString());
@@ -72,6 +73,9 @@ class FestivalGameController extends StateNotifier<FestivalGameState> {
 
   void submitGuess(String option) {
     if (state.isLoading || state.isAnswered || state.deck.isEmpty) {
+      return;
+    }
+    if (state.showOnboarding) {
       return;
     }
 
@@ -160,7 +164,20 @@ class FestivalGameController extends StateNotifier<FestivalGameState> {
       incorrectCount: 0,
       streak: 0,
       bestStreak: state.bestStreak,
+      showOnboarding: state.showOnboarding,
     );
+  }
+
+  void startGame() {
+    if (state.showOnboarding) {
+      if (state.deck.isEmpty) {
+        loadDeck(locale: state.locale).then((_) {
+          state = state.copyWith(showOnboarding: false);
+        });
+      } else {
+        state = state.copyWith(showOnboarding: false);
+      }
+    }
   }
 
   void changeLocale(GameLocale locale) {
