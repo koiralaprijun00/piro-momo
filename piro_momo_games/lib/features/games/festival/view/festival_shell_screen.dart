@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../data/models/game_locale.dart';
-import '../../../../core/theme/app_theme.dart';
 import '../../../home/data/game_definition.dart';
 import '../application/festival_game_providers.dart';
 import '../application/festival_game_state.dart';
@@ -21,18 +20,35 @@ class FestivalShellScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final FestivalGameState state = ref.watch(festivalGameControllerProvider);
     final controller = ref.read(festivalGameControllerProvider.notifier);
+    final ThemeData theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Guess the Festival'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
+          iconSize: 20,
+          padding: const EdgeInsets.all(8),
+          visualDensity: VisualDensity.compact,
           onPressed: () => context.pop(),
         ),
         actions: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.only(right: 12),
             child: SegmentedButton<GameLocale>(
+              style: ButtonStyle(
+                visualDensity: VisualDensity.compact,
+                padding: const WidgetStatePropertyAll<EdgeInsets>(
+                  EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                ),
+                textStyle: WidgetStatePropertyAll<TextStyle?>(
+                  theme.textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.4,
+                  ),
+                ),
+              ),
+              showSelectedIcon: false,
               segments: const <ButtonSegment<GameLocale>>[
                 ButtonSegment<GameLocale>(
                   value: GameLocale.english,
@@ -111,7 +127,6 @@ class _FestivalGameContent extends StatelessWidget {
       return const Center(child: Text('No questions available right now.'));
     }
 
-    final bool isWide = MediaQuery.of(context).size.width >= 960;
     final int totalAnswered = state.correctCount + state.incorrectCount;
     final double accuracy = totalAnswered == 0
         ? 0
@@ -119,90 +134,57 @@ class _FestivalGameContent extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        final EdgeInsets padding = EdgeInsets.symmetric(
-          horizontal: isWide ? 80 : 24,
-          vertical: 24,
+        final bool isWide = constraints.maxWidth >= 960;
+        final EdgeInsets basePadding = EdgeInsets.symmetric(
+          horizontal: isWide ? 120 : 20,
+          vertical: isWide ? 40 : 24,
         );
 
-        return SingleChildScrollView(
-          padding:
-              padding +
-              EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom + 24,
-              ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _HeroHeader(
-                state: state,
-                accuracy: accuracy,
-                controller: controller,
-              ),
-              const SizedBox(height: 32),
-              Card(
-                elevation: 8,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 28,
+        return Container(
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: <Color>[
+                Color(0xFFF6F3FF),
+                Color(0xFFE0F2FE),
+                Color(0xFFFFF1F2),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: Center(
+            child: SingleChildScrollView(
+              padding:
+                  basePadding +
+                  EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom + 32,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Question ${totalAnswered + 1}',
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: colorScheme.primary,
-                          letterSpacing: 0.8,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        question.question,
-                        style: theme.textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: colorScheme.onSurface,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Column(
-                        children: state.currentOptions
-                            .map(
-                              (String option) => Padding(
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: FestivalOptionButton(
-                                  label: option,
-                                  isSelected: state.selectedOption == option,
-                                  isCorrectAnswer:
-                                      state.isAnswered &&
-                                      option == question.name,
-                                  isDisabled: state.isAnswered,
-                                  onPressed: () =>
-                                      controller.submitGuess(option),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                      const SizedBox(height: 16),
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 260),
-                        switchInCurve: Curves.easeOut,
-                        switchOutCurve: Curves.easeIn,
-                        child: state.isAnswered
-                            ? _FactRevealSection(
-                                key: ValueKey<String>('fact-${question.id}'),
-                                question: question,
-                                isCorrect: state.isCorrect ?? false,
-                                controller: controller,
-                              )
-                            : const SizedBox.shrink(),
-                      ),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 920),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    _FestivalStatsPanel(
+                      state: state,
+                      accuracy: accuracy,
+                      controller: controller,
+                    ),
+                    if (totalAnswered == 0) ...<Widget>[
+                      const SizedBox(height: 20),
+                      const _FestivalIntroBanner(),
                     ],
-                  ),
+                    const SizedBox(height: 28),
+                    _FestivalQuestionCard(
+                      state: state,
+                      question: question,
+                      controller: controller,
+                      totalAnswered: totalAnswered,
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         );
       },
@@ -289,8 +271,65 @@ class _FestivalOnboarding extends StatelessWidget {
   }
 }
 
-class _HeroHeader extends StatelessWidget {
-  const _HeroHeader({
+class _FestivalIntroBanner extends StatelessWidget {
+  const _FestivalIntroBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final game = homeGames.first;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primary.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: theme.colorScheme.primary.withOpacity(0.2),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          CircleAvatar(
+            radius: 22,
+            backgroundColor: theme.colorScheme.primary.withOpacity(0.12),
+            child: Icon(
+              game.icon,
+              color: theme.colorScheme.primary,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Guess the Festival',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Match the clue to the celebration and uncover the story behind Nepal’s biggest festivals.',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurface.withOpacity(0.8),
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FestivalStatsPanel extends StatefulWidget {
+  const _FestivalStatsPanel({
     required this.state,
     required this.accuracy,
     required this.controller,
@@ -301,113 +340,260 @@ class _HeroHeader extends StatelessWidget {
   final FestivalGameController controller;
 
   @override
+  State<_FestivalStatsPanel> createState() => _FestivalStatsPanelState();
+}
+
+class _FestivalStatsPanelState extends State<_FestivalStatsPanel> {
+  bool _expanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _expanded = widget.state.isAnswered;
+  }
+
+  @override
+  void didUpdateWidget(covariant _FestivalStatsPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.state.isAnswered != oldWidget.state.isAnswered) {
+      setState(() {
+        _expanded = widget.state.isAnswered;
+      });
+    }
+  }
+
+  void _toggleExpanded() {
+    setState(() {
+      _expanded = !_expanded;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final Gradient? gradient =
-        theme.extension<GradientTheme>()?.hero ??
-        const LinearGradient(
-          colors: <Color>[
-            Color(0xFF2563EB),
-            Color(0xFFA855F7),
-            Color(0xFFF472B6),
-          ],
-        );
+    final ColorScheme colorScheme = theme.colorScheme;
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
+    final List<Widget> statChips = <Widget>[
+      FestivalStatBadge(
+        label: 'Score',
+        value: '${widget.state.score}',
+        icon: Icons.auto_awesome_rounded,
+        color: colorScheme.primary,
+        compact: true,
+      ),
+      FestivalStatBadge(
+        label: 'Streak',
+        value: widget.state.streak.toString(),
+        icon: Icons.local_fire_department_rounded,
+        color: Colors.orange.shade400,
+        compact: true,
+      ),
+      FestivalStatBadge(
+        label: 'Best',
+        value: widget.state.bestStreak.toString(),
+        icon: Icons.rocket_launch_outlined,
+        color: Colors.pink.shade400,
+        compact: true,
+      ),
+      FestivalStatBadge(
+        label: 'Accuracy',
+        value: '${widget.accuracy.toStringAsFixed(0)}%',
+        icon: Icons.insights_rounded,
+        color: Colors.blue.shade400,
+        compact: true,
+      ),
+    ];
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
       decoration: BoxDecoration(
-        gradient: gradient,
-        borderRadius: BorderRadius.circular(36),
+        color: Colors.white.withOpacity(0.92),
+        borderRadius: BorderRadius.circular(32),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withOpacity(0.35),
+        ),
         boxShadow: const <BoxShadow>[
           BoxShadow(
-            color: Color(0x34000000),
-            blurRadius: 28,
-            offset: Offset(0, 16),
+            color: Color(0x14000000),
+            blurRadius: 40,
+            offset: Offset(0, 30),
           ),
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Guess the Festival',
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -0.4,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Match the clue to the celebration and uncover the story behind Nepal’s biggest festivals.',
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        color: Colors.white.withOpacity(0.9),
-                      ),
-                    ),
-                  ],
+              Text(
+                'Stats',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: colorScheme.onSurface,
                 ),
               ),
-              const SizedBox(width: 16),
-              CircleAvatar(
-                radius: 28,
-                backgroundColor: Colors.white.withOpacity(0.18),
-                child: Icon(
-                  homeGames.first.icon,
-                  color: Colors.white,
-                  size: 28,
+              const SizedBox(width: 12),
+              Expanded(
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 200),
+                  opacity: _expanded ? 0.7 : 1,
+                  child: Text(
+                    _expanded
+                        ? 'Review your progress before the next clue.'
+                        : 'Hidden during play for less distraction.',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                onPressed: _toggleExpanded,
+                icon: Icon(
+                  _expanded
+                      ? Icons.expand_less_rounded
+                      : Icons.expand_more_rounded,
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 8),
+          AnimatedCrossFade(
+            firstChild: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  clipBehavior: Clip.none,
+                  child: Row(
+                    children: statChips
+                        .map(
+                          (Widget chip) => Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: chip,
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton.icon(
+                    onPressed: widget.controller.restart,
+                    style: TextButton.styleFrom(
+                      foregroundColor: colorScheme.primary,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                    ),
+                    icon: const Icon(Icons.refresh_rounded),
+                    label: const Text('Shuffle deck'),
+                  ),
+                ),
+              ],
+            ),
+            secondChild: const SizedBox.shrink(),
+            crossFadeState: _expanded
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+            duration: const Duration(milliseconds: 200),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FestivalQuestionCard extends StatelessWidget {
+  const _FestivalQuestionCard({
+    required this.state,
+    required this.question,
+    required this.controller,
+    required this.totalAnswered,
+  });
+
+  final FestivalGameState state;
+  final FestivalQuestion question;
+  final FestivalGameController controller;
+  final int totalAnswered;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 36),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(36),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withOpacity(0.35),
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: colorScheme.shadow.withOpacity(0.08),
+            blurRadius: 45,
+            offset: const Offset(0, 24),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Text(
+            'Question ${totalAnswered + 1}',
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: colorScheme.primary,
+              letterSpacing: 0.8,
+            ),
           ),
           const SizedBox(height: 24),
-          Wrap(
-            spacing: 16,
-            runSpacing: 12,
-            children: <Widget>[
-              FestivalStatBadge(
-                label: 'Score',
-                value: '${state.score}',
-                icon: Icons.auto_awesome_rounded,
-                color: Colors.white,
-              ),
-              FestivalStatBadge(
-                label: 'Streak',
-                value: state.streak.toString(),
-                icon: Icons.local_fire_department_rounded,
-                color: Colors.orange.shade200,
-              ),
-              FestivalStatBadge(
-                label: 'Best',
-                value: state.bestStreak.toString(),
-                icon: Icons.rocket_launch_outlined,
-                color: Colors.pink.shade100,
-              ),
-              FestivalStatBadge(
-                label: 'Accuracy',
-                value: '${accuracy.toStringAsFixed(0)}%',
-                icon: Icons.insights_rounded,
-                color: Colors.blue.shade100,
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          FilledButton.tonalIcon(
-            style: FilledButton.styleFrom(
-              backgroundColor: Colors.white.withOpacity(0.12),
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          Text(
+            question.question,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.w800,
+              color: colorScheme.onSurface,
+              height: 1.35,
             ),
-            onPressed: controller.restart,
-            icon: const Icon(Icons.refresh_rounded),
-            label: const Text('Shuffle deck'),
+          ),
+          const SizedBox(height: 32),
+          Column(
+            children: state.currentOptions
+                .map(
+                  (String option) => Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: FestivalOptionButton(
+                      label: option,
+                      isSelected: state.selectedOption == option,
+                      isCorrectAnswer:
+                          state.isAnswered && option == question.name,
+                      isDisabled: state.isAnswered,
+                      onPressed: () => controller.submitGuess(option),
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+          const SizedBox(height: 12),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 260),
+            switchInCurve: Curves.easeOut,
+            switchOutCurve: Curves.easeIn,
+            child: state.isAnswered
+                ? _FactRevealSection(
+                    key: ValueKey<String>('fact-${question.id}'),
+                    question: question,
+                    isCorrect: state.isCorrect ?? false,
+                    controller: controller,
+                  )
+                : const SizedBox.shrink(),
           ),
         ],
       ),
