@@ -9,7 +9,7 @@ class PiroMomoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Piro Momo Games',
+      title: 'Piro Momo',
       debugShowCheckedModeBanner: false,
       routerConfig: appRouter,
       theme: AppTheme.light(),
