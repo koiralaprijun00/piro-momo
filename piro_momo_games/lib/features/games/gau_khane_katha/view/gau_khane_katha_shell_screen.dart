@@ -1,17 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/theme/app_palette.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../data/models/game_locale.dart';
 import '../../../home/data/game_definition.dart';
+import '../application/riddle_game_controller.dart';
+import '../application/riddle_game_providers.dart';
+import '../application/riddle_game_state.dart';
+import '../widgets/riddle_answer_card.dart';
+import '../widgets/riddle_submission_card.dart';
+import '../widgets/riddle_summary_tiles.dart';
 
-class GauKhaneKathaShellScreen extends StatelessWidget {
+class GauKhaneKathaShellScreen extends ConsumerStatefulWidget {
   const GauKhaneKathaShellScreen({super.key});
 
   static const String routePath = '/games/gau-khane-katha';
 
   @override
+  ConsumerState<GauKhaneKathaShellScreen> createState() =>
+      _GauKhaneKathaShellScreenState();
+}
+
+class _GauKhaneKathaShellScreenState
+    extends ConsumerState<GauKhaneKathaShellScreen> {
+  late final TextEditingController _answerController;
+
+  @override
+  void initState() {
+    super.initState();
+    _answerController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _answerController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    ref.listen<RiddleGameState>(riddleGameControllerProvider, (
+      RiddleGameState? previous,
+      RiddleGameState next,
+    ) {
+      if (previous?.submissionStatus != next.submissionStatus) {
+        if (!mounted) return;
+        final messenger = ScaffoldMessenger.of(context);
+        switch (next.submissionStatus) {
+          case SubmissionStatus.success:
+            messenger.showSnackBar(
+              const SnackBar(
+                content: Text('धन्यवाद! We saved your riddle idea.'),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+            break;
+          case SubmissionStatus.failure:
+            messenger.showSnackBar(
+              const SnackBar(
+                content: Text('Could not submit right now. Try again later.'),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+            break;
+          default:
+            break;
+        }
+      }
+    });
+
+    final RiddleGameState state = ref.watch(riddleGameControllerProvider);
+    final RiddleGameController controller = ref.read(
+      riddleGameControllerProvider.notifier,
+    );
+
+    if (_answerController.text != state.userAnswer) {
+      _answerController.value = TextEditingValue(
+        text: state.userAnswer,
+        selection: TextSelection.collapsed(offset: state.userAnswer.length),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -20,31 +90,144 @@ class GauKhaneKathaShellScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () => context.pop(),
         ),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Icon(homeGames.last.icon, size: 64, color: colorScheme.secondary),
-              const SizedBox(height: 24),
-              Text(
-                'Riddle gameplay screens are queued for the next milestones.',
-                style: textTheme.headlineSmall,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Expect bilingual riddles, streak tracking, and playful animations inspired by the web experience.',
-                style: textTheme.bodyLarge?.copyWith(
-                  color: colorScheme.onBackground.withOpacity(0.7),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: SegmentedButton<GameLocale>(
+              segments: const <ButtonSegment<GameLocale>>[
+                ButtonSegment<GameLocale>(
+                  value: GameLocale.english,
+                  label: Text('EN'),
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+                ButtonSegment<GameLocale>(
+                  value: GameLocale.nepali,
+                  label: Text('NP'),
+                ),
+              ],
+              selected: <GameLocale>{state.locale},
+              onSelectionChanged: (Set<GameLocale> value) {
+                controller.changeLocale(value.first);
+              },
+            ),
           ),
+        ],
+      ),
+      body: SafeArea(
+        bottom: false,
+        child: _RiddleGameBody(
+          state: state,
+          controller: controller,
+          answerController: _answerController,
         ),
+      ),
+    );
+  }
+}
+
+class _RiddleGameBody extends StatelessWidget {
+  const _RiddleGameBody({
+    required this.state,
+    required this.controller,
+    required this.answerController,
+  });
+
+  final RiddleGameState state;
+  final RiddleGameController controller;
+  final TextEditingController answerController;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final question = state.currentRiddle;
+
+    if (state.isLoading && state.deck.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state.hasError) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const Icon(Icons.error_outline, size: 42),
+            const SizedBox(height: 12),
+            Text(
+              state.errorMessage ?? 'Unable to load riddles right now.',
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            FilledButton(
+              onPressed: controller.loadDeck,
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (question == null) {
+      return const Center(child: Text('No riddles found.'));
+    }
+
+    final bool isWide = MediaQuery.of(context).size.width >= 980;
+    final EdgeInsets padding = EdgeInsets.symmetric(
+      horizontal: isWide ? 72 : 24,
+      vertical: 28,
+    );
+
+    final Gradient? gradient =
+        theme.extension<GradientTheme>()?.card ?? AppPalette.cardGradient;
+
+    return SingleChildScrollView(
+      padding:
+          padding +
+          EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 36),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
+            decoration: BoxDecoration(
+              gradient: gradient,
+              borderRadius: BorderRadius.circular(32),
+              boxShadow: const <BoxShadow>[
+                BoxShadow(
+                  color: Color(0x24000000),
+                  blurRadius: 32,
+                  offset: Offset(0, 20),
+                ),
+              ],
+            ),
+            child: RiddleSummaryTiles(
+              score: state.score,
+              streak: state.streak,
+              bestStreak: state.bestStreak,
+              solved: state.solvedCount,
+              total: state.totalCount,
+              attemptsLeft: state.maxAttempts - state.attempts,
+              locale: state.locale,
+              onRestart: controller.restart,
+            ),
+          ),
+          const SizedBox(height: 28),
+          RiddleAnswerCard(
+            riddle: question,
+            state: state,
+            answerController: answerController,
+            onAnswerChanged: controller.updateAnswer,
+            onSubmitAnswer: controller.submitAnswer,
+            onRevealAnswer: controller.revealAnswer,
+            onNextRiddle: controller.nextRiddle,
+          ),
+          const SizedBox(height: 32),
+          RiddleSubmissionCard(
+            status: state.submissionStatus,
+            locale: state.locale,
+            onSubmitSuggestion: controller.submitRiddleSuggestion,
+          ),
+          const SizedBox(height: 48),
+        ],
       ),
     );
   }

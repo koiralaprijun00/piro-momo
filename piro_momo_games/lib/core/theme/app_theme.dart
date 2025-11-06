@@ -55,7 +55,7 @@ class AppTheme {
         titleTextStyle: textTheme.titleLarge,
         centerTitle: false,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: colorScheme.surface,
         elevation: brightness == Brightness.light ? 6 : 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),

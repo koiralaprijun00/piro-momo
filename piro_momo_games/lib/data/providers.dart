@@ -1,0 +1,42 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../core/analytics/analytics_service.dart';
+import '../core/persistence/progress_store.dart';
+import 'models/festival_question.dart';
+import 'models/game_locale.dart';
+import 'models/riddle_entry.dart';
+import 'repositories/festival_repository.dart';
+import 'repositories/riddle_repository.dart';
+
+final Provider<FestivalRepository> festivalRepositoryProvider =
+    Provider<FestivalRepository>((Ref ref) {
+      return FestivalRepository();
+    });
+
+final Provider<RiddleRepository> riddleRepositoryProvider =
+    Provider<RiddleRepository>((Ref ref) {
+      return RiddleRepository();
+    });
+
+final Provider<ProgressStore> progressStoreProvider = Provider<ProgressStore>(
+  (Ref ref) => ProgressStore(),
+);
+
+final Provider<AnalyticsService> analyticsServiceProvider =
+    Provider<AnalyticsService>((Ref ref) => const AnalyticsService());
+
+final AutoDisposeFutureProviderFamily<List<FestivalQuestion>, GameLocale>
+festivalQuestionsProvider = FutureProvider.autoDispose
+    .family<List<FestivalQuestion>, GameLocale>((ref, locale) async {
+      final FestivalRepository repository = ref.read(
+        festivalRepositoryProvider,
+      );
+      return repository.loadQuestions(locale);
+    });
+
+final AutoDisposeFutureProviderFamily<List<RiddleEntry>, GameLocale>
+riddleEntriesProvider = FutureProvider.autoDispose
+    .family<List<RiddleEntry>, GameLocale>((ref, locale) async {
+      final RiddleRepository repository = ref.read(riddleRepositoryProvider);
+      return repository.loadRiddles(locale);
+    });

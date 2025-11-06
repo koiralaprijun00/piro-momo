@@ -117,7 +117,6 @@ class _HeroBanner extends StatelessWidget {
     final theme = Theme.of(context);
     final GradientTheme? gradientTheme = theme.extension<GradientTheme>();
     final TextTheme textTheme = theme.textTheme;
-    final ColorScheme colorScheme = theme.colorScheme;
 
     return Container(
       decoration: BoxDecoration(
