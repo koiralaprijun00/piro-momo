@@ -19,6 +19,16 @@ flutter run
 
 The default entry launches the hub screen where each game card routes to a placeholder shell for upcoming gameplay work.
 
+## Java Requirements for Android/Gradle
+
+The Android Gradle Plugin (8.7.x) now runs only on JDK 17+. If you see Gradle fail with `Dependency requires at least JVM runtime version 11` (or similar), switch your Java runtime before invoking `flutter run`/`gradlew`:
+
+1. Install a JDK 17 distribution (e.g. `brew install temurin@17`, `sdk install java 17.0.11-tem`, or `asdf install java temurin-17.0.11`).
+2. Point `JAVA_HOME` at that install: macOS `export JAVA_HOME=$(/usr/libexec/java_home -v 17)`, Linux `export JAVA_HOME=/usr/lib/jvm/temurin-17`.
+3. Re-run your build (`flutter run`, `./gradlew assembleDebug`, etc.).
+
+For developers using `jenv`/`asdf`, the repo now contains a `.java-version` file set to `17` so the correct JDK is selected automatically when you `cd` into `piro_momo_games/`.
+
 ## Key Structure
 
 - `lib/app.dart` – root `MaterialApp.router` with theme wiring.
