@@ -35,32 +35,14 @@ class HomeScreen extends StatelessWidget {
                       children: <Widget>[
                         _HeroBanner(isWide: isWide),
                         const SizedBox(height: 32),
-                        Text(
-                          'Featured Games',
-                          style: Theme.of(context).textTheme.headlineSmall
-                              ?.copyWith(
-                                fontWeight: FontWeight.w700,
-                                color: colorScheme.onBackground,
-                              ),
-                        ),
                         const SizedBox(height: 12),
-                        Text(
-                          'Take a quick break, learn something new, and keep your streaks alive.',
-                          style: Theme.of(context).textTheme.bodyLarge
-                              ?.copyWith(
-                                color: colorScheme.onBackground.withOpacity(
-                                  0.7,
-                                ),
-                              ),
-                        ),
-                        const SizedBox(height: 28),
                         if (isWide)
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Expanded(
                                 child: GameCard(
-                                  game: homeGames.first,CleanShot 2025-11-06 at 13.38.44@2x.jpg
+                                  game: homeGames.first,
                                   onTap: () =>
                                       context.push(homeGames.first.routePath),
                                 ),
