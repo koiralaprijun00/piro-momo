@@ -13,7 +13,7 @@ class GameCard extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
-    final gradient = LinearGradient(
+    final Gradient gradient = LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: game.accentColors,
@@ -34,29 +34,22 @@ class GameCard extends StatelessWidget {
             ),
           ],
         ),
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 28),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.25),
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Icon(game.icon, size: 28, color: Colors.white),
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.22),
+                  borderRadius: BorderRadius.circular(18),
                 ),
-                const Spacer(),
-                Icon(
-                  Icons.arrow_forward_rounded,
-                  color: Colors.white.withOpacity(0.9),
-                ),
-              ],
+                child: Icon(game.icon, size: 24, color: Colors.white),
+              ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             Text(
               game.eyebrow.toUpperCase(),
               style: textTheme.labelSmall?.copyWith(
@@ -79,37 +72,6 @@ class GameCard extends StatelessWidget {
                 color: Colors.white.withOpacity(0.92),
               ),
             ),
-            if (game.tags.isNotEmpty) ...<Widget>[
-              const SizedBox(height: 18),
-              Wrap(
-                spacing: 10,
-                runSpacing: 8,
-                children: game.tags
-                    .map(
-                      (String tag) => Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(18),
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.35),
-                          ),
-                        ),
-                        child: Text(
-                          tag,
-                          style: textTheme.labelMedium?.copyWith(
-                            color: Colors.white,
-                            letterSpacing: 0.2,
-                          ),
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ),
-            ],
           ],
         ),
       ),
