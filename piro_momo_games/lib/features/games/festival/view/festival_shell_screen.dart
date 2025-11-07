@@ -269,50 +269,69 @@ class _FestivalStatsPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(
-              'Quick stats',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
+    return Container(
+      margin: const EdgeInsets.only(top: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: scheme.surface.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: scheme.outlineVariant.withOpacity(0.35)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: scheme.shadow.withOpacity(0.06),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final bool isTight = constraints.maxWidth < 380;
+
+          return Row(
+            children: <Widget>[
+              Expanded(
+                child: Wrap(
+                  spacing: 10,
+                  runSpacing: 8,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: <Widget>[
+                    FestivalStatBadge(
+                      label: 'Score',
+                      value: '${state.score}',
+                      icon: Icons.auto_awesome_rounded,
+                      compact: true,
+                    ),
+                    FestivalStatBadge(
+                      label: 'Streak',
+                      value: '${state.streak}',
+                      icon: Icons.local_fire_department_rounded,
+                      compact: true,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const Spacer(),
-            IconButton(
-  onPressed: controller.restart,
-  icon: const Icon(Icons.shuffle_rounded),
-  iconSize: 18,
-  style: IconButton.styleFrom(
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-    shape: const StadiumBorder(),
-  ),
-),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Wrap(
-          spacing: 12,
-          runSpacing: 10,
-          children: <Widget>[
-            FestivalStatBadge(
-              label: 'Score',
-              value: '${state.score}',
-              icon: Icons.auto_awesome_rounded,
-              compact: true,
-            ),
-            FestivalStatBadge(
-              label: 'Streak',
-              value: '${state.streak}',
-              icon: Icons.local_fire_department_rounded,
-              compact: true,
-            ),
-          ],
-        ),
-      ],
+              Tooltip(
+                message: 'Restart',
+                child: IconButton.filledTonal(
+                  onPressed: controller.restart,
+                  icon: const Icon(Icons.shuffle_rounded),
+                  iconSize: 18,
+                  style: IconButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isTight ? 10 : 14,
+                      vertical: 10,
+                    ),
+                    shape: const StadiumBorder(),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
@@ -392,12 +411,33 @@ class _FestivalQuestionCard extends StatelessWidget {
             duration: const Duration(milliseconds: 260),
             switchInCurve: Curves.easeOut,
             switchOutCurve: Curves.easeIn,
+            layoutBuilder: (Widget? currentChild, List<Widget> previousChildren) => currentChild!,
             child: state.isAnswered
-                ? _FactRevealSection(
-                    key: ValueKey<String>('fact-${question.id}'),
-                    question: question,
-                    isCorrect: state.isCorrect ?? false,
-                    controller: controller,
+                ? Column(
+                    key: ValueKey<String>('answered-${question.id}'),
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: FilledButton.tonalIcon(
+                          onPressed: controller.nextQuestion,
+                          icon: const Icon(Icons.arrow_forward_rounded),
+                          label: const Text('Next'),
+                          style: FilledButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      _FactRevealSection(
+                        key: ValueKey<String>('fact-${question.id}') ,
+                        question: question,
+                        isCorrect: state.isCorrect ?? false,
+                        controller: controller,
+                      ),
+                    ],
                   )
                 : const SizedBox.shrink(),
           ),
@@ -430,7 +470,6 @@ class _FactRevealSection extends StatelessWidget {
         : Icons.lightbulb_circle_rounded;
 
     return Container(
-      key: key,
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       decoration: BoxDecoration(
@@ -469,15 +508,6 @@ class _FactRevealSection extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-              ),
-              const Spacer(),
-              IconButton.filledTonal(
-                onPressed: controller.nextQuestion,
-                icon: const Icon(Icons.arrow_forward_rounded),
-                style: IconButton.styleFrom(
-                  backgroundColor: colorScheme.primary.withOpacity(0.85),
-                  foregroundColor: Colors.white,
                 ),
               ),
             ],

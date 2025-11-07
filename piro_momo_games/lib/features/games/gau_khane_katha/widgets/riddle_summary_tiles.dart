@@ -20,55 +20,71 @@ class RiddleSummaryTiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(
-              locale == GameLocale.nepali ? 'सादा प्रगति' : 'Quick stats',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const Spacer(),
-            TextButton.icon(
-              onPressed: onRestart,
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 10,
+    return Container(
+      margin: const EdgeInsets.only(top: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: colorScheme.surface.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: colorScheme.outlineVariant.withOpacity(0.35)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: colorScheme.shadow.withOpacity(0.06),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final bool isTight = constraints.maxWidth < 360;
+          final String tooltipLabel =
+              locale == GameLocale.nepali ? 'फेरि खेलौं' : 'Shuffle riddles';
+
+          return Row(
+            children: <Widget>[
+              Expanded(
+                child: Wrap(
+                  spacing: 10,
+                  runSpacing: 8,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: <Widget>[
+                    FestivalStatBadge(
+                      label: 'Score',
+                      value: score.toString(),
+                      icon: Icons.auto_fix_high_rounded,
+                      compact: true,
+                    ),
+                    FestivalStatBadge(
+                      label: 'Streak',
+                      value: streak.toString(),
+                      icon: Icons.local_fire_department_rounded,
+                      compact: true,
+                    ),
+                  ],
                 ),
-                shape: const StadiumBorder(),
               ),
-              icon: const Icon(Icons.shuffle_rounded, size: 18),
-              label: Text(
-                locale == GameLocale.nepali ? 'फेरि खेलौं' : 'Shuffle riddles',
+              Tooltip(
+                message: tooltipLabel,
+                child: IconButton.filledTonal(
+                  onPressed: onRestart,
+                  icon: const Icon(Icons.shuffle_rounded),
+                  iconSize: 18,
+                  style: IconButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isTight ? 10 : 14,
+                      vertical: 10,
+                    ),
+                    shape: const StadiumBorder(),
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 12,
-          runSpacing: 10,
-          children: <Widget>[
-            FestivalStatBadge(
-              label: 'Score',
-              value: score.toString(),
-              icon: Icons.auto_fix_high_rounded,
-              compact: true,
-            ),
-            FestivalStatBadge(
-              label: 'Streak',
-              value: streak.toString(),
-              icon: Icons.local_fire_department_rounded,
-              compact: true,
-            ),
-          ],
-        ),
-      ],
+            ],
+          );
+        },
+      ),
     );
   }
 }

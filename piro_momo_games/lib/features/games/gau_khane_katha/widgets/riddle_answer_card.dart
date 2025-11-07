@@ -35,6 +35,12 @@ class RiddleAnswerCard extends StatelessWidget {
     final bool showAnswer = state.showAnswer;
     final bool isCorrect = state.isCorrect ?? false;
 
+    final bool hasMore = !state.completed;
+    final IconData actionIcon =
+        hasMore ? Icons.arrow_forward_rounded : Icons.refresh_rounded;
+    final String actionLabel =
+        hasMore ? 'Next riddle' : 'Shuffle & continue';
+
     return Card(
       elevation: 8,
       child: Padding(
@@ -117,12 +123,29 @@ class RiddleAnswerCard extends StatelessWidget {
               switchInCurve: Curves.easeOutCubic,
               switchOutCurve: Curves.easeInCubic,
               child: showAnswer
-                  ? _AnswerReveal(
+                  ? Column(
                       key: ValueKey<String>('reveal-${riddle.id}'),
-                      riddle: riddle,
-                      isCorrect: isCorrect,
-                      onNext: onNextRiddle,
-                      hasMore: !state.completed,
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: FilledButton.tonalIcon(
+                            onPressed: onNextRiddle,
+                            icon: Icon(actionIcon),
+                            label: Text(actionLabel),
+                            style: FilledButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 12,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        _AnswerReveal(
+                          riddle: riddle,
+                          isCorrect: isCorrect,
+                        ),
+                      ],
                     )
                   : const SizedBox.shrink(),
             ),
@@ -138,14 +161,10 @@ class _AnswerReveal extends StatelessWidget {
     super.key,
     required this.riddle,
     required this.isCorrect,
-    required this.onNext,
-    required this.hasMore,
   });
 
   final RiddleEntry riddle;
   final bool isCorrect;
-  final VoidCallback onNext;
-  final bool hasMore;
 
   @override
   Widget build(BuildContext context) {
@@ -179,11 +198,6 @@ class _AnswerReveal extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                   color: accent,
                 ),
-              ),
-              const Spacer(),
-              FilledButton.tonal(
-                onPressed: onNext,
-                child: Text(hasMore ? 'Next riddle' : 'Shuffle and continue'),
               ),
             ],
           ),

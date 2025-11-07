@@ -8,7 +8,6 @@ import '../application/riddle_game_controller.dart';
 import '../application/riddle_game_providers.dart';
 import '../application/riddle_game_state.dart';
 import '../widgets/riddle_answer_card.dart';
-import '../widgets/riddle_submission_card.dart';
 import '../widgets/riddle_summary_tiles.dart';
 
 class GauKhaneKathaShellScreen extends ConsumerStatefulWidget {
@@ -39,36 +38,6 @@ class _GauKhaneKathaShellScreenState
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<RiddleGameState>(riddleGameControllerProvider, (
-      RiddleGameState? previous,
-      RiddleGameState next,
-    ) {
-      if (previous?.submissionStatus != next.submissionStatus) {
-        if (!mounted) return;
-        final messenger = ScaffoldMessenger.of(context);
-        switch (next.submissionStatus) {
-          case SubmissionStatus.success:
-            messenger.showSnackBar(
-              const SnackBar(
-                content: Text('धन्यवाद! We saved your riddle idea.'),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-            break;
-          case SubmissionStatus.failure:
-            messenger.showSnackBar(
-              const SnackBar(
-                content: Text('Could not submit right now. Try again later.'),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-            break;
-          default:
-            break;
-        }
-      }
-    });
-
     final RiddleGameState state = ref.watch(riddleGameControllerProvider);
     final RiddleGameController controller = ref.read(
       riddleGameControllerProvider.notifier,
@@ -202,12 +171,6 @@ class _RiddleGameBody extends StatelessWidget {
             onSubmitAnswer: controller.submitAnswer,
             onRevealAnswer: controller.revealAnswer,
             onNextRiddle: controller.nextRiddle,
-          ),
-          const SizedBox(height: 32),
-          RiddleSubmissionCard(
-            status: state.submissionStatus,
-            locale: state.locale,
-            onSubmitSuggestion: controller.submitRiddleSuggestion,
           ),
           const SizedBox(height: 48),
         ],
