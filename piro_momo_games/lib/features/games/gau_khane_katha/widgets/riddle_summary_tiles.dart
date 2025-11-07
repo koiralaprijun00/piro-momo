@@ -36,8 +36,10 @@ class RiddleSummaryTiles extends StatelessWidget {
             TextButton.icon(
               onPressed: onRestart,
               style: TextButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
                 shape: const StadiumBorder(),
               ),
               icon: const Icon(Icons.shuffle_rounded, size: 18),

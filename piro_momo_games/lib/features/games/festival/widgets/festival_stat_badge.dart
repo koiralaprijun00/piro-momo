@@ -46,14 +46,15 @@ class FestivalStatBadge extends StatelessWidget {
             if (icon != null) SizedBox(width: compact ? 8 : 10),
             Text(
               value,
-              style: (compact
+              style:
+                  (compact
                           ? theme.textTheme.titleSmall
                           : theme.textTheme.titleMedium)
                       ?.copyWith(
-                color: resolvedColor,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.2,
-              ),
+                        color: resolvedColor,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.2,
+                      ),
             ),
           ],
         ),

@@ -159,13 +159,10 @@ class _FestivalGameContent extends StatelessWidget {
                   ),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 920),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                    _FestivalStatsPanel(
-                      state: state,
-                      controller: controller,
-                    ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    _FestivalStatsPanel(state: state, controller: controller),
                     const SizedBox(height: 28),
                     _FestivalQuestionCard(
                       state: state,
@@ -264,10 +261,7 @@ class _FestivalOnboarding extends StatelessWidget {
 }
 
 class _FestivalStatsPanel extends StatelessWidget {
-  const _FestivalStatsPanel({
-    required this.state,
-    required this.controller,
-  });
+  const _FestivalStatsPanel({required this.state, required this.controller});
 
   final FestivalGameState state;
   final FestivalGameController controller;
@@ -291,11 +285,13 @@ class _FestivalStatsPanel extends StatelessWidget {
             TextButton.icon(
               onPressed: controller.restart,
               style: TextButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
                 shape: const StadiumBorder(),
               ),
-              icon: const Icon(Icons.shuffle_rounded, size: 18)
+              icon: const Icon(Icons.shuffle_rounded, size: 18),
             ),
           ],
         ),
@@ -346,9 +342,7 @@ class _FestivalQuestionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(36),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withOpacity(0.35),
-        ),
+        border: Border.all(color: colorScheme.outlineVariant.withOpacity(0.35)),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: colorScheme.shadow.withOpacity(0.08),
