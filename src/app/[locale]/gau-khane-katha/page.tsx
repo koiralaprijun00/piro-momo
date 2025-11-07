@@ -7,8 +7,27 @@ import { riddlesData } from '../../data/gau-khane-katha/gau-khane-katha-data';
 import { ImSpinner8 } from 'react-icons/im';
 import { FiSend } from 'react-icons/fi';
 import { HiOutlineClock, HiOutlineCheck } from 'react-icons/hi';
-import { CheckCircleIcon, XCircleIcon, RefreshCwIcon, TargetIcon } from 'lucide-react';
+import { CheckCircleIcon, XCircleIcon, RefreshCwIcon, Sparkles, Flame } from 'lucide-react';
 import AdSenseGoogle from '../../components/AdSenseGoogle';
+
+const StatBadges = ({ score, streak }: { score: number; streak: number }) => (
+  <div className="flex items-center justify-center gap-4">
+    <div
+      className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-white"
+      aria-label={`Score ${score}`}
+    >
+      <Sparkles className="w-4 h-4 text-yellow-300" aria-hidden="true" />
+      <span className="font-semibold">{score}</span>
+    </div>
+    <div
+      className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-white"
+      aria-label={`Streak ${streak}`}
+    >
+      <Flame className="w-4 h-4 text-orange-300" aria-hidden="true" />
+      <span className="font-semibold">{streak}</span>
+    </div>
+  </div>
+);
 
 export default function RiddlesGamePage() {
   const t = useTranslations('Translations.RiddlesGame');
@@ -19,6 +38,7 @@ export default function RiddlesGamePage() {
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [attempts, setAttempts] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
+  const [streak, setStreak] = useState<number>(0);
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [answeredRiddles, setAnsweredRiddles] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -84,6 +104,7 @@ export default function RiddlesGamePage() {
     if (isCorrect) {
       setIsCorrect(true);
       setScore((prevScore) => prevScore + 1);
+      setStreak((prev) => prev + 1);
       setAnsweredRiddles((prev) =>
         prev.includes(currentRiddle.id) ? prev : [...prev, currentRiddle.id]
       );
@@ -94,6 +115,7 @@ export default function RiddlesGamePage() {
       setAttempts(newAttempts);
       if (newAttempts >= maxAttempts) {
         setShowAnswer(true);
+        setStreak(0);
       } else {
         setUserAnswer('');
       }
@@ -101,6 +123,10 @@ export default function RiddlesGamePage() {
   };
 
   const nextRiddle = () => {
+    if (!isCorrect) {
+      setStreak(0);
+    }
+
     setShowAnswer(false);
     setIsCorrect(false);
     setUserAnswer('');
@@ -147,6 +173,7 @@ export default function RiddlesGamePage() {
     setShowAnswer(false);
     setIsCorrect(false);
     setScore(0);
+    setStreak(0);
     setGameOver(false);
     setAnsweredRiddles([]);
     setAttempts(0);
@@ -213,6 +240,9 @@ export default function RiddlesGamePage() {
                 </div>
 
                 <div className="bg-white rounded-b-lg p-4 sm:p-6">
+                  <div className="bg-gradient-to-r from-blue-600 to-red-500 rounded-2xl p-4 mb-6 text-white">
+                    <StatBadges score={score} streak={streak} />
+                  </div>
                   <div className="flex flex-col sm:flex-row justify-end items-end sm:items-center gap-4">
                     <button
                       onClick={nextRiddle}
@@ -239,40 +269,25 @@ export default function RiddlesGamePage() {
                           }}
                           className="space-y-4 sm:space-y-5"
                         >
-                          <div className="flex flex-row justify-between items-center mt-1 mb-2 p-3 rounded-lg">
-                            <div className="flex items-center text-gray-600">
-                              <TargetIcon className="w-4 h-4 text-indigo-500" />
-                              <div>
-                                <span className="text-sm ml-1 mr-1 font-medium">
-                                  {t('score')}:
+                          {!showAnswer && (
+                            <div className="flex justify-end items-center mt-1 mb-2 p-3 rounded-lg bg-gray-50">
+                              <div className="flex items-center text-sm text-gray-600">
+                                <span className="font-medium">
+                                  {t('attempt') || 'Attempt'}:
                                 </span>
-                                <span className="text-sm font-bold text-indigo-600">
-                                  {score} {t('points')}
+                                <span className="ml-2 font-bold text-indigo-600">
+                                  {attempts + 1}/{maxAttempts}
                                 </span>
                               </div>
-                            </div>
-
-                            {!showAnswer && (
-                              <div className="flex items-center">
-                                <div className="flex items-center text-sm text-gray-600">
-                                  <span className="font-medium">
-                                    {t('attempt') || 'Attempt'}:
-                                  </span>
-                                  <span className="ml-2 font-bold text-indigo-600">
-                                    {attempts + 1}/{maxAttempts}
-                                  </span>
+                              {attempts > 0 && attempts < maxAttempts && (
+                                <div className="ml-3 text-xs text-orange-500">
+                                  {attempts === maxAttempts - 1
+                                    ? t('incorrectLastAttempt') || 'Incorrect. Last attempt!'
+                                    : t('incorrectTryAgain') || 'Incorrect. Try again!'}
                                 </div>
-                                {attempts > 0 && attempts < maxAttempts && (
-                                  <div className="ml-3 text-xs text-orange-500">
-                                    {attempts === maxAttempts - 1
-                                      ? t('incorrectLastAttempt') ||
-                                        'Incorrect. Last attempt!'
-                                      : t('incorrectTryAgain') || 'Incorrect. Try again!'}
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </div>
+                              )}
+                            </div>
+                          )}
 
                           <div>
                             <label

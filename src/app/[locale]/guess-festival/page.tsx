@@ -6,6 +6,7 @@ import { getFestivalsByLocale } from "../../data/guess-festival/getFestivals"; /
 import { Festival } from "../../data/guess-festival/festival"; // Import Festival type
 import AdSenseGoogle from "../../components/AdSenseGoogle";
 import GameButton from "../../components/ui/GameButton";
+import { Sparkles, Flame } from "lucide-react";
 
 // QuizSection Component
 interface QuizSectionProps {
@@ -97,35 +98,6 @@ const AnswerReveal: React.FC<AnswerRevealProps> = ({
   );
 };
 
-// Mobile Header Component
-const MobileHeader: React.FC<{
-  score: number;
-  gameMode: "standard" | "timed";
-  timeLeft: number;
-  t: any;
-}> = ({ score, gameMode, timeLeft, t }) => {
-  return (
-    <div className="md:hidden flex justify-between items-center mb-4">
-      <div className="flex items-center">
-        <div className="bg-gradient-to-r from-blue-600 to-red-500 p-0.5 rounded-lg">
-          <div className="bg-white rounded-md px-2 py-1 flex items-center">
-            <span className="text-xl font-bold">{score}</span>
-            <span className="ml-1 text-xs text-gray-600">{t("points")}</span>
-          </div>
-        </div>
-      </div>
-
-      {gameMode === "timed" && (
-        <div className="bg-gray-100 px-2 py-1 rounded-full">
-          <span className={`font-mono ${timeLeft <= 10 ? "text-red-500" : "text-gray-800"}`}>
-            {timeLeft}s
-          </span>
-        </div>
-      )}
-    </div>
-  );
-};
-
 // Mobile Footer Component
 const MobileFooter: React.FC<{
   gameMode: "standard" | "timed";
@@ -169,6 +141,25 @@ const MobileFooter: React.FC<{
   );
 };
 
+const StatBadges: React.FC<{ score: number; streak: number }> = ({ score, streak }) => (
+  <div className="flex items-center justify-center gap-4">
+    <div
+      className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-white"
+      aria-label={`Score ${score}`}
+    >
+      <Sparkles className="w-4 h-4 text-yellow-300" aria-hidden="true" />
+      <span className="font-semibold">{score}</span>
+    </div>
+    <div
+      className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-white"
+      aria-label={`Streak ${streak}`}
+    >
+      <Flame className="w-4 h-4 text-orange-300" aria-hidden="true" />
+      <span className="font-semibold">{streak}</span>
+    </div>
+  </div>
+);
+
 // Main Home Component
 export default function Home() {
   const locale = useLocale();
@@ -182,6 +173,7 @@ export default function Home() {
   const [guess, setGuess] = useState<string>("");
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
+  const [streak, setStreak] = useState<number>(0);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [feedback, setFeedback] = useState<string>("");
   const [gameMode, setGameMode] = useState<"standard" | "timed">("standard");
@@ -268,9 +260,11 @@ export default function Home() {
       setScore((prevScore) => prevScore + newPoints);
       setFeedback(`+${newPoints} ${t("points")}`);
       setIsCorrect(true);
+      setStreak((prev) => prev + 1);
     } else {
       setFeedback(t("tryAgain"));
       setIsCorrect(false);
+      setStreak(0);
     }
 
     setGuess(selectedOption);
@@ -310,6 +304,7 @@ export default function Home() {
     setIsCorrect(false);
     setFeedback(t("timeUp"));
     setTimerActive(false);
+    setStreak(0);
   };
 
   const switchGameMode = (mode: "standard" | "timed") => {
@@ -319,6 +314,7 @@ export default function Home() {
 
   const restartGame = () => {
     setScore(0);
+    setStreak(0);
     setFestivalHistory([]);
     shuffleFestivals();
     if (gameMode === "timed") {
@@ -349,8 +345,6 @@ export default function Home() {
               {t("games.guessFestival.title")}
             </h1>
           </div>
-
-          <MobileHeader score={score} gameMode={gameMode} timeLeft={timeLeft} t={t} />
 
           <div className="flex flex-col md:flex-row gap-6 max-w-5xl mx-auto">
             <div className="hidden md:block md:w-1/3 space-y-6">
@@ -386,25 +380,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div>
-                  <h2 className="text-sm mb-3">{t("score")}</h2>
-                  <div className="bg-gradient-to-r from-blue-600 to-red-500 p-0.5 rounded-lg">
-                    <div className="bg-white rounded-md p-2 flex justify-between items-center">
-                      <div className="flex items-center">
-                        <span className="text-3xl font-bold">{score}</span>
-                        <span className="ml-2 text-gray-600">{t("points")}</span>
-                      </div>
-                      {gameMode === "timed" && (
-                        <div className="bg-gray-100 px-2 py-0.5 rounded-full">
-                          <span className={`font-mono ${timeLeft <= 10 ? "text-red-500" : "text-gray-800"}`}>
-                            {timeLeft}s
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
                 <GameButton onClick={restartGame} type="neutral" size="sm" className="mt-6 mr-2">
                   {t("games.guessFestival.restart")}
                 </GameButton>
@@ -420,6 +395,14 @@ export default function Home() {
             <div className="md:w-2/3 w-full">
               <div className="bg-gradient-to-br from-blue-600 to-red-500 p-1 rounded-xl shadow-lg">
                 <div className="bg-white rounded-lg p-4 md:p-6">
+                  <div className="bg-gradient-to-r from-blue-600 to-red-500 rounded-2xl p-4 mb-6 text-white">
+                    <StatBadges score={score} streak={streak} />
+                    {gameMode === "timed" && (
+                      <div className={`mt-3 text-center text-sm font-mono ${timeLeft <= 10 ? "text-red-100" : "text-white/80"}`}>
+                        {timeLeft}s
+                      </div>
+                    )}
+                  </div>
                   <QuizSection
                     currentFestival={currentFestival}
                     isAnswered={isAnswered}
