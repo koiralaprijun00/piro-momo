@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/theme/app_palette.dart';
-import '../../../../core/theme/app_theme.dart';
 import '../../../../data/models/game_locale.dart';
 import '../../../home/data/game_definition.dart';
 import '../application/riddle_game_controller.dart';
@@ -182,9 +180,6 @@ class _RiddleGameBody extends StatelessWidget {
       vertical: 28,
     );
 
-    final Gradient? gradient =
-        theme.extension<GradientTheme>()?.card ?? AppPalette.cardGradient;
-
     return SingleChildScrollView(
       padding:
           padding +
@@ -192,30 +187,11 @@ class _RiddleGameBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
-            decoration: BoxDecoration(
-              gradient: gradient,
-              borderRadius: BorderRadius.circular(32),
-              boxShadow: const <BoxShadow>[
-                BoxShadow(
-                  color: Color(0x24000000),
-                  blurRadius: 32,
-                  offset: Offset(0, 20),
-                ),
-              ],
-            ),
-            child: RiddleSummaryTiles(
-              score: state.score,
-              streak: state.streak,
-              bestStreak: state.bestStreak,
-              solved: state.solvedCount,
-              total: state.totalCount,
-              attemptsLeft: state.maxAttempts - state.attempts,
-              locale: state.locale,
-              onRestart: controller.restart,
-            ),
+          RiddleSummaryTiles(
+            score: state.score,
+            streak: state.streak,
+            locale: state.locale,
+            onRestart: controller.restart,
           ),
           const SizedBox(height: 28),
           RiddleAnswerCard(

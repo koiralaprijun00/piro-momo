@@ -128,9 +128,6 @@ class _FestivalGameContent extends StatelessWidget {
     }
 
     final int totalAnswered = state.correctCount + state.incorrectCount;
-    final double accuracy = totalAnswered == 0
-        ? 0
-        : (state.correctCount / totalAnswered) * 100;
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -162,18 +159,13 @@ class _FestivalGameContent extends StatelessWidget {
                   ),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 920),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
                     _FestivalStatsPanel(
                       state: state,
-                      accuracy: accuracy,
                       controller: controller,
                     ),
-                    if (totalAnswered == 0) ...<Widget>[
-                      const SizedBox(height: 20),
-                      const _FestivalIntroBanner(),
-                    ],
                     const SizedBox(height: 28),
                     _FestivalQuestionCard(
                       state: state,
@@ -271,240 +263,62 @@ class _FestivalOnboarding extends StatelessWidget {
   }
 }
 
-class _FestivalIntroBanner extends StatelessWidget {
-  const _FestivalIntroBanner();
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final game = homeGames.first;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.primary.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: theme.colorScheme.primary.withOpacity(0.2),
-        ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          CircleAvatar(
-            radius: 22,
-            backgroundColor: theme.colorScheme.primary.withOpacity(0.12),
-            child: Icon(
-              game.icon,
-              color: theme.colorScheme.primary,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Guess the Festival',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: theme.colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Match the clue to the celebration and uncover the story behind Nepal’s biggest festivals.',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.8),
-                    height: 1.5,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _FestivalStatsPanel extends StatefulWidget {
+class _FestivalStatsPanel extends StatelessWidget {
   const _FestivalStatsPanel({
     required this.state,
-    required this.accuracy,
     required this.controller,
   });
 
   final FestivalGameState state;
-  final double accuracy;
   final FestivalGameController controller;
-
-  @override
-  State<_FestivalStatsPanel> createState() => _FestivalStatsPanelState();
-}
-
-class _FestivalStatsPanelState extends State<_FestivalStatsPanel> {
-  bool _expanded = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _expanded = widget.state.isAnswered;
-  }
-
-  @override
-  void didUpdateWidget(covariant _FestivalStatsPanel oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.state.isAnswered != oldWidget.state.isAnswered) {
-      setState(() {
-        _expanded = widget.state.isAnswered;
-      });
-    }
-  }
-
-  void _toggleExpanded() {
-    setState(() {
-      _expanded = !_expanded;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final ColorScheme colorScheme = theme.colorScheme;
 
-    final List<Widget> statChips = <Widget>[
-      FestivalStatBadge(
-        label: 'Score',
-        value: '${widget.state.score}',
-        icon: Icons.auto_awesome_rounded,
-        color: colorScheme.primary,
-        compact: true,
-      ),
-      FestivalStatBadge(
-        label: 'Streak',
-        value: widget.state.streak.toString(),
-        icon: Icons.local_fire_department_rounded,
-        color: Colors.orange.shade400,
-        compact: true,
-      ),
-      FestivalStatBadge(
-        label: 'Best',
-        value: widget.state.bestStreak.toString(),
-        icon: Icons.rocket_launch_outlined,
-        color: Colors.pink.shade400,
-        compact: true,
-      ),
-      FestivalStatBadge(
-        label: 'Accuracy',
-        value: '${widget.accuracy.toStringAsFixed(0)}%',
-        icon: Icons.insights_rounded,
-        color: Colors.blue.shade400,
-        compact: true,
-      ),
-    ];
-
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 280),
-      curve: Curves.easeOutCubic,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.92),
-        borderRadius: BorderRadius.circular(32),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withOpacity(0.35),
-        ),
-        boxShadow: const <BoxShadow>[
-          BoxShadow(
-            color: Color(0x14000000),
-            blurRadius: 40,
-            offset: Offset(0, 30),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(
-                'Stats',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: colorScheme.onSurface,
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              'Quick stats',
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 200),
-                  opacity: _expanded ? 0.7 : 1,
-                  child: Text(
-                    _expanded
-                        ? 'Review your progress before the next clue.'
-                        : 'Hidden during play for less distraction.',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-              ),
-              IconButton(
-                visualDensity: VisualDensity.compact,
-                onPressed: _toggleExpanded,
-                icon: Icon(
-                  _expanded
-                      ? Icons.expand_less_rounded
-                      : Icons.expand_more_rounded,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          AnimatedCrossFade(
-            firstChild: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  clipBehavior: Clip.none,
-                  child: Row(
-                    children: statChips
-                        .map(
-                          (Widget chip) => Padding(
-                            padding: const EdgeInsets.only(right: 12),
-                            child: chip,
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton.icon(
-                    onPressed: widget.controller.restart,
-                    style: TextButton.styleFrom(
-                      foregroundColor: colorScheme.primary,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                    ),
-                    icon: const Icon(Icons.refresh_rounded),
-                    label: const Text('Shuffle deck'),
-                  ),
-                ),
-              ],
             ),
-            secondChild: const SizedBox.shrink(),
-            crossFadeState: _expanded
-                ? CrossFadeState.showFirst
-                : CrossFadeState.showSecond,
-            duration: const Duration(milliseconds: 200),
-          ),
-        ],
-      ),
+            const Spacer(),
+            TextButton.icon(
+              onPressed: controller.restart,
+              style: TextButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                shape: const StadiumBorder(),
+              ),
+              icon: const Icon(Icons.shuffle_rounded, size: 18)
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Wrap(
+          spacing: 12,
+          runSpacing: 10,
+          children: <Widget>[
+            FestivalStatBadge(
+              label: 'Score',
+              value: '${state.score}',
+              icon: Icons.auto_awesome_rounded,
+              compact: true,
+            ),
+            FestivalStatBadge(
+              label: 'Streak',
+              value: '${state.streak}',
+              icon: Icons.local_fire_department_rounded,
+              compact: true,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
