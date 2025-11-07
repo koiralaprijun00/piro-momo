@@ -282,17 +282,15 @@ class _FestivalStatsPanel extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            TextButton.icon(
-              onPressed: controller.restart,
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 10,
-                ),
-                shape: const StadiumBorder(),
-              ),
-              icon: const Icon(Icons.shuffle_rounded, size: 18),
-            ),
+            IconButton(
+  onPressed: controller.restart,
+  icon: const Icon(Icons.shuffle_rounded),
+  iconSize: 18,
+  style: IconButton.styleFrom(
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+    shape: const StadiumBorder(),
+  ),
+),
           ],
         ),
         const SizedBox(height: 16),
