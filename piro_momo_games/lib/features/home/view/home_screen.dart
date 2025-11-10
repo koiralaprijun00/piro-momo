@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../data/game_definition.dart';
 import '../widgets/game_card.dart';
+import '../widgets/piromomo_header.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -14,125 +15,71 @@ class HomeScreen extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         bottom: false,
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             final bool isWide = constraints.maxWidth >= 900;
-            final EdgeInsets padding = EdgeInsets.symmetric(
-              horizontal: isWide ? 64 : 24,
-              vertical: 24,
-            );
+            final EdgeInsets horizontalPadding =
+                EdgeInsets.symmetric(horizontal: isWide ? 64 : 24);
 
             return CustomScrollView(
               slivers: <Widget>[
                 SliverToBoxAdapter(
-                  child: Padding(
-                    padding: padding,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        _HeroBanner(isWide: isWide),
-                        const SizedBox(height: 32),
-                        const SizedBox(height: 12),
-                        if (isWide)
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Expanded(
-                                child: GameCard(
-                                  game: homeGames.first,
-                                  onTap: () =>
-                                      context.push(homeGames.first.routePath),
-                                ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      const SizedBox(height: 24),
+                      const PiromomoHeader(),
+                      const SizedBox(height: 32),
+                      Padding(
+                        padding: horizontalPadding,
+                        child: isWide
+                            ? Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: GameCard(
+                                      game: homeGames.first,
+                                      onTap: () => context
+                                          .push(homeGames.first.routePath),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 24),
+                                  Expanded(
+                                    child: GameCard(
+                                      game: homeGames.last,
+                                      onTap: () => context
+                                          .push(homeGames.last.routePath),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                children: <Widget>[
+                                  GameCard(
+                                    game: homeGames.first,
+                                    onTap: () =>
+                                        context.push(homeGames.first.routePath),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  GameCard(
+                                    game: homeGames.last,
+                                    onTap: () =>
+                                        context.push(homeGames.last.routePath),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(width: 24),
-                              Expanded(
-                                child: GameCard(
-                                  game: homeGames.last,
-                                  onTap: () =>
-                                      context.push(homeGames.last.routePath),
-                                ),
-                              ),
-                            ],
-                          )
-                        else
-                          Column(
-                            children: <Widget>[
-                              GameCard(
-                                game: homeGames.first,
-                                onTap: () =>
-                                    context.push(homeGames.first.routePath),
-                              ),
-                              const SizedBox(height: 20),
-                              GameCard(
-                                game: homeGames.last,
-                                onTap: () =>
-                                    context.push(homeGames.last.routePath),
-                              ),
-                            ],
-                          ),
-                        const SizedBox(height: 48),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 48),
+                    ],
                   ),
                 ),
               ],
             );
           },
         ),
-      ),
-    );
-  }
-}
-
-class _HeroBanner extends StatelessWidget {
-  const _HeroBanner({required this.isWide});
-
-  final bool isWide;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
-
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: isWide ? 8 : 0,
-        vertical: isWide ? 12 : 8,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                homeGames.first.icon,
-                size: isWide ? 32 : 28,
-                color: theme.colorScheme.onBackground,
-              ),
-              const SizedBox(width: 14),
-              Text(
-                'Piro Momo',
-                style: textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.4,
-                  color: theme.colorScheme.onBackground,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'Built for curious minds across the diaspora\nStay connected to Nepali culture wherever you are.',
-            style: textTheme.bodyLarge?.copyWith(
-              color: theme.colorScheme.onBackground.withOpacity(0.72),
-              height: 1.45,
-            ),
-          ),
-        ],
       ),
     );
   }
