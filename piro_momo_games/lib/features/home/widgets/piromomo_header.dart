@@ -70,46 +70,54 @@ class _HeroCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 32, 12, 16),
-      child: Stack(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Positioned(
-            top: 0,
-            right: 0,
-            child: _NotificationsPill(colorScheme: colorScheme),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(
-                'Streak: $streakDays days',
-                style: textTheme.titleSmall?.copyWith(
-                  color: colorScheme.primary,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.4,
-                ),
-              ),
-              const SizedBox(height: 20),
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: _GradientText(
-                  text: appName,
-                  style: textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -0.8,
-                    color: colorScheme.onSurface,
+              Expanded(
+                child: Text(
+                  'Streak: $streakDays days',
+                  style: textTheme.titleSmall?.copyWith(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.4,
                   ),
                 ),
               ),
-              const SizedBox(height: 6),
-              Text(
-                subtitle,
-                style: textTheme.headlineSmall?.copyWith(
-                  color: colorScheme.onSurface.withOpacity(0.8),
-                  fontWeight: FontWeight.w600,
-                ),
+              _HeroIconButton(
+                icon: Icons.notifications_none_rounded,
+                onPressed: () => debugPrint('Notifications tapped'),
+              ),
+              const SizedBox(width: 12),
+              _HeroIconButton(
+                icon: Icons.person_outline_rounded,
+                onPressed: () => debugPrint('Profile tapped'),
               ),
             ],
+          ),
+          const SizedBox(height: 18),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: _GradientText(
+              text: appName,
+              style: textTheme.displaySmall?.copyWith(
+                fontWeight: FontWeight.w800,
+                letterSpacing: -0.8,
+                color: colorScheme.onSurface,
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            style: textTheme.titleLarge?.copyWith(
+               fontSize: 14, // pick the size you need
+              color: colorScheme.onSurface.withOpacity(0.8),
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ],
       ),
@@ -117,48 +125,27 @@ class _HeroCard extends StatelessWidget {
   }
 }
 
-class _NotificationsPill extends StatelessWidget {
-  const _NotificationsPill({required this.colorScheme});
+class _HeroIconButton extends StatelessWidget {
+  const _HeroIconButton({required this.icon, required this.onPressed});
 
-  final ColorScheme colorScheme;
+  final IconData icon;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: 'Notifications',
-      child: InkWell(
-        onTap: () => debugPrint('Notifications tapped'),
-        borderRadius: BorderRadius.circular(24),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.92),
-            borderRadius: BorderRadius.circular(999),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                'Notifications',
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colorScheme.primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(width: 8),
-              CircleAvatar(
-                radius: 14,
-                backgroundColor: Colors.white,
-                child: Icon(
-                  Icons.tag_faces,
-                  color: colorScheme.primary,
-                  size: 16,
-                ),
-              ),
-            ],
-          ),
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(32),
+      onTap: onPressed,
+      child: Container(
+        height: 40,
+        width: 40,
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceVariant,
+          borderRadius: BorderRadius.circular(32),
         ),
+        child: Icon(icon, color: colorScheme.onSurfaceVariant, size: 20),
       ),
     );
   }
@@ -240,8 +227,12 @@ class _DailyStatTile extends StatelessWidget {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Icon(icon, color: iconColor, size: 20),
+        Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: Icon(icon, color: iconColor, size: 20),
+        ),
         const SizedBox(width: 8),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
