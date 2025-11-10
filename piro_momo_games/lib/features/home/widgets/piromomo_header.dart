@@ -1,89 +1,49 @@
 import 'package:flutter/material.dart';
 
-class QuickItemData {
-  final String id;
-  final String label;
-  final IconData icon;
-  final VoidCallback? onPressed;
-
-  const QuickItemData({
-    required this.id,
-    required this.label,
-    required this.icon,
-    this.onPressed,
-  });
-}
-
 class PiromomoHeader extends StatelessWidget {
   const PiromomoHeader({
     super.key,
     this.streakDays = 7,
     this.appName = 'Piromomo',
     this.subtitle = 'Game of the year 2024',
-    this.quickItems,
-    this.onShowAll,
+    this.referenceDate,
+    this.gamesPlayed = 2,
   });
 
   final int streakDays;
   final String appName;
   final String subtitle;
-  final List<QuickItemData>? quickItems;
-  final VoidCallback? onShowAll;
-
-  static List<QuickItemData> get _defaultQuickItems => <QuickItemData>[
-        QuickItemData(
-          id: 'festivals',
-          label: 'Festivals',
-          icon: Icons.celebration,
-          onPressed: () => debugPrint('Open Festivals'),
-        ),
-        QuickItemData(
-          id: 'kings',
-          label: 'Kings',
-          icon: Icons.emoji_events,
-          onPressed: () => debugPrint('Open Kings'),
-        ),
-        QuickItemData(
-          id: 'districts',
-          label: 'Districts',
-          icon: Icons.map,
-          onPressed: () => debugPrint('Open Districts'),
-        ),
-        QuickItemData(
-          id: 'quiz',
-          label: 'Quiz',
-          icon: Icons.psychology_alt,
-          onPressed: () => debugPrint('Open Quiz'),
-        ),
-      ];
-
-  List<QuickItemData> get _resolvedQuickItems {
-    final List<QuickItemData>? provided = quickItems;
-    if (provided == null || provided.isEmpty) {
-      return _defaultQuickItems;
-    }
-    return provided;
-  }
+  final DateTime? referenceDate;
+  final int gamesPlayed;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
-    final List<QuickItemData> items = _resolvedQuickItems;
+    const EdgeInsets horizontalPadding = EdgeInsets.symmetric(horizontal: 24);
+    final DateTime resolvedDate = referenceDate ?? DateTime.now();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         const SizedBox(height: 36),
-        _HeroCard(
-          streakDays: streakDays,
-          appName: appName,
-          subtitle: subtitle,
-          colorScheme: colorScheme,
+        Padding(
+          padding: horizontalPadding,
+          child: _HeroCard(
+            streakDays: streakDays,
+            appName: appName,
+            subtitle: subtitle,
+            colorScheme: colorScheme,
+          ),
         ),
-        _QuickPlaySection(
-          items: items,
-          onShowAll: onShowAll ?? () => debugPrint('Show all quick games'),
+        const SizedBox(height: 20),
+        Padding(
+          padding: horizontalPadding,
+          child: _DailyStatsRow(
+            date: resolvedDate,
+            streakDays: streakDays,
+            gamesPlayed: gamesPlayed,
+          ),
         ),
       ],
     );
@@ -109,19 +69,7 @@ class _HeroCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 48, 20, 32),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: <Color>[
-            Color(0xFF1F1147),
-            Color(0xFF6A0572),
-            Color(0xFFB62D68),
-            Color(0xFFFF7A18),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
+      padding: const EdgeInsets.fromLTRB(12, 32, 12, 16),
       child: Stack(
         children: <Widget>[
           Positioned(
@@ -135,7 +83,7 @@ class _HeroCard extends StatelessWidget {
               Text(
                 'Streak: $streakDays days',
                 style: textTheme.titleSmall?.copyWith(
-                  color: Colors.white70,
+                  color: colorScheme.primary,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.4,
                 ),
@@ -149,7 +97,7 @@ class _HeroCard extends StatelessWidget {
                   style: textTheme.displaySmall?.copyWith(
                     fontWeight: FontWeight.w800,
                     letterSpacing: -0.8,
-                    color: Colors.white,
+                    color: colorScheme.onSurface,
                   ),
                 ),
               ),
@@ -157,7 +105,7 @@ class _HeroCard extends StatelessWidget {
               Text(
                 subtitle,
                 style: textTheme.headlineSmall?.copyWith(
-                  color: Colors.white,
+                  color: colorScheme.onSurface.withOpacity(0.8),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -194,9 +142,9 @@ class _NotificationsPill extends StatelessWidget {
               Text(
                 'Notifications',
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: colorScheme.primary,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  color: colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const SizedBox(width: 8),
               CircleAvatar(
@@ -216,152 +164,130 @@ class _NotificationsPill extends StatelessWidget {
   }
 }
 
-class _QuickPlaySection extends StatelessWidget {
-  const _QuickPlaySection({
-    required this.items,
-    required this.onShowAll,
+class _DailyStatsRow extends StatelessWidget {
+  const _DailyStatsRow({
+    required this.date,
+    required this.streakDays,
+    required this.gamesPlayed,
   });
 
-  final List<QuickItemData> items;
-  final VoidCallback onShowAll;
+  final DateTime date;
+  final int streakDays;
+  final int gamesPlayed;
 
   @override
   Widget build(BuildContext context) {
-    final Color background = const Color(0xFF020617);
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    final MaterialLocalizations localizations = MaterialLocalizations.of(
+      context,
+    );
+    final String formattedDate = '${localizations.formatShortMonthDay(date)}.';
+    final Color dividerColor = colorScheme.outlineVariant.withOpacity(0.5);
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(0, 32, 0, 32),
-      decoration: BoxDecoration(
-        color: background,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Text(
-                  'Quick play',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-                const Spacer(),
-                TextButton(
-                  onPressed: onShowAll,
-                  style: TextButton.styleFrom(
-                    foregroundColor: const Color(0xFF38BDF8),
-                    textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                    visualDensity: VisualDensity.compact,
-                  ),
-                  child: const Text('Show all'),
-                ),
-              ],
+    return Material(
+      color: Colors.transparent,
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: _DailyStatTile(
+              icon: Icons.calendar_today_rounded,
+              iconColor: Colors.redAccent,
+              value: formattedDate,
+              label: 'Selected date',
             ),
-            const SizedBox(height: 16),
-            LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                final List<Widget> children = items
-                    .map((QuickItemData item) => _QuickShortcut(item: item))
-                    .toList();
-
-                if (children.length == 4 && constraints.maxWidth >= 320) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: children,
-                  );
-                }
-
-                return Wrap(
-                  spacing: 20,
-                  runSpacing: 20,
-                  alignment: WrapAlignment.spaceEvenly,
-                  children: children,
-                );
-              },
+          ),
+          _DailyDivider(color: dividerColor),
+          Expanded(
+            child: _DailyStatTile(
+              icon: Icons.bookmark_rounded,
+              iconColor: Colors.orangeAccent,
+              value: '$streakDays',
+              label: 'Current streak',
             ),
-          ],
-        ),
+          ),
+          _DailyDivider(color: dividerColor),
+          Expanded(
+            child: _DailyStatTile(
+              icon: Icons.check_box_outlined,
+              iconColor: colorScheme.primary,
+              value: '$gamesPlayed',
+              label: 'Games to play',
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _QuickShortcut extends StatelessWidget {
-  const _QuickShortcut({required this.item});
+class _DailyStatTile extends StatelessWidget {
+  const _DailyStatTile({
+    required this.icon,
+    required this.iconColor,
+    required this.value,
+    required this.label,
+  });
 
-  final QuickItemData item;
+  final IconData icon;
+  final Color iconColor;
+  final String value;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final VoidCallback onPressed =
-        item.onPressed ?? () => debugPrint('Open ${item.label}');
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    return Semantics(
-      button: true,
-      label: 'Open ${item.label}',
-      child: InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(48),
-        child: SizedBox(
-          width: 64,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(48),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
-                      blurRadius: 12,
-                      offset: const Offset(0, 6),
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  item.icon,
-                  size: 22,
-                  color: const Color(0xFF0F172A),
-                ),
+    return Row(
+      children: <Widget>[
+        Icon(icon, color: iconColor, size: 20),
+        const SizedBox(width: 8),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              value,
+              style: textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: colorScheme.onSurface,
               ),
-              const SizedBox(height: 8),
-              Text(
-                item.label,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                style: textTheme.bodySmall?.copyWith(
-                  color: Colors.white,
-                ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ),
+      ],
+    );
+  }
+}
+
+class _DailyDivider extends StatelessWidget {
+  const _DailyDivider({required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 1,
+      height: 36,
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      color: color,
     );
   }
 }
 
 class _GradientText extends StatelessWidget {
-  const _GradientText({
-    required this.text,
-    this.style,
-  });
+  const _GradientText({required this.text, this.style});
 
   static const Gradient _gradient = LinearGradient(
-    colors: <Color>[
-      Color(0xFF7C3AED),
-      Color(0xFFA855F7),
-    ],
+    colors: <Color>[Color(0xFF7C3AED), Color(0xFFA855F7)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -372,13 +298,11 @@ class _GradientText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShaderMask(
-      shaderCallback: (Rect bounds) => _gradient
-          .createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
-      blendMode: BlendMode.srcIn,
-      child: Text(
-        text,
-        style: style,
+      shaderCallback: (Rect bounds) => _gradient.createShader(
+        Rect.fromLTWH(0, 0, bounds.width, bounds.height),
       ),
+      blendMode: BlendMode.srcIn,
+      child: Text(text, style: style),
     );
   }
 }
