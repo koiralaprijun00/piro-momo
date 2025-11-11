@@ -8,7 +8,8 @@ plugins {
 android {
     namespace = "com.example.piro_momo_games"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    // Align with plugins that require NDK 27.x.
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

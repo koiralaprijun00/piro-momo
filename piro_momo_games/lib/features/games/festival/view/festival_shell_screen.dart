@@ -164,11 +164,45 @@ class _FestivalGameContent extends StatelessWidget {
                   children: <Widget>[
                     _FestivalStatsPanel(state: state, controller: controller),
                     const SizedBox(height: 28),
-                    _FestivalQuestionCard(
-                      state: state,
-                      question: question,
-                      controller: controller,
-                      totalAnswered: totalAnswered,
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      switchInCurve: Curves.easeInOut,
+                      switchOutCurve: Curves.easeInOut,
+                      layoutBuilder: (
+                        Widget? currentChild,
+                        List<Widget> previousChildren,
+                      ) {
+                        return Stack(
+                          alignment: Alignment.topCenter,
+                          children: <Widget>[
+                            ...previousChildren,
+                            if (currentChild != null) currentChild,
+                          ],
+                        );
+                      },
+                      transitionBuilder: (
+                        Widget child,
+                        Animation<double> animation,
+                      ) {
+                        final Animation<Offset> slideAnimation = Tween<Offset>(
+                          begin: const Offset(0, 0.06),
+                          end: Offset.zero,
+                        ).animate(animation);
+                        return FadeTransition(
+                          opacity: animation,
+                          child: SlideTransition(
+                            position: slideAnimation,
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: _FestivalQuestionCard(
+                        key: ValueKey<String>('question-${question.id}'),
+                        state: state,
+                        question: question,
+                        controller: controller,
+                        totalAnswered: totalAnswered,
+                      ),
                     ),
                   ],
                 ),
@@ -338,6 +372,7 @@ class _FestivalStatsPanel extends StatelessWidget {
 
 class _FestivalQuestionCard extends StatelessWidget {
   const _FestivalQuestionCard({
+    super.key,
     required this.state,
     required this.question,
     required this.controller,
@@ -381,7 +416,7 @@ class _FestivalQuestionCard extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             question.question,
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.start,
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.w800,
               color: colorScheme.onSurface,
@@ -390,144 +425,55 @@ class _FestivalQuestionCard extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           Column(
-            children: state.currentOptions
-                .map(
-                  (String option) => Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: FestivalOptionButton(
-                      label: option,
-                      isSelected: state.selectedOption == option,
-                      isCorrectAnswer:
-                          state.isAnswered && option == question.name,
-                      isDisabled: state.isAnswered,
-                      onPressed: () => controller.submitGuess(option),
+            children: state.currentOptions.asMap().entries.map((entry) {
+              final int index = entry.key;
+              final String option = entry.value;
+              final bool isSelected = state.selectedOption == option;
+              final bool isCorrectOption = option == question.name;
+              final bool showCorrectState =
+                  state.isAnswered && isCorrectOption;
+              final bool showIncorrectState =
+                  state.isAnswered && isSelected && !isCorrectOption;
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 14),
+                child: FestivalOptionButton(
+                  leadingLabel: '${String.fromCharCode(65 + index)}.',
+                  label: option,
+                  isSelected: !state.isAnswered && isSelected,
+                  isDisabled: state.isAnswered,
+                  showCorrectState: showCorrectState,
+                  showIncorrectState: showIncorrectState,
+                  correctLabel: showCorrectState
+                      ? ((state.isCorrect ?? false)
+                          ? 'Correct!'
+                          : 'Right answer')
+                      : null,
+                  incorrectLabel: showIncorrectState ? 'Not quite' : null,
+                  factText: showCorrectState ? question.fact : null,
+                  onPressed: () => controller.submitGuess(option),
+                ),
+              );
+            }).toList(),
+          ),
+          if (state.isAnswered)
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: FilledButton.tonalIcon(
+                  onPressed: controller.nextQuestion,
+                  icon: const Icon(Icons.arrow_forward_rounded),
+                  label: const Text('Next'),
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
                     ),
                   ),
-                )
-                .toList(),
-          ),
-          const SizedBox(height: 12),
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 260),
-            switchInCurve: Curves.easeOut,
-            switchOutCurve: Curves.easeIn,
-            layoutBuilder: (Widget? currentChild, List<Widget> previousChildren) => currentChild!,
-            child: state.isAnswered
-                ? Column(
-                    key: ValueKey<String>('answered-${question.id}'),
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: FilledButton.tonalIcon(
-                          onPressed: controller.nextQuestion,
-                          icon: const Icon(Icons.arrow_forward_rounded),
-                          label: const Text('Next'),
-                          style: FilledButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 12,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      _FactRevealSection(
-                        key: ValueKey<String>('fact-${question.id}') ,
-                        question: question,
-                        isCorrect: state.isCorrect ?? false,
-                        controller: controller,
-                      ),
-                    ],
-                  )
-                : const SizedBox.shrink(),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _FactRevealSection extends StatelessWidget {
-  const _FactRevealSection({
-    super.key,
-    required this.question,
-    required this.isCorrect,
-    required this.controller,
-  });
-
-  final FestivalQuestion question;
-  final bool isCorrect;
-  final FestivalGameController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme colorScheme = theme.colorScheme;
-
-    final Color pillColor = isCorrect ? colorScheme.primary : colorScheme.error;
-    final IconData icon = isCorrect
-        ? Icons.celebration_rounded
-        : Icons.lightbulb_circle_rounded;
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceVariant.withOpacity(0.55),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: (isCorrect ? colorScheme.primary : colorScheme.error)
-              .withOpacity(0.35),
-          width: 1.4,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: pillColor.withOpacity(0.18),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(icon, size: 20, color: pillColor),
-                    const SizedBox(width: 6),
-                    Text(
-                      isCorrect ? 'Nice guess!' : 'Here’s the reveal',
-                      style: theme.textTheme.labelMedium?.copyWith(
-                        color: pillColor,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 18),
-          Text(
-            question.name,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w700,
-              color: colorScheme.onSurface,
             ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            question.fact,
-            style: theme.textTheme.bodyLarge?.copyWith(
-              color: colorScheme.onSurface.withOpacity(0.85),
-              height: 1.6,
-            ),
-          ),
         ],
       ),
     );
