@@ -66,6 +66,8 @@ flutter:
     - assets/data/guess_festival_np.json
     - assets/data/gau_khane_katha_en.json
     - assets/data/gau_khane_katha_np.json
+    - assets/data/general_knowledge_en.json
+    - assets/data/general_knowledge_np.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

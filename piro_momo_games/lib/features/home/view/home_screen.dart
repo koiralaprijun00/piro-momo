@@ -21,8 +21,9 @@ class HomeScreen extends StatelessWidget {
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             final bool isWide = constraints.maxWidth >= 900;
-            final EdgeInsets horizontalPadding =
-                EdgeInsets.symmetric(horizontal: isWide ? 64 : 24);
+            final EdgeInsets horizontalPadding = EdgeInsets.symmetric(
+              horizontal: isWide ? 64 : 24,
+            );
 
             return CustomScrollView(
               slivers: <Widget>[
@@ -35,42 +36,12 @@ class HomeScreen extends StatelessWidget {
                       const SizedBox(height: 32),
                       Padding(
                         padding: horizontalPadding,
-                        child: isWide
-                            ? Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: GameCard(
-                                      game: homeGames.first,
-                                      onTap: () => context
-                                          .push(homeGames.first.routePath),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 24),
-                                  Expanded(
-                                    child: GameCard(
-                                      game: homeGames.last,
-                                      onTap: () => context
-                                          .push(homeGames.last.routePath),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : Column(
-                                children: <Widget>[
-                                  GameCard(
-                                    game: homeGames.first,
-                                    onTap: () =>
-                                        context.push(homeGames.first.routePath),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  GameCard(
-                                    game: homeGames.last,
-                                    onTap: () =>
-                                        context.push(homeGames.last.routePath),
-                                  ),
-                                ],
-                              ),
+                        child: _GameCardsGrid(
+                          isWide: isWide,
+                          availableWidth:
+                              constraints.maxWidth -
+                              horizontalPadding.horizontal,
+                        ),
                       ),
                       const SizedBox(height: 48),
                     ],
@@ -81,6 +52,52 @@ class HomeScreen extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+}
+
+class _GameCardsGrid extends StatelessWidget {
+  const _GameCardsGrid({required this.isWide, required this.availableWidth});
+
+  final bool isWide;
+  final double availableWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<GameDefinition> games = homeGames;
+
+    if (isWide) {
+      const double spacing = 24;
+      final double cardWidth = (availableWidth - spacing) / 2;
+
+      return Wrap(
+        spacing: spacing,
+        runSpacing: spacing,
+        children: games
+            .map(
+              (GameDefinition game) => SizedBox(
+                width: cardWidth,
+                child: GameCard(
+                  game: game,
+                  onTap: () => context.push(game.routePath),
+                ),
+              ),
+            )
+            .toList(),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        for (int i = 0; i < games.length; i++) ...<Widget>[
+          GameCard(
+            game: games[i],
+            onTap: () => context.push(games[i].routePath),
+          ),
+          if (i != games.length - 1) const SizedBox(height: 20),
+        ],
+      ],
     );
   }
 }

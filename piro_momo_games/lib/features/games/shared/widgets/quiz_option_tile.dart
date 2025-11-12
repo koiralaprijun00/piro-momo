@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class FestivalOptionButton extends StatefulWidget {
-  const FestivalOptionButton({
+class QuizOptionTile extends StatefulWidget {
+  const QuizOptionTile({
     super.key,
     required this.label,
     required this.leadingLabel,
@@ -27,10 +27,10 @@ class FestivalOptionButton extends StatefulWidget {
   final String? factText;
 
   @override
-  State<FestivalOptionButton> createState() => _FestivalOptionButtonState();
+  State<QuizOptionTile> createState() => _QuizOptionTileState();
 }
 
-class _FestivalOptionButtonState extends State<FestivalOptionButton> {
+class _QuizOptionTileState extends State<QuizOptionTile> {
   bool _isHovered = false;
   bool _isPressed = false;
 
@@ -128,8 +128,10 @@ class _FestivalOptionButtonState extends State<FestivalOptionButton> {
                 });
               },
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 22,
+                  vertical: 18,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -162,11 +164,11 @@ class _FestivalOptionButtonState extends State<FestivalOptionButton> {
                           duration: const Duration(milliseconds: 220),
                           transitionBuilder:
                               (Widget child, Animation<double> animation) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            );
-                          },
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                );
+                              },
                           child: widget.showCorrectState
                               ? Icon(
                                   Icons.check_rounded,
@@ -175,13 +177,13 @@ class _FestivalOptionButtonState extends State<FestivalOptionButton> {
                                   color: statusColor ?? titleColor,
                                 )
                               : widget.showIncorrectState
-                                  ? Icon(
-                                      Icons.close_rounded,
-                                      key: const ValueKey<String>('close'),
-                                      size: 22,
-                                      color: statusColor ?? titleColor,
-                                    )
-                                  : const SizedBox.shrink(),
+                              ? Icon(
+                                  Icons.close_rounded,
+                                  key: const ValueKey<String>('close'),
+                                  size: 22,
+                                  color: statusColor ?? titleColor,
+                                )
+                              : const SizedBox.shrink(),
                         ),
                       ],
                     ),
@@ -189,22 +191,22 @@ class _FestivalOptionButtonState extends State<FestivalOptionButton> {
                       duration: const Duration(milliseconds: 320),
                       transitionBuilder:
                           (Widget child, Animation<double> animation) {
-                        final Animation<double> curved = CurvedAnimation(
-                          parent: animation,
-                          curve: Curves.easeOut,
-                        );
-                        return FadeTransition(
-                          opacity: curved,
-                          child: SizeTransition(
-                            sizeFactor: curved,
-                            axisAlignment: -1,
-                            child: FadeTransition(
+                            final Animation<double> curved = CurvedAnimation(
+                              parent: animation,
+                              curve: Curves.easeOut,
+                            );
+                            return FadeTransition(
                               opacity: curved,
-                              child: child,
-                            ),
-                          ),
-                        );
-                      },
+                              child: SizeTransition(
+                                sizeFactor: curved,
+                                axisAlignment: -1,
+                                child: FadeTransition(
+                                  opacity: curved,
+                                  child: child,
+                                ),
+                              ),
+                            );
+                          },
                       child: statusText != null
                           ? Padding(
                               key: const ValueKey<String>('status'),
@@ -212,17 +214,20 @@ class _FestivalOptionButtonState extends State<FestivalOptionButton> {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Icon(statusIcon,
-                                      size: 20, color: statusColor),
+                                  Icon(
+                                    statusIcon,
+                                    size: 20,
+                                    color: statusColor,
+                                  ),
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
                                       statusText,
                                       style: theme.textTheme.titleMedium
                                           ?.copyWith(
-                                        color: statusColor,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                                            color: statusColor,
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                     ),
                                   ),
                                 ],
@@ -234,22 +239,22 @@ class _FestivalOptionButtonState extends State<FestivalOptionButton> {
                       duration: const Duration(milliseconds: 360),
                       transitionBuilder:
                           (Widget child, Animation<double> animation) {
-                        final Animation<double> curved = CurvedAnimation(
-                          parent: animation,
-                          curve: Curves.easeOut,
-                        );
-                        return FadeTransition(
-                          opacity: curved,
-                          child: SizeTransition(
-                            sizeFactor: curved,
-                            axisAlignment: -1,
-                            child: FadeTransition(
+                            final Animation<double> curved = CurvedAnimation(
+                              parent: animation,
+                              curve: Curves.easeOut,
+                            );
+                            return FadeTransition(
                               opacity: curved,
-                              child: child,
-                            ),
-                          ),
-                        );
-                      },
+                              child: SizeTransition(
+                                sizeFactor: curved,
+                                axisAlignment: -1,
+                                child: FadeTransition(
+                                  opacity: curved,
+                                  child: child,
+                                ),
+                              ),
+                            );
+                          },
                       child: showFact
                           ? Padding(
                               key: ValueKey<String>('fact-${widget.label}'),

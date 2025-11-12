@@ -1,0 +1,23 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../data/providers.dart';
+import 'general_knowledge_game_controller.dart';
+import 'general_knowledge_game_state.dart';
+
+final AutoDisposeStateNotifierProvider<
+  GeneralKnowledgeGameController,
+  GeneralKnowledgeGameState
+>
+generalKnowledgeGameControllerProvider =
+    StateNotifierProvider.autoDispose<
+      GeneralKnowledgeGameController,
+      GeneralKnowledgeGameState
+    >((ref) {
+      final controller = GeneralKnowledgeGameController(
+        repository: ref.read(generalKnowledgeRepositoryProvider),
+        progressStore: ref.read(progressStoreProvider),
+        analytics: ref.read(analyticsServiceProvider),
+      );
+      controller.loadDeck();
+      return controller;
+    });

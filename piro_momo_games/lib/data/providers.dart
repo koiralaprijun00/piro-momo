@@ -4,8 +4,10 @@ import '../core/analytics/analytics_service.dart';
 import '../core/persistence/progress_store.dart';
 import 'models/festival_question.dart';
 import 'models/game_locale.dart';
+import 'models/general_knowledge_question.dart';
 import 'models/riddle_entry.dart';
 import 'repositories/festival_repository.dart';
+import 'repositories/general_knowledge_repository.dart';
 import 'repositories/riddle_repository.dart';
 
 final Provider<FestivalRepository> festivalRepositoryProvider =
@@ -16,6 +18,11 @@ final Provider<FestivalRepository> festivalRepositoryProvider =
 final Provider<RiddleRepository> riddleRepositoryProvider =
     Provider<RiddleRepository>((Ref ref) {
       return RiddleRepository();
+    });
+
+final Provider<GeneralKnowledgeRepository> generalKnowledgeRepositoryProvider =
+    Provider<GeneralKnowledgeRepository>((Ref ref) {
+      return GeneralKnowledgeRepository();
     });
 
 final Provider<ProgressStore> progressStoreProvider = Provider<ProgressStore>(
@@ -30,6 +37,18 @@ festivalQuestionsProvider = FutureProvider.autoDispose
     .family<List<FestivalQuestion>, GameLocale>((ref, locale) async {
       final FestivalRepository repository = ref.read(
         festivalRepositoryProvider,
+      );
+      return repository.loadQuestions(locale);
+    });
+
+final AutoDisposeFutureProviderFamily<
+  List<GeneralKnowledgeQuestion>,
+  GameLocale
+>
+generalKnowledgeQuestionsProvider = FutureProvider.autoDispose
+    .family<List<GeneralKnowledgeQuestion>, GameLocale>((ref, locale) async {
+      final GeneralKnowledgeRepository repository = ref.read(
+        generalKnowledgeRepositoryProvider,
       );
       return repository.loadQuestions(locale);
     });

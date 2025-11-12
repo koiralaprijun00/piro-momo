@@ -4,27 +4,32 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../data/models/game_locale.dart';
 import '../../../home/data/game_definition.dart';
-import '../application/festival_game_providers.dart';
-import '../application/festival_game_state.dart';
-import '../application/festival_game_controller.dart';
-import '../../../../data/models/festival_question.dart';
+import '../application/general_knowledge_game_providers.dart';
+import '../application/general_knowledge_game_state.dart';
+import '../application/general_knowledge_game_controller.dart';
+import '../../../../data/models/general_knowledge_question.dart';
 import '../../shared/widgets/quiz_option_tile.dart';
-import '../widgets/festival_stat_badge.dart';
+import '../../festival/widgets/festival_stat_badge.dart';
 
-class FestivalShellScreen extends ConsumerWidget {
-  const FestivalShellScreen({super.key});
+class GeneralKnowledgeShellScreen extends ConsumerWidget {
+  const GeneralKnowledgeShellScreen({super.key});
 
-  static const String routePath = '/games/guess-festival';
+  static const String routePath = '/games/general-knowledge';
+  static const String gameId = 'general-knowledge';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final FestivalGameState state = ref.watch(festivalGameControllerProvider);
-    final controller = ref.read(festivalGameControllerProvider.notifier);
+    final GeneralKnowledgeGameState state = ref.watch(
+      generalKnowledgeGameControllerProvider,
+    );
+    final controller = ref.read(
+      generalKnowledgeGameControllerProvider.notifier,
+    );
     final ThemeData theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Guess the Festival'),
+        title: const Text('Nepal General Knowledge'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
           iconSize: 20,
@@ -70,17 +75,23 @@ class FestivalShellScreen extends ConsumerWidget {
       ),
       body: SafeArea(
         bottom: false,
-        child: _FestivalGameContent(state: state, controller: controller),
+        child: _GeneralKnowledgeGameContent(
+          state: state,
+          controller: controller,
+        ),
       ),
     );
   }
 }
 
-class _FestivalGameContent extends StatelessWidget {
-  const _FestivalGameContent({required this.state, required this.controller});
+class _GeneralKnowledgeGameContent extends StatelessWidget {
+  const _GeneralKnowledgeGameContent({
+    required this.state,
+    required this.controller,
+  });
 
-  final FestivalGameState state;
-  final FestivalGameController controller;
+  final GeneralKnowledgeGameState state;
+  final GeneralKnowledgeGameController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +99,7 @@ class _FestivalGameContent extends StatelessWidget {
     final ColorScheme colorScheme = theme.colorScheme;
 
     if (state.showOnboarding) {
-      return _FestivalOnboarding(
+      return _GeneralKnowledgeOnboarding(
         controller: controller,
         isLoading: state.isLoading,
       );
@@ -162,7 +173,19 @@ class _FestivalGameContent extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    _FestivalStatsPanel(state: state, controller: controller),
+                    if (state.categories.isNotEmpty) ...<Widget>[
+                      _CategoryFilterBar(
+                        categories: state.categories,
+                        selectedCategory: state.selectedCategory,
+                        onSelect: controller.changeCategory,
+                        isDisabled: state.isLoading,
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                    _GeneralKnowledgeStatsPanel(
+                      state: state,
+                      controller: controller,
+                    ),
                     const SizedBox(height: 28),
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
@@ -196,7 +219,7 @@ class _FestivalGameContent extends StatelessWidget {
                               ),
                             );
                           },
-                      child: _FestivalQuestionCard(
+                      child: _GeneralKnowledgeQuestionCard(
                         key: ValueKey<String>('question-${question.id}'),
                         state: state,
                         question: question,
@@ -215,19 +238,22 @@ class _FestivalGameContent extends StatelessWidget {
   }
 }
 
-class _FestivalOnboarding extends StatelessWidget {
-  const _FestivalOnboarding({
+class _GeneralKnowledgeOnboarding extends StatelessWidget {
+  const _GeneralKnowledgeOnboarding({
     required this.controller,
     required this.isLoading,
   });
 
-  final FestivalGameController controller;
+  final GeneralKnowledgeGameController controller;
   final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final game = homeGames.first;
+    final game = homeGames.firstWhere(
+      (GameDefinition game) => game.id == GeneralKnowledgeShellScreen.gameId,
+      orElse: () => homeGames.first,
+    );
 
     return Center(
       child: Padding(
@@ -240,7 +266,7 @@ class _FestivalOnboarding extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withOpacity(0.12),
+                color: theme.colorScheme.primary.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -261,7 +287,7 @@ class _FestivalOnboarding extends StatelessWidget {
             Text(
               game.description,
               style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onBackground.withOpacity(0.75),
+                color: theme.colorScheme.onBackground.withValues(alpha: 0.75),
                 height: 1.5,
               ),
               textAlign: TextAlign.center,
@@ -294,11 +320,89 @@ class _FestivalOnboarding extends StatelessWidget {
   }
 }
 
-class _FestivalStatsPanel extends StatelessWidget {
-  const _FestivalStatsPanel({required this.state, required this.controller});
+class _CategoryFilterBar extends StatelessWidget {
+  const _CategoryFilterBar({
+    required this.categories,
+    required this.selectedCategory,
+    required this.onSelect,
+    required this.isDisabled,
+  });
 
-  final FestivalGameState state;
-  final FestivalGameController controller;
+  final List<String> categories;
+  final String selectedCategory;
+  final ValueChanged<String> onSelect;
+  final bool isDisabled;
+
+  @override
+  Widget build(BuildContext context) {
+    if (categories.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Pick a category',
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+            color: colorScheme.onSurface,
+          ),
+        ),
+        const SizedBox(height: 12),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: categories.map((String category) {
+              final bool isSelected =
+                  selectedCategory.toLowerCase() == category.toLowerCase();
+              return Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: ChoiceChip(
+                  label: Text(category),
+                  selected: isSelected,
+                  onSelected: isDisabled
+                      ? null
+                      : (bool _) => onSelect(category),
+                  labelStyle: theme.textTheme.labelLarge?.copyWith(
+                    color: isSelected
+                        ? colorScheme.onPrimary
+                        : colorScheme.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  side: BorderSide(
+                    color: isSelected
+                        ? colorScheme.primary
+                        : colorScheme.outlineVariant.withValues(alpha: 0.6),
+                  ),
+                  selectedColor: colorScheme.primary,
+                  backgroundColor: colorScheme.surfaceVariant.withValues(
+                    alpha: 0.6,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _GeneralKnowledgeStatsPanel extends StatelessWidget {
+  const _GeneralKnowledgeStatsPanel({
+    required this.state,
+    required this.controller,
+  });
+
+  final GeneralKnowledgeGameState state;
+  final GeneralKnowledgeGameController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -309,12 +413,14 @@ class _FestivalStatsPanel extends StatelessWidget {
       margin: const EdgeInsets.only(top: 4),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: scheme.surface.withOpacity(0.7),
+        color: scheme.surface.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: scheme.outlineVariant.withOpacity(0.35)),
+        border: Border.all(
+          color: scheme.outlineVariant.withValues(alpha: 0.35),
+        ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: scheme.shadow.withOpacity(0.06),
+            color: scheme.shadow.withValues(alpha: 0.06),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -370,8 +476,8 @@ class _FestivalStatsPanel extends StatelessWidget {
   }
 }
 
-class _FestivalQuestionCard extends StatelessWidget {
-  const _FestivalQuestionCard({
+class _GeneralKnowledgeQuestionCard extends StatelessWidget {
+  const _GeneralKnowledgeQuestionCard({
     super.key,
     required this.state,
     required this.question,
@@ -379,9 +485,9 @@ class _FestivalQuestionCard extends StatelessWidget {
     required this.totalAnswered,
   });
 
-  final FestivalGameState state;
-  final FestivalQuestion question;
-  final FestivalGameController controller;
+  final GeneralKnowledgeGameState state;
+  final GeneralKnowledgeQuestion question;
+  final GeneralKnowledgeGameController controller;
   final int totalAnswered;
 
   @override
@@ -394,10 +500,12 @@ class _FestivalQuestionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(36),
-        border: Border.all(color: colorScheme.outlineVariant.withOpacity(0.35)),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.35),
+        ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: colorScheme.shadow.withOpacity(0.08),
+            color: colorScheme.shadow.withValues(alpha: 0.08),
             blurRadius: 45,
             offset: const Offset(0, 24),
           ),
@@ -406,14 +514,36 @@ class _FestivalQuestionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Text(
-            'Question ${totalAnswered + 1} / ${state.deck.length}',
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: colorScheme.primary,
-              letterSpacing: 0.8,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                'Question ${totalAnswered + 1} / ${state.deck.length}',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: colorScheme.primary,
+                  letterSpacing: 0.8,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: colorScheme.primary.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  question.category,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
           Text(
             question.question,
             textAlign: TextAlign.start,
@@ -429,7 +559,7 @@ class _FestivalQuestionCard extends StatelessWidget {
               final int index = entry.key;
               final String option = entry.value;
               final bool isSelected = state.selectedOption == option;
-              final bool isCorrectOption = option == question.name;
+              final bool isCorrectOption = option == question.correctAnswer;
               final bool showCorrectState = state.isAnswered && isCorrectOption;
               final bool showIncorrectState =
                   state.isAnswered && isSelected && !isCorrectOption;

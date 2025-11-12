@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/games/festival/view/festival_shell_screen.dart';
+import '../features/games/general_knowledge/view/general_knowledge_shell_screen.dart';
 import '../features/games/gau_khane_katha/view/gau_khane_katha_shell_screen.dart';
 import '../features/home/view/home_screen.dart';
 
@@ -16,6 +17,17 @@ final GoRouter appRouter = GoRouter(
           key: state.pageKey,
           child: const HomeScreen(),
           transitionsBuilder: _fadeThroughTransition,
+        );
+      },
+    ),
+    GoRoute(
+      name: 'general-knowledge',
+      path: GeneralKnowledgeShellScreen.routePath,
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        return CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: const GeneralKnowledgeShellScreen(),
+          transitionsBuilder: _slideUpTransition,
         );
       },
     ),
