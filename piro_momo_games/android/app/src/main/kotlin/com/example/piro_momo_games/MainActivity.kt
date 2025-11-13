@@ -1,4 +1,4 @@
-package com.example.piro_momo_games
+package com.piro_momo_games
 
 import io.flutter.embedding.android.FlutterActivity
 
