@@ -82,6 +82,7 @@ class GeneralKnowledgeGameController
         showOnboarding: state.showOnboarding,
         categories: categories,
         selectedCategory: 'All',
+        showSummary: false,
       );
     } catch (error) {
       state = state.copyWith(isLoading: false, errorMessage: error.toString());
@@ -143,11 +144,15 @@ class GeneralKnowledgeGameController
     }
 
     int nextIndex = state.currentIndex + 1;
-    List<GeneralKnowledgeQuestion> deck = state.deck;
+    final List<GeneralKnowledgeQuestion> deck = state.deck;
 
     if (nextIndex >= deck.length) {
-      deck = List<GeneralKnowledgeQuestion>.from(deck)..shuffle(_random);
-      nextIndex = 0;
+      state = state.copyWith(
+        showSummary: true,
+        isAnswered: false,
+        clearSelection: true,
+      );
+      return;
     }
 
     final GeneralKnowledgeQuestion nextQuestion = deck[nextIndex];
@@ -254,6 +259,7 @@ class GeneralKnowledgeGameController
       incorrectCount: 0,
       streak: 0,
       clearSelection: true,
+      showSummary: false,
     );
   }
 
@@ -277,5 +283,22 @@ class GeneralKnowledgeGameController
               .toList();
     filtered.shuffle(_random);
     return filtered;
+  }
+
+  void goHomeAndReset() {
+    state = state.copyWith(
+      showSummary: false,
+      isAnswered: false,
+      clearSelection: true,
+    );
+  }
+
+  void showCategoryPicker() {
+    state = state.copyWith(
+      showOnboarding: true,
+      showSummary: false,
+      isAnswered: false,
+      clearSelection: true,
+    );
   }
 }

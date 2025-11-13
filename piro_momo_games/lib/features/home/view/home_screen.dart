@@ -31,7 +31,6 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      const SizedBox(height: 24),
                       const PiromomoHeader(),
                       const SizedBox(height: 32),
                       Padding(

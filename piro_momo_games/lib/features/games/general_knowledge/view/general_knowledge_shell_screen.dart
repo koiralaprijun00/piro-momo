@@ -102,6 +102,9 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
       return _GeneralKnowledgeOnboarding(
         controller: controller,
         isLoading: state.isLoading,
+        categories: state.categories,
+        selectedCategory: state.selectedCategory,
+        onCategorySelect: controller.changeCategory,
       );
     }
 
@@ -136,6 +139,17 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
     final question = state.currentQuestion;
     if (question == null) {
       return const Center(child: Text('No questions available right now.'));
+    }
+
+    if (state.showSummary) {
+      return _GeneralKnowledgeSummary(
+        state: state,
+        onPlayAgain: controller.showCategoryPicker,
+        onGoHome: () {
+          controller.goHomeAndReset();
+          context.go('/');
+        },
+      );
     }
 
     final int totalAnswered = state.correctCount + state.incorrectCount;
@@ -173,20 +187,11 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    if (state.categories.isNotEmpty) ...<Widget>[
-                      _CategoryFilterBar(
-                        categories: state.categories,
-                        selectedCategory: state.selectedCategory,
-                        onSelect: controller.changeCategory,
-                        isDisabled: state.isLoading,
-                      ),
-                      const SizedBox(height: 20),
-                    ],
                     _GeneralKnowledgeStatsPanel(
                       state: state,
                       controller: controller,
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 20),
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
                       switchInCurve: Curves.easeInOut,
@@ -227,6 +232,37 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
                         totalAnswered: totalAnswered,
                       ),
                     ),
+                    const SizedBox(height: 20),
+                    _PrimaryNextButton(
+                      isEnabled: state.isAnswered,
+                      onPressed: state.isAnswered
+                          ? controller.nextQuestion
+                          : null,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: TextButton(
+                        onPressed: state.isLoading
+                            ? null
+                            : controller.showCategoryPicker,
+                        style: ButtonStyle(
+                          overlayColor: const WidgetStatePropertyAll(
+                            Colors.transparent,
+                          ),
+                          textStyle: WidgetStateProperty.resolveWith((states) {
+                            if (states.contains(WidgetState.hovered)) {
+                              return Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.copyWith(
+                                decoration: TextDecoration.underline,
+                              );
+                            }
+                            return Theme.of(context).textTheme.bodyMedium;
+                          }),
+                        ),
+                        child: const Text('Change category'),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -242,10 +278,16 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
   const _GeneralKnowledgeOnboarding({
     required this.controller,
     required this.isLoading,
+    required this.categories,
+    required this.selectedCategory,
+    required this.onCategorySelect,
   });
 
   final GeneralKnowledgeGameController controller;
   final bool isLoading;
+  final List<String> categories;
+  final String selectedCategory;
+  final ValueChanged<String> onCategorySelect;
 
   @override
   Widget build(BuildContext context) {
@@ -285,14 +327,22 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              game.description,
+              'Pick a category to focus on or stay with All. Tap Play whenever you\'re ready.',
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.colorScheme.onBackground.withValues(alpha: 0.75),
-                height: 1.5,
+                height: 1.45,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 28),
+            if (categories.isNotEmpty) ...<Widget>[
+              const SizedBox(height: 20),
+              _OnboardingCategoryChooser(
+                categories: categories,
+                selectedCategory: selectedCategory,
+                onSelect: isLoading ? null : onCategorySelect,
+              ),
+            ] else
+              const SizedBox(height: 24),
             FilledButton(
               onPressed: isLoading ? null : controller.startGame,
               style: FilledButton.styleFrom(
@@ -320,25 +370,19 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
   }
 }
 
-class _CategoryFilterBar extends StatelessWidget {
-  const _CategoryFilterBar({
+class _OnboardingCategoryChooser extends StatelessWidget {
+  const _OnboardingCategoryChooser({
     required this.categories,
     required this.selectedCategory,
-    required this.onSelect,
-    required this.isDisabled,
+    this.onSelect,
   });
 
   final List<String> categories;
   final String selectedCategory;
-  final ValueChanged<String> onSelect;
-  final bool isDisabled;
+  final ValueChanged<String>? onSelect;
 
   @override
   Widget build(BuildContext context) {
-    if (categories.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
 
@@ -353,42 +397,34 @@ class _CategoryFilterBar extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: categories.map((String category) {
-              final bool isSelected =
-                  selectedCategory.toLowerCase() == category.toLowerCase();
-              return Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: ChoiceChip(
-                  label: Text(category),
-                  selected: isSelected,
-                  onSelected: isDisabled
-                      ? null
-                      : (bool _) => onSelect(category),
-                  labelStyle: theme.textTheme.labelLarge?.copyWith(
-                    color: isSelected
-                        ? colorScheme.onPrimary
-                        : colorScheme.onSurface,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  side: BorderSide(
-                    color: isSelected
-                        ? colorScheme.primary
-                        : colorScheme.outlineVariant.withValues(alpha: 0.6),
-                  ),
-                  selectedColor: colorScheme.primary,
-                  backgroundColor: colorScheme.surfaceVariant.withValues(
-                    alpha: 0.6,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(999),
-                  ),
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: categories.map((String category) {
+            final bool isSelected =
+                selectedCategory.toLowerCase() == category.toLowerCase();
+            return ChoiceChip(
+              label: Text(category),
+              selected: isSelected,
+              onSelected: onSelect == null
+                  ? null
+                  : (bool _) => onSelect!(category),
+              labelStyle: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: isSelected ? colorScheme.onPrimary : colorScheme.primary,
+              ),
+              backgroundColor: colorScheme.primary.withValues(alpha: 0.08),
+              selectedColor: colorScheme.primary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(999),
+                side: BorderSide(
+                  color: isSelected
+                      ? colorScheme.primary
+                      : colorScheme.primary.withValues(alpha: 0.25),
                 ),
-              );
-            }).toList(),
-          ),
+              ),
+            );
+          }).toList(),
         ),
       ],
     );
@@ -476,6 +512,140 @@ class _GeneralKnowledgeStatsPanel extends StatelessWidget {
   }
 }
 
+class _GeneralKnowledgeSummary extends StatelessWidget {
+  const _GeneralKnowledgeSummary({
+    required this.state,
+    required this.onPlayAgain,
+    required this.onGoHome,
+  });
+
+  final GeneralKnowledgeGameState state;
+  final VoidCallback onPlayAgain;
+  final VoidCallback onGoHome;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 520),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                Icons.emoji_events_rounded,
+                size: 64,
+                color: colorScheme.primary,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'All questions completed!',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'You answered ${state.correctCount} out of ${state.deck.length} correctly.',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: _SummaryTile(
+                      label: 'Score',
+                      value: '${state.score}',
+                      icon: Icons.auto_awesome,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _SummaryTile(
+                      label: 'Best streak',
+                      value: '${state.bestStreak}',
+                      icon: Icons.local_fire_department,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 32),
+              FilledButton(
+                onPressed: onPlayAgain,
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size.fromHeight(48),
+                ),
+                child: const Text('Play again'),
+              ),
+              const SizedBox(height: 12),
+              OutlinedButton(
+                onPressed: onGoHome,
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(48),
+                ),
+                child: const Text('Home'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SummaryTile extends StatelessWidget {
+  const _SummaryTile({
+    required this.label,
+    required this.value,
+    required this.icon,
+  });
+
+  final String label;
+  final String value;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceVariant.withValues(alpha: 0.6),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Icon(icon, color: colorScheme.primary),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          Text(
+            label,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _GeneralKnowledgeQuestionCard extends StatelessWidget {
   const _GeneralKnowledgeQuestionCard({
     super.key,
@@ -518,7 +688,7 @@ class _GeneralKnowledgeQuestionCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'Question ${totalAnswered + 1} / ${state.deck.length}',
+                'Question ${_boundedQuestion(totalAnswered + 1, state.deck.length)} / ${state.deck.length}',
                 style: theme.textTheme.labelLarge?.copyWith(
                   color: colorScheme.primary,
                   letterSpacing: 0.8,
@@ -579,31 +749,65 @@ class _GeneralKnowledgeQuestionCard extends StatelessWidget {
                             : 'Right answer')
                       : null,
                   incorrectLabel: showIncorrectState ? 'Not quite' : null,
-                  factText: showCorrectState ? question.fact : null,
+                  factText: null,
                   onPressed: () => controller.submitGuess(option),
                 ),
               );
             }).toList(),
           ),
-          if (state.isAnswered)
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: FilledButton.tonalIcon(
-                  onPressed: controller.nextQuestion,
-                  icon: const Icon(Icons.arrow_forward_rounded),
-                  label: const Text('Next'),
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          const SizedBox(height: 8),
         ],
+      ),
+    );
+  }
+}
+
+int _boundedQuestion(int value, int max) {
+  if (max <= 0) {
+    return 0;
+  }
+  if (value < 1) {
+    return 1;
+  }
+  if (value > max) {
+    return max;
+  }
+  return value;
+}
+
+class _PrimaryNextButton extends StatelessWidget {
+  const _PrimaryNextButton({required this.isEnabled, required this.onPressed});
+
+  final bool isEnabled;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+
+    return SizedBox(
+      height: 52,
+      child: ElevatedButton.icon(
+        onPressed: isEnabled ? onPressed : null,
+        icon: const Icon(Icons.arrow_forward_rounded),
+        label: const Text('Next'),
+        style: ElevatedButton.styleFrom(
+          elevation: isEnabled ? 3 : 0,
+          backgroundColor: isEnabled
+              ? colorScheme.primary
+              : colorScheme.primary.withValues(alpha: 0.35),
+          foregroundColor: isEnabled
+              ? colorScheme.onPrimary
+              : colorScheme.onPrimary.withValues(alpha: 0.8),
+          textStyle: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(28),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 26),
+        ),
       ),
     );
   }

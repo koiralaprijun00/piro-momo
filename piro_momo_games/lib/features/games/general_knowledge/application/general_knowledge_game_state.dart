@@ -21,6 +21,7 @@ class GeneralKnowledgeGameState {
     this.showOnboarding = true,
     this.categories = const <String>[],
     this.selectedCategory = 'All',
+    this.showSummary = false,
   });
 
   factory GeneralKnowledgeGameState.initial() {
@@ -40,6 +41,7 @@ class GeneralKnowledgeGameState {
       showOnboarding: true,
       categories: <String>[],
       selectedCategory: 'All',
+      showSummary: false,
     );
   }
 
@@ -61,6 +63,7 @@ class GeneralKnowledgeGameState {
   final bool showOnboarding;
   final List<String> categories;
   final String selectedCategory;
+  final bool showSummary;
 
   GeneralKnowledgeQuestion? get currentQuestion {
     if (deck.isEmpty || currentIndex >= deck.length) {
@@ -90,6 +93,7 @@ class GeneralKnowledgeGameState {
     bool? showOnboarding,
     List<String>? categories,
     String? selectedCategory,
+    bool? showSummary,
     bool clearError = false,
     bool clearSelection = false,
   }) {
@@ -114,6 +118,7 @@ class GeneralKnowledgeGameState {
       showOnboarding: showOnboarding ?? this.showOnboarding,
       categories: categories ?? this.categories,
       selectedCategory: selectedCategory ?? this.selectedCategory,
+      showSummary: showSummary ?? this.showSummary,
     );
   }
 }

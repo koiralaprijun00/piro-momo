@@ -137,6 +137,8 @@ class _FestivalGameContent extends StatelessWidget {
           vertical: isWide ? 40 : 24,
         );
 
+        final double horizontalInset = isWide ? 120 : 20;
+
         return Container(
           width: double.infinity,
           decoration: const BoxDecoration(
@@ -163,7 +165,7 @@ class _FestivalGameContent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     _FestivalStatsPanel(state: state, controller: controller),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 20),
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
                       switchInCurve: Curves.easeInOut,
@@ -203,6 +205,13 @@ class _FestivalGameContent extends StatelessWidget {
                         controller: controller,
                         totalAnswered: totalAnswered,
                       ),
+                    ),
+                    const SizedBox(height: 20),
+                    _PrimaryNextButton(
+                      isEnabled: state.isAnswered,
+                      onPressed: state.isAnswered
+                          ? controller.nextQuestion
+                          : null,
                     ),
                   ],
                 ),
@@ -390,7 +399,7 @@ class _FestivalQuestionCard extends StatelessWidget {
     final ColorScheme colorScheme = theme.colorScheme;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 36),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(36),
@@ -413,17 +422,17 @@ class _FestivalQuestionCard extends StatelessWidget {
               letterSpacing: 0.8,
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           Text(
             question.question,
             textAlign: TextAlign.start,
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w800,
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w700,
               color: colorScheme.onSurface,
               height: 1.35,
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 20),
           Column(
             children: state.currentOptions.asMap().entries.map((entry) {
               final int index = entry.key;
@@ -435,7 +444,7 @@ class _FestivalQuestionCard extends StatelessWidget {
                   state.isAnswered && isSelected && !isCorrectOption;
 
               return Padding(
-                padding: const EdgeInsets.only(bottom: 14),
+                padding: const EdgeInsets.only(bottom: 12),
                 child: QuizOptionTile(
                   leadingLabel: '${String.fromCharCode(65 + index)}.',
                   label: option,
@@ -449,32 +458,76 @@ class _FestivalQuestionCard extends StatelessWidget {
                             : 'Right answer')
                       : null,
                   incorrectLabel: showIncorrectState ? 'Not quite' : null,
-                  factText: showCorrectState ? question.fact : null,
+                  factText: showCorrectState
+                      ? _condenseFact(question.fact)
+                      : null,
                   onPressed: () => controller.submitGuess(option),
                 ),
               );
             }).toList(),
           ),
-          if (state.isAnswered)
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: FilledButton.tonalIcon(
-                  onPressed: controller.nextQuestion,
-                  icon: const Icon(Icons.arrow_forward_rounded),
-                  label: const Text('Next'),
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          const SizedBox(height: 8),
         ],
       ),
     );
   }
+}
+
+class _PrimaryNextButton extends StatelessWidget {
+  const _PrimaryNextButton({required this.isEnabled, required this.onPressed});
+
+  final bool isEnabled;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+
+    return SizedBox(
+      height: 52,
+      child: ElevatedButton.icon(
+        onPressed: isEnabled ? onPressed : null,
+        icon: const Icon(Icons.arrow_forward_rounded),
+        label: const Text('Next'),
+        style: ElevatedButton.styleFrom(
+          elevation: isEnabled ? 3 : 0,
+          backgroundColor: isEnabled
+              ? colorScheme.primary
+              : colorScheme.primary.withValues(alpha: 0.35),
+          foregroundColor: isEnabled
+              ? colorScheme.onPrimary
+              : colorScheme.onPrimary.withValues(alpha: 0.8),
+          textStyle: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(28),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 26),
+        ),
+      ),
+    );
+  }
+}
+
+String _condenseFact(String fact) {
+  final List<String> lines = fact
+      .split('\n')
+      .map((String line) => line.trim())
+      .where((String line) => line.isNotEmpty)
+      .toList();
+  if (lines.isEmpty) {
+    return fact;
+  }
+
+  final List<String> selected = lines.take(3).toList();
+  String combined = selected.join(' ');
+  const int maxChars = 260;
+  if (combined.length > maxChars) {
+    final int lastSpace = combined.lastIndexOf(' ', maxChars);
+    final int cutoff = lastSpace > 0 ? lastSpace : maxChars;
+    combined = '${combined.substring(0, cutoff).trim()}…';
+  }
+  return combined;
 }

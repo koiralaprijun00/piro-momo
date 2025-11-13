@@ -53,8 +53,8 @@ class _QuizOptionTileState extends State<QuizOptionTile> {
     final bool showFact =
         widget.factText != null && widget.factText!.trim().isNotEmpty;
 
-    Color backgroundColor = Colors.white;
-    Color borderColor = colorScheme.outlineVariant.withOpacity(0.4);
+    Color backgroundColor = colorScheme.surface;
+    Color borderColor = colorScheme.outlineVariant.withValues(alpha: 0.4);
     Color titleColor = colorScheme.onSurface;
     IconData? statusIcon;
     Color? statusColor;
@@ -75,11 +75,11 @@ class _QuizOptionTileState extends State<QuizOptionTile> {
       statusColor = const Color(0xFFB91C1C);
       statusText = widget.incorrectLabel ?? 'Not quite';
     } else if (widget.isSelected) {
-      backgroundColor = colorScheme.primary.withOpacity(0.08);
+      backgroundColor = colorScheme.primary.withValues(alpha: 0.08);
       borderColor = colorScheme.primary;
       titleColor = colorScheme.primary;
     } else if (_isHovered) {
-      backgroundColor = colorScheme.surfaceVariant.withOpacity(0.6);
+      backgroundColor = colorScheme.surfaceVariant.withValues(alpha: 0.6);
     }
 
     final bool showShadow =
@@ -107,7 +107,7 @@ class _QuizOptionTileState extends State<QuizOptionTile> {
             boxShadow: showShadow
                 ? <BoxShadow>[
                     BoxShadow(
-                      color: colorScheme.shadow.withOpacity(0.08),
+                      color: colorScheme.shadow.withValues(alpha: 0.08),
                       blurRadius: 18,
                       offset: const Offset(0, 12),
                     ),
@@ -140,12 +140,12 @@ class _QuizOptionTileState extends State<QuizOptionTile> {
                       children: <Widget>[
                         AnimatedOpacity(
                           duration: const Duration(milliseconds: 220),
-                          opacity: widget.showCorrectState ? 1 : 0.4,
+                          opacity: widget.showCorrectState ? 1 : 0.65,
                           child: Text(
                             widget.leadingLabel,
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w700,
-                              color: titleColor.withOpacity(0.9),
+                              color: titleColor.withValues(alpha: 0.9),
                             ),
                           ),
                         ),
@@ -262,8 +262,10 @@ class _QuizOptionTileState extends State<QuizOptionTile> {
                               child: Text(
                                 widget.factText!,
                                 style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: titleColor.withOpacity(
-                                    widget.showCorrectState ? 0.95 : 0.85,
+                                  color: titleColor.withValues(
+                                    alpha: widget.showCorrectState
+                                        ? 0.95
+                                        : 0.85,
                                   ),
                                   height: 1.5,
                                 ),

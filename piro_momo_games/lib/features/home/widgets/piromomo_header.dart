@@ -5,7 +5,7 @@ class PiromomoHeader extends StatelessWidget {
     super.key,
     this.streakDays = 7,
     this.appName = 'Piromomo',
-    this.subtitle = 'Reconnect with Nepal, One Game at a Time.',
+    this.subtitle = 'Play quick trivia, stay close to Nepal.',
     this.referenceDate,
     this.gamesPlayed = 2,
   });
@@ -26,7 +26,7 @@ class PiromomoHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        const SizedBox(height: 36),
+        const SizedBox(height: 12),
         Padding(
           padding: horizontalPadding,
           child: _HeroCard(
@@ -113,10 +113,11 @@ class _HeroCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             subtitle,
-            style: textTheme.titleLarge?.copyWith(
-               fontSize: 14, // pick the size you need
-              color: colorScheme.onSurface.withOpacity(0.8),
-              fontWeight: FontWeight.w400,
+            style: textTheme.titleMedium?.copyWith(
+              fontSize: 13,
+              color: colorScheme.onSurface.withValues(alpha: 0.7),
+              fontWeight: FontWeight.w500,
+              height: 1.3,
             ),
           ),
         ],
@@ -170,7 +171,9 @@ class _DailyStatsRow extends StatelessWidget {
       context,
     );
     final String formattedDate = '${localizations.formatShortMonthDay(date)}.';
-    final Color dividerColor = colorScheme.outlineVariant.withOpacity(0.5);
+    final Color dividerColor = colorScheme.outlineVariant.withValues(
+      alpha: 0.5,
+    );
 
     return Material(
       color: Colors.transparent,

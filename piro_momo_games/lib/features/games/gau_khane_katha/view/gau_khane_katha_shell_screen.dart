@@ -188,7 +188,10 @@ class _RiddleOnboarding extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final game = homeGames.last;
+    final game = homeGames.firstWhere(
+      (GameDefinition game) => game.id == 'gau-khane-katha',
+      orElse: () => homeGames.first,
+    );
 
     return Center(
       child: Padding(
