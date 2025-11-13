@@ -1,0 +1,2 @@
+/Users/prijunkoirala/piro-momo/piro_momo_games/android/app/.cxx/RelWithDebInfo/454f6r2d/x86/CMakeFiles/edit_cache.dir
+/Users/prijunkoirala/piro-momo/piro_momo_games/android/app/.cxx/RelWithDebInfo/454f6r2d/x86/CMakeFiles/rebuild_cache.dir
