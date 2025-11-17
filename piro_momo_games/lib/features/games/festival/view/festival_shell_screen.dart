@@ -132,12 +132,10 @@ class _FestivalGameContent extends StatelessWidget {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         final bool isWide = constraints.maxWidth >= 960;
-        final EdgeInsets basePadding = EdgeInsets.symmetric(
+        final EdgeInsets contentPadding = EdgeInsets.symmetric(
           horizontal: isWide ? 120 : 20,
           vertical: isWide ? 40 : 24,
         );
-
-        final double horizontalInset = isWide ? 120 : 20;
 
         return Container(
           width: double.infinity,
@@ -153,60 +151,73 @@ class _FestivalGameContent extends StatelessWidget {
             ),
           ),
           child: Center(
-            child: SingleChildScrollView(
-              padding:
-                  basePadding +
-                  EdgeInsets.only(
-                    bottom: MediaQuery.of(context).padding.bottom + 32,
-                  ),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 920),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 920),
+              child: Padding(
+                padding:
+                    contentPadding +
+                    EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom + 16,
+                    ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    _FestivalStatsPanel(state: state, controller: controller),
-                    const SizedBox(height: 20),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      switchInCurve: Curves.easeInOut,
-                      switchOutCurve: Curves.easeInOut,
-                      layoutBuilder:
-                          (
-                            Widget? currentChild,
-                            List<Widget> previousChildren,
-                          ) {
-                            return Stack(
-                              alignment: Alignment.topCenter,
-                              children: <Widget>[
-                                ...previousChildren,
-                                if (currentChild != null) currentChild,
-                              ],
-                            );
-                          },
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                            final Animation<Offset> slideAnimation =
-                                Tween<Offset>(
-                                  begin: const Offset(0, 0.06),
-                                  end: Offset.zero,
-                                ).animate(animation);
-                            return FadeTransition(
-                              opacity: animation,
-                              child: SlideTransition(
-                                position: slideAnimation,
-                                child: child,
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            _FestivalStatsPanel(
+                              state: state,
+                              controller: controller,
+                            ),
+                            const SizedBox(height: 20),
+                            AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 300),
+                              switchInCurve: Curves.easeInOut,
+                              switchOutCurve: Curves.easeInOut,
+                              layoutBuilder:
+                                  (
+                                    Widget? currentChild,
+                                    List<Widget> previousChildren,
+                                  ) {
+                                    return Stack(
+                                      alignment: Alignment.topCenter,
+                                      children: <Widget>[
+                                        ...previousChildren,
+                                        if (currentChild != null) currentChild,
+                                      ],
+                                    );
+                                  },
+                              transitionBuilder:
+                                  (Widget child, Animation<double> animation) {
+                                    final Animation<Offset> slideAnimation =
+                                        Tween<Offset>(
+                                          begin: const Offset(0, 0.06),
+                                          end: Offset.zero,
+                                        ).animate(animation);
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: SlideTransition(
+                                        position: slideAnimation,
+                                        child: child,
+                                      ),
+                                    );
+                                  },
+                              child: _FestivalQuestionCard(
+                                key: ValueKey<String>(
+                                  'question-${question.id}',
+                                ),
+                                state: state,
+                                question: question,
+                                controller: controller,
+                                totalAnswered: totalAnswered,
                               ),
-                            );
-                          },
-                      child: _FestivalQuestionCard(
-                        key: ValueKey<String>('question-${question.id}'),
-                        state: state,
-                        question: question,
-                        controller: controller,
-                        totalAnswered: totalAnswered,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     _PrimaryNextButton(
                       isEnabled: state.isAnswered,
                       onPressed: state.isAnswered
