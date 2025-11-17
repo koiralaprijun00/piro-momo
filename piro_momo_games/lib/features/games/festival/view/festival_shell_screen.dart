@@ -8,6 +8,7 @@ import '../application/festival_game_providers.dart';
 import '../application/festival_game_state.dart';
 import '../application/festival_game_controller.dart';
 import '../../../../data/models/festival_question.dart';
+import '../../shared/widgets/game_locale_toggle.dart';
 import '../../shared/widgets/quiz_option_tile.dart';
 import '../widgets/festival_stat_badge.dart';
 
@@ -46,6 +47,8 @@ class _FestivalGameContent extends StatelessWidget {
       return _FestivalOnboarding(
         controller: controller,
         isLoading: state.isLoading,
+        currentLocale: state.locale,
+        onLocaleChange: controller.changeLocale,
       );
     }
 
@@ -124,8 +127,6 @@ class _FestivalGameContent extends StatelessWidget {
                             _FestivalStatsPanel(
                               state: state,
                               onBack: () => context.pop(),
-                              onLocaleChange: controller.changeLocale,
-                              currentLocale: state.locale,
                             ),
                             const SizedBox(height: 20),
                             AnimatedSwitcher(
@@ -196,10 +197,14 @@ class _FestivalOnboarding extends StatelessWidget {
   const _FestivalOnboarding({
     required this.controller,
     required this.isLoading,
+    required this.currentLocale,
+    required this.onLocaleChange,
   });
 
   final FestivalGameController controller;
   final bool isLoading;
+  final GameLocale currentLocale;
+  final ValueChanged<GameLocale> onLocaleChange;
 
   @override
   Widget build(BuildContext context) {
@@ -214,6 +219,11 @@ class _FestivalOnboarding extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            GameLocaleToggle(
+              currentLocale: currentLocale,
+              onChanged: onLocaleChange,
+            ),
+            const SizedBox(height: 24),
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -275,14 +285,10 @@ class _FestivalStatsPanel extends StatelessWidget {
   const _FestivalStatsPanel({
     required this.state,
     required this.onBack,
-    required this.onLocaleChange,
-    required this.currentLocale,
   });
 
   final FestivalGameState state;
   final VoidCallback onBack;
-  final ValueChanged<GameLocale> onLocaleChange;
-  final GameLocale currentLocale;
 
   @override
   Widget build(BuildContext context) {
@@ -324,7 +330,7 @@ class _FestivalStatsPanel extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Learn by playing',
+                  'Decode Nepal’s celebrations',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: scheme.onSurfaceVariant,
                   ),
@@ -332,34 +338,28 @@ class _FestivalStatsPanel extends StatelessWidget {
               ],
             ),
           ),
-          SegmentedButton<GameLocale>(
-            style: ButtonStyle(
-              visualDensity: VisualDensity.compact,
-              padding: const WidgetStatePropertyAll<EdgeInsets>(
-                EdgeInsets.symmetric(horizontal: 6),
-              ),
-              textStyle: WidgetStatePropertyAll<TextStyle?>(
-                theme.textTheme.labelSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.2,
+          const SizedBox(width: 8),
+          Flexible(
+            child: Wrap(
+              alignment: WrapAlignment.end,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 8,
+              runSpacing: 6,
+              children: <Widget>[
+                FestivalStatBadge(
+                  label: 'Score',
+                  value: '${state.score}',
+                  icon: Icons.auto_awesome_rounded,
+                  compact: true,
                 ),
-              ),
+                FestivalStatBadge(
+                  label: 'Streak',
+                  value: '${state.streak}',
+                  icon: Icons.local_fire_department_rounded,
+                  compact: true,
+                ),
+              ],
             ),
-            showSelectedIcon: false,
-            segments: const <ButtonSegment<GameLocale>>[
-              ButtonSegment<GameLocale>(
-                value: GameLocale.english,
-                label: Text('EN'),
-              ),
-              ButtonSegment<GameLocale>(
-                value: GameLocale.nepali,
-                label: Text('NP'),
-              ),
-            ],
-            selected: <GameLocale>{currentLocale},
-            onSelectionChanged: (Set<GameLocale> newSelection) {
-              onLocaleChange(newSelection.first);
-            },
           ),
         ],
       ),
@@ -387,10 +387,10 @@ class _FestivalQuestionCard extends StatelessWidget {
     final ColorScheme colorScheme = theme.colorScheme;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 22, 20, 18),
+      padding: const EdgeInsets.fromLTRB(18, 18, 18, 14),
       decoration: BoxDecoration(
         color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: colorScheme.outlineVariant.withOpacity(0.25)),
         boxShadow: <BoxShadow>[
           BoxShadow(
@@ -410,17 +410,18 @@ class _FestivalQuestionCard extends StatelessWidget {
               letterSpacing: 0.8,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Text(
             question.question,
             textAlign: TextAlign.start,
             style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
+              fontSize: 17,
+              fontWeight: FontWeight.w600,
               color: colorScheme.onSurface,
-              height: 1.25,
+              height: 1.2,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Column(
             children: state.currentOptions.asMap().entries.map((entry) {
               final int index = entry.key;
@@ -432,7 +433,7 @@ class _FestivalQuestionCard extends StatelessWidget {
                   state.isAnswered && isSelected && !isCorrectOption;
 
               return Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: QuizOptionTile(
                   leadingLabel: '${String.fromCharCode(65 + index)}.',
                   label: option,

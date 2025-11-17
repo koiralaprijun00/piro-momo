@@ -7,6 +7,7 @@ import '../../../home/data/game_definition.dart';
 import '../application/riddle_game_controller.dart';
 import '../application/riddle_game_providers.dart';
 import '../application/riddle_game_state.dart';
+import '../../shared/widgets/game_locale_toggle.dart';
 import '../widgets/riddle_answer_card.dart';
 import '../widgets/riddle_summary_tiles.dart';
 
@@ -57,27 +58,6 @@ class _GauKhaneKathaShellScreenState
           icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () => context.pop(),
         ),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: SegmentedButton<GameLocale>(
-              segments: const <ButtonSegment<GameLocale>>[
-                ButtonSegment<GameLocale>(
-                  value: GameLocale.english,
-                  label: Text('EN'),
-                ),
-                ButtonSegment<GameLocale>(
-                  value: GameLocale.nepali,
-                  label: Text('NP'),
-                ),
-              ],
-              selected: <GameLocale>{state.locale},
-              onSelectionChanged: (Set<GameLocale> value) {
-                controller.changeLocale(value.first);
-              },
-            ),
-          ),
-        ],
       ),
       body: SafeArea(
         bottom: false,
@@ -114,6 +94,8 @@ class _RiddleGameBody extends StatelessWidget {
       return _RiddleOnboarding(
         controller: controller,
         isLoading: state.isLoading,
+        currentLocale: state.locale,
+        onLocaleChange: controller.changeLocale,
       );
     }
 
@@ -180,10 +162,17 @@ class _RiddleGameBody extends StatelessWidget {
 }
 
 class _RiddleOnboarding extends StatelessWidget {
-  const _RiddleOnboarding({required this.controller, required this.isLoading});
+  const _RiddleOnboarding({
+    required this.controller,
+    required this.isLoading,
+    required this.currentLocale,
+    required this.onLocaleChange,
+  });
 
   final RiddleGameController controller;
   final bool isLoading;
+  final GameLocale currentLocale;
+  final ValueChanged<GameLocale> onLocaleChange;
 
   @override
   Widget build(BuildContext context) {
@@ -200,6 +189,11 @@ class _RiddleOnboarding extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            GameLocaleToggle(
+              currentLocale: currentLocale,
+              onChanged: onLocaleChange,
+            ),
+            const SizedBox(height: 20),
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(

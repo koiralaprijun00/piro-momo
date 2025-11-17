@@ -8,6 +8,7 @@ import '../application/general_knowledge_game_providers.dart';
 import '../application/general_knowledge_game_state.dart';
 import '../application/general_knowledge_game_controller.dart';
 import '../../../../data/models/general_knowledge_question.dart';
+import '../../shared/widgets/game_locale_toggle.dart';
 import '../../shared/widgets/quiz_option_tile.dart';
 import '../../festival/widgets/festival_stat_badge.dart';
 
@@ -60,6 +61,8 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
         categories: state.categories,
         selectedCategory: state.selectedCategory,
         onCategorySelect: controller.changeCategory,
+        currentLocale: state.locale,
+        onLocaleChange: controller.changeLocale,
       );
     }
 
@@ -228,6 +231,8 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
     required this.categories,
     required this.selectedCategory,
     required this.onCategorySelect,
+    required this.currentLocale,
+    required this.onLocaleChange,
   });
 
   final GeneralKnowledgeGameController controller;
@@ -235,6 +240,8 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
   final List<String> categories;
   final String selectedCategory;
   final ValueChanged<String> onCategorySelect;
+  final GameLocale currentLocale;
+  final ValueChanged<GameLocale> onLocaleChange;
 
   @override
   Widget build(BuildContext context) {
@@ -262,7 +269,15 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
                     height: contentHeight,
                     child: Column(
                       children: <Widget>[
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 16),
+                        Align(
+                          alignment: Alignment.center,
+                          child: GameLocaleToggle(
+                            currentLocale: currentLocale,
+                            onChanged: onLocaleChange,
+                          ),
+                        ),
+                        const SizedBox(height: 18),
                         Container(
                           padding: const EdgeInsets.all(14),
                           decoration: BoxDecoration(
@@ -454,28 +469,53 @@ class _GeneralKnowledgeStatsPanel extends StatelessWidget {
                     color: scheme.onSurface,
                   ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  'Pick a category & play',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
+                const SizedBox(height: 6),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: scheme.primary.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      state.selectedCategory,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: scheme.primary,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          FestivalStatBadge(
-            label: 'Score',
-            value: '${state.score}',
-            icon: Icons.auto_awesome_rounded,
-            compact: true,
-          ),
-          const SizedBox(width: 12),
-          FestivalStatBadge(
-            label: 'Streak',
-            value: '${state.streak}',
-            icon: Icons.local_fire_department_rounded,
-            compact: true,
+          const SizedBox(width: 8),
+          Flexible(
+            child: Wrap(
+              alignment: WrapAlignment.end,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 8,
+              runSpacing: 6,
+              children: <Widget>[
+                FestivalStatBadge(
+                  label: 'Score',
+                  value: '${state.score}',
+                  icon: Icons.auto_awesome_rounded,
+                  compact: true,
+                ),
+                FestivalStatBadge(
+                  label: 'Streak',
+                  value: '${state.streak}',
+                  icon: Icons.local_fire_department_rounded,
+                  compact: true,
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -637,10 +677,10 @@ class _GeneralKnowledgeQuestionCard extends StatelessWidget {
     final ColorScheme colorScheme = theme.colorScheme;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(22, 20, 22, 18),
+      padding: const EdgeInsets.fromLTRB(18, 18, 18, 14),
       decoration: BoxDecoration(
         color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: colorScheme.outlineVariant.withValues(alpha: 0.35),
         ),
@@ -655,46 +695,25 @@ class _GeneralKnowledgeQuestionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Question ${_boundedQuestion(totalAnswered + 1, state.deck.length)} / ${state.deck.length}',
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: colorScheme.primary,
-                  letterSpacing: 0.8,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: colorScheme.primary.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Text(
-                  question.category,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: colorScheme.primary,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ],
+          Text(
+            'Question ${_boundedQuestion(totalAnswered + 1, state.deck.length)} / ${state.deck.length}',
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: colorScheme.primary,
+              letterSpacing: 0.8,
+            ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Text(
             question.question,
             textAlign: TextAlign.start,
             style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
+              fontSize: 17,
+              fontWeight: FontWeight.w600,
               color: colorScheme.onSurface,
-              height: 1.3,
+              height: 1.2,
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
           Column(
             children: state.currentOptions.asMap().entries.map((entry) {
               final int index = entry.key;
@@ -706,7 +725,7 @@ class _GeneralKnowledgeQuestionCard extends StatelessWidget {
                   state.isAnswered && isSelected && !isCorrectOption;
 
               return Padding(
-                padding: const EdgeInsets.only(bottom: 14),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: QuizOptionTile(
                   leadingLabel: '${String.fromCharCode(65 + index)}.',
                   label: option,

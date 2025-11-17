@@ -34,7 +34,7 @@ const List<GameDefinition> homeGames = <GameDefinition>[
     title: 'Guess the Festival',
     eyebrow: 'Festival Stories',
     description:
-        'Identify Nepal’s vibrant celebrations through daily questions, hints, and cultural nuggets.',
+        'Spot Nepal’s vibrant celebrations through quick cultural hints.',
     icon: Icons.celebration_rounded,
     accentColors: <Color>[
       AppPalette.primaryBlue,
@@ -48,8 +48,7 @@ const List<GameDefinition> homeGames = <GameDefinition>[
     routePath: GauKhaneKathaShellScreen.routePath,
     title: 'Gau Khane Katha',
     eyebrow: 'Riddles & Wit',
-    description:
-        'Crack classic Nepali riddles, track your streak, and uncover the stories behind each answer.',
+    description: 'Crack Nepali riddles fast and keep your streak alive.',
     icon: Icons.psychology_rounded,
     accentColors: <Color>[
       AppPalette.nepalBlue,
@@ -64,7 +63,7 @@ const List<GameDefinition> homeGames = <GameDefinition>[
     title: 'Nepal General Knowledge',
     eyebrow: 'Trivia Highlights',
     description:
-        'Test yourself with curated facts about Nepal’s history, geography, culture, and more.',
+        'Tackle Nepal’s history, geography, and civic trivia in minutes.',
     icon: Icons.quiz_rounded,
     accentColors: <Color>[
       AppPalette.nepalBlue,

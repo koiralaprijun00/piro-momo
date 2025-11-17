@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       const PiromomoHeader(),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 24),
                       Padding(
                         padding: horizontalPadding,
                         child: _GameCardsGrid(
@@ -42,7 +42,7 @@ class HomeScreen extends StatelessWidget {
                               horizontalPadding.horizontal,
                         ),
                       ),
-                      const SizedBox(height: 48),
+                      const SizedBox(height: 32),
                     ],
                   ),
                 ),

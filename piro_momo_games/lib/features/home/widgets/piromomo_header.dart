@@ -26,7 +26,7 @@ class PiromomoHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        const SizedBox(height: 12),
+        const SizedBox(height: 6),
         Padding(
           padding: horizontalPadding,
           child: _HeroCard(
@@ -36,7 +36,7 @@ class PiromomoHeader extends StatelessWidget {
             colorScheme: colorScheme,
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         Padding(
           padding: horizontalPadding,
           child: _DailyStatsRow(
@@ -69,7 +69,7 @@ class _HeroCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 32, 12, 16),
+      padding: const EdgeInsets.fromLTRB(12, 22, 12, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -97,7 +97,7 @@ class _HeroCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 10),
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
@@ -110,14 +110,14 @@ class _HeroCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           Text(
             subtitle,
             style: textTheme.titleMedium?.copyWith(
-              fontSize: 13,
+              fontSize: 12,
               color: colorScheme.onSurface.withValues(alpha: 0.7),
               fontWeight: FontWeight.w500,
-              height: 1.3,
+              height: 1.25,
             ),
           ),
         ],
@@ -234,20 +234,20 @@ class _DailyStatTile extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(top: 2),
-          child: Icon(icon, color: iconColor, size: 20),
+          child: Icon(icon, color: iconColor, size: 18),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 6),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
               value,
-              style: textTheme.titleMedium?.copyWith(
+              style: textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: colorScheme.onSurface,
               ),
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: 1),
             Text(
               label,
               style: textTheme.bodySmall?.copyWith(
@@ -270,8 +270,8 @@ class _DailyDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 1,
-      height: 36,
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      height: 32,
+      margin: const EdgeInsets.symmetric(horizontal: 12),
       color: color,
     );
   }
