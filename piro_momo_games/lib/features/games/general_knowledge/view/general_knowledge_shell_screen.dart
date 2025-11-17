@@ -28,51 +28,6 @@ class GeneralKnowledgeShellScreen extends ConsumerWidget {
     final ThemeData theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Nepal General Knowledge'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
-          iconSize: 20,
-          padding: const EdgeInsets.all(8),
-          visualDensity: VisualDensity.compact,
-          onPressed: () => context.pop(),
-        ),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: SegmentedButton<GameLocale>(
-              style: ButtonStyle(
-                visualDensity: VisualDensity.compact,
-                padding: const WidgetStatePropertyAll<EdgeInsets>(
-                  EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                ),
-                textStyle: WidgetStatePropertyAll<TextStyle?>(
-                  theme.textTheme.labelMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.4,
-                  ),
-                ),
-              ),
-              showSelectedIcon: false,
-              segments: const <ButtonSegment<GameLocale>>[
-                ButtonSegment<GameLocale>(
-                  value: GameLocale.english,
-                  label: Text('EN'),
-                ),
-                ButtonSegment<GameLocale>(
-                  value: GameLocale.nepali,
-                  label: Text('NP'),
-                ),
-              ],
-              selected: <GameLocale>{state.locale},
-              onSelectionChanged: (Set<GameLocale> newSelection) {
-                final GameLocale locale = newSelection.first;
-                controller.changeLocale(locale);
-              },
-            ),
-          ),
-        ],
-      ),
       body: SafeArea(
         bottom: false,
         child: _GeneralKnowledgeGameContent(
@@ -193,7 +148,7 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
                           children: <Widget>[
                             _GeneralKnowledgeStatsPanel(
                               state: state,
-                              controller: controller,
+                              onBack: () => context.pop(),
                             ),
                             const SizedBox(height: 20),
                             AnimatedSwitcher(
@@ -453,11 +408,11 @@ class _OnboardingCategoryChooser extends StatelessWidget {
 class _GeneralKnowledgeStatsPanel extends StatelessWidget {
   const _GeneralKnowledgeStatsPanel({
     required this.state,
-    required this.controller,
+    required this.onBack,
   });
 
   final GeneralKnowledgeGameState state;
-  final GeneralKnowledgeGameController controller;
+  final VoidCallback onBack;
 
   @override
   Widget build(BuildContext context) {
@@ -466,66 +421,63 @@ class _GeneralKnowledgeStatsPanel extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(top: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       decoration: BoxDecoration(
-        color: scheme.surface.withValues(alpha: 0.7),
-        borderRadius: BorderRadius.circular(20),
+        color: scheme.surface.withValues(alpha: 0.75),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: scheme.outlineVariant.withValues(alpha: 0.35),
+          color: scheme.outlineVariant.withValues(alpha: 0.25),
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: scheme.shadow.withValues(alpha: 0.06),
-            blurRadius: 18,
-            offset: const Offset(0, 10),
+            color: scheme.shadow.withValues(alpha: 0.05),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          final bool isTight = constraints.maxWidth < 380;
-
-          return Row(
-            children: <Widget>[
-              Expanded(
-                child: Wrap(
-                  spacing: 10,
-                  runSpacing: 8,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: <Widget>[
-                    FestivalStatBadge(
-                      label: 'Score',
-                      value: '${state.score}',
-                      icon: Icons.auto_awesome_rounded,
-                      compact: true,
-                    ),
-                    FestivalStatBadge(
-                      label: 'Streak',
-                      value: '${state.streak}',
-                      icon: Icons.local_fire_department_rounded,
-                      compact: true,
-                    ),
-                  ],
-                ),
-              ),
-              Tooltip(
-                message: 'Restart',
-                child: IconButton.filledTonal(
-                  onPressed: controller.restart,
-                  icon: const Icon(Icons.shuffle_rounded),
-                  iconSize: 18,
-                  style: IconButton.styleFrom(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: isTight ? 10 : 14,
-                      vertical: 10,
-                    ),
-                    shape: const StadiumBorder(),
+      child: Row(
+        children: <Widget>[
+          IconButton(
+            onPressed: onBack,
+            icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Nepal General Knowledge',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: scheme.onSurface,
                   ),
                 ),
-              ),
-            ],
-          );
-        },
+                const SizedBox(height: 2),
+                Text(
+                  'Pick a category & play',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          FestivalStatBadge(
+            label: 'Score',
+            value: '${state.score}',
+            icon: Icons.auto_awesome_rounded,
+            compact: true,
+          ),
+          const SizedBox(width: 12),
+          FestivalStatBadge(
+            label: 'Streak',
+            value: '${state.streak}',
+            icon: Icons.local_fire_department_rounded,
+            compact: true,
+          ),
+        ],
       ),
     );
   }
@@ -685,10 +637,10 @@ class _GeneralKnowledgeQuestionCard extends StatelessWidget {
     final ColorScheme colorScheme = theme.colorScheme;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 36),
+      padding: const EdgeInsets.fromLTRB(22, 20, 22, 18),
       decoration: BoxDecoration(
         color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(36),
+        borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: colorScheme.outlineVariant.withValues(alpha: 0.35),
         ),
@@ -732,17 +684,17 @@ class _GeneralKnowledgeQuestionCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
           Text(
             question.question,
             textAlign: TextAlign.start,
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w800,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
               color: colorScheme.onSurface,
-              height: 1.35,
+              height: 1.3,
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 14),
           Column(
             children: state.currentOptions.asMap().entries.map((entry) {
               final int index = entry.key;
@@ -762,12 +714,8 @@ class _GeneralKnowledgeQuestionCard extends StatelessWidget {
                   isDisabled: state.isAnswered,
                   showCorrectState: showCorrectState,
                   showIncorrectState: showIncorrectState,
-                  correctLabel: showCorrectState
-                      ? ((state.isCorrect ?? false)
-                            ? 'Correct!'
-                            : 'Right answer')
-                      : null,
-                  incorrectLabel: showIncorrectState ? 'Not quite' : null,
+                  correctLabel: null,
+                  incorrectLabel: null,
                   factText: null,
                   onPressed: () => controller.submitGuess(option),
                 ),

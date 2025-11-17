@@ -23,51 +23,6 @@ class FestivalShellScreen extends ConsumerWidget {
     final ThemeData theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Guess the Festival'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
-          iconSize: 20,
-          padding: const EdgeInsets.all(8),
-          visualDensity: VisualDensity.compact,
-          onPressed: () => context.pop(),
-        ),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: SegmentedButton<GameLocale>(
-              style: ButtonStyle(
-                visualDensity: VisualDensity.compact,
-                padding: const WidgetStatePropertyAll<EdgeInsets>(
-                  EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                ),
-                textStyle: WidgetStatePropertyAll<TextStyle?>(
-                  theme.textTheme.labelMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.4,
-                  ),
-                ),
-              ),
-              showSelectedIcon: false,
-              segments: const <ButtonSegment<GameLocale>>[
-                ButtonSegment<GameLocale>(
-                  value: GameLocale.english,
-                  label: Text('EN'),
-                ),
-                ButtonSegment<GameLocale>(
-                  value: GameLocale.nepali,
-                  label: Text('NP'),
-                ),
-              ],
-              selected: <GameLocale>{state.locale},
-              onSelectionChanged: (Set<GameLocale> newSelection) {
-                final GameLocale locale = newSelection.first;
-                controller.changeLocale(locale);
-              },
-            ),
-          ),
-        ],
-      ),
       body: SafeArea(
         bottom: false,
         child: _FestivalGameContent(state: state, controller: controller),
@@ -168,7 +123,9 @@ class _FestivalGameContent extends StatelessWidget {
                           children: <Widget>[
                             _FestivalStatsPanel(
                               state: state,
-                              controller: controller,
+                              onBack: () => context.pop(),
+                              onLocaleChange: controller.changeLocale,
+                              currentLocale: state.locale,
                             ),
                             const SizedBox(height: 20),
                             AnimatedSwitcher(
@@ -315,10 +272,17 @@ class _FestivalOnboarding extends StatelessWidget {
 }
 
 class _FestivalStatsPanel extends StatelessWidget {
-  const _FestivalStatsPanel({required this.state, required this.controller});
+  const _FestivalStatsPanel({
+    required this.state,
+    required this.onBack,
+    required this.onLocaleChange,
+    required this.currentLocale,
+  });
 
   final FestivalGameState state;
-  final FestivalGameController controller;
+  final VoidCallback onBack;
+  final ValueChanged<GameLocale> onLocaleChange;
+  final GameLocale currentLocale;
 
   @override
   Widget build(BuildContext context) {
@@ -327,64 +291,77 @@ class _FestivalStatsPanel extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(top: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       decoration: BoxDecoration(
-        color: scheme.surface.withOpacity(0.7),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: scheme.outlineVariant.withOpacity(0.35)),
+        color: scheme.surface.withOpacity(0.75),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: scheme.outlineVariant.withOpacity(0.25)),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: scheme.shadow.withOpacity(0.06),
-            blurRadius: 18,
-            offset: const Offset(0, 10),
+            color: scheme.shadow.withOpacity(0.05),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          final bool isTight = constraints.maxWidth < 380;
-
-          return Row(
-            children: <Widget>[
-              Expanded(
-                child: Wrap(
-                  spacing: 10,
-                  runSpacing: 8,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: <Widget>[
-                    FestivalStatBadge(
-                      label: 'Score',
-                      value: '${state.score}',
-                      icon: Icons.auto_awesome_rounded,
-                      compact: true,
-                    ),
-                    FestivalStatBadge(
-                      label: 'Streak',
-                      value: '${state.streak}',
-                      icon: Icons.local_fire_department_rounded,
-                      compact: true,
-                    ),
-                  ],
-                ),
-              ),
-              Tooltip(
-                message: 'Restart',
-                child: IconButton.filledTonal(
-                  onPressed: controller.restart,
-                  icon: const Icon(Icons.shuffle_rounded),
-                  iconSize: 18,
-                  style: IconButton.styleFrom(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: isTight ? 10 : 14,
-                      vertical: 10,
-                    ),
-                    shape: const StadiumBorder(),
+      child: Row(
+        children: <Widget>[
+          IconButton(
+            onPressed: onBack,
+            icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Guess the Festival',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: scheme.onSurface,
                   ),
                 ),
+                const SizedBox(height: 2),
+                Text(
+                  'Learn by playing',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SegmentedButton<GameLocale>(
+            style: ButtonStyle(
+              visualDensity: VisualDensity.compact,
+              padding: const WidgetStatePropertyAll<EdgeInsets>(
+                EdgeInsets.symmetric(horizontal: 6),
+              ),
+              textStyle: WidgetStatePropertyAll<TextStyle?>(
+                theme.textTheme.labelSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.2,
+                ),
+              ),
+            ),
+            showSelectedIcon: false,
+            segments: const <ButtonSegment<GameLocale>>[
+              ButtonSegment<GameLocale>(
+                value: GameLocale.english,
+                label: Text('EN'),
+              ),
+              ButtonSegment<GameLocale>(
+                value: GameLocale.nepali,
+                label: Text('NP'),
               ),
             ],
-          );
-        },
+            selected: <GameLocale>{currentLocale},
+            onSelectionChanged: (Set<GameLocale> newSelection) {
+              onLocaleChange(newSelection.first);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -410,11 +387,11 @@ class _FestivalQuestionCard extends StatelessWidget {
     final ColorScheme colorScheme = theme.colorScheme;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+      padding: const EdgeInsets.fromLTRB(20, 22, 20, 18),
       decoration: BoxDecoration(
         color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(36),
-        border: Border.all(color: colorScheme.outlineVariant.withOpacity(0.35)),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: colorScheme.outlineVariant.withOpacity(0.25)),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: colorScheme.shadow.withOpacity(0.08),
@@ -433,17 +410,17 @@ class _FestivalQuestionCard extends StatelessWidget {
               letterSpacing: 0.8,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Text(
             question.question,
             textAlign: TextAlign.start,
-            style: theme.textTheme.titleLarge?.copyWith(
+            style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w700,
               color: colorScheme.onSurface,
-              height: 1.35,
+              height: 1.25,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
           Column(
             children: state.currentOptions.asMap().entries.map((entry) {
               final int index = entry.key;
@@ -463,12 +440,8 @@ class _FestivalQuestionCard extends StatelessWidget {
                   isDisabled: state.isAnswered,
                   showCorrectState: showCorrectState,
                   showIncorrectState: showIncorrectState,
-                  correctLabel: showCorrectState
-                      ? ((state.isCorrect ?? false)
-                            ? 'Correct!'
-                            : 'Right answer')
-                      : null,
-                  incorrectLabel: showIncorrectState ? 'Not quite' : null,
+                  correctLabel: null,
+                  incorrectLabel: null,
                   factText: showCorrectState
                       ? _condenseFact(question.fact)
                       : null,

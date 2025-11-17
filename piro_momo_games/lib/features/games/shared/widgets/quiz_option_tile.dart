@@ -58,7 +58,6 @@ class _QuizOptionTileState extends State<QuizOptionTile> {
     Color titleColor = colorScheme.onSurface;
     IconData? statusIcon;
     Color? statusColor;
-    String? statusText;
 
     if (widget.showCorrectState) {
       backgroundColor = const Color(0xFFDFF7E3);
@@ -66,14 +65,12 @@ class _QuizOptionTileState extends State<QuizOptionTile> {
       titleColor = const Color(0xFF14532D);
       statusIcon = Icons.check_rounded;
       statusColor = const Color(0xFF15803D);
-      statusText = widget.correctLabel ?? 'Correct!';
     } else if (widget.showIncorrectState) {
       backgroundColor = const Color(0xFFFEE2E2);
       borderColor = const Color(0xFFEF4444);
       titleColor = const Color(0xFF991B1B);
       statusIcon = Icons.close_rounded;
       statusColor = const Color(0xFFB91C1C);
-      statusText = widget.incorrectLabel ?? 'Not quite';
     } else if (widget.isSelected) {
       backgroundColor = colorScheme.primary.withValues(alpha: 0.08);
       borderColor = colorScheme.primary;
@@ -136,17 +133,13 @@ class _QuizOptionTileState extends State<QuizOptionTile> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        AnimatedOpacity(
-                          duration: const Duration(milliseconds: 220),
-                          opacity: widget.showCorrectState ? 1 : 0.65,
-                          child: Text(
-                            widget.leadingLabel,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
-                              color: titleColor.withValues(alpha: 0.9),
-                            ),
+                        Text(
+                          widget.leadingLabel,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: titleColor.withValues(alpha: 0.9),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -156,7 +149,7 @@ class _QuizOptionTileState extends State<QuizOptionTile> {
                             style: theme.textTheme.titleMedium?.copyWith(
                               color: titleColor,
                               fontWeight: FontWeight.w600,
-                              height: 1.35,
+                              height: 1.25,
                             ),
                           ),
                         ),
@@ -186,54 +179,6 @@ class _QuizOptionTileState extends State<QuizOptionTile> {
                               : const SizedBox.shrink(),
                         ),
                       ],
-                    ),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 320),
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                            final Animation<double> curved = CurvedAnimation(
-                              parent: animation,
-                              curve: Curves.easeOut,
-                            );
-                            return FadeTransition(
-                              opacity: curved,
-                              child: SizeTransition(
-                                sizeFactor: curved,
-                                axisAlignment: -1,
-                                child: FadeTransition(
-                                  opacity: curved,
-                                  child: child,
-                                ),
-                              ),
-                            );
-                          },
-                      child: statusText != null
-                          ? Padding(
-                              key: const ValueKey<String>('status'),
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Icon(
-                                    statusIcon,
-                                    size: 20,
-                                    color: statusColor,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      statusText,
-                                      style: theme.textTheme.titleMedium
-                                          ?.copyWith(
-                                            color: statusColor,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : const SizedBox.shrink(),
                     ),
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 360),
