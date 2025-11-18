@@ -4,12 +4,13 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../data/models/game_locale.dart';
 import '../../../home/data/game_definition.dart';
+import '../../festival/widgets/festival_stat_badge.dart';
+import '../../shared/widgets/game_locale_toggle.dart';
+import '../../shared/widgets/header_stat_chip.dart';
 import '../application/riddle_game_controller.dart';
 import '../application/riddle_game_providers.dart';
 import '../application/riddle_game_state.dart';
-import '../../shared/widgets/game_locale_toggle.dart';
 import '../widgets/riddle_answer_card.dart';
-import '../widgets/riddle_summary_tiles.dart';
 
 class GauKhaneKathaShellScreen extends ConsumerStatefulWidget {
   const GauKhaneKathaShellScreen({super.key});
@@ -52,19 +53,13 @@ class _GauKhaneKathaShellScreenState
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gau Khane Katha'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () => context.pop(),
-        ),
-      ),
       body: SafeArea(
         bottom: false,
         child: _RiddleGameBody(
           state: state,
           controller: controller,
           answerController: _answerController,
+          onBack: () => context.pop(),
         ),
       ),
     );
@@ -76,11 +71,13 @@ class _RiddleGameBody extends StatelessWidget {
     required this.state,
     required this.controller,
     required this.answerController,
+    required this.onBack,
   });
 
   final RiddleGameState state;
   final RiddleGameController controller;
   final TextEditingController answerController;
+  final VoidCallback onBack;
 
   @override
   Widget build(BuildContext context) {
@@ -125,36 +122,145 @@ class _RiddleGameBody extends StatelessWidget {
       return const Center(child: Text('No riddles found.'));
     }
 
-    final bool isWide = MediaQuery.of(context).size.width >= 980;
-    final EdgeInsets padding = EdgeInsets.symmetric(
-      horizontal: isWide ? 72 : 24,
-      vertical: 28,
+    final bool isWide = MediaQuery.of(context).size.width >= 960;
+    final EdgeInsets contentPadding = EdgeInsets.symmetric(
+      horizontal: isWide ? 120 : 20,
+      vertical: isWide ? 40 : 24,
     );
 
-    return SingleChildScrollView(
-      padding:
-          padding +
-          EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 36),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: <Color>[
+            Color(0xFFF5F3FF),
+            Color(0xFFE0F2FE),
+            Color(0xFFFFF1F2),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 920),
+          child: Padding(
+            padding:
+                contentPadding +
+                EdgeInsets.only(
+                  bottom: MediaQuery.of(context).padding.bottom + 16,
+                ),
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        _RiddleHeader(state: state, onBack: onBack),
+                        const SizedBox(height: 24),
+                        RiddleAnswerCard(
+                          riddle: question,
+                          state: state,
+                          answerController: answerController,
+                          onAnswerChanged: controller.updateAnswer,
+                          onSubmitAnswer: controller.submitAnswer,
+                          onRevealAnswer: controller.revealAnswer,
+                          onNextRiddle: controller.nextRiddle,
+                        ),
+                        const SizedBox(height: 32),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RiddleHeader extends StatelessWidget {
+  const _RiddleHeader({required this.state, required this.onBack});
+
+  final RiddleGameState state;
+  final VoidCallback onBack;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
+
+    return Container(
+      margin: const EdgeInsets.only(top: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      decoration: BoxDecoration(
+        color: scheme.surface.withValues(alpha: 0.8),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: scheme.outlineVariant.withValues(alpha: 0.25),
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: scheme.shadow.withValues(alpha: 0.05),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Row(
         children: <Widget>[
-          RiddleSummaryTiles(
-            score: state.score,
-            streak: state.streak,
-            locale: state.locale,
-            onRestart: controller.restart,
+          IconButton(
+            onPressed: onBack,
+            icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
           ),
-          const SizedBox(height: 28),
-          RiddleAnswerCard(
-            riddle: question,
-            state: state,
-            answerController: answerController,
-            onAnswerChanged: controller.updateAnswer,
-            onSubmitAnswer: controller.submitAnswer,
-            onRevealAnswer: controller.revealAnswer,
-            onNextRiddle: controller.nextRiddle,
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Gau Khane Katha',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: scheme.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Classic riddles in Nepali & English',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 48),
+          const SizedBox(width: 8),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              HeaderStatChip(
+                child: FestivalStatBadge(
+                  label: 'Score',
+                  value: '${state.score}',
+                  icon: Icons.auto_awesome_rounded,
+                  compact: true,
+                ),
+              ),
+              const SizedBox(width: 8),
+              HeaderStatChip(
+                child: FestivalStatBadge(
+                  label: 'Streak',
+                  value: '${state.streak}',
+                  icon: Icons.local_fire_department_rounded,
+                  compact: true,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

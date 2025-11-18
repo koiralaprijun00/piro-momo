@@ -7,6 +7,7 @@ import '../../../../data/models/king_entry.dart';
 import '../../../home/data/game_definition.dart';
 import '../../festival/widgets/festival_stat_badge.dart';
 import '../../shared/widgets/game_locale_toggle.dart';
+import '../../shared/widgets/header_stat_chip.dart';
 import '../application/kings_game_controller.dart';
 import '../application/kings_game_providers.dart';
 import '../application/kings_game_state.dart';
@@ -381,28 +382,27 @@ class _KingsStatsPanel extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          Flexible(
-            child: Wrap(
-              alignment: WrapAlignment.end,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 8,
-              runSpacing: 6,
-              children: <Widget>[
-                FestivalStatBadge(
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              HeaderStatChip(
+                child: FestivalStatBadge(
                   label: 'Found',
-                  value:
-                      '${state.guessedIds.length}/${state.deck.length}',
+                  value: '${state.guessedIds.length}/${state.deck.length}',
                   icon: Icons.fact_check_rounded,
                   compact: true,
                 ),
-                FestivalStatBadge(
+              ),
+              const SizedBox(width: 8),
+              HeaderStatChip(
+                child: FestivalStatBadge(
                   label: 'Streak',
                   value: '${state.streak}',
                   icon: Icons.local_fire_department_rounded,
                   compact: true,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),

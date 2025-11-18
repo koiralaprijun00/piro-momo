@@ -9,6 +9,7 @@ import '../application/festival_game_state.dart';
 import '../application/festival_game_controller.dart';
 import '../../../../data/models/festival_question.dart';
 import '../../shared/widgets/game_locale_toggle.dart';
+import '../../shared/widgets/header_stat_chip.dart';
 import '../../shared/widgets/quiz_option_tile.dart';
 import '../widgets/festival_stat_badge.dart';
 
@@ -339,27 +340,27 @@ class _FestivalStatsPanel extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          Flexible(
-            child: Wrap(
-              alignment: WrapAlignment.end,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 8,
-              runSpacing: 6,
-              children: <Widget>[
-                FestivalStatBadge(
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              HeaderStatChip(
+                child: FestivalStatBadge(
                   label: 'Score',
                   value: '${state.score}',
                   icon: Icons.auto_awesome_rounded,
                   compact: true,
                 ),
-                FestivalStatBadge(
+              ),
+              const SizedBox(width: 8),
+              HeaderStatChip(
+                child: FestivalStatBadge(
                   label: 'Streak',
                   value: '${state.streak}',
                   icon: Icons.local_fire_department_rounded,
                   compact: true,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
