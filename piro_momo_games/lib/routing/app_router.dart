@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../features/games/festival/view/festival_shell_screen.dart';
 import '../features/games/general_knowledge/view/general_knowledge_shell_screen.dart';
 import '../features/games/gau_khane_katha/view/gau_khane_katha_shell_screen.dart';
+import '../features/games/kings/view/kings_shell_screen.dart';
 import '../features/home/view/home_screen.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -49,6 +50,17 @@ final GoRouter appRouter = GoRouter(
         return CustomTransitionPage<void>(
           key: state.pageKey,
           child: const GauKhaneKathaShellScreen(),
+          transitionsBuilder: _slideUpTransition,
+        );
+      },
+    ),
+    GoRoute(
+      name: 'kings-of-nepal',
+      path: KingsShellScreen.routePath,
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        return CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: const KingsShellScreen(),
           transitionsBuilder: _slideUpTransition,
         );
       },

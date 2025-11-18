@@ -4,6 +4,7 @@ import '../../../core/theme/app_palette.dart';
 import '../../games/festival/view/festival_shell_screen.dart';
 import '../../games/general_knowledge/view/general_knowledge_shell_screen.dart';
 import '../../games/gau_khane_katha/view/gau_khane_katha_shell_screen.dart';
+import '../../games/kings/view/kings_shell_screen.dart';
 
 class GameDefinition {
   const GameDefinition({
@@ -34,7 +35,7 @@ const List<GameDefinition> homeGames = <GameDefinition>[
     title: 'Guess the Festival',
     eyebrow: 'Festival Stories',
     description:
-        'Spot Nepal’s vibrant celebrations through quick cultural hints.',
+        'Spot Nepal\'s vibrant celebrations through quick cultural hints.',
     icon: Icons.celebration_rounded,
     accentColors: <Color>[
       AppPalette.primaryBlue,
@@ -63,7 +64,7 @@ const List<GameDefinition> homeGames = <GameDefinition>[
     title: 'Nepal General Knowledge',
     eyebrow: 'Trivia Highlights',
     description:
-        'Tackle Nepal’s history, geography, and civic trivia in minutes.',
+        'Tackle Nepal\'s history, geography, and civic trivia in minutes.',
     icon: Icons.quiz_rounded,
     accentColors: <Color>[
       AppPalette.nepalBlue,
@@ -71,5 +72,20 @@ const List<GameDefinition> homeGames = <GameDefinition>[
       AppPalette.primaryPink,
     ],
     tags: <String>['Multiple choice', 'Timed vibe', 'Learn & share'],
+  ),
+  GameDefinition(
+    id: KingsShellScreen.gameId,
+    routePath: KingsShellScreen.routePath,
+    title: 'Kings of Nepal',
+    eyebrow: 'Royal Recall',
+    description:
+        'Type every Shah monarch using reign years and cultural clues.',
+    icon: Icons.military_tech_rounded,
+    accentColors: <Color>[
+      AppPalette.nepalRed,
+      AppPalette.primaryPurple,
+      AppPalette.lightBlue,
+    ],
+    tags: <String>['Typing', 'History', 'Cultural legends'],
   ),
 ];

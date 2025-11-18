@@ -5,9 +5,11 @@ import '../core/persistence/progress_store.dart';
 import 'models/festival_question.dart';
 import 'models/game_locale.dart';
 import 'models/general_knowledge_question.dart';
+import 'models/king_entry.dart';
 import 'models/riddle_entry.dart';
 import 'repositories/festival_repository.dart';
 import 'repositories/general_knowledge_repository.dart';
+import 'repositories/kings_repository.dart';
 import 'repositories/riddle_repository.dart';
 
 final Provider<FestivalRepository> festivalRepositoryProvider =
@@ -23,6 +25,11 @@ final Provider<RiddleRepository> riddleRepositoryProvider =
 final Provider<GeneralKnowledgeRepository> generalKnowledgeRepositoryProvider =
     Provider<GeneralKnowledgeRepository>((Ref ref) {
       return GeneralKnowledgeRepository();
+    });
+
+final Provider<KingsRepository> kingsRepositoryProvider =
+    Provider<KingsRepository>((Ref ref) {
+      return KingsRepository();
     });
 
 final Provider<ProgressStore> progressStoreProvider = Provider<ProgressStore>(
@@ -59,3 +66,10 @@ riddleEntriesProvider = FutureProvider.autoDispose
       final RiddleRepository repository = ref.read(riddleRepositoryProvider);
       return repository.loadRiddles(locale);
     });
+
+final AutoDisposeFutureProviderFamily<List<KingEntry>, GameLocale>
+    kingsEntriesProvider = FutureProvider.autoDispose
+        .family<List<KingEntry>, GameLocale>((ref, locale) async {
+          final KingsRepository repository = ref.read(kingsRepositoryProvider);
+          return repository.loadKings(locale);
+        });
