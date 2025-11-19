@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.piro_momo_games"
-        minSdk = flutter.minSdkVersion
+        minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = 5
         versionName = "1.0.2"
