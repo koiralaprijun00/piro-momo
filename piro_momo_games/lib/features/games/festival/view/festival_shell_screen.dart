@@ -22,8 +22,6 @@ class FestivalShellScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final FestivalGameState state = ref.watch(festivalGameControllerProvider);
     final controller = ref.read(festivalGameControllerProvider.notifier);
-    final ThemeData theme = Theme.of(context);
-
     return Scaffold(
       body: SafeArea(
         bottom: false,

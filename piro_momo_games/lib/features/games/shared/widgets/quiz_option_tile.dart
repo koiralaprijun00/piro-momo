@@ -56,21 +56,15 @@ class _QuizOptionTileState extends State<QuizOptionTile> {
     Color backgroundColor = colorScheme.surface;
     Color borderColor = colorScheme.outlineVariant.withValues(alpha: 0.4);
     Color titleColor = colorScheme.onSurface;
-    IconData? statusIcon;
-    Color? statusColor;
 
     if (widget.showCorrectState) {
       backgroundColor = const Color(0xFFDFF7E3);
       borderColor = const Color(0xFF22C55E);
       titleColor = const Color(0xFF14532D);
-      statusIcon = Icons.check_rounded;
-      statusColor = const Color(0xFF15803D);
     } else if (widget.showIncorrectState) {
       backgroundColor = const Color(0xFFFEE2E2);
       borderColor = const Color(0xFFEF4444);
       titleColor = const Color(0xFF991B1B);
-      statusIcon = Icons.close_rounded;
-      statusColor = const Color(0xFFB91C1C);
     } else if (widget.isSelected) {
       backgroundColor = colorScheme.primary.withValues(alpha: 0.08);
       borderColor = colorScheme.primary;
@@ -163,18 +157,18 @@ class _QuizOptionTileState extends State<QuizOptionTile> {
                                 );
                               },
                           child: widget.showCorrectState
-                              ? Icon(
+                              ? const Icon(
                                   Icons.check_rounded,
-                                  key: const ValueKey<String>('check'),
+                                  key: ValueKey<String>('check'),
                                   size: 22,
-                                  color: statusColor ?? titleColor,
+                                  color: Color(0xFF15803D),
                                 )
                               : widget.showIncorrectState
-                              ? Icon(
+                              ? const Icon(
                                   Icons.close_rounded,
-                                  key: const ValueKey<String>('close'),
+                                  key: ValueKey<String>('close'),
                                   size: 22,
-                                  color: statusColor ?? titleColor,
+                                  color: Color(0xFFB91C1C),
                                 )
                               : const SizedBox.shrink(),
                         ),

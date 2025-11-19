@@ -5,6 +5,8 @@ import '../features/games/festival/view/festival_shell_screen.dart';
 import '../features/games/general_knowledge/view/general_knowledge_shell_screen.dart';
 import '../features/games/gau_khane_katha/view/gau_khane_katha_shell_screen.dart';
 import '../features/games/kings/view/kings_shell_screen.dart';
+import '../features/games/name_district/view/name_district_shell_screen.dart';
+import '../features/profile/view/profile_screen.dart';
 import '../features/home/view/home_screen.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -61,6 +63,28 @@ final GoRouter appRouter = GoRouter(
         return CustomTransitionPage<void>(
           key: state.pageKey,
           child: const KingsShellScreen(),
+          transitionsBuilder: _slideUpTransition,
+        );
+      },
+    ),
+    GoRoute(
+      name: 'name-district',
+      path: NameDistrictShellScreen.routePath,
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        return CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: const NameDistrictShellScreen(),
+          transitionsBuilder: _slideUpTransition,
+        );
+      },
+    ),
+    GoRoute(
+      name: 'profile',
+      path: ProfileScreen.routePath,
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        return CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: const ProfileScreen(),
           transitionsBuilder: _slideUpTransition,
         );
       },

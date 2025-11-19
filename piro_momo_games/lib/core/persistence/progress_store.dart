@@ -7,6 +7,7 @@ class ProgressStore {
   static const String _riddleBestKey = 'progress.riddle.bestStreak';
   static const String _gkBestKey = 'progress.generalKnowledge.bestStreak';
   static const String _kingsBestKey = 'progress.kings.bestStreak';
+  static const String _districtBestKey = 'progress.district.bestStreak';
 
   SharedPreferences? _prefs;
 
@@ -52,5 +53,15 @@ class ProgressStore {
   Future<void> saveKingsBestStreak(int value) async {
     final SharedPreferences prefs = await _instance();
     await prefs.setInt(_kingsBestKey, value);
+  }
+
+  Future<int> loadDistrictBestStreak() async {
+    final SharedPreferences prefs = await _instance();
+    return prefs.getInt(_districtBestKey) ?? 0;
+  }
+
+  Future<void> saveDistrictBestStreak(int value) async {
+    final SharedPreferences prefs = await _instance();
+    await prefs.setInt(_districtBestKey, value);
   }
 }

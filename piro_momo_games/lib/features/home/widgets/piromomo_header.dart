@@ -8,6 +8,8 @@ class PiromomoHeader extends StatelessWidget {
     this.subtitle = 'Play quick trivia, stay close to Nepal.',
     this.referenceDate,
     this.gamesPlayed = 2,
+    this.onProfilePressed,
+    this.onNotificationsPressed,
   });
 
   final int streakDays;
@@ -15,6 +17,8 @@ class PiromomoHeader extends StatelessWidget {
   final String subtitle;
   final DateTime? referenceDate;
   final int gamesPlayed;
+  final VoidCallback? onProfilePressed;
+  final VoidCallback? onNotificationsPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +38,8 @@ class PiromomoHeader extends StatelessWidget {
             appName: appName,
             subtitle: subtitle,
             colorScheme: colorScheme,
+            onProfilePressed: onProfilePressed,
+            onNotificationsPressed: onNotificationsPressed,
           ),
         ),
         const SizedBox(height: 12),
@@ -56,12 +62,16 @@ class _HeroCard extends StatelessWidget {
     required this.appName,
     required this.subtitle,
     required this.colorScheme,
+    this.onProfilePressed,
+    this.onNotificationsPressed,
   });
 
   final int streakDays;
   final String appName;
   final String subtitle;
   final ColorScheme colorScheme;
+  final VoidCallback? onProfilePressed;
+  final VoidCallback? onNotificationsPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -88,12 +98,14 @@ class _HeroCard extends StatelessWidget {
               ),
               _HeroIconButton(
                 icon: Icons.notifications_none_rounded,
-                onPressed: () => debugPrint('Notifications tapped'),
+                onPressed: onNotificationsPressed ??
+                    () => debugPrint('Notifications tapped'),
               ),
               const SizedBox(width: 12),
               _HeroIconButton(
                 icon: Icons.person_outline_rounded,
-                onPressed: () => debugPrint('Profile tapped'),
+                onPressed:
+                    onProfilePressed ?? () => debugPrint('Profile tapped'),
               ),
             ],
           ),

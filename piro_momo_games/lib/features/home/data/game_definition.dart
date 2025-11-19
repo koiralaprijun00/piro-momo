@@ -4,6 +4,7 @@ import '../../../core/theme/app_palette.dart';
 import '../../games/festival/view/festival_shell_screen.dart';
 import '../../games/general_knowledge/view/general_knowledge_shell_screen.dart';
 import '../../games/gau_khane_katha/view/gau_khane_katha_shell_screen.dart';
+import '../../games/name_district/view/name_district_shell_screen.dart';
 import '../../games/kings/view/kings_shell_screen.dart';
 
 class GameDefinition {
@@ -87,5 +88,19 @@ const List<GameDefinition> homeGames = <GameDefinition>[
       AppPalette.lightBlue,
     ],
     tags: <String>['Typing', 'History', 'Cultural legends'],
+  ),
+  GameDefinition(
+    id: NameDistrictShellScreen.gameId,
+    routePath: NameDistrictShellScreen.routePath,
+    title: 'Name the District',
+    eyebrow: 'Map Mastery',
+    description: 'Identify Nepal\'s 77 districts by silhouette and clues.',
+    icon: Icons.map_rounded,
+    accentColors: <Color>[
+      AppPalette.primaryBlue,
+      AppPalette.nepalGreen,
+      AppPalette.lightBlue,
+    ],
+    tags: <String>['Geography', 'Typing', 'Challenge'],
   ),
 ];

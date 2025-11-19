@@ -27,8 +27,6 @@ class GeneralKnowledgeShellScreen extends ConsumerWidget {
     final controller = ref.read(
       generalKnowledgeGameControllerProvider.notifier,
     );
-    final ThemeData theme = Theme.of(context);
-
     return Scaffold(
       body: SafeArea(
         bottom: false,

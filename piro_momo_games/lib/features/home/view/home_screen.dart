@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../data/game_definition.dart';
 import '../widgets/game_card.dart';
 import '../widgets/piromomo_header.dart';
+import '../../profile/view/profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -31,7 +32,10 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      const PiromomoHeader(),
+                      PiromomoHeader(
+                        onProfilePressed: () =>
+                            context.push(ProfileScreen.routePath),
+                      ),
                       const SizedBox(height: 24),
                       Padding(
                         padding: horizontalPadding,

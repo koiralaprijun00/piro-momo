@@ -81,8 +81,6 @@ class _RiddleGameBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     if (state.isLoading && state.deck.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }

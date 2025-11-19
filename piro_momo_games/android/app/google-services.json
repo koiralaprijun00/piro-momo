@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "693851674416",
+    "project_id": "piromomo-app",
+    "storage_bucket": "piromomo-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693851674416:android:0673fbc4d4a3d3d964daf5",
+        "android_client_info": {
+          "package_name": "com.piro_momo_games"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAS9qOyMxmxSZgkZsOrPMZlmnNYum1jwY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
