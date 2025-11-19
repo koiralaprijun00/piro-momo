@@ -12,7 +12,20 @@
           "package_name": "com.piro_momo_games"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "693851674416-j52eb3f0kmc8v13m8ehkh9b0daoopnot.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.piro_momo_games",
+            "certificate_hash": "32d2a8dd6abaa46610b8278e921e7a4d23092814"
+          }
+        },
+        {
+          "client_id": "693851674416-2p38emcekgn8f0cnlkniss6onnr2vo8i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDAS9qOyMxmxSZgkZsOrPMZlmnNYum1jwY"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "693851674416-2p38emcekgn8f0cnlkniss6onnr2vo8i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
