@@ -17,13 +17,17 @@ class ProfileScreen extends ConsumerStatefulWidget {
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _busy = false;
   String? _error;
+  bool _showSignUp = false;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -46,6 +50,26 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       if (mounted) {
         setState(() => _busy = false);
       }
+    }
+  }
+
+  Future<void> _signUp(AuthService service) async {
+    final String password = _passwordController.text;
+    final String confirm = _confirmPasswordController.text;
+    if (password.isEmpty) {
+      setState(() => _error = 'Password cannot be empty');
+      return;
+    }
+    if (password != confirm) {
+      setState(() => _error = 'Passwords do not match');
+      return;
+    }
+    await service.signUpWithEmail(
+      email: _emailController.text.trim(),
+      password: password,
+    );
+    if (mounted) {
+      setState(() => _showSignUp = false);
     }
   }
 
@@ -237,7 +261,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ),
         const SizedBox(height: 20),
         Text(
-          'Or use email and password',
+          'OR',
           style: theme.textTheme.labelMedium?.copyWith(
             color: colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.w600,
@@ -260,28 +284,57 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           obscureText: true,
         ),
         const SizedBox(height: 12),
-        FilledButton(
-          onPressed: _busy
-              ? null
-              : () => _guard(() => authService.signInWithEmail(
-                    email: _emailController.text.trim(),
-                    password: _passwordController.text,
-                  )),
-          style: FilledButton.styleFrom(
-            minimumSize: const Size.fromHeight(46),
+        if (!_showSignUp) ...<Widget>[
+          const SizedBox(height: 12),
+          FilledButton(
+            onPressed: _busy
+                ? null
+                : () => _guard(() => authService.signInWithEmail(
+                      email: _emailController.text.trim(),
+                      password: _passwordController.text,
+                    )),
+            style: FilledButton.styleFrom(
+              minimumSize: const Size.fromHeight(46),
+            ),
+            child: const Text('Sign in'),
           ),
-          child: const Text('Sign in'),
-        ),
-        const SizedBox(height: 8),
-        TextButton(
-          onPressed: _busy
-              ? null
-              : () => _guard(() => authService.signUpWithEmail(
-                    email: _emailController.text.trim(),
-                    password: _passwordController.text,
-                  )),
-          child: const Text('Create a new account'),
-        ),
+          TextButton(
+            onPressed: _busy
+                ? null
+                : () => setState(() {
+                      _showSignUp = true;
+                      _error = null;
+                    }),
+            child: const Text('Create a new account'),
+          ),
+        ] else ...<Widget>[
+          const SizedBox(height: 12),
+          TextField(
+            controller: _confirmPasswordController,
+            decoration: const InputDecoration(
+              labelText: 'Confirm password',
+            ),
+            obscureText: true,
+          ),
+          const SizedBox(height: 8),
+          FilledButton(
+            onPressed:
+                _busy ? null : () => _guard(() => _signUp(authService)),
+            style: FilledButton.styleFrom(
+              minimumSize: const Size.fromHeight(46),
+            ),
+            child: const Text('Create account'),
+          ),
+          TextButton(
+            onPressed: _busy
+                ? null
+                : () => setState(() {
+                      _showSignUp = false;
+                      _error = null;
+                    }),
+            child: const Text('Back to sign in'),
+          ),
+        ],
         if (_busy) ...<Widget>[
           const SizedBox(height: 16),
           const LinearProgressIndicator(),
