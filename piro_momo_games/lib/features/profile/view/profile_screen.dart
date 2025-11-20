@@ -89,47 +89,58 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final AuthService authService = ref.watch(authServiceProvider);
 
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: <Color>[
-                Color(0xFFF6F3FF),
-                Color(0xFFE0F2FE),
-                Color(0xFFFFF1F2),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+      // Use a slightly cleaner gradient or solid color if preferred
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: <Color>[
+              Color(0xFFF6F3FF),
+              Color(0xFFE0F2FE),
+              Color(0xFFFFF1F2),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
+        ),
+        child: SafeArea(
           child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 440),
-              child: Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(28),
-                ),
-                margin: const EdgeInsets.symmetric(horizontal: 24),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 28, 24, 32),
-                  child: userValue.when(
-                    data: (User? user) => _buildBody(
-                      context,
-                      theme,
-                      colorScheme,
-                      authService,
-                      user,
-                    ),
-                    error: (Object error, StackTrace stackTrace) => Text(
-                      'Unable to load profile: $error',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.error,
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Card(
+                  elevation: 8,
+                  shadowColor: Colors.black.withValues(alpha: 0.1),
+                  color: colorScheme.surface,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32),
+                  ),
+                  margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                  child: Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: userValue.when(
+                      data: (User? user) => _buildBody(
+                        context,
+                        theme,
+                        colorScheme,
+                        authService,
+                        user,
                       ),
-                    ),
-                    loading: () => const Center(
-                      child: CircularProgressIndicator(),
+                      error: (Object error, StackTrace stackTrace) => Center(
+                        child: Text(
+                          'Unable to load profile',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.error,
+                          ),
+                        ),
+                      ),
+                      loading: () => const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(24.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -150,9 +161,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   ) {
     if (_closeAfterAuth && user != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) {
-          return;
-        }
+        if (!mounted) return;
         if (Navigator.of(context).canPop()) {
           Navigator.of(context).pop();
         }
@@ -160,196 +169,166 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       _closeAfterAuth = false;
       return const SizedBox.shrink();
     }
+
     if (user != null) {
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+          // Header with Back Button and Title
           Row(
             children: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+              IconButton.filledTonal(
+                icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
                 onPressed: () => Navigator.of(context).maybePop(),
               ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'Profile',
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
+              const Spacer(),
+              Text(
+                'Profile',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
+              const Spacer(),
+              // Logout Button
               IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.favorite_border),
+                icon: Icon(Icons.logout_rounded, color: colorScheme.error),
+                onPressed: _busy ? null : () => _guard(authService.signOut),
+                tooltip: 'Sign out',
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
+
+          // Profile Avatar with decorative ring
           Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: colorScheme.primary.withValues(alpha: 0.2),
+                width: 2,
+              ),
+            ),
+            child: CircleAvatar(
+              radius: 45,
+              backgroundColor: colorScheme.primaryContainer,
+              backgroundImage:
+                  user.photoURL != null ? NetworkImage(user.photoURL!) : null,
+              child: user.photoURL == null
+                  ? Text(
+                      (user.displayName ?? user.email ?? '?')
+                          .substring(0, 1)
+                          .toUpperCase(),
+                      style: theme.textTheme.displaySmall?.copyWith(
+                        color: colorScheme.onPrimaryContainer,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  : null,
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Name and Email
+          Text(
+            user.displayName ?? 'Piromomo Player',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            user.email ?? 'Email not provided',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Stats Grid
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: _ProfileStatTile(
+                  icon: Icons.local_fire_department_rounded,
+                  label: 'Streak',
+                  value: '12 Days', // Placeholder for visual
+                  color: Colors.orange,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _ProfileStatTile(
+                  icon: Icons.military_tech_rounded,
+                  label: 'High Score',
+                  value: '2,450',
+                  color: Colors.amber,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+           // Badge Row (Full Width)
+          _ProfileStatTile(
+            icon: Icons.workspace_premium_rounded,
+            label: 'Badges Earned',
+            value: '${user.providerData.length} Badges',
+            color: Colors.purple,
+            isFullWidth: true,
+          ),
+
+          const SizedBox(height: 24),
+
+          // Bio Section
+          Container(
+            width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: colorScheme.surfaceVariant.withValues(alpha: 0.3),
-              borderRadius: BorderRadius.circular(24),
+              color: colorScheme.surfaceContainer,
+              borderRadius: BorderRadius.circular(16),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    CircleAvatar(
-                      radius: 35,
-                      backgroundColor:
-                          colorScheme.primary.withValues(alpha: 0.15),
-                      backgroundImage: user.photoURL != null
-                          ? NetworkImage(user.photoURL!)
-                          : null,
-                      child: user.photoURL == null
-                          ? Text(
-                              (user.displayName ?? user.email ?? '?')
-                                  .substring(0, 1)
-                                  .toUpperCase(),
-                              style: theme.textTheme.headlineMedium?.copyWith(
-                                color: colorScheme.primary,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            )
-                          : null,
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                user.displayName ?? 'Piromomo Player',
-                                style: theme.textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              const Icon(Icons.verified, color: Colors.blue),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            user.email ?? 'Email not provided',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Piromomo Explorer',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+              children: [
+                Text(
+                  'Bio',
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    _ProfileStatTile(
-                      icon: Icons.local_fire_department_rounded,
-                      label: 'Streak',
-                      value: 'Current streak',
-                    ),
-                    _ProfileStatTile(
-                      icon: Icons.military_tech_rounded,
-                      label: 'High score',
-                      value: 'Best runs',
-                    ),
-                    _ProfileStatTile(
-                      icon: Icons.workspace_premium_rounded,
-                      label: 'Badges',
-                      value: '${user.providerData.length}',
-                    ),
-                  ],
+                const SizedBox(height: 8),
+                Text(
+                  'A curious lifelong learner. Loves conquering Nepali trivia while sipping coffee.',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    height: 1.5,
+                  ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 20),
-          Wrap(
-            spacing: 12,
-            children: <Widget>[
-              _ProfileChip(
-                icon: Icons.person,
-                label: 'About me',
-                active: true,
-              ),
-              _ProfileChip(
-                icon: Icons.star_border_rounded,
-                label: 'Achievements',
-              ),
-              _ProfileChip(
-                icon: Icons.favorite_border_rounded,
-                label: 'Wishlist',
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Short bio',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'A curious lifelong learner. Loves conquering Nepali trivia while sipping coffee.',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-              height: 1.4,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'I can help with',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 10),
-          _ProfileActionTile(
-            icon: Icons.videogame_asset_rounded,
-            title: 'Daily streak challenges',
-          ),
-          const SizedBox(height: 8),
-          _ProfileActionTile(
-            icon: Icons.map_rounded,
-            title: 'District explorer',
-          ),
-          const SizedBox(height: 24),
-          FilledButton.icon(
-            onPressed: _busy ? null : () => _guard(authService.signOut),
-            style: FilledButton.styleFrom(
-              minimumSize: const Size.fromHeight(50),
-              textStyle: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            icon: const Icon(Icons.logout_rounded),
-            label: const Text('Sign out'),
-          ),
+
           if (_busy) ...<Widget>[
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             const LinearProgressIndicator(),
           ],
           if (_error != null) ...<Widget>[
-            const SizedBox(height: 12),
-            Text(
-              _error!,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: colorScheme.error,
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: colorScheme.errorContainer,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                _error!,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onErrorContainer,
+                ),
               ),
             ),
           ],
@@ -357,144 +336,194 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       );
     }
 
+    // -----------------------
+    // Auth Flow (Sign In / Up)
+    // -----------------------
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Row(
-          children: <Widget>[
+          children: [
             IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new_rounded),
-              onPressed: () => Navigator.of(context).maybePop(),
+               icon: const Icon(Icons.arrow_back_ios_new_rounded),
+               onPressed: () => Navigator.of(context).maybePop(),
             ),
             const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                _showSignUp ? 'Sign up' : 'Sign in',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
+            Text(
+              _showSignUp ? 'Create Account' : 'Welcome Back',
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.w800,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
         Text(
-          'Choose a method to save your streaks and resume on any device.',
+          'Save your progress and join the leaderboard.',
           style: theme.textTheme.bodyMedium?.copyWith(
             color: colorScheme.onSurfaceVariant,
-            height: 1.35,
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 32),
+
+        // Social Buttons
         FilledButton.icon(
-          onPressed:
-              _busy ? null : () => _startAuthFlow(authService.signInWithGoogle),
+          onPressed: _busy ? null : () => _startAuthFlow(authService.signInWithGoogle),
           style: FilledButton.styleFrom(
-            minimumSize: const Size.fromHeight(48),
-            backgroundColor: colorScheme.primary,
+            minimumSize: const Size.fromHeight(56),
+            backgroundColor: colorScheme.surfaceContainerHigh,
+            foregroundColor: colorScheme.onSurface,
+            elevation: 0,
           ),
           icon: const Icon(Icons.g_mobiledata_rounded, size: 28),
           label: const Text('Continue with Google'),
         ),
         const SizedBox(height: 12),
         OutlinedButton.icon(
-          onPressed:
-              _busy ? null : () => _startAuthFlow(authService.signInWithGithub),
+          onPressed: _busy ? null : () => _startAuthFlow(authService.signInWithGithub),
           style: OutlinedButton.styleFrom(
-            minimumSize: const Size.fromHeight(48),
+            minimumSize: const Size.fromHeight(56),
+            side: BorderSide(color: colorScheme.outline.withValues(alpha: 0.5)),
           ),
           icon: const Icon(Icons.code_rounded),
           label: const Text('Continue with GitHub'),
         ),
-        const SizedBox(height: 20),
-        Text(
-          'OR',
-          style: theme.textTheme.labelMedium?.copyWith(
-            color: colorScheme.onSurfaceVariant,
-            fontWeight: FontWeight.w600,
-          ),
+
+        const SizedBox(height: 24),
+        Row(
+          children: [
+            Expanded(child: Divider(color: colorScheme.outlineVariant)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text('OR', style: theme.textTheme.labelSmall),
+            ),
+            Expanded(child: Divider(color: colorScheme.outlineVariant)),
+          ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 24),
+
+        // Email Input
         TextField(
           controller: _emailController,
-          decoration: const InputDecoration(
-            labelText: 'Email',
+          decoration: InputDecoration(
+            labelText: 'Email Address',
+            prefixIcon: const Icon(Icons.email_outlined),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: colorScheme.outlineVariant),
+            ),
           ),
           keyboardType: TextInputType.emailAddress,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 16),
+        
+        // Password Input
         TextField(
           controller: _passwordController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: 'Password',
+            prefixIcon: const Icon(Icons.lock_outline),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: colorScheme.outlineVariant),
+            ),
           ),
           obscureText: true,
         ),
-        const SizedBox(height: 12),
-        if (!_showSignUp) ...<Widget>[
-          const SizedBox(height: 12),
-          FilledButton(
-            onPressed: _busy
-                ? null
-                : () => _startAuthFlow(
-                      () => authService.signInWithEmail(
-                        email: _emailController.text.trim(),
-                        password: _passwordController.text,
-                      ),
-                    ),
-            style: FilledButton.styleFrom(
-              minimumSize: const Size.fromHeight(46),
-            ),
-            child: const Text('Sign in'),
-          ),
-          TextButton(
-            onPressed: _busy
-                ? null
-                : () => setState(() {
-                      _showSignUp = true;
-                      _error = null;
-                    }),
-            child: const Text('Create a new account'),
-          ),
-        ] else ...<Widget>[
-          const SizedBox(height: 12),
+
+        // Confirm Password (Sign Up only)
+        if (_showSignUp) ...[
+          const SizedBox(height: 16),
           TextField(
             controller: _confirmPasswordController,
-            decoration: const InputDecoration(
-              labelText: 'Confirm password',
+            decoration: InputDecoration(
+              labelText: 'Confirm Password',
+              prefixIcon: const Icon(Icons.lock_reset),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: colorScheme.outlineVariant),
+              ),
             ),
             obscureText: true,
           ),
-          const SizedBox(height: 8),
-          FilledButton(
-            onPressed:
-                _busy ? null : () => _startAuthFlow(() => _signUp(authService)),
-            style: FilledButton.styleFrom(
-              minimumSize: const Size.fromHeight(46),
-            ),
-            child: const Text('Create account'),
+        ],
+
+        const SizedBox(height: 24),
+
+        // Action Button
+        FilledButton(
+          onPressed: _busy
+              ? null
+              : () => _showSignUp
+                  ? _startAuthFlow(() => _signUp(authService))
+                  : _startAuthFlow(() => authService.signInWithEmail(
+                      email: _emailController.text.trim(),
+                      password: _passwordController.text,
+                    )),
+          style: FilledButton.styleFrom(
+            minimumSize: const Size.fromHeight(56),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           ),
-          TextButton(
+          child: Text(
+            _showSignUp ? 'Sign Up' : 'Sign In',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
+
+        const SizedBox(height: 16),
+
+        // Toggle Mode
+        Center(
+          child: TextButton(
             onPressed: _busy
                 ? null
                 : () => setState(() {
-                      _showSignUp = false;
+                      _showSignUp = !_showSignUp;
                       _error = null;
                     }),
-            child: const Text('Back to sign in'),
+            child: Text.rich(
+              TextSpan(
+                text: _showSignUp
+                    ? 'Already have an account? '
+                    : 'Don\'t have an account? ',
+                style: TextStyle(color: colorScheme.onSurfaceVariant),
+                children: [
+                  TextSpan(
+                    text: _showSignUp ? 'Sign in' : 'Sign up',
+                    style: TextStyle(
+                      color: colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ],
+        ),
+
         if (_busy) ...<Widget>[
           const SizedBox(height: 16),
           const LinearProgressIndicator(),
         ],
         if (_error != null) ...<Widget>[
-          const SizedBox(height: 12),
-          Text(
-            _error!,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: colorScheme.error,
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: colorScheme.errorContainer,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            width: double.infinity,
+            child: Text(
+              _error!,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: colorScheme.onErrorContainer,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
         ],
@@ -502,114 +531,97 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 }
+
 class _ProfileStatTile extends StatelessWidget {
   const _ProfileStatTile({
     required this.icon,
     required this.label,
     required this.value,
+    required this.color,
+    this.isFullWidth = false,
   });
 
   final IconData icon;
   final String label;
   final String value;
+  final Color color;
+  final bool isFullWidth;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
 
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Icon(icon, size: 18, color: colorScheme.primary),
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ProfileChip extends StatelessWidget {
-  const _ProfileChip({required this.icon, required this.label, this.active = false});
-
-  final IconData icon;
-  final String label;
-  final bool active;
-
-  @override
-  Widget build(BuildContext context) {
-    final ColorScheme scheme = Theme.of(context).colorScheme;
-    return Chip(
-      avatar: Icon(icon,
-          size: 16, color: active ? scheme.onPrimary : scheme.primary),
-      label: Text(label),
-      labelStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: active ? scheme.onPrimary : scheme.primary,
-            fontWeight: active ? FontWeight.w700 : FontWeight.w500,
-          ),
-      backgroundColor:
-          active ? scheme.primary : scheme.surfaceVariant.withValues(alpha: 0.4),
-      side: BorderSide(
-        color: active
-            ? scheme.primary
-            : scheme.primary.withValues(alpha: 0.4),
-      ),
-    );
-  }
-}
-
-class _ProfileActionTile extends StatelessWidget {
-  const _ProfileActionTile({required this.icon, required this.title});
-
-  final IconData icon;
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme colorScheme = theme.colorScheme;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceVariant.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(16),
+        color: colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: colorScheme.outline.withValues(alpha: 0.1)),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Icon(icon, color: colorScheme.primary),
-              const SizedBox(width: 12),
-              Text(
-                title,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
+      child: isFullWidth
+          ? Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, size: 20, color: color),
                 ),
-              ),
-            ],
-          ),
-          const Icon(Icons.arrow_forward_ios_rounded, size: 16),
-        ],
-      ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        value,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, size: 24, color: color),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  value,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    height: 1,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  label,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }
