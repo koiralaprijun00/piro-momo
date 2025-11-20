@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "693851674416-au818pssle2lgrbus1n0fo6hf37er12f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.piro_momo_games",
+            "certificate_hash": "2a2cd09b44930313712aeb359f5f088f13dc65bf"
+          }
+        },
+        {
           "client_id": "693851674416-j52eb3f0kmc8v13m8ehkh9b0daoopnot.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
