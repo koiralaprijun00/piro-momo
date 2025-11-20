@@ -21,39 +21,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions _web = FirebaseOptions(
-    apiKey: 'WEB_API_KEY',
-    appId: 'WEB_APP_ID',
-    messagingSenderId: 'WEB_MESSAGING_SENDER_ID',
-    projectId: 'WEB_PROJECT_ID',
-    authDomain: 'WEB_AUTH_DOMAIN',
-    storageBucket: 'WEB_STORAGE_BUCKET',
+    apiKey: 'AIzaSyDHZK-ye_NYJx3nY4fJUmeQ5VlF3uTsXlU',
+    appId: '1:693851674416:web:e6581a96074a83ca64daf5',
+    messagingSenderId: '693851674416',
+    projectId: 'piromomo-app',
+    authDomain: 'piromomo-app.firebaseapp.com',
+    storageBucket: 'piromomo-app.firebasestorage.app',
+    measurementId: 'G-028E74WPHX',
   );
 
   static const FirebaseOptions _android = FirebaseOptions(
-    apiKey: 'ANDROID_API_KEY',
-    appId: 'ANDROID_APP_ID',
-    messagingSenderId: 'ANDROID_MESSAGING_SENDER_ID',
-    projectId: 'ANDROID_PROJECT_ID',
-    storageBucket: 'ANDROID_STORAGE_BUCKET',
+    apiKey: 'AIzaSyDHZK-ye_NYJx3nY4fJUmeQ5VlF3uTsXlU',
+    appId: '1:693851674416:android:placeholder',
+    messagingSenderId: '693851674416',
+    projectId: 'piromomo-app',
+    storageBucket: 'piromomo-app.firebasestorage.app',
   );
 
   static const FirebaseOptions _ios = FirebaseOptions(
-    apiKey: 'IOS_API_KEY',
-    appId: 'IOS_APP_ID',
-    messagingSenderId: 'IOS_MESSAGING_SENDER_ID',
-    projectId: 'IOS_PROJECT_ID',
-    storageBucket: 'IOS_STORAGE_BUCKET',
-    iosClientId: 'IOS_CLIENT_ID',
+    apiKey: 'AIzaSyDHZK-ye_NYJx3nY4fJUmeQ5VlF3uTsXlU',
+    appId: '1:693851674416:ios:placeholder',
+    messagingSenderId: '693851674416',
+    projectId: 'piromomo-app',
+    storageBucket: 'piromomo-app.firebasestorage.app',
+    iosClientId: 'placeholder-ios-client-id',
     iosBundleId: 'com.piromomo.games',
   );
 
   static const FirebaseOptions _macos = FirebaseOptions(
-    apiKey: 'MACOS_API_KEY',
-    appId: 'MACOS_APP_ID',
-    messagingSenderId: 'MACOS_MESSAGING_SENDER_ID',
-    projectId: 'MACOS_PROJECT_ID',
-    storageBucket: 'MACOS_STORAGE_BUCKET',
-    iosClientId: 'MACOS_CLIENT_ID',
+    apiKey: 'AIzaSyDHZK-ye_NYJx3nY4fJUmeQ5VlF3uTsXlU',
+    appId: '1:693851674416:ios:placeholder',
+    messagingSenderId: '693851674416',
+    projectId: 'piromomo-app',
+    storageBucket: 'piromomo-app.firebasestorage.app',
+    iosClientId: 'placeholder-ios-client-id',
     iosBundleId: 'com.piromomo.games',
   );
 }

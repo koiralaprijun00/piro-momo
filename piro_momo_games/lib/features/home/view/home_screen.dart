@@ -1,18 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../auth/providers/auth_providers.dart';
+import '../../profile/view/profile_screen.dart';
 import '../data/game_definition.dart';
 import '../widgets/game_card.dart';
 import '../widgets/piromomo_header.dart';
-import '../../profile/view/profile_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   static const String routeName = 'home';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<User?> authValue = ref.watch(authStateProvider);
+    final User? currentUser = authValue.valueOrNull;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -33,6 +38,9 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       PiromomoHeader(
+                        currentUserEmail:
+                            currentUser?.email ?? currentUser?.displayName,
+                        currentUserPhoto: currentUser?.photoURL,
                         onProfilePressed: () =>
                             context.push(ProfileScreen.routePath),
                       ),

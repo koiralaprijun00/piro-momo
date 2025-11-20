@@ -10,6 +10,8 @@ class PiromomoHeader extends StatelessWidget {
     this.gamesPlayed = 2,
     this.onProfilePressed,
     this.onNotificationsPressed,
+    this.currentUserEmail,
+    this.currentUserPhoto,
   });
 
   final int streakDays;
@@ -19,6 +21,8 @@ class PiromomoHeader extends StatelessWidget {
   final int gamesPlayed;
   final VoidCallback? onProfilePressed;
   final VoidCallback? onNotificationsPressed;
+  final String? currentUserEmail;
+  final String? currentUserPhoto;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +44,8 @@ class PiromomoHeader extends StatelessWidget {
             colorScheme: colorScheme,
             onProfilePressed: onProfilePressed,
             onNotificationsPressed: onNotificationsPressed,
+            currentUserEmail: currentUserEmail,
+            currentUserPhoto: currentUserPhoto,
           ),
         ),
         const SizedBox(height: 12),
@@ -64,6 +70,8 @@ class _HeroCard extends StatelessWidget {
     required this.colorScheme,
     this.onProfilePressed,
     this.onNotificationsPressed,
+    this.currentUserEmail,
+    this.currentUserPhoto,
   });
 
   final int streakDays;
@@ -72,6 +80,8 @@ class _HeroCard extends StatelessWidget {
   final ColorScheme colorScheme;
   final VoidCallback? onProfilePressed;
   final VoidCallback? onNotificationsPressed;
+  final String? currentUserEmail;
+  final String? currentUserPhoto;
 
   @override
   Widget build(BuildContext context) {
@@ -102,8 +112,9 @@ class _HeroCard extends StatelessWidget {
                     () => debugPrint('Notifications tapped'),
               ),
               const SizedBox(width: 12),
-              _HeroIconButton(
-                icon: Icons.person_outline_rounded,
+              _ProfileIconButton(
+                email: currentUserEmail,
+                photoUrl: currentUserPhoto,
                 onPressed:
                     onProfilePressed ?? () => debugPrint('Profile tapped'),
               ),
@@ -159,6 +170,63 @@ class _HeroIconButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(32),
         ),
         child: Icon(icon, color: colorScheme.onSurfaceVariant, size: 20),
+      ),
+    );
+  }
+}
+
+class _ProfileIconButton extends StatelessWidget {
+  const _ProfileIconButton({
+    required this.onPressed,
+    this.email,
+    this.photoUrl,
+  });
+
+  final VoidCallback onPressed;
+  final String? email;
+  final String? photoUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final String? initial = email?.isNotEmpty == true
+        ? email!.substring(0, 1).toUpperCase()
+        : null;
+
+    Widget avatar;
+    if (photoUrl != null && photoUrl!.isNotEmpty) {
+      avatar = CircleAvatar(
+        backgroundImage: NetworkImage(photoUrl!),
+        radius: 18,
+      );
+    } else if (initial != null) {
+      avatar = CircleAvatar(
+        radius: 18,
+        backgroundColor: colorScheme.primary,
+        child: Text(
+          initial,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: colorScheme.onPrimary,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+      );
+    } else {
+      avatar = Icon(Icons.person_outline_rounded,
+          color: colorScheme.onSurfaceVariant, size: 20);
+    }
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(32),
+      onTap: onPressed,
+      child: Container(
+        height: 40,
+        width: 40,
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceVariant,
+          borderRadius: BorderRadius.circular(32),
+        ),
+        child: Center(child: avatar),
       ),
     );
   }
