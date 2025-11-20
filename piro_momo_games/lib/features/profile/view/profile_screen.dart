@@ -379,17 +379,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           icon: const Icon(Icons.g_mobiledata_rounded, size: 28),
           label: const Text('Continue with Google'),
         ),
-        const SizedBox(height: 12),
-        OutlinedButton.icon(
-          onPressed: _busy ? null : () => _startAuthFlow(authService.signInWithGithub),
-          style: OutlinedButton.styleFrom(
-            minimumSize: const Size.fromHeight(56),
-            side: BorderSide(color: colorScheme.outline.withValues(alpha: 0.5)),
-          ),
-          icon: const Icon(Icons.code_rounded),
-          label: const Text('Continue with GitHub'),
-        ),
-
         const SizedBox(height: 24),
         Row(
           children: [
