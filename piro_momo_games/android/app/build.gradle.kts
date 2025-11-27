@@ -13,8 +13,8 @@ android {
         applicationId = "com.piro_momo_games"
         minSdk = 23
         targetSdk = flutter.targetSdkVersion
-        versionCode = 5
-        versionName = "1.0.2"
+        versionCode = 6
+        versionName = "1.0.3"
         multiDexEnabled = true
     }
 
@@ -60,4 +60,7 @@ dependencies {
 
 apply(plugin = "com.google.gms.google-services")
 
-
+// Ensure Google Services resources are generated before deep link extraction tasks run.
+tasks.matching { it.name.startsWith("extractDeepLinks") }.configureEach {
+    mustRunAfter(tasks.matching { task -> task.name.contains("GoogleServices") })
+}
