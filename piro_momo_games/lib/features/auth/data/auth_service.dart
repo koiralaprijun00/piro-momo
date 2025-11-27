@@ -6,12 +6,9 @@ class AuthService {
   AuthService();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  static const String _googleClientId =
-      '406099696497-a12gakvts4epfk5pkio7dphc1anjiggc.apps.googleusercontent.com';
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: _googleClientId,
-  );
+  // Use platform default config so Android picks up the package/SHA-based client.
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Stream<User?> authStateChanges() => _auth.authStateChanges();
 
