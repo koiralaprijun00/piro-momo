@@ -4,7 +4,7 @@ class PiromomoHeader extends StatelessWidget {
   const PiromomoHeader({
     super.key,
     this.streakDays = 7,
-    this.appName = 'Piromomo',
+    this.appName = 'Welcome,',
     this.subtitle = 'Play quick trivia, stay close to Nepal.',
     this.referenceDate,
     this.gamesPlayed = 2,
@@ -94,18 +94,8 @@ class _HeroCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Expanded(
-                child: Text(
-                  'Streak: $streakDays days',
-                  style: textTheme.titleSmall?.copyWith(
-                    color: colorScheme.primary,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.4,
-                  ),
-                ),
-              ),
               _HeroIconButton(
                 icon: Icons.notifications_none_rounded,
                 onPressed: onNotificationsPressed ??
@@ -126,9 +116,9 @@ class _HeroCard extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: _GradientText(
               text: appName,
-              style: textTheme.displaySmall?.copyWith(
-                fontWeight: FontWeight.w800,
-                letterSpacing: -0.8,
+              style: textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.2,
                 color: colorScheme.onSurface,
               ),
             ),
@@ -136,11 +126,10 @@ class _HeroCard extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             subtitle,
-            style: textTheme.titleMedium?.copyWith(
-              fontSize: 12,
-              color: colorScheme.onSurface.withValues(alpha: 0.7),
-              fontWeight: FontWeight.w500,
-              height: 1.25,
+            style: textTheme.headlineSmall?.copyWith(
+              color: colorScheme.onSurface.withValues(alpha: 0.8),
+              fontWeight: FontWeight.w700,
+              height: 1.2,
             ),
           ),
         ],
