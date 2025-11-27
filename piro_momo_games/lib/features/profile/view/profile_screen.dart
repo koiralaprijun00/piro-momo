@@ -200,10 +200,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     if (user != null) {
       final AsyncValue<ProfileStats> statsValue =
           ref.watch(profileStatsProvider);
-      final String displayBio = user.displayName != null
-          ? 'Keeping the streak alive, ${user.displayName!.split(' ').first}.'
-          : 'Curious player keeping their Nepal trivia streak going.';
-
       return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -325,38 +321,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ),
             color: Colors.purple,
             isFullWidth: true,
-          ),
-
-          const SizedBox(height: 24),
-
-          // Bio Section
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: colorScheme.surfaceContainer,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Bio',
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  displayBio,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                    height: 1.5,
-                  ),
-                ),
-              ],
-            ),
           ),
 
           if (_busy) ...<Widget>[
