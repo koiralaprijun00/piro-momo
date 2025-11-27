@@ -4,6 +4,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../auth/data/auth_service.dart';
 import '../../auth/providers/auth_providers.dart';
+import '../../../data/providers.dart';
+import '../../../core/persistence/progress_store.dart';
+
+class ProfileStats {
+  const ProfileStats({
+    required this.bestStreak,
+    required this.bestScore,
+    required this.badges,
+  });
+
+  final int bestStreak;
+  final int bestScore;
+  final int badges;
+}
+
+final FutureProvider<ProfileStats> profileStatsProvider =
+    FutureProvider<ProfileStats>((Ref ref) async {
+      final ProgressStore store = ref.watch(progressStoreProvider);
+      final int bestStreak = await store.loadBestStreakAcrossGames();
+      final int bestScore = await store.loadBestScoreAcrossGames();
+      final int badges = _calculateBadges(bestStreak, bestScore);
+      return ProfileStats(
+        bestStreak: bestStreak,
+        bestScore: bestScore,
+        badges: badges,
+      );
+    });
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -171,6 +198,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
 
     if (user != null) {
+      final AsyncValue<ProfileStats> statsValue =
+          ref.watch(profileStatsProvider);
+      final String displayBio = user.displayName != null
+          ? 'Keeping the streak alive, ${user.displayName!.split(' ').first}.'
+          : 'Curious player keeping their Nepal trivia streak going.';
+
       return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -255,7 +288,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 child: _ProfileStatTile(
                   icon: Icons.local_fire_department_rounded,
                   label: 'Streak',
-                  value: '12 Days', // Placeholder for visual
+                  value: statsValue.when(
+                    data: (ProfileStats stats) => '${stats.bestStreak} Days',
+                    loading: () => '--',
+                    error: (_, __) => '--',
+                  ),
                   color: Colors.orange,
                 ),
               ),
@@ -264,7 +301,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 child: _ProfileStatTile(
                   icon: Icons.military_tech_rounded,
                   label: 'High Score',
-                  value: '2,450',
+                  value: statsValue.when(
+                    data: (ProfileStats stats) =>
+                        _formatNumber(stats.bestScore),
+                    loading: () => '--',
+                    error: (_, __) => '--',
+                  ),
                   color: Colors.amber,
                 ),
               ),
@@ -275,7 +317,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           _ProfileStatTile(
             icon: Icons.workspace_premium_rounded,
             label: 'Badges Earned',
-            value: '${user.providerData.length} Badges',
+            value: statsValue.when(
+              data: (ProfileStats stats) =>
+                  '${stats.badges} ${stats.badges == 1 ? 'Badge' : 'Badges'}',
+              loading: () => '--',
+              error: (_, __) => '--',
+            ),
             color: Colors.purple,
             isFullWidth: true,
           ),
@@ -302,7 +349,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'A curious lifelong learner. Loves conquering Nepali trivia while sipping coffee.',
+                  displayBio,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                     height: 1.5,
@@ -613,4 +660,26 @@ class _ProfileStatTile extends StatelessWidget {
             ),
     );
   }
+}
+
+int _calculateBadges(int bestStreak, int bestScore) {
+  int badges = 0;
+  if (bestStreak > 0) badges++;
+  if (bestStreak >= 10) badges++;
+  if (bestScore >= 500) badges++;
+  return badges;
+}
+
+String _formatNumber(int value) {
+  final String digits = value.toString();
+  final StringBuffer reversed = StringBuffer();
+  int count = 0;
+  for (int i = digits.length - 1; i >= 0; i--) {
+    reversed.write(digits[i]);
+    count++;
+    if (count % 3 == 0 && i != 0) {
+      reversed.write(',');
+    }
+  }
+  return reversed.toString().split('').reversed.join();
 }

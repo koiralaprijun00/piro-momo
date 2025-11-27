@@ -48,15 +48,6 @@ class PiromomoHeader extends StatelessWidget {
             currentUserPhoto: currentUserPhoto,
           ),
         ),
-        const SizedBox(height: 12),
-        Padding(
-          padding: horizontalPadding,
-          child: _DailyStatsRow(
-            date: resolvedDate,
-            streakDays: streakDays,
-            gamesPlayed: gamesPlayed,
-          ),
-        ),
       ],
     );
   }
@@ -234,49 +225,8 @@ class _DailyStatsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme colorScheme = theme.colorScheme;
-    final MaterialLocalizations localizations = MaterialLocalizations.of(
-      context,
-    );
-    final String formattedDate = '${localizations.formatShortMonthDay(date)}.';
-    final Color dividerColor = colorScheme.outlineVariant.withValues(
-      alpha: 0.5,
-    );
-
-    return Material(
-      color: Colors.transparent,
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: _DailyStatTile(
-              icon: Icons.calendar_today_rounded,
-              iconColor: Colors.redAccent,
-              value: formattedDate,
-              label: 'Date',
-            ),
-          ),
-          _DailyDivider(color: dividerColor),
-          Expanded(
-            child: _DailyStatTile(
-              icon: Icons.bookmark_rounded,
-              iconColor: Colors.orangeAccent,
-              value: '$streakDays',
-              label: 'Current streak',
-            ),
-          ),
-          _DailyDivider(color: dividerColor),
-          Expanded(
-            child: _DailyStatTile(
-              icon: Icons.check_box_outlined,
-              iconColor: colorScheme.primary,
-              value: '$gamesPlayed',
-              label: 'Games',
-            ),
-          ),
-        ],
-      ),
-    );
+    // Deprecated: dashboard stats removed from header.
+    return const SizedBox.shrink();
   }
 }
 

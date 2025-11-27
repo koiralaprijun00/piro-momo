@@ -15,7 +15,7 @@ generalKnowledgeGameControllerProvider =
     >((ref) {
       final controller = GeneralKnowledgeGameController(
         repository: ref.read(generalKnowledgeRepositoryProvider),
-        progressStore: ref.read(progressStoreProvider),
+        progressStore: ref.watch(progressStoreProvider),
         analytics: ref.read(analyticsServiceProvider),
       );
       controller.loadDeck();

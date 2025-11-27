@@ -10,7 +10,7 @@ final AutoDisposeStateNotifierProvider<KingsGameController, KingsGameState>
       (Ref ref) {
         final controller = KingsGameController(
           repository: ref.read(kingsRepositoryProvider),
-          progressStore: ref.read(progressStoreProvider),
+          progressStore: ref.watch(progressStoreProvider),
           analytics: ref.read(analyticsServiceProvider),
         );
         controller.loadDeck();

@@ -12,7 +12,7 @@ final AutoDisposeStateNotifierProvider<
         NameDistrictGameState>((Ref ref) {
       final controller = NameDistrictGameController(
         repository: ref.read(districtRepositoryProvider),
-        progressStore: ref.read(progressStoreProvider),
+        progressStore: ref.watch(progressStoreProvider),
         analytics: ref.read(analyticsServiceProvider),
       );
       controller.loadDeck();

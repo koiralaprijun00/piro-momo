@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/analytics/analytics_service.dart';
@@ -13,6 +14,7 @@ import 'repositories/festival_repository.dart';
 import 'repositories/general_knowledge_repository.dart';
 import 'repositories/kings_repository.dart';
 import 'repositories/riddle_repository.dart';
+import '../features/auth/providers/auth_providers.dart';
 
 final Provider<FestivalRepository> festivalRepositoryProvider =
     Provider<FestivalRepository>((Ref ref) {
@@ -40,7 +42,11 @@ final Provider<DistrictRepository> districtRepositoryProvider =
     });
 
 final Provider<ProgressStore> progressStoreProvider = Provider<ProgressStore>(
-  (Ref ref) => ProgressStore(),
+  (Ref ref) {
+    final AsyncValue<User?> authState = ref.watch(authStateProvider);
+    final String? userId = authState.asData?.value?.uid;
+    return ProgressStore(userId: userId);
+  },
 );
 
 final Provider<AnalyticsService> analyticsServiceProvider =

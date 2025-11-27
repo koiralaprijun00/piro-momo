@@ -106,6 +106,7 @@ class FestivalGameController extends StateNotifier<FestivalGameState> {
     if (improvedBest) {
       unawaited(_progressStore.saveFestivalBestStreak(updatedBestStreak));
     }
+    unawaited(_progressStore.maybeSaveFestivalBestScore(updatedScore));
 
     unawaited(
       _analytics.logEvent(

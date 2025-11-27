@@ -120,6 +120,7 @@ class NameDistrictGameController
     if (improvedBest) {
       unawaited(_progressStore.saveDistrictBestStreak(updatedBest));
     }
+    unawaited(_progressStore.maybeSaveDistrictBestScore(updatedScore));
 
     unawaited(
       _analytics.logEvent(

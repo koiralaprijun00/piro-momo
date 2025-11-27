@@ -15,7 +15,7 @@ festivalGameControllerProvider =
     >((ref) {
       final controller = FestivalGameController(
         repository: ref.read(festivalRepositoryProvider),
-        progressStore: ref.read(progressStoreProvider),
+        progressStore: ref.watch(progressStoreProvider),
         analytics: ref.read(analyticsServiceProvider),
       );
       controller.loadDeck();

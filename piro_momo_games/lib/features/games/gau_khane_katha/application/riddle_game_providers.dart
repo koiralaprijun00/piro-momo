@@ -11,7 +11,7 @@ riddleGameControllerProvider =
     ) {
       final controller = RiddleGameController(
         repository: ref.read(riddleRepositoryProvider),
-        progressStore: ref.read(progressStoreProvider),
+        progressStore: ref.watch(progressStoreProvider),
         analytics: ref.read(analyticsServiceProvider),
       );
       controller.loadDeck();

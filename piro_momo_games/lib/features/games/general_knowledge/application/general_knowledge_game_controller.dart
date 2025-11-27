@@ -124,6 +124,7 @@ class GeneralKnowledgeGameController
     if (improvedBest) {
       unawaited(_progressStore.saveGkBestStreak(updatedBestStreak));
     }
+    unawaited(_progressStore.maybeSaveGkBestScore(updatedScore));
 
     unawaited(
       _analytics.logEvent(
