@@ -57,13 +57,7 @@ class _NameDistrictGameContent extends StatelessWidget {
 
     if (state.showOnboarding) {
       return Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: game.accentColors,
-          ),
-        ),
+        color: const Color(0xFFF8F7F4),
         child: _NameDistrictOnboarding(
           controller: controller,
           isLoading: state.isLoading,
@@ -243,21 +237,18 @@ class _NameDistrictOnboarding extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.25),
+                color: Colors.white,
                 shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
+                border: Border.all(
+                  color: const Color(0xFFE5E5E5),
+                  width: 1,
+                ),
               ),
               child: Image.asset(
                 game.assetPath,
                 width: 64,
                 height: 64,
-                color: Colors.white,
+                color: game.accentColors.first,
               ),
             ),
             const SizedBox(height: 32),
@@ -265,7 +256,7 @@ class _NameDistrictOnboarding extends StatelessWidget {
               game.title,
               style: theme.textTheme.headlineLarge?.copyWith(
                 fontWeight: FontWeight.w800,
-                color: Colors.white,
+                color: const Color(0xFF1A1A1A),
                 letterSpacing: -0.5,
               ),
               textAlign: TextAlign.center,
@@ -274,7 +265,7 @@ class _NameDistrictOnboarding extends StatelessWidget {
             Text(
               game.description,
               style: theme.textTheme.bodyLarge?.copyWith(
-                color: Colors.white.withValues(alpha: 0.9),
+                color: const Color(0xFF6B6B6B),
                 height: 1.6,
                 fontSize: 16,
               ),
@@ -284,8 +275,8 @@ class _NameDistrictOnboarding extends StatelessWidget {
             FilledButton(
               onPressed: isLoading ? null : controller.startGame,
               style: FilledButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: game.accentColors.first,
+                backgroundColor: const Color(0xFF2D2D2D),
+                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 48,
                   vertical: 20,
@@ -293,20 +284,19 @@ class _NameDistrictOnboarding extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-                elevation: 8,
-                shadowColor: Colors.black.withValues(alpha: 0.3),
+                elevation: 0,
                 textStyle: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.5,
                 ),
               ),
               child: isLoading
-                  ? SizedBox(
+                  ? const SizedBox(
                       width: 24,
                       height: 24,
                       child: CircularProgressIndicator(
                         strokeWidth: 3,
-                        color: game.accentColors.first,
+                        color: Colors.white,
                       ),
                     )
                   : const Text('Play'),

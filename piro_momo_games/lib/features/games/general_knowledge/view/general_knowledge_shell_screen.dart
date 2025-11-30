@@ -58,13 +58,7 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
 
     if (state.showOnboarding) {
       return Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: game.accentColors,
-          ),
-        ),
+        color: const Color(0xFFF8F7F4),
         child: _GeneralKnowledgeOnboarding(
           controller: controller,
           isLoading: state.isLoading,
@@ -290,21 +284,18 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.25),
+                            color: Colors.white,
                             shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.1),
-                                blurRadius: 20,
-                                offset: const Offset(0, 10),
-                              ),
-                            ],
+                            border: Border.all(
+                              color: const Color(0xFFE5E5E5),
+                              width: 1,
+                            ),
                           ),
                           child: Image.asset(
                             game.assetPath,
                             width: 56,
                             height: 56,
-                            color: Colors.white,
+                            color: game.accentColors.first,
                           ),
                         ),
                         const SizedBox(height: 24),
@@ -312,7 +303,7 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
                           game.title,
                           style: theme.textTheme.headlineMedium?.copyWith(
                             fontWeight: FontWeight.w800,
-                            color: Colors.white,
+                            color: const Color(0xFF1A1A1A),
                             letterSpacing: -0.5,
                           ),
                           textAlign: TextAlign.center,
@@ -321,7 +312,7 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
                         Text(
                           'Pick a category to focus on or stay with All.',
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: const Color(0xFF6B6B6B),
                             height: 1.5,
                             fontSize: 15,
                           ),
@@ -344,26 +335,25 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
                   FilledButton(
                     onPressed: isLoading ? null : controller.startGame,
                     style: FilledButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: game.accentColors.first,
+                      backgroundColor: const Color(0xFF2D2D2D),
+                      foregroundColor: Colors.white,
                       minimumSize: const Size.fromHeight(56),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      elevation: 8,
-                      shadowColor: Colors.black.withValues(alpha: 0.3),
+                      elevation: 0,
                       textStyle: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.5,
                       ),
                     ),
                     child: isLoading
-                        ? SizedBox(
+                        ? const SizedBox(
                             width: 24,
                             height: 24,
                             child: CircularProgressIndicator(
                               strokeWidth: 3,
-                              color: game.accentColors.first,
+                              color: Colors.white,
                             ),
                           )
                         : const Text('Play'),
@@ -404,7 +394,7 @@ class _OnboardingCategoryChooser extends StatelessWidget {
           'Pick a category',
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w800,
-            color: Colors.white,
+            color: const Color(0xFF1A1A1A),
             fontSize: 15,
           ),
         ),
