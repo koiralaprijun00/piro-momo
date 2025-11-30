@@ -79,13 +79,24 @@ class _KingsGameContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
+    final GameDefinition game = homeGames.firstWhere(
+      (g) => g.id == 'kings-of-nepal',
+    );
 
     if (state.showOnboarding) {
-      return _KingsOnboarding(
-        controller: controller,
-        isLoading: state.isLoading,
-        currentLocale: state.locale,
-        onLocaleChange: controller.changeLocale,
+      return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: game.accentColors,
+          ),
+        ),
+        child: _KingsOnboarding(
+          controller: controller,
+          isLoading: state.isLoading,
+          game: game,
+        ),
       );
     }
 
@@ -101,7 +112,7 @@ class _KingsGameContent extends StatelessWidget {
             Icon(Icons.error_outline, size: 48, color: colorScheme.error),
             const SizedBox(height: 16),
             Text(
-              state.errorMessage ?? 'Unable to load Kings of Nepal data.',
+              state.errorMessage ?? 'Something went wrong',
               style: theme.textTheme.titleMedium?.copyWith(
                 color: colorScheme.error,
               ),
@@ -117,17 +128,6 @@ class _KingsGameContent extends StatelessWidget {
       );
     }
 
-    if (state.showSummary) {
-      return _KingsSummary(
-        state: state,
-        onPlayAgain: controller.restart,
-        onGoHome: () {
-          controller.goHomeAndReset();
-          context.go('/');
-        },
-      );
-    }
-
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         final bool isWide = constraints.maxWidth >= 960;
@@ -138,13 +138,12 @@ class _KingsGameContent extends StatelessWidget {
 
         return Container(
           width: double.infinity,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: <Color>[
-                Color(0xFFF5F3FF),
-                Color(0xFFE0F2FE),
-                Color(0xFFFFF1F2),
-              ],
+              colors:
+                  game.accentColors
+                      .map((Color c) => c.withValues(alpha: 0.15))
+                      .toList(),
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -160,19 +159,60 @@ class _KingsGameContent extends StatelessWidget {
                     ),
                 child: Column(
                   children: <Widget>[
-                    _KingsStatsPanel(
-                      state: state,
-                      onBack: () => context.pop(),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            _KingsStatsPanel(
+                              state: state,
+                              onBack: () => context.pop(),
+                            ),
+                            const SizedBox(height: 20),
+                            AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 300),
+                              switchInCurve: Curves.easeInOut,
+                              switchOutCurve: Curves.easeInOut,
+                              layoutBuilder: (
+                                Widget? currentChild,
+                                List<Widget> previousChildren,
+                              ) {
+                                return Stack(
+                                  alignment: Alignment.topCenter,
+                                  children: <Widget>[
+                                    ...previousChildren,
+                                    if (currentChild != null) currentChild,
+                                  ],
+                                );
+                              },
+                              transitionBuilder: (
+                                Widget child,
+                                Animation<double> animation,
+                              ) {
+                                final Animation<Offset> slideAnimation =
+                                    Tween<Offset>(
+                                      begin: const Offset(0, 0.06),
+                                      end: Offset.zero,
+                                    ).animate(animation);
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: SlideTransition(
+                                    position: slideAnimation,
+                                    child: child,
+                                  ),
+                                );
+                              },
+                              child: _KingsListCard(state: state),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 16),
                     _KingsInputPanel(
                       state: state,
                       controller: controller,
                       inputController: answerController,
-                    ),
-                    const SizedBox(height: 18),
-                    Expanded(
-                      child: _KingsListCard(state: state),
                     ),
                   ],
                 ),
@@ -189,139 +229,99 @@ class _KingsOnboarding extends StatelessWidget {
   const _KingsOnboarding({
     required this.controller,
     required this.isLoading,
-    required this.currentLocale,
-    required this.onLocaleChange,
+    required this.game,
   });
 
   final KingsGameController controller;
   final bool isLoading;
-  final GameLocale currentLocale;
-  final ValueChanged<GameLocale> onLocaleChange;
+  final GameDefinition game;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final game = homeGames.firstWhere(
-      (GameDefinition game) => game.id == KingsShellScreen.gameId,
-      orElse: () => homeGames.first,
-    );
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final double playSectionHeight =
-            72 + MediaQuery.of(context).padding.bottom + 16;
-        final double contentHeight = (constraints.maxHeight - playSectionHeight)
-            .clamp(360.0, constraints.maxHeight.toDouble());
-
-        return Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 420),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: contentHeight,
-                    child: Column(
-                      children: <Widget>[
-                        const SizedBox(height: 24),
-                        Container(
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.primary.withValues(
-                              alpha: 0.12,
-                            ),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            game.icon,
-                            size: 32,
-                            color: theme.colorScheme.primary,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          game.title,
-                          style: theme.textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Type each Shah monarch\'s name to reveal the table. Keep your streak alive!',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onBackground.withValues(
-                              alpha: 0.75,
-                            ),
-                            height: 1.3,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 18),
-                        GameLocaleToggle(
-                          currentLocale: currentLocale,
-                          onChanged: onLocaleChange,
-                        ),
-                        const SizedBox(height: 20),
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 18,
-                              vertical: 14,
-                            ),
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.surfaceVariant
-                                  .withValues(alpha: 0.25),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(Icons.table_rows_rounded,
-                                    size: 36,
-                                    color: theme.colorScheme.primary),
-                                const SizedBox(height: 12),
-                                Text(
-                                  'All reign periods are lined up. Unlock each row by typing the matching king\'s name.',
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: theme.colorScheme.onSurface
-                                        .withValues(alpha: 0.8),
-                                    height: 1.4,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 48),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.25),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
                   ),
-                  const SizedBox(height: 12),
-                  FilledButton(
-                    onPressed: isLoading ? null : controller.startGame,
-                    style: FilledButton.styleFrom(
-                      minimumSize: const Size.fromHeight(52),
-                      textStyle: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    child: isLoading
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2.5),
-                          )
-                        : const Text('Play'),
-                  ),
-                  const SizedBox(height: 16),
                 ],
               ),
+              child: Image.asset(
+                game.assetPath,
+                width: 64,
+                height: 64,
+                color: Colors.white,
+              ),
             ),
-          ),
-        );
-      },
+            const SizedBox(height: 32),
+            Text(
+              game.title,
+              style: theme.textTheme.headlineLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+                letterSpacing: -0.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              game.description,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: Colors.white.withValues(alpha: 0.9),
+                height: 1.6,
+                fontSize: 16,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 40),
+            FilledButton(
+              onPressed: isLoading ? null : controller.startGame,
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: game.accentColors.first,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 48,
+                  vertical: 20,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                elevation: 8,
+                shadowColor: Colors.black.withValues(alpha: 0.3),
+                textStyle: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              child: isLoading
+                  ? SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 3,
+                        color: game.accentColors.first,
+                      ),
+                    )
+                  : const Text('Play'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

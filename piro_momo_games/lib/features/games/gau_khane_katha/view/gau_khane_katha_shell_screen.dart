@@ -81,16 +81,32 @@ class _RiddleGameBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    final GameDefinition game = homeGames.firstWhere(
+      (g) => g.id == 'gau-khane-katha',
+    );
+
     if (state.isLoading && state.deck.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
 
     if (state.showOnboarding) {
-      return _RiddleOnboarding(
-        controller: controller,
-        isLoading: state.isLoading,
-        currentLocale: state.locale,
-        onLocaleChange: controller.changeLocale,
+      return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: game.accentColors,
+          ),
+        ),
+        child: _RiddleOnboarding(
+          controller: controller,
+          isLoading: state.isLoading,
+          currentLocale: state.locale,
+          onLocaleChange: controller.changeLocale,
+          game: game,
+        ),
       );
     }
 
@@ -128,13 +144,12 @@ class _RiddleGameBody extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: <Color>[
-            Color(0xFFF5F3FF),
-            Color(0xFFE0F2FE),
-            Color(0xFFFFF1F2),
-          ],
+          colors:
+              game.accentColors
+                  .map((Color c) => c.withValues(alpha: 0.15))
+                  .toList(),
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -265,80 +280,100 @@ class _RiddleOnboarding extends StatelessWidget {
     required this.isLoading,
     required this.currentLocale,
     required this.onLocaleChange,
+    required this.game,
   });
 
   final RiddleGameController controller;
   final bool isLoading;
   final GameLocale currentLocale;
   final ValueChanged<GameLocale> onLocaleChange;
+  final GameDefinition game;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final game = homeGames.firstWhere(
-      (GameDefinition game) => game.id == 'gau-khane-katha',
-      orElse: () => homeGames.first,
-    );
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
+        padding: const EdgeInsets.symmetric(horizontal: 48),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             GameLocaleToggle(
               currentLocale: currentLocale,
               onChanged: onLocaleChange,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: theme.colorScheme.secondary.withOpacity(0.12),
+                color: Colors.white.withValues(alpha: 0.25),
                 shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
               ),
-              child: Icon(
-                game.icon,
-                size: 40,
-                color: theme.colorScheme.secondary,
+              child: Image.asset(
+                game.assetPath,
+                width: 64,
+                height: 64,
+                color: Colors.white,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
             Text(
               game.title,
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.w700,
+              style: theme.textTheme.headlineLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+                letterSpacing: -0.5,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             Text(
               game.description,
               style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onBackground.withOpacity(0.75),
-                height: 1.5,
+                color: Colors.white.withValues(alpha: 0.9),
+                height: 1.6,
+                fontSize: 16,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 28),
+            const SizedBox(height: 40),
             FilledButton(
               onPressed: isLoading ? null : controller.startGame,
               style: FilledButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: game.accentColors.first,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 36,
-                  vertical: 16,
+                  horizontal: 48,
+                  vertical: 20,
                 ),
-                textStyle: theme.textTheme.titleMedium?.copyWith(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                elevation: 8,
+                shadowColor: Colors.black.withValues(alpha: 0.3),
+                textStyle: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w700,
-                  letterSpacing: 0.3,
+                  letterSpacing: 0.5,
                 ),
               ),
               child: isLoading
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2.5),
+                  ? SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 3,
+                        color: game.accentColors.first,
+                      ),
                     )
                   : const Text('Play'),
             ),

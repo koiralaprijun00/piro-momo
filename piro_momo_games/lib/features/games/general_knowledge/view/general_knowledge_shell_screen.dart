@@ -52,16 +52,29 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
+    final GameDefinition game = homeGames.firstWhere(
+      (g) => g.id == 'general-knowledge',
+    );
 
     if (state.showOnboarding) {
-      return _GeneralKnowledgeOnboarding(
-        controller: controller,
-        isLoading: state.isLoading,
-        categories: state.categories,
-        selectedCategory: state.selectedCategory,
-        onCategorySelect: controller.changeCategory,
-        currentLocale: state.locale,
-        onLocaleChange: controller.changeLocale,
+      return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: game.accentColors,
+          ),
+        ),
+        child: _GeneralKnowledgeOnboarding(
+          controller: controller,
+          isLoading: state.isLoading,
+          categories: state.categories,
+          selectedCategory: state.selectedCategory,
+          onCategorySelect: controller.changeCategory,
+          currentLocale: state.locale,
+          onLocaleChange: controller.changeLocale,
+          game: game,
+        ),
       );
     }
 
@@ -121,13 +134,12 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
 
         return Container(
           width: double.infinity,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: <Color>[
-                Color(0xFFF6F3FF),
-                Color(0xFFE0F2FE),
-                Color(0xFFFFF1F2),
-              ],
+              colors:
+                  game.accentColors
+                      .map((Color c) => c.withValues(alpha: 0.15))
+                      .toList(),
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -232,6 +244,7 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
     required this.onCategorySelect,
     required this.currentLocale,
     required this.onLocaleChange,
+    required this.game,
   });
 
   final GeneralKnowledgeGameController controller;
@@ -241,14 +254,11 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
   final ValueChanged<String> onCategorySelect;
   final GameLocale currentLocale;
   final ValueChanged<GameLocale> onLocaleChange;
+  final GameDefinition game;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final game = homeGames.firstWhere(
-      (GameDefinition game) => game.id == GeneralKnowledgeShellScreen.gameId,
-      orElse: () => homeGames.first,
-    );
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -268,7 +278,7 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
                     height: contentHeight,
                     child: Column(
                       children: <Widget>[
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 24),
                         Align(
                           alignment: Alignment.center,
                           child: GameLocaleToggle(
@@ -276,37 +286,44 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
                             onChanged: onLocaleChange,
                           ),
                         ),
-                        const SizedBox(height: 18),
+                        const SizedBox(height: 32),
                         Container(
-                          padding: const EdgeInsets.all(14),
+                          padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.primary.withValues(
-                              alpha: 0.12,
-                            ),
+                            color: Colors.white.withValues(alpha: 0.25),
                             shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                blurRadius: 20,
+                                offset: const Offset(0, 10),
+                              ),
+                            ],
                           ),
-                          child: Icon(
-                            game.icon,
-                            size: 32,
-                            color: theme.colorScheme.primary,
+                          child: Image.asset(
+                            game.assetPath,
+                            width: 56,
+                            height: 56,
+                            color: Colors.white,
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 24),
                         Text(
                           game.title,
-                          style: theme.textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w700,
+                          style: theme.textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                            letterSpacing: -0.5,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 12),
                         Text(
                           'Pick a category to focus on or stay with All.',
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onBackground.withValues(
-                              alpha: 0.75,
-                            ),
-                            height: 1.3,
+                            color: Colors.white.withValues(alpha: 0.9),
+                            height: 1.5,
+                            fontSize: 15,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -323,20 +340,31 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 16),
                   FilledButton(
                     onPressed: isLoading ? null : controller.startGame,
                     style: FilledButton.styleFrom(
-                      minimumSize: const Size.fromHeight(52),
-                      textStyle: theme.textTheme.titleMedium?.copyWith(
+                      backgroundColor: Colors.white,
+                      foregroundColor: game.accentColors.first,
+                      minimumSize: const Size.fromHeight(56),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 8,
+                      shadowColor: Colors.black.withValues(alpha: 0.3),
+                      textStyle: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w700,
+                        letterSpacing: 0.5,
                       ),
                     ),
                     child: isLoading
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2.5),
+                        ? SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 3,
+                              color: game.accentColors.first,
+                            ),
                           )
                         : const Text('Play'),
                   ),
@@ -365,7 +393,9 @@ class _OnboardingCategoryChooser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final ColorScheme colorScheme = theme.colorScheme;
+    final GameDefinition game = homeGames.firstWhere(
+      (g) => g.id == 'general-knowledge',
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,11 +403,12 @@ class _OnboardingCategoryChooser extends StatelessWidget {
         Text(
           'Pick a category',
           style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w700,
-            color: colorScheme.onSurface,
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
+            fontSize: 15,
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
         Wrap(
           spacing: 8,
           runSpacing: 8,
@@ -386,7 +417,7 @@ class _OnboardingCategoryChooser extends StatelessWidget {
                 selectedCategory.toLowerCase() == category.toLowerCase();
             return ChoiceChip(
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              labelPadding: const EdgeInsets.symmetric(horizontal: 10),
+              labelPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               visualDensity: VisualDensity.compact,
               label: Text(
                 category,
@@ -399,17 +430,13 @@ class _OnboardingCategoryChooser extends StatelessWidget {
                   : (bool _) => onSelect!(category),
               labelStyle: theme.textTheme.bodySmall?.copyWith(
                 fontWeight: FontWeight.w600,
-                color: isSelected ? colorScheme.onPrimary : colorScheme.primary,
+                color: game.accentColors.first,
               ),
-              backgroundColor: colorScheme.primary.withValues(alpha: 0.08),
-              selectedColor: colorScheme.primary,
+              backgroundColor: Colors.white.withValues(alpha: 0.9),
+              selectedColor: Colors.white,
+              side: BorderSide.none,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(999),
-                side: BorderSide(
-                  color: isSelected
-                      ? colorScheme.primary
-                      : colorScheme.primary.withValues(alpha: 0.25),
-                ),
+                borderRadius: BorderRadius.circular(20),
               ),
             );
           }).toList(),

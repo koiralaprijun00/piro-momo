@@ -32,7 +32,7 @@ class NameDistrictShellScreen extends ConsumerWidget {
     return Scaffold(
       body: SafeArea(
         bottom: false,
-        child: _NameDistrictContent(
+        child: _NameDistrictGameContent(
           state: state,
           controller: controller,
         ),
@@ -41,8 +41,8 @@ class NameDistrictShellScreen extends ConsumerWidget {
   }
 }
 
-class _NameDistrictContent extends StatelessWidget {
-  const _NameDistrictContent({required this.state, required this.controller});
+class _NameDistrictGameContent extends StatelessWidget {
+  const _NameDistrictGameContent({required this.state, required this.controller});
 
   final NameDistrictGameState state;
   final NameDistrictGameController controller;
@@ -51,13 +51,26 @@ class _NameDistrictContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
+    final GameDefinition game = homeGames.firstWhere(
+      (g) => g.id == 'name-district',
+    );
 
     if (state.showOnboarding) {
-      return _NameDistrictOnboarding(
-        controller: controller,
-        isLoading: state.isLoading,
-        currentLocale: state.locale,
-        onLocaleChange: controller.changeLocale,
+      return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: game.accentColors,
+          ),
+        ),
+        child: _NameDistrictOnboarding(
+          controller: controller,
+          isLoading: state.isLoading,
+          currentLocale: state.locale,
+          onLocaleChange: controller.changeLocale,
+          game: game,
+        ),
       );
     }
 
@@ -73,16 +86,16 @@ class _NameDistrictContent extends StatelessWidget {
             Icon(Icons.error_outline, size: 48, color: colorScheme.error),
             const SizedBox(height: 16),
             Text(
-              state.errorMessage ?? 'Unable to load districts.',
+              state.errorMessage ?? 'Something went wrong',
               style: theme.textTheme.titleMedium?.copyWith(
                 color: colorScheme.error,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             FilledButton(
               onPressed: controller.loadDeck,
-              child: const Text('Retry'),
+              child: const Text('Try again'),
             ),
           ],
         ),
@@ -91,7 +104,7 @@ class _NameDistrictContent extends StatelessWidget {
 
     final district = state.currentDistrict;
     if (district == null) {
-      return const Center(child: Text('No districts available.'));
+      return const Center(child: Text('No questions available.'));
     }
 
     return LayoutBuilder(
@@ -104,13 +117,12 @@ class _NameDistrictContent extends StatelessWidget {
 
         return Container(
           width: double.infinity,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: <Color>[
-                Color(0xFFF6F3FF),
-                Color(0xFFE0F2FE),
-                Color(0xFFFFF1F2),
-              ],
+              colors:
+                  game.accentColors
+                      .map((Color c) => c.withValues(alpha: 0.15))
+                      .toList(),
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -136,10 +148,44 @@ class _NameDistrictContent extends StatelessWidget {
                               onBack: () => context.pop(),
                             ),
                             const SizedBox(height: 20),
-                            _DistrictQuestionCard(
-                              state: state,
-                              controller: controller,
-                              district: district,
+                            AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 300),
+                              switchInCurve: Curves.easeInOut,
+                              switchOutCurve: Curves.easeInOut,
+                              layoutBuilder: (
+                                Widget? currentChild,
+                                List<Widget> previousChildren,
+                              ) {
+                                return Stack(
+                                  alignment: Alignment.topCenter,
+                                  children: <Widget>[
+                                    ...previousChildren,
+                                    if (currentChild != null) currentChild,
+                                  ],
+                                );
+                              },
+                              transitionBuilder: (
+                                Widget child,
+                                Animation<double> animation,
+                              ) {
+                                final Animation<Offset> slideAnimation =
+                                    Tween<Offset>(
+                                      begin: const Offset(0, 0.06),
+                                      end: Offset.zero,
+                                    ).animate(animation);
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: SlideTransition(
+                                    position: slideAnimation,
+                                    child: child,
+                                  ),
+                                );
+                              },
+                              child: _DistrictQuestionCard(
+                                state: state,
+                                district: district,
+                                controller: controller,
+                              ),
                             ),
                           ],
                         ),
@@ -168,71 +214,100 @@ class _NameDistrictOnboarding extends StatelessWidget {
     required this.isLoading,
     required this.currentLocale,
     required this.onLocaleChange,
+    required this.game,
   });
 
   final NameDistrictGameController controller;
   final bool isLoading;
   final GameLocale currentLocale;
   final ValueChanged<GameLocale> onLocaleChange;
+  final GameDefinition game;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final game = homeGames.firstWhere(
-      (GameDefinition game) => game.id == NameDistrictShellScreen.gameId,
-      orElse: () => homeGames.first,
-    );
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 48),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withOpacity(0.12),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(game.icon, size: 40, color: theme.colorScheme.primary),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              game.title,
-              style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Guess the district by its silhouette and stay sharp on Nepal\'s map.',
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-                height: 1.35,
-              ),
-            ),
-            const SizedBox(height: 18),
             GameLocaleToggle(
               currentLocale: currentLocale,
               onChanged: onLocaleChange,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 40),
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.25),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: Image.asset(
+                game.assetPath,
+                width: 64,
+                height: 64,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 32),
+            Text(
+              game.title,
+              style: theme.textTheme.headlineLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+                letterSpacing: -0.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              game.description,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: Colors.white.withValues(alpha: 0.9),
+                height: 1.6,
+                fontSize: 16,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 40),
             FilledButton(
               onPressed: isLoading ? null : controller.startGame,
               style: FilledButton.styleFrom(
-                minimumSize: const Size.fromHeight(52),
-                textStyle: theme.textTheme.titleMedium?.copyWith(
+                backgroundColor: Colors.white,
+                foregroundColor: game.accentColors.first,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 48,
+                  vertical: 20,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                elevation: 8,
+                shadowColor: Colors.black.withValues(alpha: 0.3),
+                textStyle: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
                 ),
               ),
               child: isLoading
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2.5),
+                  ? SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 3,
+                        color: game.accentColors.first,
+                      ),
                     )
                   : const Text('Play'),
             ),

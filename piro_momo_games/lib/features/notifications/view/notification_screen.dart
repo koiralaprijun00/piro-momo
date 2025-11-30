@@ -141,10 +141,11 @@ class _LatestGameCard extends StatelessWidget {
                     color: colorScheme.primaryContainer,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    game.icon,
-                    color: colorScheme.onPrimaryContainer,
-                    size: 24,
+                  child: Image.asset(
+                    game.assetPath,
+                    width: 24,
+                    height: 24,
+                    fit: BoxFit.contain,
                   ),
                 ),
                 const SizedBox(width: 12),

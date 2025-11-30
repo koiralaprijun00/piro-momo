@@ -14,7 +14,7 @@ class GameDefinition {
     required this.title,
     required this.eyebrow,
     required this.description,
-    required this.icon,
+    required this.assetPath,
     required this.accentColors,
     this.tags = const <String>[],
   });
@@ -24,7 +24,7 @@ class GameDefinition {
   final String title;
   final String eyebrow;
   final String description;
-  final IconData icon;
+  final String assetPath;
   final List<Color> accentColors;
   final List<String> tags;
 }
@@ -37,7 +37,7 @@ const List<GameDefinition> homeGames = <GameDefinition>[
     eyebrow: 'Festival Stories',
     description:
         'Spot Nepal\'s vibrant celebrations through quick cultural hints.',
-    icon: Icons.celebration_rounded,
+    assetPath: 'assets/images/guess-festival.png',
     accentColors: <Color>[
       AppPalette.primaryBlue,
       AppPalette.primaryPurple,
@@ -51,7 +51,7 @@ const List<GameDefinition> homeGames = <GameDefinition>[
     title: 'Gau Khane Katha',
     eyebrow: 'Riddles & Wit',
     description: 'Crack Nepali riddles fast and keep your streak alive.',
-    icon: Icons.psychology_rounded,
+    assetPath: 'assets/images/gau-khane-katha.png',
     accentColors: <Color>[
       AppPalette.nepalBlue,
       AppPalette.nepalGreen,
@@ -66,7 +66,7 @@ const List<GameDefinition> homeGames = <GameDefinition>[
     eyebrow: 'Trivia Highlights',
     description:
         'Tackle Nepal\'s history, geography, and civic trivia in minutes.',
-    icon: Icons.quiz_rounded,
+    assetPath: 'assets/images/general-knowledge.png',
     accentColors: <Color>[
       AppPalette.nepalBlue,
       AppPalette.primaryPurple,
@@ -81,7 +81,7 @@ const List<GameDefinition> homeGames = <GameDefinition>[
     eyebrow: 'Royal Recall',
     description:
         'Type every Shah monarch using reign years and cultural clues.',
-    icon: Icons.military_tech_rounded,
+    assetPath: 'assets/images/kings-of-nepal.png',
     accentColors: <Color>[
       AppPalette.nepalRed,
       AppPalette.primaryPurple,
@@ -95,7 +95,7 @@ const List<GameDefinition> homeGames = <GameDefinition>[
     title: 'Name the District',
     eyebrow: 'Map Mastery',
     description: 'Identify Nepal\'s 77 districts by silhouette and clues.',
-    icon: Icons.map_rounded,
+    assetPath: 'assets/images/name-district.png',
     accentColors: <Color>[
       AppPalette.primaryBlue,
       AppPalette.nepalGreen,

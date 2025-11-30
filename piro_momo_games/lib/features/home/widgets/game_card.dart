@@ -79,7 +79,12 @@ class GameCard extends StatelessWidget {
                 color: Colors.white.withOpacity(0.22),
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: Icon(game.icon, size: 22, color: Colors.white),
+              child: Image.asset(
+                game.assetPath,
+                width: 32,
+                height: 32,
+                fit: BoxFit.contain,
+              ),
             ),
           ],
         ),
