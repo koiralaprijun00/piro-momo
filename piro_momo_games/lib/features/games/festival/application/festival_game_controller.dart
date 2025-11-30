@@ -107,6 +107,7 @@ class FestivalGameController extends StateNotifier<FestivalGameState> {
       unawaited(_progressStore.saveFestivalBestStreak(updatedBestStreak));
     }
     unawaited(_progressStore.maybeSaveFestivalBestScore(updatedScore));
+    unawaited(_progressStore.saveLatestGame('guess-festival', updatedScore));
 
     unawaited(
       _analytics.logEvent(

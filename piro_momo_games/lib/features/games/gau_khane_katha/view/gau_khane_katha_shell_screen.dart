@@ -226,13 +226,7 @@ class _RiddleHeader extends StatelessWidget {
                     color: scheme.onSurface,
                   ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  'Classic riddles in Nepali & English',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
-                ),
+
               ],
             ),
           ),

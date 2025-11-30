@@ -121,6 +121,7 @@ class NameDistrictGameController
       unawaited(_progressStore.saveDistrictBestStreak(updatedBest));
     }
     unawaited(_progressStore.maybeSaveDistrictBestScore(updatedScore));
+    unawaited(_progressStore.saveLatestGame('name-district', updatedScore));
 
     unawaited(
       _analytics.logEvent(

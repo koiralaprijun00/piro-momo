@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class PiromomoHeader extends StatelessWidget {
   const PiromomoHeader({
@@ -90,7 +91,7 @@ class _HeroCard extends StatelessWidget {
               _HeroIconButton(
                 icon: Icons.notifications_none_rounded,
                 onPressed: onNotificationsPressed ??
-                    () => debugPrint('Notifications tapped'),
+                    () => context.push('/notifications'),
               ),
               const SizedBox(width: 12),
               _ProfileIconButton(

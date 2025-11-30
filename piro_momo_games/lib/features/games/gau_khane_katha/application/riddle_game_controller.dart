@@ -137,6 +137,7 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
         unawaited(_progressStore.saveRiddleBestStreak(updatedBest));
       }
       unawaited(_progressStore.maybeSaveRiddleBestScore(state.score));
+      unawaited(_progressStore.saveLatestGame('gau-khane-katha', state.score));
 
       outcomeCorrect = true;
     } else {

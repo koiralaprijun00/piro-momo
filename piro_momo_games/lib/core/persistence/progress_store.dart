@@ -17,6 +17,10 @@ class ProgressStore {
   static const String _kingsBestScoreKey = 'progress.kings.bestScore';
   static const String _districtBestScoreKey = 'progress.district.bestScore';
 
+  static const String _latestGameIdKey = 'progress.latest.gameId';
+  static const String _latestGameScoreKey = 'progress.latest.score';
+  static const String _latestGameTimestampKey = 'progress.latest.timestamp';
+
   SharedPreferences? _prefs;
 
   String _key(String base) => '${_userId ?? 'guest'}.$base';
@@ -169,5 +173,33 @@ class ProgressStore {
     return values.fold<int>(0, (int maxValue, int current) {
       return current > maxValue ? current : maxValue;
     });
+  }
+
+  Future<void> saveLatestGame(String gameId, int score) async {
+    final SharedPreferences prefs = await _instance();
+    await prefs.setString(_key(_latestGameIdKey), gameId);
+    await prefs.setInt(_key(_latestGameScoreKey), score);
+    await prefs.setInt(
+      _key(_latestGameTimestampKey),
+      DateTime.now().millisecondsSinceEpoch,
+    );
+  }
+
+  Future<Map<String, dynamic>?> loadLatestGame() async {
+    final SharedPreferences prefs = await _instance();
+    final String? gameId = prefs.getString(_key(_latestGameIdKey));
+    if (gameId == null) return null;
+
+    final int score = prefs.getInt(_key(_latestGameScoreKey)) ?? 0;
+    final int? timestamp = prefs.getInt(_key(_latestGameTimestampKey));
+
+    return <String, dynamic>{
+      'gameId': gameId,
+      'score': score,
+      'timestamp':
+          timestamp != null
+              ? DateTime.fromMillisecondsSinceEpoch(timestamp)
+              : null,
+    };
   }
 }

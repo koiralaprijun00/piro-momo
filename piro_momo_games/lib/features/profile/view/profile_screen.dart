@@ -11,12 +11,10 @@ class ProfileStats {
   const ProfileStats({
     required this.bestStreak,
     required this.bestScore,
-    required this.badges,
   });
 
   final int bestStreak;
   final int bestScore;
-  final int badges;
 }
 
 final FutureProvider<ProfileStats> profileStatsProvider =
@@ -24,11 +22,9 @@ final FutureProvider<ProfileStats> profileStatsProvider =
       final ProgressStore store = ref.watch(progressStoreProvider);
       final int bestStreak = await store.loadBestStreakAcrossGames();
       final int bestScore = await store.loadBestScoreAcrossGames();
-      final int badges = _calculateBadges(bestStreak, bestScore);
       return ProfileStats(
         bestStreak: bestStreak,
         bestScore: bestScore,
-        badges: badges,
       );
     });
 
@@ -309,19 +305,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ],
           ),
           const SizedBox(height: 12),
-           // Badge Row (Full Width)
-          _ProfileStatTile(
-            icon: Icons.workspace_premium_rounded,
-            label: 'Badges Earned',
-            value: statsValue.when(
-              data: (ProfileStats stats) =>
-                  '${stats.badges} ${stats.badges == 1 ? 'Badge' : 'Badges'}',
-              loading: () => '--',
-              error: (_, __) => '--',
-            ),
-            color: Colors.purple,
-            isFullWidth: true,
-          ),
+
 
           if (_busy) ...<Widget>[
             const SizedBox(height: 24),
@@ -626,13 +610,7 @@ class _ProfileStatTile extends StatelessWidget {
   }
 }
 
-int _calculateBadges(int bestStreak, int bestScore) {
-  int badges = 0;
-  if (bestStreak > 0) badges++;
-  if (bestStreak >= 10) badges++;
-  if (bestScore >= 500) badges++;
-  return badges;
-}
+
 
 String _formatNumber(int value) {
   final String digits = value.toString();

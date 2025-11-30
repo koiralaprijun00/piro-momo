@@ -8,6 +8,7 @@ import '../features/games/kings/view/kings_shell_screen.dart';
 import '../features/games/name_district/view/name_district_shell_screen.dart';
 import '../features/profile/view/profile_screen.dart';
 import '../features/home/view/home_screen.dart';
+import '../features/notifications/view/notification_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -85,6 +86,18 @@ final GoRouter appRouter = GoRouter(
         return CustomTransitionPage<void>(
           key: state.pageKey,
           child: const ProfileScreen(),
+          transitionsBuilder: _slideUpTransition,
+        );
+      },
+    ),
+
+    GoRoute(
+      name: 'notifications',
+      path: NotificationScreen.routePath,
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        return CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: const NotificationScreen(),
           transitionsBuilder: _slideUpTransition,
         );
       },

@@ -327,13 +327,7 @@ class _FestivalStatsPanel extends StatelessWidget {
                     color: scheme.onSurface,
                   ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  'Decode Nepal’s celebrations',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
-                ),
+
               ],
             ),
           ),

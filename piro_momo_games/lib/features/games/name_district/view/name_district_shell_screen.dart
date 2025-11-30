@@ -288,13 +288,7 @@ class _NameDistrictHeader extends StatelessWidget {
                     color: scheme.onSurface,
                   ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  'Identify Nepal\'s 77 districts by silhouette',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
-                ),
+
               ],
             ),
           ),
@@ -343,7 +337,7 @@ class _DistrictQuestionCard extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
     return Container(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(28),
@@ -366,9 +360,9 @@ class _DistrictQuestionCard extends StatelessWidget {
               letterSpacing: 0.8,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           AspectRatio(
-            aspectRatio: 3 / 2,
+            aspectRatio: 2 / 1,
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: colorScheme.surfaceVariant.withValues(alpha: 0.35),

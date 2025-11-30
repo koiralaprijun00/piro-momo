@@ -142,6 +142,7 @@ class KingsGameController extends StateNotifier<KingsGameState> {
       unawaited(_progressStore.saveKingsBestStreak(updatedBest));
     }
     unawaited(_progressStore.maybeSaveKingsBestScore(state.score));
+    unawaited(_progressStore.saveLatestGame('kings-of-nepal', state.score));
 
     _logGuess(correct: true, kingId: matched.id);
 

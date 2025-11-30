@@ -125,6 +125,7 @@ class GeneralKnowledgeGameController
       unawaited(_progressStore.saveGkBestStreak(updatedBestStreak));
     }
     unawaited(_progressStore.maybeSaveGkBestScore(updatedScore));
+    unawaited(_progressStore.saveLatestGame('general-knowledge', updatedScore));
 
     unawaited(
       _analytics.logEvent(
