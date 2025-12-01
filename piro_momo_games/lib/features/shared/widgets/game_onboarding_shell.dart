@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../home/data/game_definition.dart';
+import 'animated_game_icon.dart';
 
 class GameOnboardingShell extends StatelessWidget {
   const GameOnboardingShell({
@@ -38,29 +39,11 @@ class GameOnboardingShell extends StatelessWidget {
             children: [
               const SizedBox(height: 40),
               // Floating Icon
-              Container(
-                width: 120,
-                height: 120,
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(40),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.2),
-                    width: 1,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: Image.asset(
-                  game.assetPath,
-                  fit: BoxFit.contain,
-                ),
+              const SizedBox(height: 40),
+              // Floating Icon
+              AnimatedGameIcon(
+                assetPath: game.assetPath,
+                size: 140,
               ),
               const SizedBox(height: 40),
               // Title

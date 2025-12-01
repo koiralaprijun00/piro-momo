@@ -9,6 +9,8 @@ import '../application/general_knowledge_game_controller.dart';
 import '../../../../data/models/general_knowledge_question.dart';
 import '../../shared/widgets/header_stat_chip.dart';
 import '../../shared/widgets/quiz_option_tile.dart';
+import '../../shared/widgets/glass_header.dart';
+import '../../shared/widgets/glass_primary_button.dart';
 import '../../festival/widgets/festival_stat_badge.dart';
 
 class GeneralKnowledgeShellScreen extends ConsumerWidget {
@@ -59,10 +61,8 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
         color: const Color(0xFFF8F7F4),
         child: _GeneralKnowledgeOnboarding(
           controller: controller,
+          state: state,
           isLoading: state.isLoading,
-          categories: state.categories,
-          selectedCategory: state.selectedCategory,
-          onCategorySelect: controller.changeCategory,
           game: game,
         ),
       );
@@ -124,14 +124,15 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
 
         return Container(
           width: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors:
-                  game.accentColors
-                      .map((Color c) => c.withValues(alpha: 0.15))
-                      .toList(),
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF6366F1), // Indigo
+                Color(0xFFA855F7), // Purple
+                Color(0xFFEC4899), // Pink
+              ],
             ),
           ),
           child: Center(
@@ -150,9 +151,32 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            _GeneralKnowledgeStatsPanel(
-                              state: state,
+                            GlassHeader(
+                              title: 'General Knowledge',
                               onBack: () => context.pop(),
+                              stats: [
+                                HeaderStatChip(
+                                  child: FestivalStatBadge(
+                                    label: 'Score',
+                                    value: '${state.score}',
+                                    icon: Icons.auto_awesome_rounded,
+                                    compact: true,
+                                    color: Colors.white,
+                                    backgroundColor: Colors.white.withOpacity(0.15),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                HeaderStatChip(
+                                  child: FestivalStatBadge(
+                                    label: 'Streak',
+                                    value: '${state.streak}',
+                                    icon: Icons.local_fire_department_rounded,
+                                    compact: true,
+                                    color: Colors.white,
+                                    backgroundColor: Colors.white.withOpacity(0.15),
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 20),
                             AnimatedSwitcher(
@@ -202,17 +226,11 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    _PrimaryNextButton(
+                    GlassPrimaryButton(
                       isEnabled: state.isAnswered,
                       onPressed: state.isAnswered
                           ? controller.nextQuestion
                           : null,
-                    ),
-                    TextButton(
-                      onPressed: state.isLoading
-                          ? null
-                          : controller.showCategoryPicker,
-                      child: const Text('Change category'),
                     ),
                   ],
                 ),
@@ -228,260 +246,187 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
 class _GeneralKnowledgeOnboarding extends StatelessWidget {
   const _GeneralKnowledgeOnboarding({
     required this.controller,
+    required this.state,
     required this.isLoading,
-    required this.categories,
-    required this.selectedCategory,
-    required this.onCategorySelect,
     required this.game,
   });
 
   final GeneralKnowledgeGameController controller;
+  final GeneralKnowledgeGameState state;
   final bool isLoading;
-  final List<String> categories;
-  final String selectedCategory;
-  final ValueChanged<String> onCategorySelect;
   final GameDefinition game;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final bool isWide = constraints.maxWidth >= 960;
+        final EdgeInsets contentPadding = EdgeInsets.symmetric(
+          horizontal: isWide ? 120 : 20,
+          vertical: isWide ? 40 : 24,
+        );
 
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF6366F1), // Indigo
-              Color(0xFFA855F7), // Purple
-              Color(0xFFEC4899), // Pink
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(height: 20),
-                // Title
-                Text(
-                  game.title,
-                  style: textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                // Description
-                Text(
-                  'Pick a category to focus on or stay with All.',
-                  style: textTheme.bodyLarge?.copyWith(
-                    color: Colors.white.withOpacity(0.9),
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 32),
-                
-                // Category selection
-                Expanded(
-                  child: categories.isEmpty
-                      ? const SizedBox.shrink()
-                      : _OnboardingCategoryChooser(
-                          categories: categories,
-                          selectedCategory: selectedCategory,
-                          onSelect: isLoading ? null : onCategorySelect,
-                          game: game,
-                        ),
-                ),
-                
-                const SizedBox(height: 24),
-                
-                // Stats Cards
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.15),
-                      width: 1,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(
-                          Icons.library_books_rounded,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'TOTAL QUESTIONS',
-                            style: textTheme.labelSmall?.copyWith(
-                              color: Colors.white.withOpacity(0.7),
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '100+ curated trivia questions',
-                            style: textTheme.titleSmall?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.15),
-                      width: 1,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(
-                          Icons.bolt_rounded,
-                          color: Colors.amber,
-                          size: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'DIFFICULTY',
-                            style: textTheme.labelSmall?.copyWith(
-                              color: Colors.white.withOpacity(0.7),
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'All levels - Easy, Medium & Hard',
-                            style: textTheme.titleSmall?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 32),
-                // Buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.white.withOpacity(0.8),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24, 
-                          vertical: 16
-                        ),
-                        textStyle: textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      child: const Text('Go Back'),
-                    ),
-                    const SizedBox(width: 16),
-                    FilledButton(
-                      onPressed: isLoading ? null : controller.startGame,
-                      style: FilledButton.styleFrom(
-                        backgroundColor: const Color(0xFF1F2937),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 48,
-                          vertical: 20,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        elevation: 0,
-                        textStyle: textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      child: isLoading
-                          ? const SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.5,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Text('Play'),
-                    ),
-                  ],
-                ),
+        return Container(
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF6366F1), // Indigo
+                Color(0xFFA855F7), // Purple
+                Color(0xFFEC4899), // Pink
               ],
             ),
           ),
-        ),
-      ),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 920),
+              child: Padding(
+                padding:
+                    contentPadding +
+                    EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom + 16,
+                    ),
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            // Left-aligned Content
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  game.title,
+                                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.white,
+                                    height: 1.1,
+                                    letterSpacing: -0.5,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  game.description,
+                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: Colors.white.withOpacity(0.9),
+                                    height: 1.5,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 32),
+                            
+                            // Category Selection
+                            _OnboardingCategoryChooser(
+                              selectedCategory: state.selectedCategory,
+                              onCategorySelected: controller.changeCategory,
+                            ),
+                            const SizedBox(height: 32),
+
+                            // Stats Grid
+                            LayoutBuilder(
+                              builder: (context, constraints) {
+                                return Wrap(
+                                  spacing: 12,
+                                  runSpacing: 12,
+                                  children: [
+                                    _GlassStatCard(
+                                      icon: Icons.library_books_rounded,
+                                      label: 'TOTAL QUESTIONS',
+                                      value: '100+',
+                                      width: (constraints.maxWidth - 12) / 2,
+                                    ),
+                                    _GlassStatCard(
+                                      icon: Icons.bolt_rounded,
+                                      label: 'DIFFICULTY',
+                                      value: 'All Levels',
+                                      width: (constraints.maxWidth - 12) / 2,
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 24),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // Bottom Buttons
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton.icon(
+                          onPressed: () => context.pop(),
+                          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 16),
+                          label: const Text('Go Back'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          ),
+                        ),
+                        FilledButton.icon(
+                          onPressed: isLoading ? null : controller.startGame,
+                          icon: isLoading 
+                              ? const SizedBox(
+                                  width: 20, 
+                                  height: 20, 
+                                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)
+                                )
+                              : const Icon(Icons.play_arrow_rounded),
+                          label: Text(isLoading ? 'Loading...' : 'Play Now'),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: const Color(0xFF1E1B4B), // Dark indigo
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
 
 class _OnboardingCategoryChooser extends StatelessWidget {
   const _OnboardingCategoryChooser({
-    required this.categories,
     required this.selectedCategory,
-    required this.game,
-    this.onSelect,
+    this.onCategorySelected,
   });
 
-  final List<String> categories;
   final String selectedCategory;
-  final GameDefinition game;
-  final ValueChanged<String>? onSelect;
+  final ValueChanged<String>? onCategorySelected;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final Set<String> allCategories =
-        categories.map((String c) => c.trim()).where((c) => c.isNotEmpty).toSet();
-    final List<String> orderedCategories = <String>[
+    final List<String> orderedCategories = [
       'All',
-      ...allCategories.where((c) => c.toLowerCase() != 'all').toList()..sort(),
+      'Culture',
+      'History & Literature',
+      'Religion & Mythology',
+      'Economy & Politics',
+      'Geography',
+      'Sports',
+      'Science',
+      'International',
+      'Entertainment',
+      'Environment',
+      'Jatra of Kathmandu Valley',
     ];
     final Map<String, IconData> iconMap = <String, IconData>{
       'All': Icons.apps_rounded,
@@ -528,7 +473,7 @@ class _OnboardingCategoryChooser extends StatelessWidget {
                 
                 return InkWell(
                   borderRadius: BorderRadius.circular(18),
-                  onTap: onSelect == null ? null : () => onSelect!(category),
+                  onTap: onCategorySelected == null ? null : () => onCategorySelected!(category),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 180),
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -924,39 +869,77 @@ int _boundedQuestion(int value, int max) {
   return value;
 }
 
-class _PrimaryNextButton extends StatelessWidget {
-  const _PrimaryNextButton({required this.isEnabled, required this.onPressed});
+class _GlassStatCard extends StatelessWidget {
+  const _GlassStatCard({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.width,
+  });
 
-  final bool isEnabled;
-  final VoidCallback? onPressed;
+  final IconData icon;
+  final String label;
+  final String value;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final ColorScheme colorScheme = theme.colorScheme;
-
-    return SizedBox(
-      height: 52,
-      child: ElevatedButton.icon(
-        onPressed: isEnabled ? onPressed : null,
-        icon: const Icon(Icons.arrow_forward_rounded),
-        label: const Text('Next'),
-        style: ElevatedButton.styleFrom(
-          elevation: isEnabled ? 3 : 0,
-          backgroundColor: isEnabled
-              ? colorScheme.primary
-              : colorScheme.primary.withValues(alpha: 0.35),
-          foregroundColor: isEnabled
-              ? colorScheme.onPrimary
-              : colorScheme.onPrimary.withValues(alpha: 0.8),
-          textStyle: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(28),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 26),
+    
+    return Container(
+      width: width,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.15),
+          width: 1,
         ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              icon,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: Colors.white.withOpacity(0.7),
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.5,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

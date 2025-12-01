@@ -8,6 +8,8 @@ import '../../../home/data/game_definition.dart';
 import '../../festival/widgets/festival_stat_badge.dart';
 import '../../shared/widgets/header_stat_chip.dart';
 import '../../shared/widgets/quiz_option_tile.dart';
+import '../../shared/widgets/glass_header.dart';
+import '../../shared/widgets/glass_primary_button.dart';
 import '../application/name_district_game_controller.dart';
 import '../application/name_district_game_providers.dart';
 import '../application/name_district_game_state.dart';
@@ -108,14 +110,15 @@ class _NameDistrictGameContent extends StatelessWidget {
 
         return Container(
           width: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors:
-                  game.accentColors
-                      .map((Color c) => c.withValues(alpha: 0.15))
-                      .toList(),
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF6366F1), // Indigo
+                Color(0xFFA855F7), // Purple
+                Color(0xFFEC4899), // Pink
+              ],
             ),
           ),
           child: Center(
@@ -134,9 +137,32 @@ class _NameDistrictGameContent extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            _NameDistrictHeader(
-                              state: state,
+                            GlassHeader(
+                              title: 'Name the District',
                               onBack: () => context.pop(),
+                              stats: [
+                                HeaderStatChip(
+                                  child: FestivalStatBadge(
+                                    label: 'Score',
+                                    value: '${state.score}',
+                                    icon: Icons.auto_awesome_rounded,
+                                    compact: true,
+                                    color: Colors.white,
+                                    backgroundColor: Colors.white.withOpacity(0.15),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                HeaderStatChip(
+                                  child: FestivalStatBadge(
+                                    label: 'Streak',
+                                    value: '${state.streak}',
+                                    icon: Icons.local_fire_department_rounded,
+                                    compact: true,
+                                    color: Colors.white,
+                                    backgroundColor: Colors.white.withOpacity(0.15),
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 20),
                             AnimatedSwitcher(
@@ -183,7 +209,7 @@ class _NameDistrictGameContent extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    _PrimaryNextButton(
+                    GlassPrimaryButton(
                       isEnabled: state.isAnswered,
                       onPressed:
                           state.isAnswered ? controller.nextDistrict : null,
@@ -220,84 +246,6 @@ class _NameDistrictOnboarding extends StatelessWidget {
   }
 }
 
-class _NameDistrictHeader extends StatelessWidget {
-  const _NameDistrictHeader({required this.state, required this.onBack});
-
-  final NameDistrictGameState state;
-  final VoidCallback onBack;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme scheme = theme.colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-      decoration: BoxDecoration(
-        color: scheme.surface.withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: scheme.outlineVariant.withValues(alpha: 0.25),
-        ),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: scheme.shadow.withValues(alpha: 0.05),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Row(
-        children: <Widget>[
-          IconButton(
-            onPressed: onBack,
-            icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Name the District',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: scheme.onSurface,
-                  ),
-                ),
-
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              HeaderStatChip(
-                child: FestivalStatBadge(
-                  label: 'Score',
-                  value: '${state.score}',
-                  icon: Icons.auto_awesome_rounded,
-                  compact: true,
-                ),
-              ),
-              const SizedBox(width: 8),
-              HeaderStatChip(
-                child: FestivalStatBadge(
-                  label: 'Streak',
-                  value: '${state.streak}',
-                  icon: Icons.local_fire_department_rounded,
-                  compact: true,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _DistrictQuestionCard extends StatelessWidget {
   const _DistrictQuestionCard({
     required this.state,
@@ -316,12 +264,12 @@ class _DistrictQuestionCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
       decoration: BoxDecoration(
-        color: colorScheme.surface,
+        color: Colors.white.withOpacity(0.9),
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.25)),
+        border: Border.all(color: Colors.white),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: colorScheme.shadow.withValues(alpha: 0.08),
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 40,
             offset: const Offset(0, 24),
           ),
@@ -395,44 +343,6 @@ class _DistrictQuestionCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
         ],
-      ),
-    );
-  }
-}
-
-class _PrimaryNextButton extends StatelessWidget {
-  const _PrimaryNextButton({required this.isEnabled, required this.onPressed});
-
-  final bool isEnabled;
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme colorScheme = theme.colorScheme;
-
-    return SizedBox(
-      height: 52,
-      child: ElevatedButton.icon(
-        onPressed: isEnabled ? onPressed : null,
-        icon: const Icon(Icons.arrow_forward_rounded),
-        label: const Text('Next'),
-        style: ElevatedButton.styleFrom(
-          elevation: isEnabled ? 3 : 0,
-          backgroundColor: isEnabled
-              ? colorScheme.primary
-              : colorScheme.primary.withValues(alpha: 0.35),
-          foregroundColor: isEnabled
-              ? colorScheme.onPrimary
-              : colorScheme.onPrimary.withValues(alpha: 0.8),
-          textStyle: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(28),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 26),
-        ),
       ),
     );
   }

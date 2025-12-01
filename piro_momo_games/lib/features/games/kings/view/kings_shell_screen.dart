@@ -9,6 +9,7 @@ import '../../shared/widgets/header_stat_chip.dart';
 import '../application/kings_game_controller.dart';
 import '../application/kings_game_providers.dart';
 import '../application/kings_game_state.dart';
+import '../../shared/widgets/glass_header.dart';
 import '../../../shared/widgets/game_onboarding_shell.dart';
 
 class KingsShellScreen extends ConsumerStatefulWidget {
@@ -131,14 +132,15 @@ class _KingsGameContent extends StatelessWidget {
 
         return Container(
           width: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors:
-                  game.accentColors
-                      .map((Color c) => c.withValues(alpha: 0.15))
-                      .toList(),
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF6366F1), // Indigo
+                Color(0xFFA855F7), // Purple
+                Color(0xFFEC4899), // Pink
+              ],
             ),
           ),
           child: Center(
@@ -157,9 +159,33 @@ class _KingsGameContent extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            _KingsStatsPanel(
-                              state: state,
+                            GlassHeader(
+                              title: 'Kings of Nepal',
+                              subtitle: 'Unlocked ${state.guessedIds.length} of ${state.deck.length}',
                               onBack: () => context.pop(),
+                              stats: [
+                                HeaderStatChip(
+                                  child: FestivalStatBadge(
+                                    label: 'Found',
+                                    value: '${state.guessedIds.length}/${state.deck.length}',
+                                    icon: Icons.fact_check_rounded,
+                                    compact: true,
+                                    color: Colors.white,
+                                    backgroundColor: Colors.white.withOpacity(0.15),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                HeaderStatChip(
+                                  child: FestivalStatBadge(
+                                    label: 'Streak',
+                                    value: '${state.streak}',
+                                    icon: Icons.local_fire_department_rounded,
+                                    compact: true,
+                                    color: Colors.white,
+                                    backgroundColor: Colors.white.withOpacity(0.15),
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 20),
                             AnimatedSwitcher(
@@ -235,90 +261,6 @@ class _KingsOnboarding extends StatelessWidget {
       game: game,
       onPlay: controller.startGame,
       isLoading: isLoading,
-    );
-  }
-}
-
-class _KingsStatsPanel extends StatelessWidget {
-  const _KingsStatsPanel({required this.state, required this.onBack});
-
-  final KingsGameState state;
-  final VoidCallback onBack;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme scheme = theme.colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-      decoration: BoxDecoration(
-        color: scheme.surface.withValues(alpha: 0.75),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: scheme.outlineVariant.withValues(alpha: 0.25),
-        ),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: scheme.shadow.withValues(alpha: 0.05),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Row(
-        children: <Widget>[
-          IconButton(
-            onPressed: onBack,
-            icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Kings of Nepal',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: scheme.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  'Unlocked ${state.guessedIds.length} of ${state.deck.length}',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              HeaderStatChip(
-                child: FestivalStatBadge(
-                  label: 'Found',
-                  value: '${state.guessedIds.length}/${state.deck.length}',
-                  icon: Icons.fact_check_rounded,
-                  compact: true,
-                ),
-              ),
-              const SizedBox(width: 8),
-              HeaderStatChip(
-                child: FestivalStatBadge(
-                  label: 'Streak',
-                  value: '${state.streak}',
-                  icon: Icons.local_fire_department_rounded,
-                  compact: true,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }
