@@ -1,9 +1,7 @@
 import '../../../../data/models/festival_question.dart';
-import '../../../../data/models/game_locale.dart';
 
 class FestivalGameState {
   const FestivalGameState({
-    required this.locale,
     required this.deck,
     required this.currentIndex,
     required this.isLoading,
@@ -22,7 +20,6 @@ class FestivalGameState {
 
   factory FestivalGameState.initial() {
     return const FestivalGameState(
-      locale: GameLocale.english,
       deck: <FestivalQuestion>[],
       currentIndex: 0,
       isLoading: true,
@@ -37,7 +34,6 @@ class FestivalGameState {
     );
   }
 
-  final GameLocale locale;
   final List<FestivalQuestion> deck;
   final int currentIndex;
   final bool isLoading;
@@ -65,7 +61,6 @@ class FestivalGameState {
       deck.isNotEmpty && correctCount + incorrectCount >= deck.length;
 
   FestivalGameState copyWith({
-    GameLocale? locale,
     List<FestivalQuestion>? deck,
     int? currentIndex,
     bool? isLoading,
@@ -84,7 +79,6 @@ class FestivalGameState {
     bool clearSelection = false,
   }) {
     return FestivalGameState(
-      locale: locale ?? this.locale,
       deck: deck ?? this.deck,
       currentIndex: currentIndex ?? this.currentIndex,
       isLoading: isLoading ?? this.isLoading,

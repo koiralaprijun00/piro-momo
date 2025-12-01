@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/analytics/analytics_service.dart';
 import '../../../../core/persistence/progress_store.dart';
-import '../../../../data/models/game_locale.dart';
 import '../../../../data/models/riddle_entry.dart';
 import '../../../../data/repositories/riddle_repository.dart';
 import 'riddle_game_state.dart';
@@ -28,11 +27,8 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
   final AnalyticsService _analytics;
   final Random _random;
 
-  Future<void> loadDeck({GameLocale? locale}) async {
-    final GameLocale targetLocale = locale ?? state.locale;
-
+  Future<void> loadDeck() async {
     state = state.copyWith(
-      locale: targetLocale,
       isLoading: true,
       clearError: true,
       submissionStatus: SubmissionStatus.idle,
@@ -43,14 +39,13 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
     );
 
     try {
-      final List<RiddleEntry> riddles = List<RiddleEntry>.from(
-        await _repository.loadRiddles(targetLocale),
-      );
+      final List<RiddleEntry> riddles =
+          List<RiddleEntry>.from(await _repository.loadRiddles());
 
       if (riddles.isEmpty) {
         state = state.copyWith(
           isLoading: false,
-          errorMessage: 'No riddles available for this locale.',
+          errorMessage: 'No riddles available.',
         );
         return;
       }
@@ -59,7 +54,6 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
       final int persistedBest = await _progressStore.loadRiddleBestStreak();
 
       state = RiddleGameState(
-        locale: targetLocale,
         deck: riddles,
         currentIndex: 0,
         isLoading: false,
@@ -105,7 +99,7 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
     }
 
     final int attemptNumber = state.attempts + 1;
-    final bool isCorrect = _matchesAnswer(answer, current, state.locale);
+    final bool isCorrect = _matchesAnswer(answer, current);
 
     bool? outcomeCorrect;
 
@@ -166,7 +160,6 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
           'correct': outcomeCorrect ?? false,
           'attempt': attemptNumber,
           'riddle_id': current.id,
-          'locale': state.locale.languageCode,
         },
       ),
     );
@@ -193,7 +186,6 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
         'riddle_reveal',
         parameters: <String, Object?>{
           'riddle_id': current.id,
-          'locale': state.locale.languageCode,
         },
       ),
     );
@@ -231,23 +223,9 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
     );
   }
 
-  void changeLocale(GameLocale locale) {
-    if (locale == state.locale && state.deck.isNotEmpty) {
-      restart(resetBest: false);
-      return;
-    }
-    loadDeck(locale: locale);
-    unawaited(
-      _analytics.logEvent(
-        'riddle_locale_change',
-        parameters: <String, Object?>{'locale': locale.languageCode},
-      ),
-    );
-  }
-
   void restart({bool resetBest = false}) {
     if (state.deck.isEmpty) {
-      loadDeck(locale: state.locale);
+      loadDeck();
       return;
     }
 
@@ -255,7 +233,6 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
     deck.shuffle(_random);
 
     state = RiddleGameState(
-      locale: state.locale,
       deck: deck,
       currentIndex: 0,
       isLoading: false,
@@ -303,7 +280,7 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
     }
   }
 
-  bool _matchesAnswer(String input, RiddleEntry entry, GameLocale locale) {
+  bool _matchesAnswer(String input, RiddleEntry entry) {
     final String normalizedInput = input.toLowerCase().trim();
 
     final Set<String> candidates = <String>{
@@ -330,7 +307,7 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
   void startGame() {
     if (state.showOnboarding) {
       if (state.deck.isEmpty) {
-        loadDeck(locale: state.locale).then((_) {
+        loadDeck().then((_) {
           state = state.copyWith(showOnboarding: false);
         });
       } else {

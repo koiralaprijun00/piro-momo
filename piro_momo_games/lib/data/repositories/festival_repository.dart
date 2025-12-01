@@ -3,43 +3,37 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show AssetBundle, rootBundle;
 
 import '../models/festival_question.dart';
-import '../models/game_locale.dart';
 
 class FestivalRepository {
   FestivalRepository({AssetBundle? bundle}) : _bundle = bundle ?? rootBundle;
 
   final AssetBundle _bundle;
-  final Map<GameLocale, List<FestivalQuestion>> _cache =
-      <GameLocale, List<FestivalQuestion>>{};
-  final Map<GameLocale, Future<List<FestivalQuestion>>> _inFlight =
-      <GameLocale, Future<List<FestivalQuestion>>>{};
+  List<FestivalQuestion>? _cache;
+  Future<List<FestivalQuestion>>? _inFlight;
 
-  static const Map<GameLocale, String> _assetPaths = <GameLocale, String>{
-    GameLocale.english: 'assets/data/guess_festival_en.json',
-    GameLocale.nepali: 'assets/data/guess_festival_np.json',
-  };
+  static const String _assetPath = 'assets/data/guess_festival_en.json';
 
-  Future<List<FestivalQuestion>> loadQuestions(GameLocale locale) {
-    if (_cache.containsKey(locale)) {
-      return Future<List<FestivalQuestion>>.value(_cache[locale]!);
+  Future<List<FestivalQuestion>> loadQuestions() {
+    if (_cache != null) {
+      return Future<List<FestivalQuestion>>.value(_cache!);
     }
 
-    if (_inFlight.containsKey(locale)) {
-      return _inFlight[locale]!;
+    if (_inFlight != null) {
+      return _inFlight!;
     }
 
-    final Future<List<FestivalQuestion>> loader = _loadFromAsset(locale);
-    _inFlight[locale] = loader;
+    final Future<List<FestivalQuestion>> loader = _loadFromAsset();
+    _inFlight = loader;
 
     return loader.then((List<FestivalQuestion> questions) {
-      _cache[locale] = questions;
-      _inFlight.remove(locale);
+      _cache = questions;
+      _inFlight = null;
       return questions;
     });
   }
 
-  FestivalQuestion? findById(String id, GameLocale locale) {
-    final List<FestivalQuestion>? questions = _cache[locale];
+  FestivalQuestion? findById(String id) {
+    final List<FestivalQuestion>? questions = _cache;
     if (questions == null) {
       return null;
     }
@@ -51,20 +45,15 @@ class FestivalRepository {
     return null;
   }
 
-  Future<List<FestivalQuestion>> _loadFromAsset(GameLocale locale) async {
-    final String? assetPath = _assetPaths[locale];
-    if (assetPath == null) {
-      throw ArgumentError('Unsupported locale: $locale');
-    }
-
-    final String raw = await _bundle.loadString(assetPath);
+  Future<List<FestivalQuestion>> _loadFromAsset() async {
+    final String raw = await _bundle.loadString(_assetPath);
     final List<dynamic> decoded = json.decode(raw) as List<dynamic>;
 
     return decoded
         .cast<Map<String, dynamic>>()
         .map(
           (Map<String, dynamic> json) =>
-              FestivalQuestion.fromJson(json, locale),
+              FestivalQuestion.fromJson(json),
         )
         .toList(growable: false);
   }

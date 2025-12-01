@@ -1,5 +1,3 @@
-import 'game_locale.dart';
-
 class KingEntry {
   KingEntry({
     required this.id,
@@ -7,7 +5,6 @@ class KingEntry {
     required this.reignYears,
     required this.summary,
     required this.aliases,
-    required this.locale,
     this.image,
   });
 
@@ -17,9 +14,8 @@ class KingEntry {
   final String summary;
   final List<String> aliases;
   final String? image;
-  final GameLocale locale;
 
-  factory KingEntry.fromJson(Map<String, dynamic> json, GameLocale locale) {
+  factory KingEntry.fromJson(Map<String, dynamic> json) {
     return KingEntry(
       id: json['id'] as String,
       name: json['name'] as String,
@@ -32,7 +28,6 @@ class KingEntry {
           .where((String value) => value.trim().isNotEmpty)
           .toList(growable: false),
       image: json['image'] as String?,
-      locale: locale,
     );
   }
 
@@ -44,7 +39,6 @@ class KingEntry {
       'summary': summary,
       'aliases': aliases,
       'image': image,
-      'locale': locale.languageCode,
     };
   }
 }

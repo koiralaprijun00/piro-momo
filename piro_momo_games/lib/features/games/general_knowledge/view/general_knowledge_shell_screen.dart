@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../data/models/game_locale.dart';
 import '../../../home/data/game_definition.dart';
 import '../application/general_knowledge_game_providers.dart';
 import '../application/general_knowledge_game_state.dart';
 import '../application/general_knowledge_game_controller.dart';
 import '../../../../data/models/general_knowledge_question.dart';
-import '../../shared/widgets/game_locale_toggle.dart';
 import '../../shared/widgets/header_stat_chip.dart';
 import '../../shared/widgets/quiz_option_tile.dart';
 import '../../festival/widgets/festival_stat_badge.dart';
@@ -65,8 +63,6 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
           categories: state.categories,
           selectedCategory: state.selectedCategory,
           onCategorySelect: controller.changeCategory,
-          currentLocale: state.locale,
-          onLocaleChange: controller.changeLocale,
           game: game,
         ),
       );
@@ -236,8 +232,6 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
     required this.categories,
     required this.selectedCategory,
     required this.onCategorySelect,
-    required this.currentLocale,
-    required this.onLocaleChange,
     required this.game,
   });
 
@@ -246,8 +240,6 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
   final List<String> categories;
   final String selectedCategory;
   final ValueChanged<String> onCategorySelect;
-  final GameLocale currentLocale;
-  final ValueChanged<GameLocale> onLocaleChange;
   final GameDefinition game;
 
   @override
@@ -273,14 +265,6 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         const SizedBox(height: 24),
-                        Align(
-                          alignment: Alignment.center,
-                          child: GameLocaleToggle(
-                            currentLocale: currentLocale,
-                            onChanged: onLocaleChange,
-                          ),
-                        ),
-                        const SizedBox(height: 32),
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(

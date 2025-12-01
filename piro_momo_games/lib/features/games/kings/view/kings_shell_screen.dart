@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../data/models/game_locale.dart';
 import '../../../../data/models/king_entry.dart';
 import '../../../home/data/game_definition.dart';
 import '../../festival/widgets/festival_stat_badge.dart';
-import '../../shared/widgets/game_locale_toggle.dart';
 import '../../shared/widgets/header_stat_chip.dart';
 import '../application/kings_game_controller.dart';
 import '../application/kings_game_providers.dart';

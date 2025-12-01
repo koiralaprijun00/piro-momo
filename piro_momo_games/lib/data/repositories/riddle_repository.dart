@@ -2,43 +2,37 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart' show AssetBundle, rootBundle;
 
-import '../models/game_locale.dart';
 import '../models/riddle_entry.dart';
 
 class RiddleRepository {
   RiddleRepository({AssetBundle? bundle}) : _bundle = bundle ?? rootBundle;
 
   final AssetBundle _bundle;
-  final Map<GameLocale, List<RiddleEntry>> _cache =
-      <GameLocale, List<RiddleEntry>>{};
-  final Map<GameLocale, Future<List<RiddleEntry>>> _inFlight =
-      <GameLocale, Future<List<RiddleEntry>>>{};
+  List<RiddleEntry>? _cache;
+  Future<List<RiddleEntry>>? _inFlight;
 
-  static const Map<GameLocale, String> _assetPaths = <GameLocale, String>{
-    GameLocale.english: 'assets/data/gau_khane_katha_en.json',
-    GameLocale.nepali: 'assets/data/gau_khane_katha_np.json',
-  };
+  static const String _assetPath = 'assets/data/gau_khane_katha_en.json';
 
-  Future<List<RiddleEntry>> loadRiddles(GameLocale locale) {
-    if (_cache.containsKey(locale)) {
-      return Future<List<RiddleEntry>>.value(_cache[locale]!);
+  Future<List<RiddleEntry>> loadRiddles() {
+    if (_cache != null) {
+      return Future<List<RiddleEntry>>.value(_cache!);
     }
 
-    if (_inFlight.containsKey(locale)) {
-      return _inFlight[locale]!;
+    if (_inFlight != null) {
+      return _inFlight!;
     }
 
-    final Future<List<RiddleEntry>> loader = _loadFromAsset(locale);
-    _inFlight[locale] = loader;
+    final Future<List<RiddleEntry>> loader = _loadFromAsset();
+    _inFlight = loader;
     return loader.then((List<RiddleEntry> riddles) {
-      _cache[locale] = riddles;
-      _inFlight.remove(locale);
+      _cache = riddles;
+      _inFlight = null;
       return riddles;
     });
   }
 
-  RiddleEntry? findById(String id, GameLocale locale) {
-    final List<RiddleEntry>? riddles = _cache[locale];
+  RiddleEntry? findById(String id) {
+    final List<RiddleEntry>? riddles = _cache;
     if (riddles == null) {
       return null;
     }
@@ -50,18 +44,13 @@ class RiddleRepository {
     return null;
   }
 
-  Future<List<RiddleEntry>> _loadFromAsset(GameLocale locale) async {
-    final String? assetPath = _assetPaths[locale];
-    if (assetPath == null) {
-      throw ArgumentError('Unsupported locale: $locale');
-    }
-
-    final String raw = await _bundle.loadString(assetPath);
+  Future<List<RiddleEntry>> _loadFromAsset() async {
+    final String raw = await _bundle.loadString(_assetPath);
     final List<dynamic> decoded = json.decode(raw) as List<dynamic>;
 
     return decoded
         .cast<Map<String, dynamic>>()
-        .map((Map<String, dynamic> json) => RiddleEntry.fromJson(json, locale))
+        .map((Map<String, dynamic> json) => RiddleEntry.fromJson(json))
         .toList(growable: false);
   }
 }

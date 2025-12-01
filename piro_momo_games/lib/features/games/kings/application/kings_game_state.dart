@@ -1,9 +1,7 @@
-import '../../../../data/models/game_locale.dart';
 import '../../../../data/models/king_entry.dart';
 
 class KingsGameState {
   const KingsGameState({
-    required this.locale,
     required this.deck,
     required this.isLoading,
     required this.userAnswer,
@@ -23,7 +21,6 @@ class KingsGameState {
 
   factory KingsGameState.initial() {
     return const KingsGameState(
-      locale: GameLocale.english,
       deck: <KingEntry>[],
       isLoading: true,
       userAnswer: '',
@@ -38,7 +35,6 @@ class KingsGameState {
     );
   }
 
-  final GameLocale locale;
   final List<KingEntry> deck;
   final bool isLoading;
   final String userAnswer;
@@ -60,7 +56,6 @@ class KingsGameState {
   int get remaining => deck.length - guessedIds.length;
 
   KingsGameState copyWith({
-    GameLocale? locale,
     List<KingEntry>? deck,
     bool? isLoading,
     String? userAnswer,
@@ -81,7 +76,6 @@ class KingsGameState {
     bool clearResult = false,
   }) {
     return KingsGameState(
-      locale: locale ?? this.locale,
       deck: deck ?? this.deck,
       isLoading: isLoading ?? this.isLoading,
       userAnswer: clearAnswer ? '' : (userAnswer ?? this.userAnswer),

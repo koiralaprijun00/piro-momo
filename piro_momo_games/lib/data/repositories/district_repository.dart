@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show AssetBundle, rootBundle;
 
 import '../models/district_entry.dart';
-import '../models/game_locale.dart';
 
 class DistrictRepository {
   DistrictRepository({AssetBundle? bundle}) : _bundle = bundle ?? rootBundle;
@@ -12,7 +11,6 @@ class DistrictRepository {
   List<DistrictEntry>? _cache;
 
   static const String _enPath = 'assets/data/name_district_en.json';
-  static const String _npPath = 'assets/data/name_district_np.json';
   static const String _assetMapPath = 'assets/data/district_assets.json';
 
   Future<List<DistrictEntry>> loadDistricts() async {
@@ -23,9 +21,6 @@ class DistrictRepository {
     final Map<String, dynamic> enJson = json.decode(
       await _bundle.loadString(_enPath),
     ) as Map<String, dynamic>;
-    final Map<String, dynamic> npJson = json.decode(
-      await _bundle.loadString(_npPath),
-    ) as Map<String, dynamic>;
     final List<dynamic> assetList = json.decode(
       await _bundle.loadString(_assetMapPath),
     ) as List<dynamic>;
@@ -34,11 +29,6 @@ class DistrictRepository {
         (enJson['districts'] as Map<String, dynamic>).map(
       (String key, dynamic value) => MapEntry(key, value as String),
     );
-    final Map<String, String> npNames =
-        (npJson['districts'] as Map<String, dynamic>).map(
-      (String key, dynamic value) => MapEntry(key, value as String),
-    );
-
     final List<DistrictEntry> entries = assetList.map((dynamic raw) {
       final Map<String, dynamic> data = raw as Map<String, dynamic>;
       final String id = data['id'] as String;
@@ -46,7 +36,7 @@ class DistrictRepository {
       return DistrictEntry(
         id: id,
         englishName: enNames[id] ?? id,
-        nepaliName: npNames[id] ?? enNames[id] ?? id,
+        nepaliName: enNames[id] ?? id,
         assetPath: asset,
       );
     }).toList(growable: false);
@@ -55,7 +45,4 @@ class DistrictRepository {
     return entries;
   }
 
-  String localizedName(DistrictEntry entry, GameLocale locale) {
-    return entry.localizedName(locale);
-  }
 }

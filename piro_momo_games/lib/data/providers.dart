@@ -5,7 +5,6 @@ import '../core/analytics/analytics_service.dart';
 import '../core/persistence/progress_store.dart';
 import 'models/district_entry.dart';
 import 'models/festival_question.dart';
-import 'models/game_locale.dart';
 import 'models/general_knowledge_question.dart';
 import 'models/king_entry.dart';
 import 'models/riddle_entry.dart';
@@ -52,40 +51,35 @@ final Provider<ProgressStore> progressStoreProvider = Provider<ProgressStore>(
 final Provider<AnalyticsService> analyticsServiceProvider =
     Provider<AnalyticsService>((Ref ref) => const AnalyticsService());
 
-final AutoDisposeFutureProviderFamily<List<FestivalQuestion>, GameLocale>
-festivalQuestionsProvider = FutureProvider.autoDispose
-    .family<List<FestivalQuestion>, GameLocale>((ref, locale) async {
-      final FestivalRepository repository = ref.read(
-        festivalRepositoryProvider,
-      );
-      return repository.loadQuestions(locale);
-    });
+final AutoDisposeFutureProvider<List<FestivalQuestion>>
+    festivalQuestionsProvider =
+    FutureProvider.autoDispose<List<FestivalQuestion>>((ref) async {
+  final FestivalRepository repository = ref.read(
+    festivalRepositoryProvider,
+  );
+  return repository.loadQuestions();
+});
 
-final AutoDisposeFutureProviderFamily<
-  List<GeneralKnowledgeQuestion>,
-  GameLocale
->
-generalKnowledgeQuestionsProvider = FutureProvider.autoDispose
-    .family<List<GeneralKnowledgeQuestion>, GameLocale>((ref, locale) async {
-      final GeneralKnowledgeRepository repository = ref.read(
-        generalKnowledgeRepositoryProvider,
-      );
-      return repository.loadQuestions(locale);
-    });
+final AutoDisposeFutureProvider<List<GeneralKnowledgeQuestion>>
+    generalKnowledgeQuestionsProvider =
+    FutureProvider.autoDispose<List<GeneralKnowledgeQuestion>>((ref) async {
+  final GeneralKnowledgeRepository repository = ref.read(
+    generalKnowledgeRepositoryProvider,
+  );
+  return repository.loadQuestions();
+});
 
-final AutoDisposeFutureProviderFamily<List<RiddleEntry>, GameLocale>
-riddleEntriesProvider = FutureProvider.autoDispose
-    .family<List<RiddleEntry>, GameLocale>((ref, locale) async {
-      final RiddleRepository repository = ref.read(riddleRepositoryProvider);
-      return repository.loadRiddles(locale);
-    });
+final AutoDisposeFutureProvider<List<RiddleEntry>> riddleEntriesProvider =
+    FutureProvider.autoDispose<List<RiddleEntry>>((ref) async {
+  final RiddleRepository repository = ref.read(riddleRepositoryProvider);
+  return repository.loadRiddles();
+});
 
-final AutoDisposeFutureProviderFamily<List<KingEntry>, GameLocale>
-    kingsEntriesProvider = FutureProvider.autoDispose
-        .family<List<KingEntry>, GameLocale>((ref, locale) async {
-          final KingsRepository repository = ref.read(kingsRepositoryProvider);
-          return repository.loadKings(locale);
-        });
+final AutoDisposeFutureProvider<List<KingEntry>> kingsEntriesProvider =
+    FutureProvider.autoDispose<List<KingEntry>>((ref) async {
+  final KingsRepository repository = ref.read(kingsRepositoryProvider);
+  return repository.loadKings();
+});
 
 final AutoDisposeFutureProvider<List<DistrictEntry>> districtEntriesProvider =
     FutureProvider.autoDispose<List<DistrictEntry>>((Ref ref) async {

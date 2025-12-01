@@ -1,11 +1,9 @@
-import '../../../../data/models/game_locale.dart';
 import '../../../../data/models/riddle_entry.dart';
 
 enum SubmissionStatus { idle, submitting, success, failure }
 
 class RiddleGameState {
   const RiddleGameState({
-    required this.locale,
     required this.deck,
     required this.currentIndex,
     required this.isLoading,
@@ -27,7 +25,6 @@ class RiddleGameState {
 
   factory RiddleGameState.initial() {
     return const RiddleGameState(
-      locale: GameLocale.english,
       deck: <RiddleEntry>[],
       currentIndex: 0,
       isLoading: true,
@@ -46,7 +43,6 @@ class RiddleGameState {
     );
   }
 
-  final GameLocale locale;
   final List<RiddleEntry> deck;
   final int currentIndex;
   final bool isLoading;
@@ -78,7 +74,6 @@ class RiddleGameState {
   bool get hasError => errorMessage != null;
 
   RiddleGameState copyWith({
-    GameLocale? locale,
     List<RiddleEntry>? deck,
     int? currentIndex,
     bool? isLoading,
@@ -99,7 +94,6 @@ class RiddleGameState {
     bool clearError = false,
   }) {
     return RiddleGameState(
-      locale: locale ?? this.locale,
       deck: deck ?? this.deck,
       currentIndex: currentIndex ?? this.currentIndex,
       isLoading: isLoading ?? this.isLoading,

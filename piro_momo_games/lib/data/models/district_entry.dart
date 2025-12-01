@@ -1,5 +1,3 @@
-import 'game_locale.dart';
-
 class DistrictEntry {
   const DistrictEntry({
     required this.id,
@@ -12,8 +10,4 @@ class DistrictEntry {
   final String englishName;
   final String nepaliName;
   final String assetPath;
-
-  String localizedName(GameLocale locale) {
-    return locale == GameLocale.nepali ? nepaliName : englishName;
-  }
 }

@@ -1,9 +1,7 @@
 import '../../../../data/models/general_knowledge_question.dart';
-import '../../../../data/models/game_locale.dart';
 
 class GeneralKnowledgeGameState {
   const GeneralKnowledgeGameState({
-    required this.locale,
     required this.deck,
     required this.allQuestions,
     required this.currentIndex,
@@ -26,7 +24,6 @@ class GeneralKnowledgeGameState {
 
   factory GeneralKnowledgeGameState.initial() {
     return const GeneralKnowledgeGameState(
-      locale: GameLocale.english,
       deck: <GeneralKnowledgeQuestion>[],
       allQuestions: <GeneralKnowledgeQuestion>[],
       currentIndex: 0,
@@ -45,7 +42,6 @@ class GeneralKnowledgeGameState {
     );
   }
 
-  final GameLocale locale;
   final List<GeneralKnowledgeQuestion> deck;
   final List<GeneralKnowledgeQuestion> allQuestions;
   final int currentIndex;
@@ -75,7 +71,6 @@ class GeneralKnowledgeGameState {
   bool get hasError => errorMessage != null;
 
   GeneralKnowledgeGameState copyWith({
-    GameLocale? locale,
     List<GeneralKnowledgeQuestion>? deck,
     List<GeneralKnowledgeQuestion>? allQuestions,
     int? currentIndex,
@@ -98,7 +93,6 @@ class GeneralKnowledgeGameState {
     bool clearSelection = false,
   }) {
     return GeneralKnowledgeGameState(
-      locale: locale ?? this.locale,
       deck: deck ?? this.deck,
       allQuestions: allQuestions ?? this.allQuestions,
       currentIndex: currentIndex ?? this.currentIndex,

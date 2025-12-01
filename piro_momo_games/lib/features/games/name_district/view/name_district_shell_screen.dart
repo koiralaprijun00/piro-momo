@@ -4,10 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../data/models/district_entry.dart';
-import '../../../../data/models/game_locale.dart';
 import '../../../home/data/game_definition.dart';
 import '../../festival/widgets/festival_stat_badge.dart';
-import '../../shared/widgets/game_locale_toggle.dart';
 import '../../shared/widgets/header_stat_chip.dart';
 import '../../shared/widgets/quiz_option_tile.dart';
 import '../application/name_district_game_controller.dart';
@@ -61,8 +59,6 @@ class _NameDistrictGameContent extends StatelessWidget {
         child: _NameDistrictOnboarding(
           controller: controller,
           isLoading: state.isLoading,
-          currentLocale: state.locale,
-          onLocaleChange: controller.changeLocale,
           game: game,
         ),
       );
@@ -206,15 +202,11 @@ class _NameDistrictOnboarding extends StatelessWidget {
   const _NameDistrictOnboarding({
     required this.controller,
     required this.isLoading,
-    required this.currentLocale,
-    required this.onLocaleChange,
     required this.game,
   });
 
   final NameDistrictGameController controller;
   final bool isLoading;
-  final GameLocale currentLocale;
-  final ValueChanged<GameLocale> onLocaleChange;
   final GameDefinition game;
 
   @override
@@ -229,11 +221,6 @@ class _NameDistrictOnboarding extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            GameLocaleToggle(
-              currentLocale: currentLocale,
-              onChanged: onLocaleChange,
-            ),
-            const SizedBox(height: 40),
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
@@ -460,8 +447,7 @@ class _DistrictQuestionCard extends StatelessWidget {
             children: state.currentOptions.asMap().entries.map((entry) {
               final int index = entry.key;
               final String option = entry.value;
-              final String correctName =
-                  district.localizedName(state.locale);
+              final String correctName = district.englishName;
               final bool showCorrect =
                   state.isAnswered && option == correctName;
               final bool showIncorrect = state.isAnswered &&

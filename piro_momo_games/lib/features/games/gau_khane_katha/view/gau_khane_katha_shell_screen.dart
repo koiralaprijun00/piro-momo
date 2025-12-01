@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../data/models/game_locale.dart';
 import '../../../home/data/game_definition.dart';
 import '../../festival/widgets/festival_stat_badge.dart';
-import '../../shared/widgets/game_locale_toggle.dart';
 import '../../shared/widgets/header_stat_chip.dart';
 import '../application/riddle_game_controller.dart';
 import '../application/riddle_game_providers.dart';
@@ -97,8 +95,6 @@ class _RiddleGameBody extends StatelessWidget {
         child: _RiddleOnboarding(
           controller: controller,
           isLoading: state.isLoading,
-          currentLocale: state.locale,
-          onLocaleChange: controller.changeLocale,
           game: game,
         ),
       );
@@ -272,15 +268,11 @@ class _RiddleOnboarding extends StatelessWidget {
   const _RiddleOnboarding({
     required this.controller,
     required this.isLoading,
-    required this.currentLocale,
-    required this.onLocaleChange,
     required this.game,
   });
 
   final RiddleGameController controller;
   final bool isLoading;
-  final GameLocale currentLocale;
-  final ValueChanged<GameLocale> onLocaleChange;
   final GameDefinition game;
 
   @override
@@ -295,11 +287,6 @@ class _RiddleOnboarding extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            GameLocaleToggle(
-              currentLocale: currentLocale,
-              onChanged: onLocaleChange,
-            ),
-            const SizedBox(height: 40),
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(

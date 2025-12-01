@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/analytics/analytics_service.dart';
 import '../../../../core/persistence/progress_store.dart';
 import '../../../../data/models/district_entry.dart';
-import '../../../../data/models/game_locale.dart';
 import '../../../../data/repositories/district_repository.dart';
 import 'name_district_game_state.dart';
 
@@ -41,7 +40,7 @@ class NameDistrictGameController
         currentIndex: 0,
         isLoading: false,
         isAnswered: false,
-        currentOptions: _buildOptions(entries.first, state.locale, pool: entries),
+        currentOptions: _buildOptions(entries.first, pool: entries),
         score: 0,
         correctCount: 0,
         incorrectCount: 0,
@@ -66,18 +65,6 @@ class NameDistrictGameController
     } else {
       state = state.copyWith(showOnboarding: false);
     }
-  }
-
-  void changeLocale(GameLocale locale) {
-    if (locale == state.locale) {
-      return;
-    }
-    final DistrictEntry? current = state.currentDistrict;
-    state = state.copyWith(
-      locale: locale,
-      currentOptions:
-          current == null ? state.currentOptions : _buildOptions(current, locale),
-    );
   }
 
   void updateAnswer(String value) {
@@ -129,7 +116,6 @@ class NameDistrictGameController
         parameters: <String, Object?>{
           'correct': isCorrect,
           'district_id': current.id,
-          'locale': state.locale.languageCode,
         },
       ),
     );
@@ -148,7 +134,7 @@ class NameDistrictGameController
     state = state.copyWith(
       currentIndex: nextIndex,
       isAnswered: false,
-      currentOptions: _buildOptions(next, state.locale),
+      currentOptions: _buildOptions(next),
       clearSelection: true,
       clearAnswer: true,
     );
@@ -171,7 +157,6 @@ class NameDistrictGameController
       streak: 0,
       currentOptions: _buildOptions(
         shuffled.first,
-        state.locale,
         pool: shuffled,
       ),
       clearSelection: true,
@@ -180,18 +165,17 @@ class NameDistrictGameController
   }
 
   List<String> _buildOptions(
-    DistrictEntry entry,
-    GameLocale locale, {
+    DistrictEntry entry, {
     List<DistrictEntry>? pool,
   }) {
     final List<String> source = (pool ?? state.deck)
-        .map((DistrictEntry e) => e.localizedName(locale))
+        .map((DistrictEntry e) => e.englishName)
         .toList();
-    if (!source.contains(entry.localizedName(locale))) {
-      source.add(entry.localizedName(locale));
+    if (!source.contains(entry.englishName)) {
+      source.add(entry.englishName);
     }
     source.shuffle(_random);
-    final Set<String> options = <String>{entry.localizedName(locale)};
+    final Set<String> options = <String>{entry.englishName};
     for (final String candidate in source) {
       if (options.length >= 4) {
         break;

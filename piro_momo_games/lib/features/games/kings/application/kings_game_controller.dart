@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/analytics/analytics_service.dart';
 import '../../../../core/persistence/progress_store.dart';
-import '../../../../data/models/game_locale.dart';
 import '../../../../data/models/king_entry.dart';
 import '../../../../data/repositories/kings_repository.dart';
 import 'kings_game_state.dart';
@@ -25,10 +24,8 @@ class KingsGameController extends StateNotifier<KingsGameState> {
   final ProgressStore _progressStore;
   final AnalyticsService _analytics;
 
-  Future<void> loadDeck({GameLocale? locale}) async {
-    final GameLocale targetLocale = locale ?? state.locale;
+  Future<void> loadDeck() async {
     state = state.copyWith(
-      locale: targetLocale,
       isLoading: true,
       clearError: true,
       showSummary: false,
@@ -39,7 +36,7 @@ class KingsGameController extends StateNotifier<KingsGameState> {
 
     try {
       final List<KingEntry> kings =
-          List<KingEntry>.from(await _repository.loadKings(targetLocale));
+          List<KingEntry>.from(await _repository.loadKings());
 
       if (kings.isEmpty) {
         state = state.copyWith(
@@ -52,7 +49,6 @@ class KingsGameController extends StateNotifier<KingsGameState> {
       final int persistedBest = await _progressStore.loadKingsBestStreak();
 
       state = KingsGameState(
-        locale: targetLocale,
         deck: kings,
         isLoading: false,
         userAnswer: '',
@@ -152,7 +148,6 @@ class KingsGameController extends StateNotifier<KingsGameState> {
         _analytics.logEvent(
           'kings_completed',
           parameters: <String, Object?>{
-            'locale': state.locale.languageCode,
             'score': state.score,
           },
         ),
@@ -166,7 +161,7 @@ class KingsGameController extends StateNotifier<KingsGameState> {
     }
 
     if (state.deck.isEmpty) {
-      loadDeck(locale: state.locale).then((_) {
+      loadDeck().then((_) {
         state = state.copyWith(showOnboarding: false);
       });
     } else {
@@ -175,11 +170,6 @@ class KingsGameController extends StateNotifier<KingsGameState> {
   }
 
   void restart() {
-    if (state.deck.isEmpty) {
-      loadDeck(locale: state.locale);
-      return;
-    }
-
     state = state.copyWith(
       guessedIds: <String>{},
       showSummary: false,
@@ -192,26 +182,12 @@ class KingsGameController extends StateNotifier<KingsGameState> {
       lastMatchedId: null,
       clearAnswer: true,
     );
-  }
-
-  void changeLocale(GameLocale locale) {
-    if (locale == state.locale && state.deck.isNotEmpty) {
-      restart();
-      return;
-    }
-    loadDeck(locale: locale);
-    unawaited(
-      _analytics.logEvent(
-        'kings_locale_change',
-        parameters: <String, Object?>{'locale': locale.languageCode},
-      ),
-    );
+    loadDeck();
   }
 
   void goHomeAndReset() {
-    final GameLocale currentLocale = state.locale;
-    state = KingsGameState.initial().copyWith(locale: currentLocale);
-    loadDeck(locale: currentLocale);
+    state = KingsGameState.initial();
+    loadDeck();
   }
 
   void _logGuess({required bool correct, String? kingId}) {
@@ -221,7 +197,6 @@ class KingsGameController extends StateNotifier<KingsGameState> {
         parameters: <String, Object?>{
           'correct': correct,
           'king_id': kingId,
-          'locale': state.locale.languageCode,
         },
       ),
     );

@@ -1,5 +1,3 @@
-import 'game_locale.dart';
-
 class GeneralKnowledgeQuestion {
   GeneralKnowledgeQuestion({
     required this.id,
@@ -8,7 +6,6 @@ class GeneralKnowledgeQuestion {
     required this.options,
     required this.correctAnswer,
     required this.fact,
-    required this.locale,
   });
 
   final String id;
@@ -17,12 +14,8 @@ class GeneralKnowledgeQuestion {
   final List<String> options;
   final String correctAnswer;
   final String fact;
-  final GameLocale locale;
 
-  factory GeneralKnowledgeQuestion.fromJson(
-    Map<String, dynamic> json,
-    GameLocale locale,
-  ) {
+  factory GeneralKnowledgeQuestion.fromJson(Map<String, dynamic> json) {
     return GeneralKnowledgeQuestion(
       id: json['id'] as String,
       category: json['category'] as String? ?? 'General Knowledge',
@@ -32,7 +25,6 @@ class GeneralKnowledgeQuestion {
       fact:
           json['fact'] as String? ??
           '${json['correctAnswer']} is the correct answer.',
-      locale: locale,
     );
   }
 
@@ -44,7 +36,6 @@ class GeneralKnowledgeQuestion {
       'options': options,
       'correctAnswer': correctAnswer,
       'fact': fact,
-      'locale': locale.languageCode,
     };
   }
 }

@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/analytics/analytics_service.dart';
 import '../../../../core/persistence/progress_store.dart';
-import '../../../../data/models/game_locale.dart';
 import '../../../../data/models/general_knowledge_question.dart';
 import '../../../../data/repositories/general_knowledge_repository.dart';
 import 'general_knowledge_game_state.dart';
@@ -28,18 +27,16 @@ class GeneralKnowledgeGameController
   final AnalyticsService _analytics;
   final Random _random;
 
-  Future<void> loadDeck({GameLocale? locale}) async {
-    final GameLocale targetLocale = locale ?? state.locale;
+  Future<void> loadDeck() async {
     state = state.copyWith(
-      locale: targetLocale,
       isLoading: true,
       clearError: true,
       clearSelection: true,
     );
 
     try {
-      final List<GeneralKnowledgeQuestion> questions = await _repository
-          .loadQuestions(targetLocale);
+      final List<GeneralKnowledgeQuestion> questions =
+          await _repository.loadQuestions();
       if (questions.isEmpty) {
         state = state.copyWith(
           isLoading: false,
@@ -54,10 +51,8 @@ class GeneralKnowledgeGameController
         'All',
         ...questions.map((GeneralKnowledgeQuestion q) => q.category).toSet(),
       }.toList();
-      final List<GeneralKnowledgeQuestion> filtered = _filterQuestions(
-        questions,
-        'All',
-      );
+      final List<GeneralKnowledgeQuestion> filtered =
+          _filterQuestions(questions, 'All');
       if (filtered.isEmpty) {
         state = state.copyWith(
           isLoading: false,
@@ -67,7 +62,6 @@ class GeneralKnowledgeGameController
       }
 
       state = GeneralKnowledgeGameState(
-        locale: targetLocale,
         deck: filtered,
         allQuestions: questions,
         currentIndex: 0,
@@ -134,7 +128,6 @@ class GeneralKnowledgeGameController
           'correct': isCorrect,
           'streak': updatedStreak,
           'question_id': current.id,
-          'locale': state.locale.languageCode,
         },
       ),
     );
@@ -170,7 +163,7 @@ class GeneralKnowledgeGameController
 
   void restart() {
     if (state.deck.isEmpty) {
-      loadDeck(locale: state.locale);
+      loadDeck();
       return;
     }
 
@@ -200,26 +193,12 @@ class GeneralKnowledgeGameController
       return;
     }
     if (state.deck.isEmpty) {
-      loadDeck(locale: state.locale).then((_) {
+      loadDeck().then((_) {
         state = state.copyWith(showOnboarding: false);
       });
     } else {
       state = state.copyWith(showOnboarding: false);
     }
-  }
-
-  void changeLocale(GameLocale locale) {
-    if (locale == state.locale && state.deck.isNotEmpty) {
-      restart();
-      return;
-    }
-    loadDeck(locale: locale);
-    unawaited(
-      _analytics.logEvent(
-        'general_knowledge_locale_change',
-        parameters: <String, Object?>{'locale': locale.languageCode},
-      ),
-    );
   }
 
   void changeCategory(String category) {

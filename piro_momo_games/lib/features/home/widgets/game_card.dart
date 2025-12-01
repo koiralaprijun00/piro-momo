@@ -74,15 +74,15 @@ class GameCard extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.22),
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Image.asset(
                 game.assetPath,
-                width: 32,
-                height: 32,
+                width: 48,
+                height: 48,
                 fit: BoxFit.contain,
               ),
             ),

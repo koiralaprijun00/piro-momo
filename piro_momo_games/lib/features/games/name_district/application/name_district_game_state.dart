@@ -1,9 +1,7 @@
 import '../../../../data/models/district_entry.dart';
-import '../../../../data/models/game_locale.dart';
 
 class NameDistrictGameState {
   const NameDistrictGameState({
-    required this.locale,
     required this.deck,
     required this.currentIndex,
     required this.isLoading,
@@ -23,7 +21,6 @@ class NameDistrictGameState {
 
   factory NameDistrictGameState.initial() {
     return const NameDistrictGameState(
-      locale: GameLocale.english,
       deck: <DistrictEntry>[],
       currentIndex: 0,
       isLoading: true,
@@ -39,7 +36,6 @@ class NameDistrictGameState {
     );
   }
 
-  final GameLocale locale;
   final List<DistrictEntry> deck;
   final int currentIndex;
   final bool isLoading;
@@ -66,7 +62,6 @@ class NameDistrictGameState {
   bool get hasError => errorMessage != null;
 
   NameDistrictGameState copyWith({
-    GameLocale? locale,
     List<DistrictEntry>? deck,
     int? currentIndex,
     bool? isLoading,
@@ -87,7 +82,6 @@ class NameDistrictGameState {
     bool clearAnswer = false,
   }) {
     return NameDistrictGameState(
-      locale: locale ?? this.locale,
       deck: deck ?? this.deck,
       currentIndex: currentIndex ?? this.currentIndex,
       isLoading: isLoading ?? this.isLoading,

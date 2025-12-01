@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/analytics/analytics_service.dart';
 import '../../../../core/persistence/progress_store.dart';
 import '../../../../data/models/festival_question.dart';
-import '../../../../data/models/game_locale.dart';
 import '../../../../data/repositories/festival_repository.dart';
 import 'festival_game_state.dart';
 
@@ -27,11 +26,8 @@ class FestivalGameController extends StateNotifier<FestivalGameState> {
   final AnalyticsService _analytics;
   final Random _random;
 
-  Future<void> loadDeck({GameLocale? locale}) async {
-    final GameLocale targetLocale = locale ?? state.locale;
-
+  Future<void> loadDeck() async {
     state = state.copyWith(
-      locale: targetLocale,
       isLoading: true,
       clearError: true,
       clearSelection: true,
@@ -39,7 +35,7 @@ class FestivalGameController extends StateNotifier<FestivalGameState> {
 
     try {
       final List<FestivalQuestion> questions = List<FestivalQuestion>.from(
-        await _repository.loadQuestions(targetLocale),
+        await _repository.loadQuestions(),
       );
       if (questions.isEmpty) {
         state = state.copyWith(
@@ -53,7 +49,6 @@ class FestivalGameController extends StateNotifier<FestivalGameState> {
       final int persistedBest = await _progressStore.loadFestivalBestStreak();
 
       state = FestivalGameState(
-        locale: targetLocale,
         deck: questions,
         currentIndex: 0,
         isLoading: false,
@@ -116,7 +111,6 @@ class FestivalGameController extends StateNotifier<FestivalGameState> {
           'correct': isCorrect,
           'streak': updatedStreak,
           'question_id': current.id,
-          'locale': state.locale.languageCode,
         },
       ),
     );
@@ -147,7 +141,7 @@ class FestivalGameController extends StateNotifier<FestivalGameState> {
 
   void restart() {
     if (state.deck.isEmpty) {
-      loadDeck(locale: state.locale);
+      loadDeck();
       return;
     }
 
@@ -155,7 +149,6 @@ class FestivalGameController extends StateNotifier<FestivalGameState> {
       ..shuffle(_random);
 
     state = FestivalGameState(
-      locale: state.locale,
       deck: deck,
       currentIndex: 0,
       isLoading: false,
@@ -173,27 +166,13 @@ class FestivalGameController extends StateNotifier<FestivalGameState> {
   void startGame() {
     if (state.showOnboarding) {
       if (state.deck.isEmpty) {
-        loadDeck(locale: state.locale).then((_) {
+        loadDeck().then((_) {
           state = state.copyWith(showOnboarding: false);
         });
       } else {
         state = state.copyWith(showOnboarding: false);
       }
     }
-  }
-
-  void changeLocale(GameLocale locale) {
-    if (locale == state.locale && state.deck.isNotEmpty) {
-      restart();
-      return;
-    }
-    loadDeck(locale: locale);
-    unawaited(
-      _analytics.logEvent(
-        'festival_locale_change',
-        parameters: <String, Object?>{'locale': locale.languageCode},
-      ),
-    );
   }
 
   List<String> _buildOptions(List<FestivalQuestion> deck, int activeIndex) {
