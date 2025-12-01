@@ -17,6 +17,9 @@ class GameDefinition {
     required this.assetPath,
     required this.accentColors,
     this.tags = const <String>[],
+    required this.metadata,
+    required this.difficulty,
+    required this.features,
   });
 
   final String id;
@@ -27,6 +30,21 @@ class GameDefinition {
   final String assetPath;
   final List<Color> accentColors;
   final List<String> tags;
+  final String metadata;
+  final String difficulty;
+  final List<GameFeature> features;
+}
+
+class GameFeature {
+  const GameFeature({
+    required this.icon,
+    required this.label,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color color;
 }
 
 const List<GameDefinition> homeGames = <GameDefinition>[
@@ -44,6 +62,25 @@ const List<GameDefinition> homeGames = <GameDefinition>[
       AppPalette.primaryPink,
     ],
     tags: <String>['Daily quiz', 'Cultural facts', 'Family friendly'],
+    metadata: '12 festivals',
+    difficulty: 'Easy',
+    features: [
+      GameFeature(
+        icon: Icons.celebration_rounded,
+        label: '12 major Nepali festivals',
+        color: AppPalette.primaryPink,
+      ),
+      GameFeature(
+        icon: Icons.timer_rounded,
+        label: 'Quick cultural challenges',
+        color: AppPalette.primaryPurple,
+      ),
+      GameFeature(
+        icon: Icons.emoji_events_rounded,
+        label: 'Build streaks & learn facts',
+        color: AppPalette.primaryBlue,
+      ),
+    ],
   ),
   GameDefinition(
     id: 'gau-khane-katha',
@@ -58,6 +95,25 @@ const List<GameDefinition> homeGames = <GameDefinition>[
       AppPalette.lightGreen,
     ],
     tags: <String>['Brain teaser', 'Nepali & English', 'All ages'],
+    metadata: '50+ riddles',
+    difficulty: 'Medium',
+    features: [
+      GameFeature(
+        icon: Icons.psychology_rounded,
+        label: '50+ traditional Nepali riddles',
+        color: AppPalette.nepalRed,
+      ),
+      GameFeature(
+        icon: Icons.bolt_rounded,
+        label: 'Quick challenges under 2 minutes',
+        color: AppPalette.primaryPurple,
+      ),
+      GameFeature(
+        icon: Icons.emoji_events_rounded,
+        label: 'Build streaks & earn achievements',
+        color: AppPalette.nepalGreen,
+      ),
+    ],
   ),
   GameDefinition(
     id: 'general-knowledge',
@@ -73,6 +129,9 @@ const List<GameDefinition> homeGames = <GameDefinition>[
       AppPalette.primaryPink,
     ],
     tags: <String>['Multiple choice', 'Timed vibe', 'Learn & share'],
+    metadata: '100+ questions',
+    difficulty: 'All levels',
+    features: [], // General Knowledge doesn't use this onboarding yet
   ),
   GameDefinition(
     id: KingsShellScreen.gameId,
@@ -88,6 +147,25 @@ const List<GameDefinition> homeGames = <GameDefinition>[
       AppPalette.lightBlue,
     ],
     tags: <String>['Typing', 'History', 'Cultural legends'],
+    metadata: '10 monarchs',
+    difficulty: 'Hard',
+    features: [
+      GameFeature(
+        icon: Icons.history_edu_rounded,
+        label: 'Recall all Shah monarchs',
+        color: AppPalette.nepalRed,
+      ),
+      GameFeature(
+        icon: Icons.keyboard_rounded,
+        label: 'Type names to verify knowledge',
+        color: AppPalette.primaryPurple,
+      ),
+      GameFeature(
+        icon: Icons.school_rounded,
+        label: 'Learn reign years & history',
+        color: AppPalette.lightBlue,
+      ),
+    ],
   ),
   GameDefinition(
     id: NameDistrictShellScreen.gameId,
@@ -102,5 +180,24 @@ const List<GameDefinition> homeGames = <GameDefinition>[
       AppPalette.lightBlue,
     ],
     tags: <String>['Geography', 'Typing', 'Challenge'],
+    metadata: '77 districts',
+    difficulty: 'Medium',
+    features: [
+      GameFeature(
+        icon: Icons.map_rounded,
+        label: 'Identify all 77 districts',
+        color: AppPalette.primaryBlue,
+      ),
+      GameFeature(
+        icon: Icons.shape_line_rounded,
+        label: 'Recognize districts by shape',
+        color: AppPalette.nepalGreen,
+      ),
+      GameFeature(
+        icon: Icons.explore_rounded,
+        label: 'Master Nepal\'s geography',
+        color: AppPalette.lightBlue,
+      ),
+    ],
   ),
 ];

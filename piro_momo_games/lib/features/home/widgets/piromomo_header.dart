@@ -76,7 +76,7 @@ class _HeroCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 22, 12, 12),
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -91,25 +91,21 @@ class _HeroCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
-            child: _GradientText(
-              text: appName,
-              style: textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w700,
-                letterSpacing: -0.2,
-                color: colorScheme.onSurface,
-              ),
+          const SizedBox(height: 4),
+          Text(
+            appName,
+            style: textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.w800,
+              letterSpacing: -0.5,
+              color: Colors.white,
             ),
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: 8),
           Text(
             subtitle,
-            style: textTheme.headlineSmall?.copyWith(
-              color: colorScheme.onSurface.withValues(alpha: 0.8),
-              fontWeight: FontWeight.w700,
+            style: textTheme.titleMedium?.copyWith(
+              color: Colors.white.withOpacity(0.9),
+              fontWeight: FontWeight.w600,
               height: 1.2,
             ),
           ),
@@ -182,19 +178,22 @@ class _ProfileIconButton extends StatelessWidget {
         ),
       );
     } else {
-      avatar = Icon(Icons.person_outline_rounded,
-          color: colorScheme.onSurfaceVariant, size: 20);
+      avatar = const Icon(Icons.person_rounded, color: Colors.white, size: 24);
     }
 
     return InkWell(
       borderRadius: BorderRadius.circular(32),
       onTap: onPressed,
       child: Container(
-        height: 40,
-        width: 40,
+        height: 48,
+        width: 48,
         decoration: BoxDecoration(
-          color: colorScheme.surfaceVariant,
-          borderRadius: BorderRadius.circular(32),
+          color: Colors.white.withOpacity(0.2),
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: Colors.white.withOpacity(0.3),
+            width: 1,
+          ),
         ),
         child: Center(child: avatar),
       ),

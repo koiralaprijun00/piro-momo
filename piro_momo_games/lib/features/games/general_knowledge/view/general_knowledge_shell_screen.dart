@@ -245,94 +245,216 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // Spacer to maintain heading position
-            const SizedBox(height: 86),
-            // Title
-            Text(
-              game.title,
-              style: theme.textTheme.headlineLarge?.copyWith(
-                fontWeight: FontWeight.w800,
-                color: const Color(0xFF1A1A1A),
-                letterSpacing: -0.5,
-              ),
-            ),
-            const SizedBox(height: 12),
-            // Description
-            Text(
-              'Pick a category to focus on or stay with All.',
-              maxLines: 3,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: const Color(0xFF6B6B6B),
-                height: 1.6,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 24),
-            // Category selection
-            Expanded(
-              child: categories.isEmpty
-                  ? const SizedBox.shrink()
-                  : _OnboardingCategoryChooser(
-                      categories: categories,
-                      selectedCategory: selectedCategory,
-                      onSelect: isLoading ? null : onCategorySelect,
-                    ),
-            ),
-            const SizedBox(height: 24),
-            // Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF6366F1), // Indigo
+              Color(0xFFA855F7), // Purple
+              Color(0xFFEC4899), // Pink
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  style: TextButton.styleFrom(
-                    foregroundColor: const Color(0xFF6B6B6B),
-                    padding: EdgeInsets.zero,
-                    textStyle: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                const SizedBox(height: 20),
+                // Title
+                Text(
+                  game.title,
+                  style: textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                    letterSpacing: -0.5,
                   ),
-                  child: const Text('Go Back'),
                 ),
-                const SizedBox(width: 16),
-                FilledButton(
-                  onPressed: isLoading ? null : controller.startGame,
-                  style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFF2D2D2D),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 20,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 0,
-                    textStyle: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
+                const SizedBox(height: 8),
+                // Description
+                Text(
+                  'Pick a category to focus on or stay with All.',
+                  style: textTheme.bodyLarge?.copyWith(
+                    color: Colors.white.withOpacity(0.9),
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 32),
+                
+                // Category selection
+                Expanded(
+                  child: categories.isEmpty
+                      ? const SizedBox.shrink()
+                      : _OnboardingCategoryChooser(
+                          categories: categories,
+                          selectedCategory: selectedCategory,
+                          onSelect: isLoading ? null : onCategorySelect,
+                          game: game,
+                        ),
+                ),
+                
+                const SizedBox(height: 24),
+                
+                // Stats Cards
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.15),
+                      width: 1,
                     ),
                   ),
-                  child: isLoading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.5,
-                            color: Colors.white,
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.library_books_rounded,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'TOTAL QUESTIONS',
+                            style: textTheme.labelSmall?.copyWith(
+                              color: Colors.white.withOpacity(0.7),
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                            ),
                           ),
-                        )
-                      : const Text('Play'),
+                          const SizedBox(height: 4),
+                          Text(
+                            '100+ curated trivia questions',
+                            style: textTheme.titleSmall?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.15),
+                      width: 1,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.bolt_rounded,
+                          color: Colors.amber,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'DIFFICULTY',
+                            style: textTheme.labelSmall?.copyWith(
+                              color: Colors.white.withOpacity(0.7),
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'All levels - Easy, Medium & Hard',
+                            style: textTheme.titleSmall?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 32),
+                // Buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white.withOpacity(0.8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24, 
+                          vertical: 16
+                        ),
+                        textStyle: textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      child: const Text('Go Back'),
+                    ),
+                    const SizedBox(width: 16),
+                    FilledButton(
+                      onPressed: isLoading ? null : controller.startGame,
+                      style: FilledButton.styleFrom(
+                        backgroundColor: const Color(0xFF1F2937),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 48,
+                          vertical: 20,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 0,
+                        textStyle: textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      child: isLoading
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text('Play'),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -343,19 +465,18 @@ class _OnboardingCategoryChooser extends StatelessWidget {
   const _OnboardingCategoryChooser({
     required this.categories,
     required this.selectedCategory,
+    required this.game,
     this.onSelect,
   });
 
   final List<String> categories;
   final String selectedCategory;
+  final GameDefinition game;
   final ValueChanged<String>? onSelect;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final GameDefinition game = homeGames.firstWhere(
-      (g) => g.id == 'general-knowledge',
-    );
     final Set<String> allCategories =
         categories.map((String c) => c.trim()).where((c) => c.isNotEmpty).toSet();
     final List<String> orderedCategories = <String>[
@@ -374,6 +495,7 @@ class _OnboardingCategoryChooser extends StatelessWidget {
       'International': Icons.public_rounded,
       'Entertainment': Icons.movie_filter_rounded,
       'Environment': Icons.eco_rounded,
+      'Jatra of Kathmandu Valley': Icons.temple_buddhist_rounded,
     };
 
     return Column(
@@ -382,64 +504,79 @@ class _OnboardingCategoryChooser extends StatelessWidget {
         Text(
           'Pick a category',
           style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w800,
-            color: const Color(0xFF1A1A1A),
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
             fontSize: 15,
           ),
         ),
         const SizedBox(height: 16),
-        Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: orderedCategories.map((String category) {
-            final bool isSelected =
-                selectedCategory.toLowerCase() == category.toLowerCase();
-            final Color baseColor =
-                isSelected ? game.accentColors.first : const Color(0xFFF1EBE6);
-            final Color textColor = isSelected ? Colors.white : const Color(0xFF4A3B32);
-            return InkWell(
-              borderRadius: BorderRadius.circular(18),
-              onTap: onSelect == null ? null : () => onSelect!(category),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                decoration: BoxDecoration(
-                  color: baseColor,
+        Expanded(
+          child: SingleChildScrollView(
+            child: Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: orderedCategories.map((String category) {
+                final bool isSelected =
+                    selectedCategory.toLowerCase() == category.toLowerCase();
+                
+                // Glassmorphism style for chips
+                final Color baseColor = isSelected 
+                    ? const Color(0xFF2563EB) // Blue for selected
+                    : Colors.white.withOpacity(0.15); // Semi-transparent for unselected
+                
+                final Color textColor = Colors.white;
+                
+                return InkWell(
                   borderRadius: BorderRadius.circular(18),
-                  boxShadow: isSelected
-                      ? <BoxShadow>[
-                          BoxShadow(
-                            color: baseColor.withValues(alpha: 0.35),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ]
-                      : const <BoxShadow>[],
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(
-                      iconMap[category] ?? Icons.label_rounded,
-                      size: 16,
-                      color: textColor,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      category,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: textColor,
-                        letterSpacing: 0.1,
+                  onTap: onSelect == null ? null : () => onSelect!(category),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: baseColor,
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: isSelected 
+                            ? Colors.blue.shade300 
+                            : Colors.white.withOpacity(0.2),
+                        width: 1,
                       ),
+                      boxShadow: isSelected
+                          ? <BoxShadow>[
+                              BoxShadow(
+                                color: Colors.blue.withOpacity(0.3),
+                                blurRadius: 12,
+                                offset: const Offset(0, 4),
+                              ),
+                            ]
+                          : const <BoxShadow>[],
                     ),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Icon(
+                          iconMap[category] ?? Icons.label_rounded,
+                          size: 16,
+                          color: textColor,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          category,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: textColor,
+                            letterSpacing: 0.1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
         ),
       ],
     );

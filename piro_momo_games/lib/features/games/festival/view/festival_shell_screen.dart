@@ -10,6 +10,7 @@ import '../../../../data/models/festival_question.dart';
 import '../../shared/widgets/header_stat_chip.dart';
 import '../../shared/widgets/quiz_option_tile.dart';
 import '../widgets/festival_stat_badge.dart';
+import '../../../shared/widgets/game_onboarding_shell.dart';
 
 class FestivalShellScreen extends ConsumerWidget {
   const FestivalShellScreen({super.key});
@@ -194,6 +195,8 @@ class _FestivalGameContent extends StatelessWidget {
   }
 }
 
+
+
 class _FestivalOnboarding extends StatelessWidget {
   const _FestivalOnboarding({
     required this.controller,
@@ -207,86 +210,10 @@ class _FestivalOnboarding extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // Spacer to maintain heading position
-            const SizedBox(height: 86),
-            // Title
-            Text(
-              game.title,
-              style: theme.textTheme.headlineLarge?.copyWith(
-                fontWeight: FontWeight.w800,
-                color: const Color(0xFF1A1A1A),
-                letterSpacing: -0.5,
-              ),
-            ),
-            const SizedBox(height: 12),
-            // Description
-            Text(
-              game.description,
-              maxLines: 3,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: const Color(0xFF6B6B6B),
-                height: 1.6,
-                fontSize: 16,
-              ),
-            ),
-            const Spacer(),
-            // Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  style: TextButton.styleFrom(
-                    foregroundColor: const Color(0xFF6B6B6B),
-                    padding: EdgeInsets.zero,
-                    textStyle: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  child: const Text('Go Back'),
-                ),
-                const SizedBox(width: 16),
-                FilledButton(
-                  onPressed: isLoading ? null : controller.startGame,
-                  style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFF2D2D2D),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 20,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 0,
-                    textStyle: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  child: isLoading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.5,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Text('Play'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+    return GameOnboardingShell(
+      game: game,
+      onPlay: controller.startGame,
+      isLoading: isLoading,
     );
   }
 }

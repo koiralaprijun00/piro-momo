@@ -21,46 +21,58 @@ class HomeScreen extends ConsumerWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
-      body: SafeArea(
-        bottom: false,
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            final bool isWide = constraints.maxWidth >= 900;
-            final EdgeInsets horizontalPadding = EdgeInsets.symmetric(
-              horizontal: isWide ? 64 : 24,
-            );
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF6366F1), // Indigo
+              Color(0xFFA855F7), // Purple
+              Color(0xFFEC4899), // Pink
+            ],
+          ),
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              final bool isWide = constraints.maxWidth >= 900;
+              final EdgeInsets horizontalPadding = EdgeInsets.symmetric(
+                horizontal: isWide ? 64 : 24,
+              );
 
-            return CustomScrollView(
-              slivers: <Widget>[
-                SliverToBoxAdapter(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      PiromomoHeader(
-                        currentUserEmail:
-                            currentUser?.email ?? currentUser?.displayName,
-                        currentUserPhoto: currentUser?.photoURL,
-                        onProfilePressed: () =>
-                            context.push(ProfileScreen.routePath),
-                      ),
-                      const SizedBox(height: 24),
-                      Padding(
-                        padding: horizontalPadding,
-                        child: _GameCardsGrid(
-                          isWide: isWide,
-                          availableWidth:
-                              constraints.maxWidth -
-                              horizontalPadding.horizontal,
+              return CustomScrollView(
+                slivers: <Widget>[
+                  SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        PiromomoHeader(
+                          currentUserEmail:
+                              currentUser?.email ?? currentUser?.displayName,
+                          currentUserPhoto: currentUser?.photoURL,
+                          onProfilePressed: () =>
+                              context.push(ProfileScreen.routePath),
                         ),
-                      ),
-                      const SizedBox(height: 32),
-                    ],
+                        const SizedBox(height: 24),
+                        Padding(
+                          padding: horizontalPadding,
+                          child: _GameCardsGrid(
+                            isWide: isWide,
+                            availableWidth:
+                                constraints.maxWidth -
+                                horizontalPadding.horizontal,
+                          ),
+                        ),
+                        const SizedBox(height: 32),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
