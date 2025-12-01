@@ -4,6 +4,7 @@ import 'dart:math' show max;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/analytics/analytics_service.dart';
+import '../../../../core/persistence/cloud_progress_service.dart';
 import '../../../../core/persistence/progress_store.dart';
 import '../../../../data/models/king_entry.dart';
 import '../../../../data/repositories/kings_repository.dart';
@@ -14,15 +15,18 @@ class KingsGameController extends StateNotifier<KingsGameState> {
     required KingsRepository repository,
     required ProgressStore progressStore,
     required AnalyticsService analytics,
+    required CloudProgressService cloudProgress,
     KingsGameState? initialState,
   }) : _repository = repository,
        _progressStore = progressStore,
        _analytics = analytics,
+       _cloudProgress = cloudProgress,
        super(initialState ?? KingsGameState.initial());
 
   final KingsRepository _repository;
   final ProgressStore _progressStore;
   final AnalyticsService _analytics;
+  final CloudProgressService _cloudProgress;
 
   Future<void> loadDeck() async {
     state = state.copyWith(
@@ -41,7 +45,7 @@ class KingsGameController extends StateNotifier<KingsGameState> {
       if (kings.isEmpty) {
         state = state.copyWith(
           isLoading: false,
-          errorMessage: 'No kings data available for this locale.',
+          errorMessage: 'No kings data available.',
         );
         return;
       }
@@ -136,6 +140,11 @@ class KingsGameController extends StateNotifier<KingsGameState> {
 
     if (improvedBest) {
       unawaited(_progressStore.saveKingsBestStreak(updatedBest));
+      unawaited(_cloudProgress.updateProgress(
+        gameId: 'kings-of-nepal',
+        bestStreak: updatedBest,
+        bestScore: state.score + 10,
+      ));
     }
     unawaited(_progressStore.maybeSaveKingsBestScore(state.score));
     unawaited(_progressStore.saveLatestGame('kings-of-nepal', state.score));

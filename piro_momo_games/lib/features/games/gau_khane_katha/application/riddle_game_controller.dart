@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/analytics/analytics_service.dart';
+import '../../../../core/persistence/cloud_progress_service.dart';
 import '../../../../core/persistence/progress_store.dart';
 import '../../../../data/models/riddle_entry.dart';
 import '../../../../data/repositories/riddle_repository.dart';
@@ -14,17 +15,20 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
     required RiddleRepository repository,
     required ProgressStore progressStore,
     required AnalyticsService analytics,
+    required CloudProgressService cloudProgress,
     RiddleGameState? initialState,
     Random? random,
   }) : _repository = repository,
        _progressStore = progressStore,
        _analytics = analytics,
+       _cloudProgress = cloudProgress,
        _random = random ?? Random(),
        super(initialState ?? RiddleGameState.initial());
 
   final RiddleRepository _repository;
   final ProgressStore _progressStore;
   final AnalyticsService _analytics;
+  final CloudProgressService _cloudProgress;
   final Random _random;
 
   Future<void> loadDeck() async {
@@ -129,6 +133,11 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
 
       if (improvedBest) {
         unawaited(_progressStore.saveRiddleBestStreak(updatedBest));
+        unawaited(_cloudProgress.updateProgress(
+          gameId: 'gau-khane-katha',
+          bestStreak: updatedBest,
+          bestScore: state.score + earnedPoints,
+        ));
       }
       unawaited(_progressStore.maybeSaveRiddleBestScore(state.score));
       unawaited(_progressStore.saveLatestGame('gau-khane-katha', state.score));

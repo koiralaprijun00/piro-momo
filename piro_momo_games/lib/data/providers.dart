@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/analytics/analytics_service.dart';
+import '../core/persistence/cloud_progress_service.dart';
 import '../core/persistence/progress_store.dart';
 import 'models/district_entry.dart';
 import 'models/festival_question.dart';
@@ -47,6 +48,13 @@ final Provider<ProgressStore> progressStoreProvider = Provider<ProgressStore>(
     return ProgressStore(userId: userId);
   },
 );
+
+final Provider<CloudProgressService> cloudProgressServiceProvider =
+    Provider<CloudProgressService>((Ref ref) {
+  final AsyncValue<User?> authState = ref.watch(authStateProvider);
+  final String? userId = authState.asData?.value?.uid;
+  return CloudProgressService(userId: userId);
+});
 
 final Provider<AnalyticsService> analyticsServiceProvider =
     Provider<AnalyticsService>((Ref ref) => const AnalyticsService());

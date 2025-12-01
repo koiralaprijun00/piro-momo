@@ -13,6 +13,7 @@ riddleGameControllerProvider =
         repository: ref.read(riddleRepositoryProvider),
         progressStore: ref.watch(progressStoreProvider),
         analytics: ref.read(analyticsServiceProvider),
+        cloudProgress: ref.read(cloudProgressServiceProvider),
       );
       controller.loadDeck();
       return controller;

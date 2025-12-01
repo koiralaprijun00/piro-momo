@@ -14,6 +14,7 @@ final AutoDisposeStateNotifierProvider<
         repository: ref.read(districtRepositoryProvider),
         progressStore: ref.watch(progressStoreProvider),
         analytics: ref.read(analyticsServiceProvider),
+        cloudProgress: ref.read(cloudProgressServiceProvider),
       );
       controller.loadDeck();
       return controller;

@@ -10,7 +10,6 @@ class PiromomoHeader extends StatelessWidget {
     this.referenceDate,
     this.gamesPlayed = 2,
     this.onProfilePressed,
-    this.onNotificationsPressed,
     this.currentUserEmail,
     this.currentUserPhoto,
   });
@@ -21,7 +20,6 @@ class PiromomoHeader extends StatelessWidget {
   final DateTime? referenceDate;
   final int gamesPlayed;
   final VoidCallback? onProfilePressed;
-  final VoidCallback? onNotificationsPressed;
   final String? currentUserEmail;
   final String? currentUserPhoto;
 
@@ -44,7 +42,6 @@ class PiromomoHeader extends StatelessWidget {
             subtitle: subtitle,
             colorScheme: colorScheme,
             onProfilePressed: onProfilePressed,
-            onNotificationsPressed: onNotificationsPressed,
             currentUserEmail: currentUserEmail,
             currentUserPhoto: currentUserPhoto,
           ),
@@ -61,7 +58,6 @@ class _HeroCard extends StatelessWidget {
     required this.subtitle,
     required this.colorScheme,
     this.onProfilePressed,
-    this.onNotificationsPressed,
     this.currentUserEmail,
     this.currentUserPhoto,
   });
@@ -71,7 +67,6 @@ class _HeroCard extends StatelessWidget {
   final String subtitle;
   final ColorScheme colorScheme;
   final VoidCallback? onProfilePressed;
-  final VoidCallback? onNotificationsPressed;
   final String? currentUserEmail;
   final String? currentUserPhoto;
 
@@ -88,12 +83,6 @@ class _HeroCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              _HeroIconButton(
-                icon: Icons.notifications_none_rounded,
-                onPressed: onNotificationsPressed ??
-                    () => context.push('/notifications'),
-              ),
-              const SizedBox(width: 12),
               _ProfileIconButton(
                 email: currentUserEmail,
                 photoUrl: currentUserPhoto,

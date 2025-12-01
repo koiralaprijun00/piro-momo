@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/analytics/analytics_service.dart';
+import '../../../../core/persistence/cloud_progress_service.dart';
 import '../../../../core/persistence/progress_store.dart';
 import '../../../../data/models/district_entry.dart';
 import '../../../../data/repositories/district_repository.dart';
@@ -15,17 +16,20 @@ class NameDistrictGameController
     required DistrictRepository repository,
     required ProgressStore progressStore,
     required AnalyticsService analytics,
+    required CloudProgressService cloudProgress,
     NameDistrictGameState? initialState,
     Random? random,
   }) : _repository = repository,
        _progressStore = progressStore,
        _analytics = analytics,
+       _cloudProgress = cloudProgress,
        _random = random ?? Random(),
        super(initialState ?? NameDistrictGameState.initial());
 
   final DistrictRepository _repository;
   final ProgressStore _progressStore;
   final AnalyticsService _analytics;
+  final CloudProgressService _cloudProgress;
   final Random _random;
 
   Future<void> loadDeck() async {
@@ -106,6 +110,11 @@ class NameDistrictGameController
 
     if (improvedBest) {
       unawaited(_progressStore.saveDistrictBestStreak(updatedBest));
+      unawaited(_cloudProgress.updateProgress(
+        gameId: 'name-district',
+        bestStreak: updatedBest,
+        bestScore: updatedScore,
+      ));
     }
     unawaited(_progressStore.maybeSaveDistrictBestScore(updatedScore));
     unawaited(_progressStore.saveLatestGame('name-district', updatedScore));

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/analytics/analytics_service.dart';
+import '../../../../core/persistence/cloud_progress_service.dart';
 import '../../../../core/persistence/progress_store.dart';
 import '../../../../data/models/festival_question.dart';
 import '../../../../data/repositories/festival_repository.dart';
@@ -14,16 +15,19 @@ class FestivalGameController extends StateNotifier<FestivalGameState> {
     required FestivalRepository repository,
     required ProgressStore progressStore,
     required AnalyticsService analytics,
+    required CloudProgressService cloudProgress,
     FestivalGameState? initialState,
   }) : _repository = repository,
        _progressStore = progressStore,
        _analytics = analytics,
+       _cloudProgress = cloudProgress,
        _random = Random(),
        super(initialState ?? FestivalGameState.initial());
 
   final FestivalRepository _repository;
   final ProgressStore _progressStore;
   final AnalyticsService _analytics;
+  final CloudProgressService _cloudProgress;
   final Random _random;
 
   Future<void> loadDeck() async {
@@ -100,6 +104,11 @@ class FestivalGameController extends StateNotifier<FestivalGameState> {
 
     if (improvedBest) {
       unawaited(_progressStore.saveFestivalBestStreak(updatedBestStreak));
+      unawaited(_cloudProgress.updateProgress(
+        gameId: 'guess-festival',
+        bestStreak: updatedBestStreak,
+        bestScore: updatedScore,
+      ));
     }
     unawaited(_progressStore.maybeSaveFestivalBestScore(updatedScore));
     unawaited(_progressStore.saveLatestGame('guess-festival', updatedScore));
