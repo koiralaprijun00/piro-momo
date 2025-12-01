@@ -69,17 +69,12 @@ flutter:
 
   assets:
     - assets/data/guess_festival_en.json
-    - assets/data/guess_festival_np.json
     - assets/data/gau_khane_katha_en.json
-    - assets/data/gau_khane_katha_np.json
     - assets/data/general_knowledge_en.json
-    - assets/data/general_knowledge_np.json
     - assets/data/name_district_en.json
-    - assets/data/name_district_np.json
     - assets/data/district_assets.json
     - assets/districts/
     - assets/data/kings_of_nepal_en.json
-    - assets/data/kings_of_nepal_np.json
     - assets/images/guess-festival.png
     - assets/images/gau-khane-katha.png
     - assets/images/general-knowledge.png

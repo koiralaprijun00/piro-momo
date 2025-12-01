@@ -213,32 +213,15 @@ class _NameDistrictOnboarding extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Center(
+    return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 48),
+        padding: const EdgeInsets.all(24),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: const Color(0xFFE5E5E5),
-                  width: 1,
-                ),
-              ),
-              child: Image.asset(
-                game.assetPath,
-                width: 64,
-                height: 64,
-                color: game.accentColors.first,
-              ),
-            ),
-            const SizedBox(height: 32),
+            // Spacer to maintain heading position
+            const SizedBox(height: 86),
+            // Title
             Text(
               game.title,
               style: theme.textTheme.headlineLarge?.copyWith(
@@ -246,47 +229,64 @@ class _NameDistrictOnboarding extends StatelessWidget {
                 color: const Color(0xFF1A1A1A),
                 letterSpacing: -0.5,
               ),
-              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
+            // Description
             Text(
               game.description,
+              maxLines: 3,
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: const Color(0xFF6B6B6B),
                 height: 1.6,
                 fontSize: 16,
               ),
-              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 40),
-            FilledButton(
-              onPressed: isLoading ? null : controller.startGame,
-              style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFF2D2D2D),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 48,
-                  vertical: 20,
+            const Spacer(),
+            // Buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: TextButton.styleFrom(
+                    foregroundColor: const Color(0xFF6B6B6B),
+                    padding: EdgeInsets.zero,
+                    textStyle: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  child: const Text('Go Back'),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                const SizedBox(width: 16),
+                FilledButton(
+                  onPressed: isLoading ? null : controller.startGame,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: const Color(0xFF2D2D2D),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 20,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 0,
+                    textStyle: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  child: isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.5,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text('Play'),
                 ),
-                elevation: 0,
-                textStyle: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              child: isLoading
-                  ? const SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 3,
-                        color: Colors.white,
-                      ),
-                    )
-                  : const Text('Play'),
+              ],
             ),
           ],
         ),

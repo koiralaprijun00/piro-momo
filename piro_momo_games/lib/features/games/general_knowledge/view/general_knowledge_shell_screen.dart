@@ -246,109 +246,95 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final double playSectionHeight =
-            72 + MediaQuery.of(context).padding.bottom + 16;
-        final double contentHeight = (constraints.maxHeight - playSectionHeight)
-            .clamp(360.0, constraints.maxHeight.toDouble());
-
-        return Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 420),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: contentHeight,
-                    child: Column(
-                      children: <Widget>[
-                        const SizedBox(height: 24),
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: const Color(0xFFE5E5E5),
-                              width: 1,
-                            ),
-                          ),
-                          child: Image.asset(
-                            game.assetPath,
-                            width: 56,
-                            height: 56,
-                            color: game.accentColors.first,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          game.title,
-                          style: theme.textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            color: const Color(0xFF1A1A1A),
-                            letterSpacing: -0.5,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Pick a category to focus on or stay with All.',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: const Color(0xFF6B6B6B),
-                            height: 1.5,
-                            fontSize: 15,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 12),
-                        Expanded(
-                          child: categories.isEmpty
-                              ? const SizedBox.shrink()
-                              : _OnboardingCategoryChooser(
-                                  categories: categories,
-                                  selectedCategory: selectedCategory,
-                                  onSelect: isLoading ? null : onCategorySelect,
-                                ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  FilledButton(
-                    onPressed: isLoading ? null : controller.startGame,
-                    style: FilledButton.styleFrom(
-                      backgroundColor: const Color(0xFF2D2D2D),
-                      foregroundColor: Colors.white,
-                      minimumSize: const Size.fromHeight(56),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      elevation: 0,
-                      textStyle: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    child: isLoading
-                        ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 3,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text('Play'),
-                  ),
-                  const SizedBox(height: 16),
-                ],
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            // Spacer to maintain heading position
+            const SizedBox(height: 86),
+            // Title
+            Text(
+              game.title,
+              style: theme.textTheme.headlineLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+                color: const Color(0xFF1A1A1A),
+                letterSpacing: -0.5,
               ),
             ),
-          ),
-        );
-      },
+            const SizedBox(height: 12),
+            // Description
+            Text(
+              'Pick a category to focus on or stay with All.',
+              maxLines: 3,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: const Color(0xFF6B6B6B),
+                height: 1.6,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Category selection
+            Expanded(
+              child: categories.isEmpty
+                  ? const SizedBox.shrink()
+                  : _OnboardingCategoryChooser(
+                      categories: categories,
+                      selectedCategory: selectedCategory,
+                      onSelect: isLoading ? null : onCategorySelect,
+                    ),
+            ),
+            const SizedBox(height: 24),
+            // Buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: TextButton.styleFrom(
+                    foregroundColor: const Color(0xFF6B6B6B),
+                    padding: EdgeInsets.zero,
+                    textStyle: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  child: const Text('Go Back'),
+                ),
+                const SizedBox(width: 16),
+                FilledButton(
+                  onPressed: isLoading ? null : controller.startGame,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: const Color(0xFF2D2D2D),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 20,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 0,
+                    textStyle: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  child: isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.5,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text('Play'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -370,6 +356,25 @@ class _OnboardingCategoryChooser extends StatelessWidget {
     final GameDefinition game = homeGames.firstWhere(
       (g) => g.id == 'general-knowledge',
     );
+    final Set<String> allCategories =
+        categories.map((String c) => c.trim()).where((c) => c.isNotEmpty).toSet();
+    final List<String> orderedCategories = <String>[
+      'All',
+      ...allCategories.where((c) => c.toLowerCase() != 'all').toList()..sort(),
+    ];
+    final Map<String, IconData> iconMap = <String, IconData>{
+      'All': Icons.apps_rounded,
+      'Culture': Icons.celebration_rounded,
+      'History & Literature': Icons.menu_book_rounded,
+      'Religion & Mythology': Icons.self_improvement_rounded,
+      'Economy & Politics': Icons.account_balance_rounded,
+      'Geography': Icons.map_rounded,
+      'Sports': Icons.sports_soccer_rounded,
+      'Science': Icons.science_rounded,
+      'International': Icons.public_rounded,
+      'Entertainment': Icons.movie_filter_rounded,
+      'Environment': Icons.eco_rounded,
+    };
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -384,33 +389,54 @@ class _OnboardingCategoryChooser extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: categories.map((String category) {
+          spacing: 10,
+          runSpacing: 10,
+          children: orderedCategories.map((String category) {
             final bool isSelected =
                 selectedCategory.toLowerCase() == category.toLowerCase();
-            return ChoiceChip(
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              labelPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              visualDensity: VisualDensity.compact,
-              label: Text(
-                category,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-              selected: isSelected,
-              onSelected: onSelect == null
-                  ? null
-                  : (bool _) => onSelect!(category),
-              labelStyle: theme.textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: game.accentColors.first,
-              ),
-              backgroundColor: Colors.white.withValues(alpha: 0.9),
-              selectedColor: Colors.white,
-              side: BorderSide.none,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+            final Color baseColor =
+                isSelected ? game.accentColors.first : const Color(0xFFF1EBE6);
+            final Color textColor = isSelected ? Colors.white : const Color(0xFF4A3B32);
+            return InkWell(
+              borderRadius: BorderRadius.circular(18),
+              onTap: onSelect == null ? null : () => onSelect!(category),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                decoration: BoxDecoration(
+                  color: baseColor,
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: isSelected
+                      ? <BoxShadow>[
+                          BoxShadow(
+                            color: baseColor.withValues(alpha: 0.35),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ]
+                      : const <BoxShadow>[],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Icon(
+                      iconMap[category] ?? Icons.label_rounded,
+                      size: 16,
+                      color: textColor,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      category,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: textColor,
+                        letterSpacing: 0.1,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           }).toList(),

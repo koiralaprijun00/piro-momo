@@ -14,7 +14,7 @@
   },
   {
     "id": "history-1",
-    "category": "History",
+    "category": "History & Literature",
     "question": "In which year was the Sugauli Treaty signed between Nepal and British India?",
     "options": [
       "1814",
@@ -27,7 +27,7 @@
   },
   {
     "id": "politics-1",
-    "category": "Politics",
+    "category": "Economy & Politics",
     "question": "How many provinces are there in Nepal according to the 2015 constitution?",
     "options": [
       "5",
@@ -79,7 +79,7 @@
   },
   {
     "id": "literature-1",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Who wrote the famous Nepali epic poem \"Muna Madan\"?",
     "options": [
       "Laxmi Prasad Devkota",
@@ -105,7 +105,7 @@
   },
   {
     "id": "economy-1",
-    "category": "Economy",
+    "category": "Economy & Politics",
     "question": "Which is the main export crop of Nepal?",
     "options": [
       "Tea",
@@ -144,7 +144,7 @@
   },
   {
     "id": "history-2",
-    "category": "History",
+    "category": "History & Literature",
     "question": "Who was the first king of unified Nepal?",
     "options": [
       "Prithvi Narayan Shah",
@@ -196,7 +196,7 @@
   },
   {
     "id": "literature-2",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Who is considered the first poet of Nepal to write in the Nepali language?",
     "options": [
       "Bhanubhakta Acharya",
@@ -222,7 +222,7 @@
   },
   {
     "id": "economy-2",
-    "category": "Economy",
+    "category": "Economy & Politics",
     "question": "Which river system is the primary source of hydroelectric power in Nepal?",
     "options": [
       "Koshi",
@@ -235,7 +235,7 @@
   },
   {
     "id": "politics-2",
-    "category": "Politics",
+    "category": "Economy & Politics",
     "question": "Who was the first president of Nepal after the abolition of the monarchy?",
     "options": [
       "Ram Baran Yadav",
@@ -352,7 +352,7 @@
   },
   {
     "id": "history-3",
-    "category": "History",
+    "category": "History & Literature",
     "question": "Which Rana prime minister ruled Nepal for the longest period?",
     "options": [
       "Jung Bahadur Rana",
@@ -365,7 +365,7 @@
   },
   {
     "id": "history-4",
-    "category": "History",
+    "category": "History & Literature",
     "question": "In which year was Nepal declared a secular state?",
     "options": [
       "2006",
@@ -378,7 +378,7 @@
   },
   {
     "id": "history-5",
-    "category": "History",
+    "category": "History & Literature",
     "question": "Which king of Nepal abolished slavery?",
     "options": [
       "Tribhuvan",
@@ -391,7 +391,7 @@
   },
   {
     "id": "history-6",
-    "category": "History",
+    "category": "History & Literature",
     "question": "When did Nepal first establish diplomatic relations with the United States?",
     "options": [
       "1947",
@@ -404,7 +404,7 @@
   },
   {
     "id": "history-7",
-    "category": "History",
+    "category": "History & Literature",
     "question": "Which event marked the end of the Rana regime in Nepal?",
     "options": [
       "1951 Revolution",
@@ -417,7 +417,7 @@
   },
   {
     "id": "history-8",
-    "category": "History",
+    "category": "History & Literature",
     "question": "Who was the last king of Nepal?",
     "options": [
       "Gyanendra Shah",
@@ -430,7 +430,7 @@
   },
   {
     "id": "history-9",
-    "category": "History",
+    "category": "History & Literature",
     "question": "Which Nepali king was killed in the 2001 royal massacre?",
     "options": [
       "Birendra",
@@ -443,7 +443,7 @@
   },
   {
     "id": "history-10",
-    "category": "History",
+    "category": "History & Literature",
     "question": "In which year did the Gorkha Earthquake devastate Nepal?",
     "options": [
       "2010",
@@ -456,7 +456,7 @@
   },
   {
     "id": "politics-3",
-    "category": "Politics",
+    "category": "Economy & Politics",
     "question": "Who was Nepal’s first female president?",
     "options": [
       "Bidhya Devi Bhandari",
@@ -469,7 +469,7 @@
   },
   {
     "id": "politics-4",
-    "category": "Politics",
+    "category": "Economy & Politics",
     "question": "Which political party led Nepal’s transition to a republic?",
     "options": [
       "Nepali Congress",
@@ -482,7 +482,7 @@
   },
   {
     "id": "politics-5",
-    "category": "Politics",
+    "category": "Economy & Politics",
     "question": "How many members are in Nepal’s House of Representatives?",
     "options": [
       "275",
@@ -495,7 +495,7 @@
   },
   {
     "id": "politics-6",
-    "category": "Politics",
+    "category": "Economy & Politics",
     "question": "Which Nepali leader is known as \"Prachanda\"?",
     "options": [
       "Pushpa Kamal Dahal",
@@ -508,7 +508,7 @@
   },
   {
     "id": "politics-7",
-    "category": "Politics",
+    "category": "Economy & Politics",
     "question": "In which year was Nepal’s monarchy officially abolished?",
     "options": [
       "2006",
@@ -521,7 +521,7 @@
   },
   {
     "id": "politics-8",
-    "category": "Politics",
+    "category": "Economy & Politics",
     "question": "Who was Nepal’s first elected prime minister after the 1951 Revolution?",
     "options": [
       "BP Koirala",
@@ -534,7 +534,7 @@
   },
   {
     "id": "politics-9",
-    "category": "Politics",
+    "category": "Economy & Politics",
     "question": "Which province in Nepal is named after a river?",
     "options": [
       "Karnali",
@@ -547,7 +547,7 @@
   },
   {
     "id": "politics-10",
-    "category": "Politics",
+    "category": "Economy & Politics",
     "question": "Which Nepali leader is known for the \"Panchayat\" system?",
     "options": [
       "King Mahendra",
@@ -859,7 +859,7 @@
   },
   {
     "id": "literature-3",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Which Nepali writer is known for the play \"Malati Mangale\"?",
     "options": [
       "Balkrishna Sama",
@@ -872,7 +872,7 @@
   },
   {
     "id": "literature-4",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Which Nepali poet wrote \"Gaunthali\"?",
     "options": [
       "Madhav Prasad Ghimire",
@@ -885,7 +885,7 @@
   },
   {
     "id": "literature-5",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Which epic by Bhanubhakta Acharya is a Nepali classic?",
     "options": [
       "Ramayana",
@@ -898,7 +898,7 @@
   },
   {
     "id": "literature-6",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Which Nepali writer penned \"Shirish Ko Phool\"?",
     "options": [
       "Parijat",
@@ -911,7 +911,7 @@
   },
   {
     "id": "literature-7",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Which Nepali author wrote the historical novel \"Basanti\"?",
     "options": [
       "Diamond Shumsher",
@@ -924,7 +924,7 @@
   },
   {
     "id": "literature-8",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Which poet is known as the \"Poet of the Dawn\" in Nepal?",
     "options": [
       "Lekhnath Paudyal",
@@ -937,7 +937,7 @@
   },
   {
     "id": "literature-9",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Which Nepali writer was also a prime minister?",
     "options": [
       "Bishweshwar Prasad Koirala",
@@ -950,7 +950,7 @@
   },
   {
     "id": "literature-10",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Which literary award is Nepal’s most prestigious?",
     "options": [
       "Madan Puraskar",
@@ -1067,7 +1067,7 @@
   },
   {
     "id": "economy-3",
-    "category": "Economy",
+    "category": "Economy & Politics",
     "question": "Which industry employs the most people in Nepal?",
     "options": [
       "Agriculture",
@@ -1080,7 +1080,7 @@
   },
   {
     "id": "economy-4",
-    "category": "Economy",
+    "category": "Economy & Politics",
     "question": "Which Nepali city is the commercial hub of the Terai region?",
     "options": [
       "Biratnagar",
@@ -1093,7 +1093,7 @@
   },
   {
     "id": "economy-5",
-    "category": "Economy",
+    "category": "Economy & Politics",
     "question": "Which is Nepal’s largest source of foreign exchange?",
     "options": [
       "Remittances",
@@ -1106,7 +1106,7 @@
   },
   {
     "id": "economy-6",
-    "category": "Economy",
+    "category": "Economy & Politics",
     "question": "Which Nepali product is famous for its hand-knotted quality?",
     "options": [
       "Carpets",
@@ -1119,7 +1119,7 @@
   },
   {
     "id": "economy-7",
-    "category": "Economy",
+    "category": "Economy & Politics",
     "question": "Which dam is Nepal’s largest hydropower project?",
     "options": [
       "Kulekhani",
@@ -1132,7 +1132,7 @@
   },
   {
     "id": "economy-8",
-    "category": "Economy",
+    "category": "Economy & Politics",
     "question": "Which Nepali tea is globally recognized?",
     "options": [
       "Darjeeling",
@@ -1145,7 +1145,7 @@
   },
   {
     "id": "economy-9",
-    "category": "Economy",
+    "category": "Economy & Politics",
     "question": "Which mineral is mined in Nepal’s Mustang region?",
     "options": [
       "Salt",
@@ -1158,7 +1158,7 @@
   },
   {
     "id": "economy-10",
-    "category": "Economy",
+    "category": "Economy & Politics",
     "question": "Which Nepali city is known for its pashmina industry?",
     "options": [
       "Kathmandu",
@@ -1262,7 +1262,7 @@
   },
   {
     "id": "np-gk-101",
-    "category": "History",
+    "category": "History & Literature",
     "question": "When did the 'Kot Massacre' take place in the history of Nepal?",
     "options": [
       "B.S. 1903",
@@ -1275,7 +1275,7 @@
   },
   {
     "id": "np-gk-102",
-    "category": "Architecture",
+    "category": "History & Literature",
     "question": "In which architectural style is the Changu Narayan Temple, considered the oldest in Kathmandu Valley, built?",
     "options": [
       "Pagoda Style",
@@ -1301,7 +1301,7 @@
   },
   {
     "id": "np-gk-104",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Which poet is known as 'Aashu Kavi' (Impromptu Poet) in Nepali literature?",
     "options": [
       "Shambhu Prasad Dhungel",
@@ -1314,7 +1314,7 @@
   },
   {
     "id": "np-gk-105",
-    "category": "Politics",
+    "category": "Economy & Politics",
     "question": "According to the current Constitution of Nepal (2015), how many constitutional bodies are there?",
     "options": [
       "10",
@@ -1327,7 +1327,7 @@
   },
   {
     "id": "np-gk-106",
-    "category": "Demography",
+    "category": "Geography",
     "question": "According to the National Census 2078 (2021 AD), which district has the highest population in Nepal?",
     "options": [
       "Rupandehi",
@@ -1340,7 +1340,7 @@
   },
   {
     "id": "np-gk-107",
-    "category": "Media",
+    "category": "Entertainment",
     "question": "What was the first daily newspaper of Nepal?",
     "options": [
       "Gorkhapatra",
@@ -1405,7 +1405,7 @@
   },
   {
     "id": "np-gk-112",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Who is the author of the famous novel 'Seto Dharti'?",
     "options": [
       "Amar Neupane",
@@ -1431,7 +1431,7 @@
   },
   {
     "id": "np-gk-114",
-    "category": "History",
+    "category": "History & Literature",
     "question": "Who was the first female minister of Nepal?",
     "options": [
       "Shailaja Acharya",
@@ -1444,7 +1444,7 @@
   },
   {
     "id": "np-gk-115",
-    "category": "Culture",
+    "category": "Jatra of Kathmandu Valley",
     "question": "Who introduced the tradition of celebrating 'Ghode Jatra' in Kathmandu Valley?",
     "options": [
       "Pratap Malla",
@@ -1483,7 +1483,7 @@
   },
   {
     "id": "np-gk-118",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Who was the first female writer to receive the Madan Puraskar?",
     "options": [
       "Jhamak Ghimire",
@@ -1522,7 +1522,7 @@
   },
   {
     "id": "np-gk-121",
-    "category": "Transportation",
+    "category": "Geography",
     "question": "When was Nepal Airlines Corporation established?",
     "options": [
       "B.S. 2010",
@@ -1561,7 +1561,7 @@
   },
   {
     "id": "np-gk-124",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Who is honored as the 'Modern Poet' in the history of Nepali literature?",
     "options": [
       "Gopal Prasad Rimal",
@@ -1587,7 +1587,7 @@
   },
   {
     "id": "np-gk-126",
-    "category": "History",
+    "category": "History & Literature",
     "question": "Who was the first Nepali Prime Minister to address the United Nations General Assembly?",
     "options": [
       "B.P. Koirala",
@@ -1626,7 +1626,7 @@
   },
   {
     "id": "np-gk-129",
-    "category": "Mythology",
+    "category": "Religion & Mythology",
     "question": "According to the Mahabharata, which place in Nepal is believed to be where the Pandavas spent part of their exile?",
     "options": [
       "Swargadwari",
@@ -1639,7 +1639,7 @@
   },
   {
     "id": "np-gk-130",
-    "category": "Education",
+    "category": "Culture",
     "question": "Which is the first university established in Nepal?",
     "options": [
       "Kathmandu University",
@@ -1652,7 +1652,7 @@
   },
   {
     "id": "np-gk-221",
-    "category": "History",
+    "category": "History & Literature",
     "question": "Which specific event in 1979 led to a referendum on Nepal's political system (Panchayat vs Multi-party)?",
     "options": [
       "The Timburbote Incident",
@@ -1678,7 +1678,7 @@
   },
   {
     "id": "np-gk-223",
-    "category": "Conservation",
+    "category": "Environment",
     "question": "The 'Api Nampa Conservation Area' is located in which far-western district of Nepal?",
     "options": [
       "Darchula",
@@ -1730,7 +1730,7 @@
   },
   {
     "id": "np-gk-227",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Who was the author of the early Nepali grammar book 'Aksharanka Shiksha'?",
     "options": [
       "Bhanubhakta Acharya",
@@ -1756,7 +1756,7 @@
   },
   {
     "id": "np-gk-229",
-    "category": "Religion",
+    "category": "Religion & Mythology",
     "question": "The 'Jhankri' tradition in many Nepali communities involves individuals acting as:",
     "options": [
       "Priests",
@@ -1769,7 +1769,7 @@
   },
   {
     "id": "np-gk-230",
-    "category": "Mythology",
+    "category": "Religion & Mythology",
     "question": "Which lake in Nepal is famously associated with the legend of a submerged palace?",
     "options": [
       "Rara Lake",
@@ -1782,7 +1782,7 @@
   },
   {
     "id": "np-gk-231",
-    "category": "History",
+    "category": "History & Literature",
     "question": "The 'Battle of Kirtipur' during Nepal's unification campaign was primarily fought between Gorkhali forces and:",
     "options": [
       "Limbu forces",
@@ -1795,7 +1795,7 @@
   },
   {
     "id": "np-gk-232",
-    "category": "Conservation",
+    "category": "Environment",
     "question": "What is the approximate percentage of Nepal's land area covered by protected areas (National Parks, Reserves etc.)?",
     "options": [
       "Around 10%",
@@ -1808,7 +1808,7 @@
   },
   {
     "id": "np-gk-233",
-    "category": "Economy",
+    "category": "Economy & Politics",
     "question": "Which organization manages the Nepal Stock Exchange (NEPSE)?",
     "options": [
       "Nepal Rastra Bank",
@@ -1821,7 +1821,7 @@
   },
   {
     "id": "np-gk-234",
-    "category": "Culture",
+    "category": "Jatra of Kathmandu Valley",
     "question": "The 'Bisket Jatra', celebrated primarily in Bhaktapur, marks the beginning of:",
     "options": [
       "The Nepali New Year (Bikram Sambat)",
@@ -1847,7 +1847,7 @@
   },
   {
     "id": "np-gk-236",
-    "category": "Media",
+    "category": "Entertainment",
     "question": "The historic 'Gorkhapatra' newspaper was initially published in which language besides Nepali?",
     "options": [
       "English",
@@ -1899,7 +1899,7 @@
   },
   {
     "id": "np-gk-240",
-    "category": "Food",
+    "category": "Culture",
     "question": "What is the name of the traditional Sherpa high-altitude tea mixed with butter and salt?",
     "options": [
       "Chiura",
@@ -1912,7 +1912,7 @@
   },
   {
     "id": "np-gk-241",
-    "category": "Politics",
+    "category": "Economy & Politics",
     "question": "Which constitutional body in Nepal is primarily responsible for conducting elections?",
     "options": [
       "Supreme Court",
@@ -1925,7 +1925,7 @@
   },
   {
     "id": "np-gk-242",
-    "category": "Music",
+    "category": "Entertainment",
     "question": "Who composed the music for Nepal's current national anthem, 'Sayau Thunga Phool Ka'?",
     "options": [
       "Amber Gurung",
@@ -1938,7 +1938,7 @@
   },
   {
     "id": "np-gk-243",
-    "category": "Agriculture",
+    "category": "Economy & Politics",
     "question": "Which district in Nepal is famous for producing high-quality apples?",
     "options": [
       "Mustang",
@@ -1964,7 +1964,7 @@
   },
   {
     "id": "np-gk-245",
-    "category": "Infrastructure",
+    "category": "Geography",
     "question": "Which hydropower project was Nepal's first, built during the Rana era?",
     "options": [
       "Pharping Hydropower Station (Chandrajyoti)",
@@ -1990,7 +1990,7 @@
   },
   {
     "id": "np-gk-247",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Which Nepali author won the prestigious Sajha Puraskar for the novel 'Palpasa Cafe'?",
     "options": [
       "Narayan Wagle",
@@ -2003,7 +2003,7 @@
   },
   {
     "id": "np-gk-248",
-    "category": "International Relations",
+    "category": "International",
     "question": "Nepal serves significantly in UN Peacekeeping Operations. Which country has historically received the largest deployment of Nepali peacekeepers?",
     "options": [
       "Lebanon",
@@ -2016,7 +2016,7 @@
   },
   {
     "id": "np-gk-249",
-    "category": "Conservation & Environment",
+    "category": "Environment",
     "question": "What is the 'Chitwan Declaration' related to in Nepal's conservation history?",
     "options": [
       "Tiger Conservation",
@@ -2029,7 +2029,7 @@
   },
   {
     "id": "np-gk-250",
-    "category": "History & Architecture",
+    "category": "History & Literature",
     "question": "The 'Singha Durbar', Nepal's main administrative complex, was originally built as a private residence for which Rana Prime Minister?",
     "options": [
       "Jung Bahadur Rana",
@@ -2224,7 +2224,7 @@
   },
   {
     "id": "religion-15",
-    "category": "Religion & Mythology",
+    "category": "Jatra of Kathmandu Valley",
     "question": "Which deity is honored in the Rato Machhendranath Jatra?",
     "options": [
       "Avalokiteshvara",
@@ -2510,7 +2510,7 @@
   },
   {
     "id": "religion-37",
-    "category": "Religion & Mythology",
+    "category": "Jatra of Kathmandu Valley",
     "question": "Which deity is symbolically carried in the Indra Jatra festival?",
     "options": [
       "Bhairab",
@@ -2562,7 +2562,7 @@
   },
   {
     "id": "philosophy-2",
-    "category": "Philosophy",
+    "category": "History & Literature",
     "question": "Why did Gautama Buddha propose the concept of the 'Middle Way'?",
     "options": [
       "To reject both extreme indulgence and severe austerity",
@@ -2575,7 +2575,7 @@
   },
   {
     "id": "philosophy-3",
-    "category": "Philosophy",
+    "category": "History & Literature",
     "question": "Who is mainly known for promoting the philosophy of ‘Ahimsa Paramo Dharma’ (non-violence is the highest virtue)?",
     "options": [
       "Gautama Buddha",
@@ -2588,7 +2588,7 @@
   },
   {
     "id": "philosophy-4",
-    "category": "Philosophy",
+    "category": "History & Literature",
     "question": "According to Shankaracharya’s Advaita Vedanta philosophy, what is the relationship between Brahman and Atman?",
     "options": [
       "Completely distinct",
@@ -2601,7 +2601,7 @@
   },
   {
     "id": "philosophy-5",
-    "category": "Philosophy",
+    "category": "History & Literature",
     "question": "In Nepal, the Vajrayana tradition of Buddhist philosophy is mainly practiced by which community?",
     "options": [
       "Brahmin",
@@ -2614,7 +2614,7 @@
   },
   {
     "id": "philosophy-6",
-    "category": "Philosophy",
+    "category": "History & Literature",
     "question": "What is the central belief of the Charvaka philosophy?",
     "options": [
       "Law of karma",
@@ -2627,7 +2627,7 @@
   },
   {
     "id": "philosophy-7",
-    "category": "Philosophy",
+    "category": "History & Literature",
     "question": "Which philosophy uses the method of 'Neti Neti' (Not this, not that)?",
     "options": [
       "Yoga Philosophy",
@@ -2640,7 +2640,7 @@
   },
   {
     "id": "philosophy-8",
-    "category": "Philosophy",
+    "category": "History & Literature",
     "question": "According to Buddhist philosophy, how can suffering be ended?",
     "options": [
       "Through meditation",
@@ -2653,7 +2653,7 @@
   },
   {
     "id": "philosophy-9",
-    "category": "Philosophy",
+    "category": "History & Literature",
     "question": "What is the main focus of Nyaya philosophy?",
     "options": [
       "Yoga practice",
@@ -2666,7 +2666,7 @@
   },
   {
     "id": "philosophy-10",
-    "category": "Philosophy",
+    "category": "History & Literature",
     "question": "Who is considered the founder of Samkhya philosophy?",
     "options": [
       "Patanjali",
@@ -2679,7 +2679,7 @@
   },
   {
     "id": "philosophy-11",
-    "category": "Philosophy",
+    "category": "History & Literature",
     "question": "In Patanjali's Yoga Sutra, what does 'Pratyahara' mean?",
     "options": [
       "Sense withdrawal",
@@ -3225,7 +3225,7 @@
   },
   {
     "id": "hard-history-1",
-    "category": "History",
+    "category": "History & Literature",
     "question": "When did the 'Kot Massacre' take place in the history of Nepal?",
     "options": [
       "B.S. 1903",
@@ -3238,7 +3238,7 @@
   },
   {
     "id": "hard-literature-1",
-    "category": "Literature",
+    "category": "History & Literature",
     "question": "Who was the author of the early Nepali grammar book 'Aksharanka Shiksha'?",
     "options": [
       "Bhanubhakta Acharya",
@@ -3290,7 +3290,7 @@
   },
   {
     "id": "hard-economy-1",
-    "category": "Economy",
+    "category": "Economy & Politics",
     "question": "Which hydropower project was Nepal's first, built during the Rana era?",
     "options": [
       "Pharping Hydropower Station (Chandrajyoti)",
@@ -3316,7 +3316,7 @@
   },
   {
     "id": "hard-politics-1",
-    "category": "Politics",
+    "category": "Economy & Politics",
     "question": "Which specific event in 1979 led to a referendum on Nepal's political system (Panchayat vs Multi-party)?",
     "options": [
       "The Timburbote Incident",
@@ -3329,7 +3329,7 @@
   },
   {
     "id": "hard-environment-1",
-    "category": "Conservation & Environment",
+    "category": "Environment",
     "question": "What is the approximate percentage of Nepal's land area covered by protected areas (National Parks, Reserves etc.)?",
     "options": [
       "Around 10%",
@@ -3342,7 +3342,7 @@
   },
   {
     "id": "hard-media-1",
-    "category": "Media",
+    "category": "Entertainment",
     "question": "The historic 'Gorkhapatra' newspaper was initially published in which language besides Nepali?",
     "options": [
       "English",
@@ -3355,7 +3355,7 @@
   },
   {
     "id": "hard-international-1",
-    "category": "International Relations",
+    "category": "International",
     "question": "Nepal serves significantly in UN Peacekeeping Operations. Which country has historically received the largest deployment of Nepali peacekeepers?",
     "options": [
       "Lebanon",
@@ -3368,7 +3368,7 @@
   },
   {
     "id": "hard-architecture-1",
-    "category": "History & Architecture",
+    "category": "History & Literature",
     "question": "The 'Singha Durbar', Nepal's main administrative complex, was originally built as a private residence for which Rana Prime Minister?",
     "options": [
       "Jung Bahadur Rana",
@@ -3381,7 +3381,7 @@
   },
   {
     "id": "hard-mythology-1",
-    "category": "Mythology",
+    "category": "Religion & Mythology",
     "question": "According to the Mahabharata, which place in Nepal is believed to be where the Pandavas spent part of their exile?",
     "options": [
       "Swargadwari",
@@ -3420,7 +3420,7 @@
   },
   {
     "id": "hard-food-1",
-    "category": "Food",
+    "category": "Culture",
     "question": "What is the name of the traditional Sherpa high-altitude tea mixed with butter and salt?",
     "options": [
       "Chiura",
@@ -3433,7 +3433,7 @@
   },
   {
     "id": "hard-music-1",
-    "category": "Music",
+    "category": "Entertainment",
     "question": "Who composed the music for Nepal's current national anthem, 'Sayau Thunga Phool Ka'?",
     "options": [
       "Amber Gurung",
@@ -3446,7 +3446,7 @@
   },
   {
     "id": "hard-philosophy-1",
-    "category": "Philosophy",
+    "category": "History & Literature",
     "question": "In Patanjali's Yoga Sutra, what does 'Pratyahara' mean?",
     "options": [
       "Sense withdrawal",
@@ -3459,7 +3459,7 @@
   },
   {
     "id": "hard-agriculture-1",
-    "category": "Agriculture",
+    "category": "Economy & Politics",
     "question": "Which district in Nepal is famous for producing high-quality apples?",
     "options": [
       "Mustang",
