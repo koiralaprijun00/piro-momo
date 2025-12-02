@@ -105,7 +105,7 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
     final int attemptNumber = state.attempts + 1;
     final bool isCorrect = _matchesAnswer(answer, current);
 
-    bool? outcomeCorrect;
+    bool outcomeCorrect = false;
 
     if (isCorrect) {
       final Set<String> solvedIds = Set<String>.from(state.solvedIds)
@@ -166,7 +166,7 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
       _analytics.logEvent(
         'riddle_attempt',
         parameters: <String, Object?>{
-          'correct': outcomeCorrect ?? false,
+          'correct': outcomeCorrect,
           'attempt': attemptNumber,
           'riddle_id': current.id,
         },

@@ -17,7 +17,6 @@ class GlassHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final ColorScheme scheme = theme.colorScheme;
 
     return Container(
       margin: const EdgeInsets.only(top: 4),

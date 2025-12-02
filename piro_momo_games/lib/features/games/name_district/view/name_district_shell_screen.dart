@@ -57,13 +57,10 @@ class _NameDistrictGameContent extends StatelessWidget {
     );
 
     if (state.showOnboarding) {
-      return Container(
-        color: const Color(0xFFF8F7F4),
-        child: _NameDistrictOnboarding(
-          controller: controller,
-          isLoading: state.isLoading,
-          game: game,
-        ),
+      return _NameDistrictOnboarding(
+        controller: controller,
+        isLoading: state.isLoading,
+        game: game,
       );
     }
 

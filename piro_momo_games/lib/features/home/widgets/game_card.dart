@@ -12,86 +12,97 @@ class GameCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
+    final BorderRadius cardRadius = BorderRadius.circular(24);
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(24),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: Colors.white.withOpacity(0.2),
-            width: 1,
+    return MouseRegion(
+      cursor: onTap != null ? SystemMouseCursors.click : MouseCursor.defer,
+      child: Material(
+        color: Colors.transparent,
+        child: Ink(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.1),
+            borderRadius: cardRadius,
+            border: Border.all(
+              color: Colors.white.withOpacity(0.2),
+              width: 1,
+            ),
           ),
-        ),
-        padding: const EdgeInsets.all(20),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: cardRadius,
+            splashColor: Colors.white.withOpacity(0.15),
+            highlightColor: Colors.white.withOpacity(0.08),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
                 children: [
-                  Text(
-                    game.eyebrow.toUpperCase(),
-                    style: textTheme.labelSmall?.copyWith(
-                      color: Colors.white.withOpacity(0.7),
-                      letterSpacing: 1.2,
-                      fontWeight: FontWeight.w600,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          game.eyebrow.toUpperCase(),
+                          style: textTheme.labelSmall?.copyWith(
+                            color: Colors.white.withOpacity(0.7),
+                            letterSpacing: 1.2,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          game.title,
+                          style: textTheme.titleLarge?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 22,
+                            height: 1.1,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          game.description,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.bodyMedium?.copyWith(
+                            color: Colors.white.withOpacity(0.8),
+                            height: 1.4,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            _MetadataItem(
+                              icon: Icons.star_rounded,
+                              label: game.metadata,
+                            ),
+                            const SizedBox(width: 16),
+                            _MetadataItem(
+                              icon: Icons.check_rounded,
+                              label: game.difficulty,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    game.title,
-                    style: textTheme.titleLarge?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 22,
-                      height: 1.1,
+                  const SizedBox(width: 16),
+                  Container(
+                    width: 72,
+                    height: 72,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    game.description,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: Colors.white.withOpacity(0.8),
-                      height: 1.4,
+                    child: Image.asset(
+                      game.assetPath,
+                      fit: BoxFit.contain,
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      _MetadataItem(
-                        icon: Icons.star_rounded,
-                        label: game.metadata,
-                      ),
-                      const SizedBox(width: 16),
-                      _MetadataItem(
-                        icon: Icons.check_rounded,
-                        label: game.difficulty,
-                      ),
-                    ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 16),
-            Container(
-              width: 72,
-              height: 72,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Image.asset(
-                game.assetPath,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -47,13 +47,10 @@ class _FestivalGameContent extends StatelessWidget {
     );
 
     if (state.showOnboarding) {
-      return Container(
-        color: const Color(0xFFF8F7F4),
-        child: _FestivalOnboarding(
-          controller: controller,
-          isLoading: state.isLoading,
-          game: game,
-        ),
+      return _FestivalOnboarding(
+        controller: controller,
+        isLoading: state.isLoading,
+        game: game,
       );
     }
 

@@ -18,7 +18,6 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<User?> authValue = ref.watch(authStateProvider);
     final User? currentUser = authValue.valueOrNull;
-    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       body: Container(

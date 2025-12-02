@@ -57,14 +57,11 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
     );
 
     if (state.showOnboarding) {
-      return Container(
-        color: const Color(0xFFF8F7F4),
-        child: _GeneralKnowledgeOnboarding(
-          controller: controller,
-          state: state,
-          isLoading: state.isLoading,
-          game: game,
-        ),
+      return _GeneralKnowledgeOnboarding(
+        controller: controller,
+        state: state,
+        isLoading: state.isLoading,
+        game: game,
       );
     }
 
@@ -455,178 +452,71 @@ class _OnboardingCategoryChooser extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              children: orderedCategories.map((String category) {
-                final bool isSelected =
-                    selectedCategory.toLowerCase() == category.toLowerCase();
-                
-                // Glassmorphism style for chips
-                final Color baseColor = isSelected 
-                    ? const Color(0xFF2563EB) // Blue for selected
-                    : Colors.white.withOpacity(0.15); // Semi-transparent for unselected
-                
-                final Color textColor = Colors.white;
-                
-                return InkWell(
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: orderedCategories.map((String category) {
+            final bool isSelected =
+                selectedCategory.toLowerCase() == category.toLowerCase();
+
+            // Glassmorphism style for chips
+            final Color baseColor = isSelected
+                ? const Color(0xFF2563EB) // Blue for selected
+                : Colors.white.withOpacity(0.15); // Semi-transparent for unselected
+
+            final Color textColor = Colors.white;
+
+            return InkWell(
+              borderRadius: BorderRadius.circular(18),
+              onTap: onCategorySelected == null ? null : () => onCategorySelected!(category),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  color: baseColor,
                   borderRadius: BorderRadius.circular(18),
-                  onTap: onCategorySelected == null ? null : () => onCategorySelected!(category),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 180),
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: baseColor,
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(
-                        color: isSelected 
-                            ? Colors.blue.shade300 
-                            : Colors.white.withOpacity(0.2),
-                        width: 1,
-                      ),
-                      boxShadow: isSelected
-                          ? <BoxShadow>[
-                              BoxShadow(
-                                color: Colors.blue.withOpacity(0.3),
-                                blurRadius: 12,
-                                offset: const Offset(0, 4),
-                              ),
-                            ]
-                          : const <BoxShadow>[],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Icon(
-                          iconMap[category] ?? Icons.label_rounded,
-                          size: 16,
-                          color: textColor,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          category,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: textColor,
-                            letterSpacing: 0.1,
-                          ),
-                        ),
-                      ],
-                    ),
+                  border: Border.all(
+                    color: isSelected
+                        ? Colors.blue.shade300
+                        : Colors.white.withOpacity(0.2),
+                    width: 1,
                   ),
-                );
-              }).toList(),
-            ),
-          ),
+                  boxShadow: isSelected
+                      ? <BoxShadow>[
+                          BoxShadow(
+                            color: Colors.blue.withOpacity(0.3),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ]
+                      : const <BoxShadow>[],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Icon(
+                      iconMap[category] ?? Icons.label_rounded,
+                      size: 16,
+                      color: textColor,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      category,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: textColor,
+                        letterSpacing: 0.1,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
         ),
       ],
-    );
-  }
-}
-
-class _GeneralKnowledgeStatsPanel extends StatelessWidget {
-  const _GeneralKnowledgeStatsPanel({
-    required this.state,
-    required this.onBack,
-  });
-
-  final GeneralKnowledgeGameState state;
-  final VoidCallback onBack;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme scheme = theme.colorScheme;
-
-    return Container(
-      margin: const EdgeInsets.only(top: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-      decoration: BoxDecoration(
-        color: scheme.surface.withValues(alpha: 0.75),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: scheme.outlineVariant.withValues(alpha: 0.25),
-        ),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: scheme.shadow.withValues(alpha: 0.05),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Row(
-        children: <Widget>[
-          IconButton(
-            onPressed: onBack,
-            icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Nepal General Knowledge',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: scheme.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: scheme.primary.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                    child: Text(
-                      state.selectedCategory,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: scheme.primary,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.2,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              HeaderStatChip(
-                child: FestivalStatBadge(
-                  label: 'Score',
-                  value: '${state.score}',
-                  icon: Icons.auto_awesome_rounded,
-                  compact: true,
-                ),
-              ),
-              const SizedBox(width: 8),
-              HeaderStatChip(
-                child: FestivalStatBadge(
-                  label: 'Streak',
-                  value: '${state.streak}',
-                  icon: Icons.local_fire_department_rounded,
-                  compact: true,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }

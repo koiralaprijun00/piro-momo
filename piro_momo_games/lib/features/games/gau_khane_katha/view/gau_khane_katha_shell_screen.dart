@@ -82,7 +82,6 @@ class _RiddleGameBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final ColorScheme colorScheme = theme.colorScheme;
     final GameDefinition game = homeGames.firstWhere(
       (g) => g.id == 'gau-khane-katha',
     );
@@ -92,13 +91,10 @@ class _RiddleGameBody extends StatelessWidget {
     }
 
     if (state.showOnboarding) {
-      return Container(
-        color: const Color(0xFFF8F7F4),
-        child: _RiddleOnboarding(
-          controller: controller,
-          isLoading: state.isLoading,
-          game: game,
-        ),
+      return _RiddleOnboarding(
+        controller: controller,
+        isLoading: state.isLoading,
+        game: game,
       );
     }
 

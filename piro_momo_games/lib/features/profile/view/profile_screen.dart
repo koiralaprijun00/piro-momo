@@ -11,10 +11,12 @@ class ProfileStats {
   const ProfileStats({
     required this.bestStreak,
     required this.bestScore,
+    required this.gamesTracked,
   });
 
   final int bestStreak;
   final int bestScore;
+  final int gamesTracked;
 }
 
 final FutureProvider<ProfileStats> profileStatsProvider =
@@ -22,9 +24,18 @@ final FutureProvider<ProfileStats> profileStatsProvider =
       final ProgressStore store = ref.watch(progressStoreProvider);
       final int bestStreak = await store.loadBestStreakAcrossGames();
       final int bestScore = await store.loadBestScoreAcrossGames();
+      final List<int> bests = <int>[
+        await store.loadFestivalBestScore(),
+        await store.loadRiddleBestScore(),
+        await store.loadGkBestScore(),
+        await store.loadKingsBestScore(),
+        await store.loadDistrictBestScore(),
+      ];
+      final int gamesTracked = bests.where((int v) => v > 0).length;
       return ProfileStats(
         bestStreak: bestStreak,
         bestScore: bestScore,
+        gamesTracked: gamesTracked,
       );
     });
 
@@ -112,57 +123,63 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final AuthService authService = ref.watch(authServiceProvider);
 
     return Scaffold(
-      // Use a slightly cleaner gradient or solid color if preferred
       body: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: <Color>[
-              Color(0xFFF6F3FF),
-              Color(0xFFE0F2FE),
-              Color(0xFFFFF1F2),
-            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF6366F1), // Indigo
+              Color(0xFFA855F7), // Purple
+              Color(0xFFEC4899), // Pink
+            ],
           ),
         ),
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 400),
-                child: Card(
-                  elevation: 8,
-                  shadowColor: Colors.black.withValues(alpha: 0.1),
-                  color: colorScheme.surface,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(32),
+                constraints: const BoxConstraints(maxWidth: 460),
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      width: 1.5,
+                    ),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
                   ),
-                  margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                  child: Padding(
-                    padding: const EdgeInsets.all(32),
-                    child: userValue.when(
-                      data: (User? user) => _buildBody(
-                        context,
-                        theme,
-                        colorScheme,
-                        authService,
-                        user,
-                      ),
-                      error: (Object error, StackTrace stackTrace) => Center(
-                        child: Text(
-                          'Unable to load profile',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.error,
-                          ),
+                  child: userValue.when(
+                    data: (User? user) => _buildBody(
+                      context,
+                      theme,
+                      colorScheme,
+                      authService,
+                      user,
+                    ),
+                    error: (Object error, StackTrace stackTrace) => Center(
+                      child: Text(
+                        'Unable to load profile',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.error,
                         ),
                       ),
-                      loading: () => const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(24.0),
-                          child: CircularProgressIndicator(),
-                        ),
+                    ),
+                    loading: () => const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(24.0),
+                        child: CircularProgressIndicator(),
                       ),
                     ),
                   ),
@@ -196,322 +213,369 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     if (user != null) {
       final AsyncValue<ProfileStats> statsValue =
           ref.watch(profileStatsProvider);
+
       return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          // Header with Back Button and Title
           Row(
             children: <Widget>[
-              IconButton.filledTonal(
+              IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+                color: Colors.white,
                 onPressed: () => Navigator.of(context).maybePop(),
               ),
               const Spacer(),
-              Text(
-                'Profile',
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Icon(Icons.verified_rounded,
+                        size: 16, color: Colors.greenAccent.shade200),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Signed in',
+                      style: theme.textTheme.labelMedium
+                          ?.copyWith(color: Colors.white),
+                    ),
+                  ],
                 ),
               ),
               const Spacer(),
-              // Logout Button
-              IconButton(
-                icon: Icon(Icons.logout_rounded, color: colorScheme.error),
+              TextButton.icon(
+                style: TextButton.styleFrom(
+                  foregroundColor: colorScheme.error,
+                ),
+                icon: const Icon(Icons.logout_rounded, size: 18),
                 onPressed: _busy ? null : () => _guard(authService.signOut),
-                tooltip: 'Sign out',
+                label: const Text('Sign out'),
               ),
             ],
           ),
-          const SizedBox(height: 24),
-
-          // Profile Avatar with decorative ring
-          Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: colorScheme.primary.withValues(alpha: 0.2),
-                width: 2,
-              ),
-            ),
-            child: CircleAvatar(
-              radius: 45,
-              backgroundColor: colorScheme.primaryContainer,
-              backgroundImage:
-                  user.photoURL != null ? NetworkImage(user.photoURL!) : null,
-              child: user.photoURL == null
-                  ? Text(
-                      (user.displayName ?? user.email ?? '?')
-                          .substring(0, 1)
-                          .toUpperCase(),
-                      style: theme.textTheme.displaySmall?.copyWith(
-                        color: colorScheme.onPrimaryContainer,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  : null,
+          const SizedBox(height: 16),
+          _FrostedCard(
+            child: Column(
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 44,
+                  backgroundColor: Colors.white.withValues(alpha: 0.08),
+                  backgroundImage:
+                      user.photoURL != null ? NetworkImage(user.photoURL!) : null,
+                  child: user.photoURL == null
+                      ? Text(
+                          (user.displayName ?? user.email ?? '?')
+                              .substring(0, 1)
+                              .toUpperCase(),
+                          style: theme.textTheme.headlineMedium?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        )
+                      : null,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  user.displayName ?? 'Piromomo Player',
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.2,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  user.email ?? 'Email not provided',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.white.withValues(alpha: 0.7),
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 16),
-
-          // Name and Email
-          Text(
-            user.displayName ?? 'Piromomo Player',
-            textAlign: TextAlign.center,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            user.email ?? 'Email not provided',
-            textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Stats Grid
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: _ProfileStatTile(
-                  icon: Icons.local_fire_department_rounded,
-                  label: 'Streak',
-                  value: statsValue.when(
-                    data: (ProfileStats stats) => '${stats.bestStreak} Days',
-                    loading: () => '--',
-                    error: (_, __) => '--',
-                  ),
-                  color: Colors.orange,
+          statsValue.when(
+            data: (ProfileStats stats) => Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: _ProfileStatTile(
+                        icon: Icons.local_fire_department_rounded,
+                        label: 'Best Streak',
+                        value: '${stats.bestStreak}',
+                        color: Colors.orangeAccent,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _ProfileStatTile(
+                        icon: Icons.military_tech_rounded,
+                        label: 'High Score',
+                        value: _formatNumber(stats.bestScore),
+                        color: Colors.amber.shade200,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _ProfileStatTile(
-                  icon: Icons.military_tech_rounded,
-                  label: 'High Score',
-                  value: statsValue.when(
-                    data: (ProfileStats stats) =>
-                        _formatNumber(stats.bestScore),
-                    loading: () => '--',
-                    error: (_, __) => '--',
-                  ),
-                  color: Colors.amber,
+                const SizedBox(height: 12),
+                _ProfileStatTile(
+                  icon: Icons.sports_esports_rounded,
+                  label: 'Games Tracked',
+                  value: '${stats.gamesTracked}',
+                  color: Colors.lightBlueAccent,
+                  isFullWidth: true,
                 ),
-              ),
-            ],
+              ],
+            ),
+            loading: () => const Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: LinearProgressIndicator(),
+            ),
+            error: (_, __) => const SizedBox.shrink(),
           ),
-          const SizedBox(height: 12),
-
-
           if (_busy) ...<Widget>[
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             const LinearProgressIndicator(),
           ],
           if (_error != null) ...<Widget>[
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: colorScheme.errorContainer,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                _error!,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: colorScheme.onErrorContainer,
-                ),
-              ),
-            ),
+            const SizedBox(height: 14),
+            _ErrorBanner(message: _error!),
           ],
         ],
       );
     }
 
-    // -----------------------
-    // Auth Flow (Sign In / Up)
-    // -----------------------
+    // Auth flow
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Row(
-          children: [
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
             IconButton(
-               icon: const Icon(Icons.arrow_back_ios_new_rounded),
-               onPressed: () => Navigator.of(context).maybePop(),
+              icon: const Icon(Icons.arrow_back_ios_new_rounded),
+              color: Colors.white,
+              onPressed: () => Navigator.of(context).maybePop(),
             ),
-            const SizedBox(width: 8),
-            Text(
-              _showSignUp ? 'Create Account' : 'Welcome Back',
-              style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w800,
+            SegmentedButton<bool>(
+              style: ButtonStyle(
+                visualDensity: VisualDensity.compact,
+                padding: MaterialStateProperty.all(
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                ),
+                backgroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return Colors.white.withValues(alpha: 0.14);
+                  }
+                  return Colors.white.withValues(alpha: 0.06);
+                }),
+                foregroundColor:
+                    MaterialStateProperty.all<Color>(Colors.white),
               ),
+              segments: const <ButtonSegment<bool>>[
+                ButtonSegment<bool>(value: false, label: Text('Sign In')),
+                ButtonSegment<bool>(value: true, label: Text('Sign Up')),
+              ],
+              selected: <bool>{_showSignUp},
+              onSelectionChanged: (Set<bool> value) {
+                setState(() {
+                  _showSignUp = value.first;
+                  _error = null;
+                });
+              },
             ),
           ],
+        ),
+        const SizedBox(height: 20),
+        Text(
+          _showSignUp ? 'Create your account' : 'Welcome back',
+          style: theme.textTheme.headlineSmall?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.2,
+          ),
         ),
         const SizedBox(height: 8),
         Text(
-          'Save your progress and join the leaderboard.',
+          'Sign in to sync your progress across devices.',
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: colorScheme.onSurfaceVariant,
+            color: Colors.white.withValues(alpha: 0.7),
           ),
         ),
-        const SizedBox(height: 32),
-
-        // Social Buttons
-        FilledButton.icon(
-          onPressed: _busy ? null : () => _startAuthFlow(authService.signInWithGoogle),
-          style: FilledButton.styleFrom(
-            minimumSize: const Size.fromHeight(56),
-            backgroundColor: colorScheme.surfaceContainerHigh,
-            foregroundColor: colorScheme.onSurface,
-            elevation: 0,
-          ),
-          icon: const Icon(Icons.g_mobiledata_rounded, size: 28),
-          label: const Text('Continue with Google'),
-        ),
-        const SizedBox(height: 24),
-        Row(
-          children: [
-            Expanded(child: Divider(color: colorScheme.outlineVariant)),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text('OR', style: theme.textTheme.labelSmall),
-            ),
-            Expanded(child: Divider(color: colorScheme.outlineVariant)),
-          ],
-        ),
-        const SizedBox(height: 24),
-
-        // Email Input
-        TextField(
-          controller: _emailController,
-          decoration: InputDecoration(
-            labelText: 'Email Address',
-            prefixIcon: const Icon(Icons.email_outlined),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: colorScheme.outlineVariant),
-            ),
-          ),
-          keyboardType: TextInputType.emailAddress,
-        ),
-        const SizedBox(height: 16),
-        
-        // Password Input
-        TextField(
-          controller: _passwordController,
-          decoration: InputDecoration(
-            labelText: 'Password',
-            prefixIcon: const Icon(Icons.lock_outline),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: colorScheme.outlineVariant),
-            ),
-          ),
-          obscureText: true,
-        ),
-
-        // Confirm Password (Sign Up only)
-        if (_showSignUp) ...[
-          const SizedBox(height: 16),
-          TextField(
-            controller: _confirmPasswordController,
-            decoration: InputDecoration(
-              labelText: 'Confirm Password',
-              prefixIcon: const Icon(Icons.lock_reset),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: colorScheme.outlineVariant),
-              ),
-            ),
-            obscureText: true,
-          ),
+        const SizedBox(height: 18),
+        if (_error != null) ...<Widget>[
+          _ErrorBanner(message: _error!),
+          const SizedBox(height: 12),
         ],
-
-        const SizedBox(height: 24),
-
-        // Action Button
-        FilledButton(
-          onPressed: _busy
-              ? null
-              : () => _showSignUp
-                  ? _startAuthFlow(() => _signUp(authService))
-                  : _startAuthFlow(() => authService.signInWithEmail(
-                      email: _emailController.text.trim(),
-                      password: _passwordController.text,
-                    )),
-          style: FilledButton.styleFrom(
-            minimumSize: const Size.fromHeight(56),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          ),
-          child: Text(
-            _showSignUp ? 'Sign Up' : 'Sign In',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-        ),
-
-        const SizedBox(height: 16),
-
-        // Toggle Mode
-        Center(
-          child: TextButton(
-            onPressed: _busy
-                ? null
-                : () => setState(() {
-                      _showSignUp = !_showSignUp;
-                      _error = null;
-                    }),
-            child: Text.rich(
-              TextSpan(
-                text: _showSignUp
-                    ? 'Already have an account? '
-                    : 'Don\'t have an account? ',
-                style: TextStyle(color: colorScheme.onSurfaceVariant),
-                children: [
-                  TextSpan(
-                    text: _showSignUp ? 'Sign in' : 'Sign up',
-                    style: TextStyle(
-                      color: colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
+        if (_busy) ...<Widget>[
+          const LinearProgressIndicator(),
+          const SizedBox(height: 12),
+        ],
+        _FrostedCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              FilledButton.icon(
+                style: FilledButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: const Color(0xFF1F2937),
+                  minimumSize: const Size(double.infinity, 54),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
+                  elevation: 0,
+                ),
+                icon: const Icon(Icons.login),
+                label: const Text('Continue with Google', style: TextStyle(fontWeight: FontWeight.w600)),
+                onPressed:
+                    _busy ? null : () => _startAuthFlow(authService.signInWithGoogle),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: <Widget>[
+                  Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.2))),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    child: Text('or',
+                        style: TextStyle(color: Colors.white70)),
+                  ),
+                  Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.2))),
                 ],
               ),
-            ),
+              const SizedBox(height: 16),
+              _AuthField(
+                controller: _emailController,
+                label: 'Email',
+                icon: Icons.mail_outline_rounded,
+                keyboardType: TextInputType.emailAddress,
+              ),
+              const SizedBox(height: 12),
+              _AuthField(
+                controller: _passwordController,
+                label: 'Password',
+                icon: Icons.lock_outline_rounded,
+                obscureText: true,
+              ),
+              if (_showSignUp) ...<Widget>[
+                const SizedBox(height: 12),
+                _AuthField(
+                  controller: _confirmPasswordController,
+                  label: 'Confirm Password',
+                  icon: Icons.lock_reset_rounded,
+                  obscureText: true,
+                ),
+              ],
+              const SizedBox(height: 14),
+              FilledButton(
+                onPressed: _busy
+                    ? null
+                    : () {
+                        if (_showSignUp) {
+                          _guard(() => _signUp(authService));
+                        } else {
+                          _guard(() async {
+                            await authService.signInWithEmail(
+                              email: _emailController.text.trim(),
+                              password: _passwordController.text,
+                            );
+                          });
+                        }
+                      },
+                style: FilledButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: const Color(0xFF1F2937),
+                  minimumSize: const Size(double.infinity, 54),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 0,
+                ),
+                child: Text(
+                  _showSignUp ? 'Create Account' : 'Sign In',
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
           ),
         ),
-
-        if (_busy) ...<Widget>[
-          const SizedBox(height: 16),
-          const LinearProgressIndicator(),
-        ],
-        if (_error != null) ...<Widget>[
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: colorScheme.errorContainer,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            width: double.infinity,
-            child: Text(
-              _error!,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: colorScheme.onErrorContainer,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
       ],
+    );
+  }
+}
+
+class _FrostedCard extends StatelessWidget {
+  const _FrostedCard({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.25),
+          width: 1.5,
+        ),
+      ),
+      child: child,
+    );
+  }
+}
+
+class _AuthField extends StatelessWidget {
+  const _AuthField({
+    required this.controller,
+    required this.label,
+    required this.icon,
+    this.keyboardType,
+    this.obscureText = false,
+  });
+
+  final TextEditingController controller;
+  final String label;
+  final IconData icon;
+  final TextInputType? keyboardType;
+  final bool obscureText;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType,
+      obscureText: obscureText,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.8)),
+        prefixIcon: Icon(icon, color: Colors.white.withValues(alpha: 0.8)),
+        filled: true,
+        fillColor: Colors.white.withValues(alpha: 0.12),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(
+            color: Colors.white.withValues(alpha: 0.25),
+            width: 1.5,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+            color: Colors.white,
+            width: 2,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -534,14 +598,16 @@ class _ProfileStatTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final ColorScheme colorScheme = theme.colorScheme;
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 18),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerLow,
+        color: Colors.white.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: colorScheme.outline.withValues(alpha: 0.1)),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.25),
+          width: 1.5,
+        ),
       ),
       child: isFullWidth
           ? Row(
@@ -549,7 +615,7 @@ class _ProfileStatTile extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.1),
+                    color: color.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(icon, size: 20, color: color),
@@ -562,7 +628,7 @@ class _ProfileStatTile extends StatelessWidget {
                       Text(
                         label,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
+                          color: Colors.white70,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -570,6 +636,7 @@ class _ProfileStatTile extends StatelessWidget {
                         value,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
                     ],
@@ -583,7 +650,7 @@ class _ProfileStatTile extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.1),
+                    color: color.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(icon, size: 24, color: color),
@@ -594,13 +661,14 @@ class _ProfileStatTile extends StatelessWidget {
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     height: 1,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   label,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
+                    color: Colors.white70,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -610,7 +678,44 @@ class _ProfileStatTile extends StatelessWidget {
   }
 }
 
+class _ErrorBanner extends StatelessWidget {
+  const _ErrorBanner({required this.message});
 
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.red.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.red.withValues(alpha: 0.4)),
+      ),
+      child: Row(
+        children: <Widget>[
+          const Icon(Icons.error_outline, color: Colors.red),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              message,
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+int _calculateBadges(int bestStreak, int bestScore) {
+  int badges = 0;
+  if (bestStreak > 0) badges++;
+  if (bestStreak >= 10) badges++;
+  if (bestScore >= 500) badges++;
+  return badges;
+}
 
 String _formatNumber(int value) {
   final String digits = value.toString();

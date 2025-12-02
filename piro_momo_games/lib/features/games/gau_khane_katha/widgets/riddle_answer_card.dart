@@ -158,7 +158,6 @@ class RiddleAnswerCard extends StatelessWidget {
 
 class _AnswerReveal extends StatelessWidget {
   const _AnswerReveal({
-    super.key,
     required this.riddle,
     required this.isCorrect,
   });
