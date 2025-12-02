@@ -200,15 +200,29 @@ class KingsGameController extends StateNotifier<KingsGameState> {
   }
 
   void _logGuess({required bool correct, String? kingId}) {
-    unawaited(
-      _analytics.logEvent(
-        'kings_guess',
-        parameters: <String, Object?>{
-          'correct': correct,
-          'king_id': kingId,
-        },
-      ),
+    _analytics.logEvent(
+      'kings_guess',
+      parameters: {
+        'correct': correct,
+        if (kingId != null) 'king_id': kingId,
+      },
     );
+  }
+
+  void giveUp() {
+    // Reveal all kings by adding all IDs to guessedIds
+    final Set<String> allKingIds = state.deck.map((king) => king.id).toSet();
+    state = state.copyWith(
+      guessedIds: allKingIds,
+      lastMessage: 'All kings revealed!',
+      lastGuessCorrect: null,
+      lastMatchedId: null,
+    );
+    
+    _analytics.logEvent('kings_give_up', parameters: {
+      'kings_found': state.guessedIds.length,
+      'total_kings': state.deck.length,
+    });
   }
 
   String _normalize(String value) {

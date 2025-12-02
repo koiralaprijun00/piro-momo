@@ -230,6 +230,25 @@ class _KingsGameContent extends StatelessWidget {
                       controller: controller,
                       inputController: answerController,
                     ),
+                    const SizedBox(height: 8),
+                    // Give Up button
+                    if (state.guessedIds.length < state.deck.length)
+                        TextButton(
+                          onPressed: () {
+                            controller.giveUp();
+                          },
+                          style: TextButton.styleFrom(
+                          foregroundColor: Colors.white.withValues(alpha: 0.7),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          child: const Text(
+                            'Give Up',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -399,158 +418,168 @@ class _KingsListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme scheme = theme.colorScheme;
+    // Filter to only show guessed kings
+    final List<KingEntry> guessedKings = state.deck
+        .where((king) => state.guessedIds.contains(king.id))
+        .toList();
 
-    return Container(
-      decoration: BoxDecoration(
-        color: scheme.surface,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: scheme.outlineVariant.withValues(alpha: 0.25),
-        ),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: scheme.shadow.withValues(alpha: 0.08),
-            blurRadius: 45,
-            offset: const Offset(0, 24),
-          ),
-        ],
-      ),
-      child: Column(
-        children: <Widget>[
-          const _KingsTableHeader(),
-          const Divider(height: 1),
-          Expanded(
-            child: ListView.separated(
-              padding: EdgeInsets.zero,
-              itemCount: state.deck.length,
-              separatorBuilder: (_, __) =>
-                  Divider(height: 1, color: scheme.outline.withValues(alpha: 0.1)),
-              itemBuilder: (BuildContext context, int index) {
-                final KingEntry king = state.deck[index];
-                final bool guessed = state.guessedIds.contains(king.id);
-                final bool highlight =
-                    guessed && state.lastMatchedId == king.id;
-                return _KingListRow(
-                  index: index,
-                  king: king,
-                  guessed: guessed,
-                  highlight: highlight,
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+    if (guessedKings.isEmpty) {
+      return _EmptyKingsState();
+    }
+
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(bottom: 16),
+      itemCount: guessedKings.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      itemBuilder: (BuildContext context, int index) {
+        final KingEntry king = guessedKings[index];
+        final bool highlight = state.lastMatchedId == king.id;
+        // Find the original index in the full deck for numbering
+        final int originalIndex = state.deck.indexOf(king);
+        return _KingCard(
+          index: originalIndex,
+          king: king,
+          highlight: highlight,
+        );
+      },
     );
   }
 }
 
-class _KingsTableHeader extends StatelessWidget {
-  const _KingsTableHeader();
+class _EmptyKingsState extends StatelessWidget {
+  const _EmptyKingsState();
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle? labelStyle = Theme.of(context).textTheme.labelLarge;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-      child: Row(
-        children: <Widget>[
-          SizedBox(
-            width: 32,
-            child: Text('#', style: labelStyle),
-          ),
-          SizedBox(
-            width: 120,
-            child: Text('Reign', style: labelStyle),
-          ),
-          Expanded(
-            child: Text("King's name", style: labelStyle),
-          ),
-        ],
+    final ThemeData theme = Theme.of(context);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.search_rounded,
+              size: 64,
+              color: Colors.white.withValues(alpha: 0.3),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Start guessing to reveal kings!',
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+              Text(
+                'Type a king\'s name below',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.white.withValues(alpha: 0.7),
+                ),
+                textAlign: TextAlign.center,
+              ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _KingListRow extends StatelessWidget {
-  const _KingListRow({
+class _KingCard extends StatelessWidget {
+  const _KingCard({
     required this.index,
     required this.king,
-    required this.guessed,
     required this.highlight,
   });
 
   final int index;
   final KingEntry king;
-  final bool guessed;
   final bool highlight;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final ColorScheme scheme = theme.colorScheme;
-    final TextStyle defaultStyle = theme.textTheme.bodyLarge!.copyWith(
-      color: scheme.onSurfaceVariant,
-    );
-
-    final TextStyle guessedStyle = theme.textTheme.bodyLarge!.copyWith(
-      fontWeight: FontWeight.w700,
-      color: scheme.onSurface,
-    );
-
-    final String displayName = guessed ? king.name : '?????';
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
-      color: highlight
-          ? scheme.primary.withValues(alpha: 0.08)
-          : Colors.transparent,
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          SizedBox(
-            width: 32,
-            child: Text(
-              '${index + 1}',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: scheme.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 120,
-            child: Text(
-              king.reignYears,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: scheme.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Row(
-              children: <Widget>[
-                Text(
-                  displayName,
-                  style: guessed ? guessedStyle : defaultStyle,
-                ),
-                if (guessed) ...<Widget>[
-                  const SizedBox(width: 6),
-                  Icon(
-                    Icons.check_circle_rounded,
-                    size: 18,
-                    color: scheme.primary,
-                  ),
-                ],
-              ],
-            ),
+        decoration: BoxDecoration(
+          color: highlight 
+              ? Colors.white 
+              : Colors.white.withValues(alpha: 0.95),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: highlight 
+              ? const Color(0xFF6366F1)
+              : Colors.white,
+          width: highlight ? 2 : 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          children: [
+            // Number badge
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+              child: Center(
+                child: Text(
+                  '${index + 1}',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: const Color(0xFF6366F1),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            // King info
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    king.name,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF1F2937),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    king.reignYears,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: const Color(0xFF6B7280),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Check icon
+            Icon(
+              Icons.check_circle_rounded,
+              color: const Color(0xFF10B981),
+              size: 28,
+            ),
+          ],
+        ),
       ),
     );
   }

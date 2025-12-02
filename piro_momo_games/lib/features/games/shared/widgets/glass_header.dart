@@ -20,7 +20,7 @@ class GlassHeader extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(top: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(24),
@@ -36,72 +36,74 @@ class GlassHeader extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // Back Button
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: onBack,
-              borderRadius: BorderRadius.circular(16),
-              child: Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
+          // Top row: Back button and Title
+          Row(
+            children: [
+              // Back Button
+              Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: onBack,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    width: 1,
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        width: 1,
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      color: Colors.white,
+                      size: 16,
+                    ),
                   ),
                 ),
-                child: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: Colors.white,
-                  size: 18,
-                ),
               ),
-            ),
-          ),
-          const SizedBox(width: 16),
-          // Title
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
+              const SizedBox(width: 12),
+              // Title
+              Expanded(
+                child: Text(
                   title,
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 18,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                if (subtitle != null) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle!,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: Colors.white.withValues(alpha: 0.8),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ],
-            ),
+              ),
+            ],
           ),
-          // Stats
-          if (stats.isNotEmpty) ...[
-            const SizedBox(width: 8),
+          // Bottom row: Subtitle (left) and Stats (right)
+          if (subtitle != null || stats.isNotEmpty) ...[
+            const SizedBox(height: 6),
             Row(
-              mainAxisSize: MainAxisSize.min,
-              children: stats.map((stat) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: stat,
-                );
-              }).toList(),
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                // Stats on the right
+                if (stats.isNotEmpty)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: stats.map((stat) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 1),
+                        child: Transform.scale(
+                          scale: 0.85,
+                          child: stat,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+              ],
             ),
           ],
         ],
