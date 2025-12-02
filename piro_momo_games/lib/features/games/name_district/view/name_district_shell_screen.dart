@@ -145,7 +145,7 @@ class _NameDistrictGameContent extends StatelessWidget {
                                     icon: Icons.auto_awesome_rounded,
                                     compact: true,
                                     color: Colors.white,
-                                    backgroundColor: Colors.white.withOpacity(0.15),
+                                    backgroundColor: Colors.white.withValues(alpha: 0.15),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -156,7 +156,7 @@ class _NameDistrictGameContent extends StatelessWidget {
                                     icon: Icons.local_fire_department_rounded,
                                     compact: true,
                                     color: Colors.white,
-                                    backgroundColor: Colors.white.withOpacity(0.15),
+                                    backgroundColor: Colors.white.withValues(alpha: 0.15),
                                   ),
                                 ),
                               ],
@@ -261,12 +261,12 @@ class _DistrictQuestionCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(28),
         border: Border.all(color: Colors.white),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 40,
             offset: const Offset(0, 24),
           ),
@@ -287,7 +287,7 @@ class _DistrictQuestionCard extends StatelessWidget {
             aspectRatio: 2 / 1,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: colorScheme.surfaceVariant.withValues(alpha: 0.35),
+                color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.35),
                 borderRadius: BorderRadius.circular(18),
               ),
               child: Center(

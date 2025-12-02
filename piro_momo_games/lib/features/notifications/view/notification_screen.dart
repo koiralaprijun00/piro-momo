@@ -87,13 +87,11 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
                       gameData: _latestGame!,
                       onPlayAgain: () {
                         final String gameId = _latestGame!['gameId'] as String;
-                        final GameDefinition? game = homeGames.firstWhere(
+                        final GameDefinition game = homeGames.firstWhere(
                           (g) => g.id == gameId,
                           orElse: () => homeGames.first,
                         );
-                        if (game != null) {
-                          context.push(game.routePath);
-                        }
+                        context.push(game.routePath);
                       },
                     ),
                   ],

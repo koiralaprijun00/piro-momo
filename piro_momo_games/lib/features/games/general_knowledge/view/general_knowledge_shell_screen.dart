@@ -159,7 +159,7 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
                                     icon: Icons.auto_awesome_rounded,
                                     compact: true,
                                     color: Colors.white,
-                                    backgroundColor: Colors.white.withOpacity(0.15),
+                                    backgroundColor: Colors.white.withValues(alpha: 0.15),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -170,7 +170,7 @@ class _GeneralKnowledgeGameContent extends StatelessWidget {
                                     icon: Icons.local_fire_department_rounded,
                                     compact: true,
                                     color: Colors.white,
-                                    backgroundColor: Colors.white.withOpacity(0.15),
+                                    backgroundColor: Colors.white.withValues(alpha: 0.15),
                                   ),
                                 ),
                               ],
@@ -309,7 +309,7 @@ class _GeneralKnowledgeOnboarding extends StatelessWidget {
                                 Text(
                                   game.description,
                                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: Colors.white.withOpacity(0.9),
+                                    color: Colors.white.withValues(alpha: 0.9),
                                     height: 1.5,
                                     fontSize: 16,
                                   ),
@@ -462,7 +462,7 @@ class _OnboardingCategoryChooser extends StatelessWidget {
             // Glassmorphism style for chips
             final Color baseColor = isSelected
                 ? const Color(0xFF2563EB) // Blue for selected
-                : Colors.white.withOpacity(0.15); // Semi-transparent for unselected
+                : Colors.white.withValues(alpha: 0.15); // Semi-transparent for unselected
 
             final Color textColor = Colors.white;
 
@@ -478,13 +478,13 @@ class _OnboardingCategoryChooser extends StatelessWidget {
                   border: Border.all(
                     color: isSelected
                         ? Colors.blue.shade300
-                        : Colors.white.withOpacity(0.2),
+                        : Colors.white.withValues(alpha: 0.2),
                     width: 1,
                   ),
                   boxShadow: isSelected
                       ? <BoxShadow>[
                           BoxShadow(
-                            color: Colors.blue.withOpacity(0.3),
+                            color: Colors.blue.withValues(alpha: 0.3),
                             blurRadius: 12,
                             offset: const Offset(0, 4),
                           ),
@@ -629,7 +629,7 @@ class _SummaryTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceVariant.withValues(alpha: 0.6),
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -780,10 +780,10 @@ class _GlassStatCard extends StatelessWidget {
       width: width,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.white.withOpacity(0.15),
+          color: Colors.white.withValues(alpha: 0.15),
           width: 1,
         ),
       ),
@@ -792,7 +792,7 @@ class _GlassStatCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -809,7 +809,7 @@ class _GlassStatCard extends StatelessWidget {
                 Text(
                   label,
                   style: theme.textTheme.labelSmall?.copyWith(
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.5,
                   ),

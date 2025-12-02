@@ -77,7 +77,7 @@ class _AnimatedGameIconState extends State<AnimatedGameIcon>
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [
-                              Colors.white.withOpacity(0.1),
+                          Colors.white.withValues(alpha: 0.1),
                               Colors.transparent,
                             ],
                           ),
@@ -93,15 +93,15 @@ class _AnimatedGameIconState extends State<AnimatedGameIcon>
                   height: widget.size,
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.15),
+                    color: Colors.white.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(40),
                     border: Border.all(
-                      color: Colors.white.withOpacity(0.25),
+                      color: Colors.white.withValues(alpha: 0.25),
                       width: 2,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 60,
                         offset: const Offset(0, 20),
                       ),

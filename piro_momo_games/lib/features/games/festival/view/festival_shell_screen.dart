@@ -137,7 +137,7 @@ class _FestivalGameContent extends StatelessWidget {
                                     icon: Icons.auto_awesome_rounded,
                                     compact: true,
                                     color: Colors.white,
-                                    backgroundColor: Colors.white.withOpacity(0.15),
+                                    backgroundColor: Colors.white.withValues(alpha: 0.15),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -148,7 +148,7 @@ class _FestivalGameContent extends StatelessWidget {
                                     icon: Icons.local_fire_department_rounded,
                                     compact: true,
                                     color: Colors.white,
-                                    backgroundColor: Colors.white.withOpacity(0.15),
+                                    backgroundColor: Colors.white.withValues(alpha: 0.15),
                                   ),
                                 ),
                               ],
@@ -263,12 +263,12 @@ class _FestivalQuestionCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(18, 18, 18, 14),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: Colors.white),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 45,
             offset: const Offset(0, 24),
           ),

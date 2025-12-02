@@ -366,17 +366,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             SegmentedButton<bool>(
               style: ButtonStyle(
                 visualDensity: VisualDensity.compact,
-                padding: MaterialStateProperty.all(
+                padding: WidgetStateProperty.all(
                   const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 ),
-                backgroundColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.selected)) {
+                backgroundColor: WidgetStateProperty.resolveWith((states) {
+                  if (states.contains(WidgetState.selected)) {
                     return Colors.white.withValues(alpha: 0.14);
                   }
                   return Colors.white.withValues(alpha: 0.06);
                 }),
-                foregroundColor:
-                    MaterialStateProperty.all<Color>(Colors.white),
+                foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
               ),
               segments: const <ButtonSegment<bool>>[
                 ButtonSegment<bool>(value: false, label: Text('Sign In')),
@@ -707,14 +706,6 @@ class _ErrorBanner extends StatelessWidget {
       ),
     );
   }
-}
-
-int _calculateBadges(int bestStreak, int bestScore) {
-  int badges = 0;
-  if (bestStreak > 0) badges++;
-  if (bestStreak >= 10) badges++;
-  if (bestScore >= 500) badges++;
-  return badges;
 }
 
 String _formatNumber(int value) {

@@ -70,7 +70,7 @@ class _QuizOptionTileState extends State<QuizOptionTile> {
       borderColor = colorScheme.primary;
       titleColor = colorScheme.primary;
     } else if (_isHovered) {
-      backgroundColor = colorScheme.surfaceVariant.withValues(alpha: 0.6);
+      backgroundColor = colorScheme.surfaceContainerHighest.withValues(alpha: 0.6);
     }
 
     final bool showShadow =

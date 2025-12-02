@@ -81,7 +81,6 @@ class _RiddleGameBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     final GameDefinition game = homeGames.firstWhere(
       (g) => g.id == 'gau-khane-katha',
     );
@@ -170,7 +169,7 @@ class _RiddleGameBody extends StatelessWidget {
                                 icon: Icons.auto_awesome_rounded,
                                 compact: true,
                                 color: Colors.white,
-                                backgroundColor: Colors.white.withOpacity(0.15),
+                                backgroundColor: Colors.white.withValues(alpha: 0.15),
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -181,7 +180,7 @@ class _RiddleGameBody extends StatelessWidget {
                                 icon: Icons.local_fire_department_rounded,
                                 compact: true,
                                 color: Colors.white,
-                                backgroundColor: Colors.white.withOpacity(0.15),
+                                backgroundColor: Colors.white.withValues(alpha: 0.15),
                               ),
                             ),
                           ],

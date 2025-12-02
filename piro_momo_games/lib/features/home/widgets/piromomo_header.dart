@@ -101,7 +101,7 @@ class _HeroCard extends StatelessWidget {
           Text(
             subtitle,
             style: textTheme.titleMedium?.copyWith(
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
               fontWeight: FontWeight.w600,
               height: 1.2,
             ),
@@ -159,10 +159,10 @@ class _ProfileIconButton extends StatelessWidget {
         height: 48,
         width: 48,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withValues(alpha: 0.2),
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.white.withOpacity(0.3),
+            color: Colors.white.withValues(alpha: 0.3),
             width: 1,
           ),
         ),

@@ -168,7 +168,7 @@ class _KingsGameContent extends StatelessWidget {
                                     icon: Icons.fact_check_rounded,
                                     compact: true,
                                     color: Colors.white,
-                                    backgroundColor: Colors.white.withOpacity(0.15),
+                                    backgroundColor: Colors.white.withValues(alpha: 0.15),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -179,7 +179,7 @@ class _KingsGameContent extends StatelessWidget {
                                     icon: Icons.local_fire_department_rounded,
                                     compact: true,
                                     color: Colors.white,
-                                    backgroundColor: Colors.white.withOpacity(0.15),
+                                    backgroundColor: Colors.white.withValues(alpha: 0.15),
                                   ),
                                 ),
                               ],
@@ -312,7 +312,7 @@ class _KingsInputPanel extends StatelessWidget {
               child: LinearProgressIndicator(
                 value: progress,
                 minHeight: 6,
-                backgroundColor: colorScheme.surfaceVariant.withValues(alpha: 0.4),
+                backgroundColor: colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
               ),
             ),
             const SizedBox(height: 14),
@@ -551,92 +551,6 @@ class _KingListRow extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _KingsSummary extends StatelessWidget {
-  const _KingsSummary({
-    required this.state,
-    required this.onPlayAgain,
-    required this.onGoHome,
-  });
-
-  final KingsGameState state;
-  final VoidCallback onPlayAgain;
-  final VoidCallback onGoHome;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 520),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Icon(
-                Icons.emoji_events_rounded,
-                size: 64,
-                color: colorScheme.primary,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'All kings unlocked!',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'You typed all ${state.deck.length} monarchs correctly.',
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  FestivalStatBadge(
-                    label: 'Score',
-                    value: '${state.score}',
-                    icon: Icons.auto_awesome_rounded,
-                  ),
-                  const SizedBox(width: 16),
-                  FestivalStatBadge(
-                    label: 'Best streak',
-                    value: '${state.bestStreak}',
-                    icon: Icons.local_fire_department_rounded,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 28),
-              FilledButton(
-                onPressed: onPlayAgain,
-                style: FilledButton.styleFrom(
-                  minimumSize: const Size.fromHeight(52),
-                  textStyle: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                child: const Text('Play again'),
-              ),
-              const SizedBox(height: 12),
-              TextButton(
-                onPressed: onGoHome,
-                child: const Text('Back to home'),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

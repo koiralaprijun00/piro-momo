@@ -27,11 +27,11 @@ class GlassPrimaryButton extends StatelessWidget {
                 end: Alignment.centerRight,
               )
             : null,
-        color: isEnabled ? null : Colors.white.withOpacity(0.1),
+        color: isEnabled ? null : Colors.white.withValues(alpha: 0.1),
         boxShadow: isEnabled
             ? [
                 BoxShadow(
-                  color: const Color(0xFF2563EB).withOpacity(0.3),
+                  color: const Color(0xFF2563EB).withValues(alpha: 0.3),
                   blurRadius: 12,
                   offset: const Offset(0, 6),
                 ),
@@ -53,14 +53,18 @@ class GlassPrimaryButton extends StatelessWidget {
                   label,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
-                    color: isEnabled ? Colors.white : Colors.white.withOpacity(0.4),
+                    color: isEnabled
+                        ? Colors.white
+                        : Colors.white.withValues(alpha: 0.4),
                     fontSize: 18,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Icon(
                   Icons.arrow_forward_rounded,
-                  color: isEnabled ? Colors.white : Colors.white.withOpacity(0.4),
+                  color: isEnabled
+                      ? Colors.white
+                      : Colors.white.withValues(alpha: 0.4),
                   size: 20,
                 ),
               ],

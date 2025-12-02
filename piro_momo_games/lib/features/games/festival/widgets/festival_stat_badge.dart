@@ -24,7 +24,7 @@ class FestivalStatBadge extends StatelessWidget {
     final ColorScheme colorScheme = theme.colorScheme;
     final Color resolvedColor = color ?? colorScheme.onSurface;
     final Color resolvedBackground =
-        backgroundColor ?? resolvedColor.withOpacity(0.12);
+        backgroundColor ?? resolvedColor.withValues(alpha: 0.12);
     final EdgeInsets resolvedPadding = compact
         ? const EdgeInsets.symmetric(horizontal: 14, vertical: 8)
         : const EdgeInsets.symmetric(horizontal: 18, vertical: 12);
@@ -37,7 +37,7 @@ class FestivalStatBadge extends StatelessWidget {
         decoration: BoxDecoration(
           color: resolvedBackground,
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: resolvedColor.withOpacity(0.3)),
+        border: Border.all(color: resolvedColor.withValues(alpha: 0.3)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

@@ -7,22 +7,21 @@ class AppTypography {
   static TextTheme textTheme(ColorScheme colorScheme, Brightness brightness) {
     final base = GoogleFonts.dmSansTextTheme();
     final onSurface = colorScheme.onSurface;
-    final onBackground = colorScheme.onBackground;
 
     return base.copyWith(
       displayLarge: base.displayLarge?.copyWith(
         fontWeight: FontWeight.w700,
         letterSpacing: -0.5,
-        color: onBackground,
+        color: onSurface,
       ),
       displayMedium: base.displayMedium?.copyWith(
         fontWeight: FontWeight.w700,
         letterSpacing: -0.25,
-        color: onBackground,
+        color: onSurface,
       ),
       displaySmall: base.displaySmall?.copyWith(
         fontWeight: FontWeight.w600,
-        color: onBackground,
+        color: onSurface,
       ),
       headlineLarge: base.headlineLarge?.copyWith(
         fontWeight: FontWeight.w700,
@@ -48,7 +47,7 @@ class AppTypography {
       titleSmall: base.titleSmall?.copyWith(
         fontWeight: FontWeight.w600,
         letterSpacing: 0.1,
-        color: onSurface.withOpacity(0.92),
+        color: onSurface.withValues(alpha: 0.92),
       ),
       bodyLarge: base.bodyLarge?.copyWith(
         fontWeight: FontWeight.w500,
@@ -57,12 +56,12 @@ class AppTypography {
       ),
       bodyMedium: base.bodyMedium?.copyWith(
         fontWeight: FontWeight.w500,
-        color: onSurface.withOpacity(0.9),
+        color: onSurface.withValues(alpha: 0.9),
         height: 1.5,
       ),
       bodySmall: base.bodySmall?.copyWith(
         fontWeight: FontWeight.w500,
-        color: onSurface.withOpacity(0.8),
+        color: onSurface.withValues(alpha: 0.8),
         height: 1.4,
       ),
       labelLarge: base.labelLarge?.copyWith(
@@ -73,12 +72,12 @@ class AppTypography {
       labelMedium: base.labelMedium?.copyWith(
         fontWeight: FontWeight.w600,
         letterSpacing: 0.3,
-        color: onSurface.withOpacity(0.9),
+        color: onSurface.withValues(alpha: 0.9),
       ),
       labelSmall: base.labelSmall?.copyWith(
         fontWeight: FontWeight.w600,
         letterSpacing: 0.4,
-        color: onSurface.withOpacity(0.8),
+        color: onSurface.withValues(alpha: 0.8),
       ),
     );
   }
@@ -87,7 +86,7 @@ class AppTypography {
     return GoogleFonts.notoSerifDevanagari(
       fontSize: 32,
       fontWeight: FontWeight.w700,
-      color: colorScheme.onBackground,
+      color: colorScheme.onSurface,
       height: 1.25,
     );
   }
