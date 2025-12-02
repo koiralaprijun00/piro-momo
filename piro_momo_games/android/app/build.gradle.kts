@@ -13,7 +13,7 @@ android {
         applicationId = "com.piro_momo_games"
         minSdk = 23
         targetSdk = flutter.targetSdkVersion
-        versionCode = 6
+        versionCode = 7
         versionName = "1.0.3"
         multiDexEnabled = true
     }
