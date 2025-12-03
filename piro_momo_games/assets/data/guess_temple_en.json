@@ -1,0 +1,748 @@
+[
+  {
+    "id": "pashupatinath",
+    "name": "Pashupatinath Temple",
+    "district": "Kathmandu",
+    "type": "Hindu Temple",
+    "built": "5th century",
+    "deity": "Lord Shiva",
+    "description": "One of the most sacred Hindu temples dedicated to Lord Shiva, located on the banks of the Bagmati River.",
+    "imagePath": "assets/images/temples/pashupatinath.jpg",
+    "alternativeNames": [
+      "Pashupati Temple"
+    ],
+    "acceptableAnswers": [
+      "pashupatinath",
+      "pashupati",
+      "pase",
+      "pashupati temple",
+      "pashupatinath temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "swayambhunath",
+    "name": "Swayambhunath Stupa",
+    "district": "Kathmandu",
+    "type": "Buddhist Stupa",
+    "built": "5th century",
+    "description": "Also known as the Monkey Temple, this ancient religious complex sits atop a hill in the Kathmandu Valley.",
+    "imagePath": "assets/images/temples/swayambhunath.jpg",
+    "alternativeNames": [
+      "Monkey Temple"
+    ],
+    "acceptableAnswers": [
+      "swayambhunath",
+      "swayambhu",
+      "swayambhu stupa",
+      "swayambhunath stupa",
+      "monkey temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "boudhanath",
+    "name": "Boudhanath Stupa",
+    "district": "Kathmandu",
+    "type": "Buddhist Stupa",
+    "built": "14th century",
+    "description": "One of the largest stupas in Nepal and a UNESCO World Heritage Site.",
+    "imagePath": "assets/images/temples/boudhanath.jpg",
+    "acceptableAnswers": [
+      "boudhanath",
+      "boudha",
+      "boudhha",
+      "boudha stupa",
+      "boudhanath stupa"
+    ],
+    "points": 10
+  },
+  {
+    "id": "changu-narayan",
+    "name": "Changu Narayan Temple",
+    "district": "Bhaktapur",
+    "type": "Hindu Temple",
+    "built": "4th century",
+    "deity": "Lord Vishnu",
+    "description": "The oldest Hindu temple in the Kathmandu Valley, dedicated to Lord Vishnu.",
+    "imagePath": "assets/images/temples/changu-narayan.jpg",
+    "acceptableAnswers": [
+      "changu narayan",
+      "changu",
+      "changu temple",
+      "changu narayan temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "dakshinkali",
+    "name": "Dakshinkali Temple",
+    "district": "Kathmandu",
+    "type": "Hindu Temple",
+    "deity": "Goddess Kali",
+    "description": "A significant temple dedicated to the goddess Kali, known for its animal sacrifices.",
+    "imagePath": "assets/images/temples/dakshinkali.jpg",
+    "acceptableAnswers": [
+      "dakshinkali",
+      "dakshin kali",
+      "dakshin kali temple",
+      "dakshinkali temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "budhanilkantha",
+    "name": "Budhanilkantha Temple",
+    "district": "Kathmandu",
+    "type": "Hindu Temple",
+    "deity": "Lord Vishnu",
+    "description": "Famous for its large reclining statue of Lord Vishnu floating in a tank of water.",
+    "imagePath": "assets/images/temples/budhanilkantha.jpg",
+    "acceptableAnswers": [
+      "budhanilkantha",
+      "budha nilkantha",
+      "budha nilkantha temple",
+      "budhanilkantha temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "muktinath",
+    "name": "Muktinath Temple",
+    "district": "Mustang",
+    "type": "Hindu and Buddhist Temple",
+    "deity": "Lord Vishnu",
+    "description": "A sacred site for both Hindus and Buddhists, known for its natural gas flames and 108 water spouts.",
+    "imagePath": "assets/images/temples/muktinath.jpg",
+    "alternativeNames": [
+      "Chumig Gyatsa"
+    ],
+    "acceptableAnswers": [
+      "muktinath",
+      "mukti nath",
+      "mukti nath temple",
+      "muktinath temple",
+      "chumig gyatsa"
+    ],
+    "points": 10
+  },
+  {
+    "id": "janaki-mandir",
+    "name": "Janaki Mandir",
+    "district": "Dhanusha",
+    "type": "Hindu Temple",
+    "deity": "Goddess Sita",
+    "built": "1910 AD",
+    "description": "A beautiful temple dedicated to Goddess Sita, the birthplace of Sita and a significant pilgrimage site.",
+    "imagePath": "assets/images/temples/janaki-mandir.jpg",
+    "alternativeNames": [
+      "Nau Lakha Mandir"
+    ],
+    "acceptableAnswers": [
+      "janaki mandir",
+      "janaki temple",
+      "nau lakha mandir",
+      "nau lakha temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "gorkha-durbar",
+    "name": "Gorkha Durbar",
+    "district": "Gorkha",
+    "type": "Hindu Temple",
+    "deity": "Goddess Kali and Gorakhnath",
+    "description": "A historical fort and temple complex with significant religious and historical importance.",
+    "imagePath": "assets/images/temples/gorkha-durbar.jpg",
+    "acceptableAnswers": [
+      "gorkha durbar",
+      "gorkha palace",
+      "gorkha temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "pathivara-devi-temple",
+    "name": "Pathivara Devi Temple",
+    "district": "Taplejung",
+    "type": "Hindu Temple",
+    "deity": "Goddess Pathivara",
+    "description": "A highly revered pilgrimage site believed to fulfill the wishes of devotees.",
+    "imagePath": "assets/images/temples/pathivara.jpg",
+    "acceptableAnswers": [
+      "pathivara",
+      "pathibara",
+      "pathivara devi",
+      "pathibara devi",
+      "pathivara temple",
+      "pathibara temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "bindhyabasini-temple",
+    "name": "Bindhyabasini Temple",
+    "district": "Kaski",
+    "type": "Hindu Temple",
+    "deity": "Goddess Bindhyabasini",
+    "description": "A significant Shakti Peetha in Pokhara, dedicated to Goddess Bindhyabasini.",
+    "imagePath": "assets/images/temples/bindhyabasini.jpg",
+    "acceptableAnswers": [
+      "bindhyabasini",
+      "bindhyabasini",
+      "bindhyabasini temple",
+      "bindhya basini",
+      "bindhya basini temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "tal-barahi-temple",
+    "name": "Tal Barahi Temple",
+    "district": "Kaski",
+    "type": "Hindu Temple",
+    "deity": "Goddess Varahi",
+    "description": "A two-storied pagoda temple located on a small island in Phewa Lake.",
+    "imagePath": "assets/images/temples/tal-barahi.jpg",
+    "alternativeNames": [
+      "Lake Temple"
+    ],
+    "acceptableAnswers": [
+      "tal barahi",
+      "tal barahi temple",
+      "lake temple",
+      "phewa lake temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "doleshwor-mahadev-temple",
+    "name": "Doleshwor Mahadev Temple",
+    "district": "Bhaktapur",
+    "type": "Hindu Temple",
+    "deity": "Lord Shiva",
+    "description": "Believed by some to be the head part of the Kedarnath Jyotirlinga.",
+    "imagePath": "assets/images/temples/doleshwor-mahadev.jpg",
+    "acceptableAnswers": [
+      "doleshwor mahadev",
+      "doleshwor",
+      "doleshwor temple",
+      "doleshwor mahadev temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "koteshwor-mahadev-temple",
+    "name": "Koteshwor Mahadev Temple",
+    "district": "Kathmandu",
+    "type": "Hindu Temple",
+    "deity": "Lord Shiva",
+    "description": "A popular Shiva temple in the eastern part of Kathmandu.",
+    "imagePath": "assets/images/temples/koteshwor-mahadev.jpg",
+    "acceptableAnswers": [
+      "koteshwor mahadev",
+      "koteshwor",
+      "koteshwor temple",
+      "koteshwor mahadev temple",
+      "koteshwor mahadev temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "uma-maheshwor-temple",
+    "name": "Uma Maheshwor Temple (Kirtipur)",
+    "district": "Kathmandu",
+    "type": "Hindu Temple",
+    "deity": "Lord Shiva and Goddess Parvati",
+    "description": "A beautiful Newari-style temple offering panoramic views of the Kathmandu Valley.",
+    "imagePath": "assets/images/temples/uma-maheshwor-kirtipur.jpg",
+    "acceptableAnswers": [
+      "uma maheshwor",
+      "uma",
+      "uma maheshwor temple",
+      "kirtipur uma maheshwor",
+      "kirtipur temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "chandragiri-temple",
+    "name": "Chandragiri Temple",
+    "district": "Kathmandu",
+    "type": "Hindu Temple",
+    "deity": "Lord Shiva",
+    "description": "An ancient temple located in the western part of Kathmandu Valley, offering panoramic views of the Kathmandu Valley.",
+    "imagePath": "assets/images/temples/chandragiri.jpg",
+    "acceptableAnswers": [
+      "chandragiri",
+      "chandra giri",
+      "chandragiri temple",
+      "chandra giri temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "hiranya-varna-mahavihar",
+    "name": "Hiranya Varna Mahavihar",
+    "district": "Lalitpur",
+    "type": "Buddhist Monastery",
+    "built": "12th century",
+    "description": "Also known as the Golden Temple, renowned for its exquisite golden pagoda.",
+    "imagePath": "assets/images/temples/hiranya-varna-mahavihar.jpg",
+    "alternativeNames": [
+      "Golden Temple"
+    ],
+    "acceptableAnswers": [
+      "hiranya varna mahavihar",
+      "hiranya",
+      "hiranya varna",
+      "golden temple",
+      "hiranya varna temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "guhyeshwari",
+    "name": "Guhyeshwari Temple",
+    "district": "Kathmandu",
+    "type": "Hindu Temple",
+    "deity": "Goddess Guhyeshwari",
+    "description": "A sacred temple dedicated to Goddess Guhyeshwari, closely associated with Pashupatinath and important in tantric worship.",
+    "imagePath": "assets/images/temples/guhyeshwari.jpg",
+    "acceptableAnswers": [
+      "guhyeshwari",
+      "guhyeshwari temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "manakamana",
+    "name": "Manakamana Temple",
+    "district": "Gorkha",
+    "type": "Hindu Temple",
+    "deity": "Goddess Manakamana",
+    "description": "A famous temple dedicated to Goddess Manakamana, believed to grant wishes to devotees. Accessible by cable car.",
+    "imagePath": "assets/images/temples/manakamana.jpg",
+    "acceptableAnswers": [
+      "manakamana",
+      "manakamana temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "kalinchowk-bhagwati",
+    "name": "Kalinchowk Bhagwati Temple",
+    "district": "Dolakha",
+    "type": "Hindu Temple",
+    "deity": "Goddess Bhagwati",
+    "description": "A popular hilltop temple dedicated to Goddess Bhagwati, visited especially during winter pilgrimage.",
+    "imagePath": "assets/images/temples/kalinchowk-bhagwati.jpg",
+    "acceptableAnswers": [
+      "kalinchowk",
+      "kalinchowk temple",
+      "kalinchowk bhagwati"
+    ],
+    "points": 10
+  },
+  {
+    "id": "namo-buddha",
+    "name": "Namo Buddha Monastery",
+    "district": "Kavrepalanchok",
+    "type": "Buddhist Monastery",
+    "description": "A major Buddhist pilgrimage site featuring a large stupa and serene surroundings.",
+    "imagePath": "assets/images/temples/namo-buddha.jpg",
+    "acceptableAnswers": [
+      "namo buddha",
+      "namo buddha monastery"
+    ],
+    "points": 10
+  },
+  {
+    "id": "krishna-mandir-patan",
+    "name": "Krishna Mandir",
+    "district": "Lalitpur",
+    "type": "Hindu Temple",
+    "deity": "Lord Krishna",
+    "description": "A historic temple located in Patan Durbar Square, dedicated to Lord Krishna with exquisite stone carvings.",
+    "imagePath": "assets/images/temples/krishna-mandir-patan.jpg",
+    "acceptableAnswers": [
+      "krishna mandir",
+      "krishna mandir patan",
+      "patan krishna temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "bageshwori",
+    "name": "Bageshwori Temple",
+    "district": "Banke",
+    "type": "Hindu Temple",
+    "deity": "Goddess Bageshwori",
+    "description": "An important temple in western Nepal dedicated to Goddess Bageshwori, drawing many devotees especially during festivals.",
+    "imagePath": "assets/images/temples/bageshwori.jpg",
+    "acceptableAnswers": [
+      "bageshwori",
+      "bageshwori temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "barahachhetra",
+    "name": "Barahachhetra Temple",
+    "district": "Sunsari",
+    "type": "Hindu Temple",
+    "deity": "Lord Vishnu as Baraha",
+    "description": "An ancient temple and pilgrimage site dedicated to Lord Vishnu in his boar incarnation, located near the Koshi river.",
+    "imagePath": "assets/images/temples/barahachhetra.jpg",
+    "acceptableAnswers": [
+      "barahachhetra",
+      "baraha temple",
+      "barahachhetra temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "nyatapola-temple",
+    "name": "Nyatapola Temple",
+    "district": "Bhaktapur",
+    "type": "Hindu Temple",
+    "built": "1702 AD",
+    "deity": "Goddess Siddhi Lakshmi",
+    "description": "A famous five-tiered pagoda temple and an iconic example of Newari architecture in Bhaktapur.",
+    "imagePath": "assets/images/temples/nyatapola.jpg",
+    "acceptableAnswers": [
+      "nyatapola",
+      "nyatapola temple",
+      "nyatapola temple bhaktapur"
+    ],
+    "points": 10
+  },
+  {
+    "id": "taleju-bhawani-temple",
+    "name": "Taleju Bhawani Temple",
+    "district": "Kathmandu",
+    "type": "Hindu Temple",
+    "deity": "Goddess Taleju Bhawani",
+    "description": "A historic royal temple located inside the Hanuman Dhoka Durbar Square in Kathmandu.",
+    "imagePath": "assets/images/temples/taleju-bhawani.jpg",
+    "acceptableAnswers": [
+      "taleju",
+      "taleju bhawani",
+      "taleju temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "jagannath-temple",
+    "name": "Jagannath Temple",
+    "district": "Kathmandu",
+    "type": "Hindu Temple",
+    "deity": "Lord Jagannath",
+    "description": "Known for its huge chariot festival (Rath Yatra) celebrated every year in Kathmandu.",
+    "imagePath": "assets/images/temples/jagannath.jpg",
+    "acceptableAnswers": [
+      "jagannath",
+      "jagannath temple",
+      "rath yatra temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "ashok-binayak-temple",
+    "name": "Ashok Binayak Temple",
+    "district": "Kathmandu",
+    "type": "Hindu Temple",
+    "deity": "Lord Ganesh",
+    "description": "A well-known Hindu temple dedicated to Lord Ganesh located in Kathmandu.",
+    "imagePath": "assets/images/temples/ashok-binayak.jpg",
+    "acceptableAnswers": [
+      "ashok binayak",
+      "ashok binayak temple",
+      "ganesh temple kathmandu"
+    ],
+    "points": 10
+  },
+  {
+    "id": "kumari-ghar",
+    "name": "Kumari Ghar",
+    "district": "Kathmandu",
+    "type": "Religious Residence",
+    "deity": "Living Goddess Kumari",
+    "description": "The residence of the living goddess Kumari in Kathmandu Durbar Square.",
+    "imagePath": "assets/images/temples/kumari-ghar.jpg",
+    "acceptableAnswers": [
+      "kumari ghar",
+      "living goddess",
+      "kumari temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "machhendranath-temple",
+    "name": "Machhendranath Temple",
+    "district": "Lalitpur",
+    "type": "Hindu Temple",
+    "deity": "Lord Machhendranath",
+    "description": "Dedicated to the rain god, this temple is central to the Rato Machhendranath chariot festival.",
+    "imagePath": "assets/images/temples/machhendranath.jpg",
+    "acceptableAnswers": [
+      "machhendranath",
+      "rato machhendranath",
+      "machhendranath temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "pharping-cave-monastery",
+    "name": "Pharping Cave Monastery",
+    "district": "Kathmandu",
+    "type": "Buddhist Monastery",
+    "description": "A Tibetan Buddhist monastery famous for its sacred caves near Kathmandu.",
+    "imagePath": "assets/images/temples/pharping-cave.jpg",
+    "acceptableAnswers": [
+      "pharping",
+      "pharping cave monastery"
+    ],
+    "points": 10
+  },
+  {
+    "id": "budha-subba-temple",
+    "name": "Budha Subba Temple",
+    "district": "Sunsari",
+    "type": "Kirat Temple",
+    "description": "A cultural and spiritual Kirat site in eastern Nepal.",
+    "imagePath": "assets/images/temples/budha-subba.jpg",
+    "acceptableAnswers": [
+      "budha subba",
+      "budha subba temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "mai-pokhari-temple",
+    "name": "Mai Pokhari Temple",
+    "district": "Ilam",
+    "type": "Hindu Temple",
+    "description": "A sacred pond and temple, important pilgrimage destination in Ilam district.",
+    "imagePath": "assets/images/temples/mai-pokhari.jpg",
+    "acceptableAnswers": [
+      "mai pokhari",
+      "mai pokhari temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "dantakali-temple",
+    "name": "Dantakali Temple",
+    "district": "Sindhuli",
+    "type": "Hindu Temple",
+    "deity": "Goddess Kali",
+    "description": "A hilltop temple dedicated to Goddess Kali with panoramic views.",
+    "imagePath": "assets/images/temples/dantakali.jpg",
+    "acceptableAnswers": [
+      "dantakali",
+      "dantakali temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "jaleshwor-mahadev-temple",
+    "name": "Jaleshwor Mahadev Temple",
+    "district": "Mahottari",
+    "type": "Hindu Temple",
+    "deity": "Lord Shiva",
+    "description": "An important Shiva temple in Mahottari district.",
+    "imagePath": "assets/images/temples/jaleshwor-mahadev.jpg",
+    "acceptableAnswers": [
+      "jaleshwor",
+      "jaleshwor mahadev",
+      "jaleshwor mahadev temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "gadhimai-temple",
+    "name": "Gadhimai Temple",
+    "district": "Bara",
+    "type": "Hindu Temple",
+    "deity": "Goddess Gadhimai",
+    "description": "Famous for the large-scale Gadhimai festival held every five years.",
+    "imagePath": "assets/images/temples/gadhimai.jpg",
+    "acceptableAnswers": [
+      "gadhimai",
+      "gadhimai temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "kankalini-temple",
+    "name": "Kankalini Temple",
+    "district": "Saptari",
+    "type": "Hindu Temple",
+    "deity": "Goddess Kankalini",
+    "description": "A Shakti Peetha dedicated to Goddess Kankalini.",
+    "imagePath": "assets/images/temples/kankalini.jpeg",
+    "acceptableAnswers": [
+      "kankalini",
+      "kankalini temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "chhinnamasta-bhagawati-temple",
+    "name": "Chhinnamasta Bhagawati Temple",
+    "district": "Saptari",
+    "type": "Hindu Temple",
+    "deity": "Goddess Chhinnamasta",
+    "description": "A powerful Shakti Peetha in Saptari district.",
+    "imagePath": "assets/images/temples/chhinnamasta-bhagawati.jpg",
+    "acceptableAnswers": [
+      "chhinnamasta",
+      "chhinnamasta bhagawati",
+      "chhinnamasta temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "halesi-mahadev-temple",
+    "name": "Halesi Mahadev Temple",
+    "district": "Khotang",
+    "type": "Hindu and Buddhist Temple",
+    "deity": "Lord Shiva",
+    "description": "A famous pilgrimage site revered by both Hindus and Buddhists.",
+    "imagePath": "assets/images/temples/halesi-mahadev.jpg",
+    "acceptableAnswers": [
+      "halesi",
+      "halesi mahadev",
+      "halesi temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "seti-devi-temple",
+    "name": "Seti Devi Temple",
+    "district": "Pokhara",
+    "type": "Hindu Temple",
+    "deity": "Goddess Seti Devi",
+    "description": "Historic temple near the Seti River in Pokhara.",
+    "imagePath": "assets/images/temples/seti-devi.jpg",
+    "acceptableAnswers": [
+      "seti devi",
+      "seti devi temple",
+      "seti temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "ruru-temple",
+    "name": "Ruru Temple",
+    "district": "Gandaki",
+    "type": "Hindu Temple",
+    "deity": "Lord Vishnu",
+    "description": "Pilgrimage site near Ruru village in Gandaki region.",
+    "imagePath": "assets/images/temples/ruru.jpg",
+    "acceptableAnswers": [
+      "ruru",
+      "ruru temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "lumbini",
+    "name": "Lumbini",
+    "district": "Rupandehi",
+    "type": "Buddhist Pilgrimage Site",
+    "description": "Birthplace of Lord Buddha, with many temples and stupas.",
+    "imagePath": "assets/images/temples/lumbini.jpg",
+    "acceptableAnswers": [
+      "lumbini",
+      "lumbini buddhist site"
+    ],
+    "points": 10
+  },
+  {
+    "id": "madan-kudan-stupa",
+    "name": "Kudan Stupa",
+    "district": "Rupandehi",
+    "type": "Buddhist Site",
+    "description": "Important Buddhist pilgrimage site near Lumbini.",
+    "imagePath": "assets/images/temples/kudan-stupa.jpg",
+    "acceptableAnswers": [
+      "kudan",
+      "kudan stupa"
+    ],
+    "points": 10
+  },
+  {
+    "id": "khaptad-baba-ashram",
+    "name": "Khaptad Baba Ashram",
+    "district": "Doti",
+    "type": "Hindu Hermitage and Temple",
+    "description": "Sacred hermitage with temples in Doti district.",
+    "imagePath": "assets/images/temples/khaptad-baba-ashram.jpg",
+    "acceptableAnswers": [
+      "khaptad baba",
+      "khaptad ashram",
+      "khaptad temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "badimalika-temple",
+    "name": "Badimalika Temple",
+    "district": "Achham",
+    "type": "Hindu Temple",
+    "deity": "Goddess Badimalika",
+    "description": "Major Shakti Peetha pilgrimage site in Achham district.",
+    "imagePath": "assets/images/temples/badimalika.jpg",
+    "acceptableAnswers": [
+      "badimalika",
+      "badimalika temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "malikarjun-temple",
+    "name": "Malikarjun Temple",
+    "district": "Doti",
+    "type": "Hindu Temple",
+    "deity": "Lord Shiva",
+    "description": "Popular religious site in Doti district.",
+    "imagePath": "assets/images/temples/malikarjun.jpg",
+    "acceptableAnswers": [
+      "malikarjun",
+      "malikarjun temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "gosaikunda-temple",
+    "name": "Gosaikunda Temple",
+    "district": "Rasuwa",
+    "type": "Hindu Temple",
+    "deity": "Lord Shiva",
+    "description": "Sacred lake temple in the Langtang region, a famous pilgrimage site especially during Janai Purnima festival.",
+    "imagePath": "assets/images/temples/gosaikunda.jpg",
+    "acceptableAnswers": [
+      "gosaikunda",
+      "gosaikunda temple",
+      "gosainkunda",
+      "gosainkunda temple"
+    ],
+    "points": 10
+  },
+  {
+    "id": "rani-mahal",
+    "name": "Rani Mahal",
+    "district": "Palpa",
+    "type": "Historical Palace with Temple",
+    "description": "Also known as the Taj Mahal of Nepal, this palace complex includes a temple nearby and is a notable heritage site.",
+    "imagePath": "assets/images/temples/rani-mahal.jpg",
+    "acceptableAnswers": [
+      "rani mahal",
+      "rani mahal palpa",
+      "palpa rani mahal"
+    ],
+    "points": 10
+  }
+]

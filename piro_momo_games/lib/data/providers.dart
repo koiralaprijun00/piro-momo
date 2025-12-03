@@ -10,6 +10,7 @@ import 'models/general_knowledge_question.dart';
 import 'models/king_entry.dart';
 import 'models/riddle_entry.dart';
 import 'repositories/district_repository.dart';
+import 'repositories/temple_repository.dart';
 import 'repositories/festival_repository.dart';
 import 'repositories/general_knowledge_repository.dart';
 import 'repositories/kings_repository.dart';
@@ -39,6 +40,11 @@ final Provider<KingsRepository> kingsRepositoryProvider =
 final Provider<DistrictRepository> districtRepositoryProvider =
     Provider<DistrictRepository>((Ref ref) {
       return DistrictRepository();
+    });
+
+final Provider<TempleRepository> templeRepositoryProvider =
+    Provider<TempleRepository>((Ref ref) {
+      return TempleRepository();
     });
 
 final Provider<ProgressStore> progressStoreProvider = Provider<ProgressStore>(

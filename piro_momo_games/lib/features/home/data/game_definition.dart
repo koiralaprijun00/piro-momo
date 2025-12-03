@@ -6,6 +6,7 @@ import '../../games/general_knowledge/view/general_knowledge_shell_screen.dart';
 import '../../games/gau_khane_katha/view/gau_khane_katha_shell_screen.dart';
 import '../../games/name_district/view/name_district_shell_screen.dart';
 import '../../games/kings/view/kings_shell_screen.dart';
+import '../../games/temple/view/temple_shell_screen.dart';
 
 class GameDefinition {
   const GameDefinition({
@@ -79,6 +80,39 @@ const List<GameDefinition> homeGames = <GameDefinition>[
         icon: Icons.emoji_events_rounded,
         label: 'Build streaks & learn facts',
         color: AppPalette.primaryBlue,
+      ),
+    ],
+  ),
+  GameDefinition(
+    id: TempleShellScreen.gameId,
+    routePath: TempleShellScreen.routePath,
+    title: 'Guess the Temple',
+    eyebrow: 'Sacred Sites',
+    description: 'Identify temples from Nepal with quick photo prompts.',
+    assetPath: 'assets/images/guess-the-temple.png',
+    accentColors: <Color>[
+      AppPalette.primaryBlue,
+      AppPalette.primaryPurple,
+      AppPalette.primaryPink,
+    ],
+    tags: <String>['Typing', 'Culture', 'Photo quiz'],
+    metadata: '45+ temples',
+    difficulty: 'Medium',
+    features: [
+      GameFeature(
+        icon: Icons.temple_buddhist_rounded,
+        label: 'Guess iconic temples',
+        color: AppPalette.primaryPurple,
+      ),
+      GameFeature(
+        icon: Icons.spellcheck_rounded,
+        label: 'Handles spelling variants',
+        color: AppPalette.primaryBlue,
+      ),
+      GameFeature(
+        icon: Icons.bolt_rounded,
+        label: 'Reach 100 points to win',
+        color: AppPalette.primaryPink,
       ),
     ],
   ),

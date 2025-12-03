@@ -6,6 +6,7 @@ import '../features/games/general_knowledge/view/general_knowledge_shell_screen.
 import '../features/games/gau_khane_katha/view/gau_khane_katha_shell_screen.dart';
 import '../features/games/kings/view/kings_shell_screen.dart';
 import '../features/games/name_district/view/name_district_shell_screen.dart';
+import '../features/games/temple/view/temple_shell_screen.dart';
 import '../features/profile/view/profile_screen.dart';
 import '../features/home/view/home_screen.dart';
 import '../features/notifications/view/notification_screen.dart';
@@ -42,6 +43,17 @@ final GoRouter appRouter = GoRouter(
         return CustomTransitionPage<void>(
           key: state.pageKey,
           child: const FestivalShellScreen(),
+          transitionsBuilder: _slideUpTransition,
+        );
+      },
+    ),
+    GoRoute(
+      name: 'guess-temple',
+      path: TempleShellScreen.routePath,
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        return CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: const TempleShellScreen(),
           transitionsBuilder: _slideUpTransition,
         );
       },

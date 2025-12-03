@@ -10,12 +10,14 @@ class ProgressStore {
   static const String _gkBestKey = 'progress.generalKnowledge.bestStreak';
   static const String _kingsBestKey = 'progress.kings.bestStreak';
   static const String _districtBestKey = 'progress.district.bestStreak';
+  static const String _templeBestKey = 'progress.temple.bestStreak';
 
   static const String _festivalBestScoreKey = 'progress.festival.bestScore';
   static const String _riddleBestScoreKey = 'progress.riddle.bestScore';
   static const String _gkBestScoreKey = 'progress.generalKnowledge.bestScore';
   static const String _kingsBestScoreKey = 'progress.kings.bestScore';
   static const String _districtBestScoreKey = 'progress.district.bestScore';
+  static const String _templeBestScoreKey = 'progress.temple.bestScore';
 
   static const String _latestGameIdKey = 'progress.latest.gameId';
   static const String _latestGameScoreKey = 'progress.latest.score';
@@ -77,6 +79,16 @@ class ProgressStore {
   Future<void> saveDistrictBestStreak(int value) async {
     final SharedPreferences prefs = await _instance();
     await prefs.setInt(_key(_districtBestKey), value);
+  }
+
+  Future<int> loadTempleBestStreak() async {
+    final SharedPreferences prefs = await _instance();
+    return prefs.getInt(_key(_templeBestKey)) ?? 0;
+  }
+
+  Future<void> saveTempleBestStreak(int value) async {
+    final SharedPreferences prefs = await _instance();
+    await prefs.setInt(_key(_templeBestKey), value);
   }
 
   Future<int> loadFestivalBestScore() async {
@@ -156,6 +168,7 @@ class ProgressStore {
       loadGkBestStreak(),
       loadKingsBestStreak(),
       loadDistrictBestStreak(),
+      loadTempleBestStreak(),
     ]);
     return values.fold<int>(0, (int maxValue, int current) {
       return current > maxValue ? current : maxValue;
@@ -169,10 +182,25 @@ class ProgressStore {
       loadGkBestScore(),
       loadKingsBestScore(),
       loadDistrictBestScore(),
+      loadTempleBestScore(),
     ]);
     return values.fold<int>(0, (int maxValue, int current) {
       return current > maxValue ? current : maxValue;
     });
+  }
+
+  Future<int> loadTempleBestScore() async {
+    final SharedPreferences prefs = await _instance();
+    return prefs.getInt(_key(_templeBestScoreKey)) ?? 0;
+  }
+
+  Future<void> maybeSaveTempleBestScore(int value) async {
+    final SharedPreferences prefs = await _instance();
+    final String key = _key(_templeBestScoreKey);
+    final int current = prefs.getInt(key) ?? 0;
+    if (value > current) {
+      await prefs.setInt(key, value);
+    }
   }
 
   Future<void> saveLatestGame(String gameId, int score) async {

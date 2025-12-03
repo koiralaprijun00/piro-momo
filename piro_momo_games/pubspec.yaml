@@ -76,11 +76,15 @@ flutter:
     - assets/data/district_assets.json
     - assets/districts/
     - assets/data/kings_of_nepal_en.json
+    - assets/data/guess_temple_en.json
+    - assets/images/temples/
     - assets/images/guess-festival.png
     - assets/images/gau-khane-katha.png
     - assets/images/general-knowledge.png
     - assets/images/kings-of-nepal.png
     - assets/images/name-district.png
+    - assets/images/guess-temple.jpg
+    - assets/images/guess-the-temple.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
