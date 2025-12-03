@@ -226,30 +226,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 onPressed: () => Navigator.of(context).maybePop(),
               ),
               const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(Icons.verified_rounded,
-                        size: 16, color: Colors.greenAccent.shade200),
-                    const SizedBox(width: 6),
-                    Text(
-                      'Signed in',
-                      style: theme.textTheme.labelMedium
-                          ?.copyWith(color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
               const Spacer(),
               TextButton.icon(
                 style: TextButton.styleFrom(
-                  foregroundColor: colorScheme.error,
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.white.withValues(alpha: 0.1),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 ),
                 icon: const Icon(Icons.logout_rounded, size: 18),
                 onPressed: _busy ? null : () => _guard(authService.signOut),
@@ -614,10 +596,10 @@ class _ProfileStatTile extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.2),
+                    color: color.withValues(alpha: 0.35),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(icon, size: 20, color: color),
+                  child: Icon(icon, size: 20, color: Colors.white),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -649,10 +631,10 @@ class _ProfileStatTile extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.2),
+                    color: color.withValues(alpha: 0.35),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(icon, size: 24, color: color),
+                  child: Icon(icon, size: 24, color: Colors.white),
                 ),
                 const SizedBox(height: 12),
                 Text(
@@ -676,6 +658,7 @@ class _ProfileStatTile extends StatelessWidget {
     );
   }
 }
+
 
 class _ErrorBanner extends StatelessWidget {
   const _ErrorBanner({required this.message});

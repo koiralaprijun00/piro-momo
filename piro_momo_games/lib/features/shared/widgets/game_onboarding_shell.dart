@@ -35,49 +35,49 @@ class GameOnboardingShell extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: 24),
           AnimatedGameIcon(
             assetPath: game.assetPath,
-            size: 140,
+            size: 100,
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 20),
           Text(
             game.title,
             textAlign: TextAlign.center,
-            style: textTheme.displaySmall?.copyWith(
+            style: textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.w800,
               color: Colors.white,
               height: 1.1,
               letterSpacing: -0.5,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               game.description,
               textAlign: TextAlign.center,
-              style: textTheme.bodyLarge?.copyWith(
+              style: textTheme.bodyMedium?.copyWith(
                 color: Colors.white.withValues(alpha: 0.9),
-                height: 1.5,
-                fontSize: 16,
+                height: 1.4,
+                fontSize: 14,
               ),
             ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 24),
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: game.features.map((feature) {
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.only(bottom: 12),
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: Colors.white.withValues(alpha: 0.25),
                           width: 1.5,
@@ -86,24 +86,25 @@ class GameOnboardingShell extends StatelessWidget {
                       child: Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.white.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Icon(
                               feature.icon,
                               color: Colors.white,
-                              size: 24,
+                              size: 20,
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: Text(
                               feature.label,
-                              style: textTheme.titleMedium?.copyWith(
+                              style: textTheme.bodyLarge?.copyWith(
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white,
+                                fontSize: 15,
                               ),
                             ),
                           ),
