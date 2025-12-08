@@ -1,6 +1,6 @@
 import React from "react"
 import Image from "next/image"
-import { Product } from "../data/spend-binod-money/product"
+import { Product } from "@/app/data/spend-binod-money/product"
 import { useCallback } from "react"
 
 interface ProductCardProps {

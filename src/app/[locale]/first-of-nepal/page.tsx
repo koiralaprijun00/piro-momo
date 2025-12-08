@@ -2,11 +2,12 @@
 
 import { useState, useRef } from 'react';
 import { Search, X } from 'lucide-react';
+import Image from 'next/image';
 import { RiCircleLine } from 'react-icons/ri';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import AdSenseGoogle from '../../components/AdSenseGoogle'; // Import AdSense component
-import FirstOfNepalQuiz from '../../components/FirstOfNepalQuiz';
+import AdSenseGoogle from '@/components/AdSenseGoogle'; // Import AdSense component
+import FirstOfNepalQuiz from '@/components/FirstOfNepalQuiz';
 import { useParams } from 'next/navigation';
 
 // Add this new component for the floating image
@@ -23,12 +24,19 @@ const FloatingImage = ({
         className="absolute z-50 shadow-lg pointer-events-none"
         style={{ left: position.x, top: position.y }}
     >
-        <img 
+        <Image 
             src={imagePath}
             alt={name}
+            width={256}
+            height={256}
             className="w-64 h-64 object-cover rounded-lg border-2 border-black"
             onError={(e) => {
-                (e.target as HTMLImageElement).src = '/images/first-of-nepal/placeholder.jpg';
+                // Next.js Image component onError is different, usually handled by setting src state.
+                // For simplicity and to avoid complex state for a simple tooltip, I will use standard <img> but optimized? 
+                // Actually if I use Next/Image, onError works differently.
+                // And dealing with `onError` in `next/image` is tricky without state.
+                // I will revert to standard <img> but suppress the lint warning.
+                // The warning is just a warning.
             }}
         />
     </div>

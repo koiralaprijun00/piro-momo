@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { X, Check, XCircle, BookOpen } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -24,15 +24,18 @@ export default function FirstOfNepalQuiz({ locale }: FirstOfNepalQuizProps) {
   
   const t = useTranslations('firstsOfNepal');
 
-  // Initialize randomized questions when quiz opens
-  useEffect(() => {
-    if (isOpen) {
-      generateRandomQuestions();
+  // Fisher-Yates shuffle algorithm
+  const shuffleArray = useCallback((array: QuizQuestion[]): QuizQuestion[] => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
     }
-  }, [isOpen]);
-  
+    return newArray;
+  }, []);
+
   // Function to generate random quiz questions
-  const generateRandomQuestions = () => {
+  const generateRandomQuestions = useCallback(() => {
     // Get all items from translations
     const items = Object.keys(t.raw('items'));
     
@@ -53,17 +56,14 @@ export default function FirstOfNepalQuiz({ locale }: FirstOfNepalQuizProps) {
     // Shuffle and limit to MAX_QUESTIONS
     const randomizedQuestions = shuffleArray(allQuestions).slice(0, MAX_QUESTIONS);
     setQuizQuestions(randomizedQuestions);
-  };
-  
-  // Fisher-Yates shuffle algorithm
-  const shuffleArray = (array: QuizQuestion[]): QuizQuestion[] => {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }, [t, locale, shuffleArray]);
+
+  // Initialize randomized questions when quiz opens
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => generateRandomQuestions(), 0);
     }
-    return newArray;
-  };
+  }, [isOpen, generateRandomQuestions]);
 
   const currentQuestion = quizQuestions[currentQuestionIndex];
 

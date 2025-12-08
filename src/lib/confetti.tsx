@@ -18,7 +18,7 @@ const ContainedConfetti: React.FC<ContainedConfettiProps> = ({ duration = 8000 }
       'bg-green-400', 'bg-purple-400', 'bg-pink-400'
     ];
     
-    const items = [];
+    const items: React.ReactNode[] = [];
     for (let i = 0; i < 70; i++) {
       const left = Math.random() * 100;
       const top = -10 - (Math.random() * 20); // Start above the container
@@ -47,7 +47,9 @@ const ContainedConfetti: React.FC<ContainedConfettiProps> = ({ duration = 8000 }
       );
     }
     
-    setConfettiItems(items);
+    setTimeout(() => {
+      setConfettiItems(items);
+    }, 0);
     
     // Set a timeout to hide confetti after the specified duration
     // Extended to 8 seconds by default

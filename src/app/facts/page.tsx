@@ -19,7 +19,7 @@ export default function FactsPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-8">
-      <h1 className="text-2xl font-bold mb-6">Facts about Binod's Money</h1>
+      <h1 className="text-2xl font-bold mb-6">Facts about Binod&apos;s Money</h1>
       <ul className="list-disc list-inside space-y-3 text-gray-700">
         {facts.map((fact, index) =>
           <li key={index}>

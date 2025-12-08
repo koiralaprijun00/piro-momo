@@ -266,7 +266,7 @@ export const useWordSelection = () => {
     }
 
     actions.setCurrentWord(nextWord);
-  }, [srSystem, actions, toast, state]); // state was in deps but not used directly in body, kept for now
+  }, [srSystem, actions, toast]);
 
   return selectNextWord;
 };

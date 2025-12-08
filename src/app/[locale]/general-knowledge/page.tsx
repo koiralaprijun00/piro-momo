@@ -3,11 +3,11 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import QuizSection from "../nepal-gk-components/QuizSection";
-import { getQuestionsByLocale } from "../../data/general-knowledge/getQuestions";
-import AdSenseGoogle from "../../components/AdSenseGoogle";
-import GameButton from "../../components/ui/GameButton";
-import CustomDropdown from "../../components/ui/CustomDropdown";
-import ContainedConfetti from "../../lib/confetti";
+import { getQuestionsByLocale } from "@/app/data/general-knowledge/getQuestions";
+import AdSenseGoogle from '@/components/AdSenseGoogle';
+import GameButton from '@/components/ui/GameButton';
+import CustomDropdown from '@/components/ui/CustomDropdown';
+import ContainedConfetti from '@/lib/confetti';
 
 export interface Question {
   id: string;
@@ -134,14 +134,16 @@ export default function NepalGKQuiz() {
 
   // Initialize and handle category changes
   useEffect(() => {
-    setCurrentQuestionIndex(0);
-    setFeedbackState({
-      isAnswered: false,
-      isCorrect: false,
-      feedback: "",
-    });
-    setScore(0);
-    setShowConfetti(false);
+    setTimeout(() => {
+      setCurrentQuestionIndex(0);
+      setFeedbackState({
+        isAnswered: false,
+        isCorrect: false,
+        feedback: "",
+      });
+      setScore(0);
+      setShowConfetti(false);
+    }, 0);
   }, [selectedCategory]);
 
   // Current question

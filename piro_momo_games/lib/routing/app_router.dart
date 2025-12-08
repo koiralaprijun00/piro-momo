@@ -10,6 +10,7 @@ import '../features/games/temple/view/temple_shell_screen.dart';
 import '../features/profile/view/profile_screen.dart';
 import '../features/home/view/home_screen.dart';
 import '../features/notifications/view/notification_screen.dart';
+import '../features/games/logo_quiz/view/logo_quiz_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -110,6 +111,17 @@ final GoRouter appRouter = GoRouter(
         return CustomTransitionPage<void>(
           key: state.pageKey,
           child: const NotificationScreen(),
+          transitionsBuilder: _slideUpTransition,
+        );
+      },
+    ),
+    GoRoute(
+      name: 'logo-quiz',
+      path: LogoQuizScreen.routePath,
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        return CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: const LogoQuizScreen(),
           transitionsBuilder: _slideUpTransition,
         );
       },

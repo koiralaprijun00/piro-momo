@@ -1,5 +1,5 @@
 name: piro_momo_games
-description: "Mobile companion app for Piro Momo games with shared hub experience."
+description: 'Mobile companion app for Piro Momo games with shared hub experience.'
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -62,7 +62,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -85,6 +84,8 @@ flutter:
     - assets/images/name-district.png
     - assets/images/guess-temple.jpg
     - assets/images/guess-the-temple.png
+    - assets/images/logo-quiz.png
+    - assets/images/yo-chineu/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

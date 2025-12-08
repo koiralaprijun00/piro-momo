@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import Image from 'next/image';
 import { districtData } from '../../data/district-data';
-import AdSenseGoogle from '../../components/AdSenseGoogle';
+import AdSenseGoogle from '@/components/AdSenseGoogle';
 
 const TOTAL_DISTRICTS = districtData.length;
 
@@ -18,34 +18,46 @@ const toNepaliNumerals = (num: number): string => {
     .join('');
 };
 
+// Fisher-Yates shuffle algorithm
+const shuffleArray = <T,>(array: T[]): T[] => {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+};
+
 const NepalDistrictQuiz: React.FC = () => {
   
   // Add this constant near the top of the file
   const DEFAULT_DISTRICT_IMAGE = '/districts/district-placeholder.png'; // Update with your actual placeholder path
 
   // Safe translation function to prevent errors
-const safeT = (key: string, defaultValue: string = '', params: any = {}) => {
-  try {
-    return t(key, params);
-  } catch (error) {
-    console.warn(`Translation key not found: ${key}`);
-    return defaultValue;
-  }
-};
 
-  const safeTDistricts = (key: string, defaultValue: string = '') => {
+
+  const t = useTranslations('Translations'); // For general UI translations
+  const tDistricts = useTranslations('districts'); // For district names
+  const locale = useLocale();
+  const isNepali = locale === 'np'; // Assuming 'np' for Nepali locale
+
+  const safeT = React.useCallback((key: string, defaultValue: string = '', params: Record<string, any> = {}) => {
+    try {
+      return t(key, params);
+    } catch (error) {
+      console.warn(`Translation key not found: ${key}`);
+      return defaultValue;
+    }
+  }, [t]);
+
+  const safeTDistricts = React.useCallback((key: string, defaultValue: string = '') => {
     try {
       return tDistricts(key);
     } catch (error) {
       console.warn(`District translation key not found: ${key}`);
       return defaultValue;
     }
-  };
-
-  const t = useTranslations('Translations'); // For general UI translations
-  const tDistricts = useTranslations('districts'); // For district names
-  const locale = useLocale();
-  const isNepali = locale === 'np'; // Assuming 'np' for Nepali locale
+  }, [tDistricts]);
 
   // Game state
   const [gameStarted, setGameStarted] = useState(false);
@@ -70,24 +82,60 @@ const safeT = (key: string, defaultValue: string = '', params: any = {}) => {
   const paginationRef = useRef<HTMLDivElement>(null);
 
   // Fisher-Yates shuffle algorithm
-  const shuffleArray = <T,>(array: T[]): T[] => {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-  };
+
 
   // Auto-start the game on mount and reset scroll
+  // Auto-start the game on mount and reset scroll
+  const startGame = React.useCallback(() => {
+    const shuffled = shuffleArray([...districtData]);
+    setRandomizedDistricts(shuffled);
+    setCurrentDistrictIndex(0);
+    setGameStarted(true);
+    setGameOver(false);
+    setShowResults(false);
+    setCorrectGuesses([]);
+    setCurrentGuess('');
+    setFeedback('');
+    setStreak(0);
+    setBestStreak(0);
+    setTimeLeft(1200);
+
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    timerRef.current = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          if (timerRef.current) {
+            clearInterval(timerRef.current);
+          }
+          setGameOver(true);
+          setShowResults(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    if (paginationRef.current) {
+      paginationRef.current.scrollLeft = 0;
+    }
+  }, []);
+
+
+
   useEffect(() => {
-    startGame();
+    setTimeout(() => startGame(), 0);
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
     };
-  }, []);
+  }, [startGame]);
 
   // Check for game completion
   useEffect(() => {
@@ -95,8 +143,10 @@ const safeT = (key: string, defaultValue: string = '', params: any = {}) => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
-      setGameOver(true);
-      setShowResults(true);
+      setTimeout(() => {
+        setGameOver(true);
+        setShowResults(true);
+      }, 0);
     }
   }, [correctGuesses, gameStarted]);
 
@@ -111,9 +161,10 @@ const safeT = (key: string, defaultValue: string = '', params: any = {}) => {
         safeTDistricts(currentDistrict.id),
         ...distractors.map(d => safeTDistricts(d.id)),
       ];
-      setOptions(shuffleArray(choices));
+
+      setTimeout(() => setOptions(shuffleArray(choices)), 0);
     }
-  }, [currentDistrictIndex, randomizedDistricts, tDistricts]);
+  }, [currentDistrictIndex, randomizedDistricts, tDistricts, safeTDistricts]);
 
   // Scroll pagination to active district
   useEffect(() => {
@@ -211,45 +262,7 @@ const safeT = (key: string, defaultValue: string = '', params: any = {}) => {
     }
   };
 
-  const startGame = () => {
-    const shuffled = shuffleArray([...districtData]);
-    setRandomizedDistricts(shuffled);
-    setCurrentDistrictIndex(0);
-    setGameStarted(true);
-    setGameOver(false);
-    setShowResults(false);
-    setCorrectGuesses([]);
-    setCurrentGuess('');
-    setFeedback('');
-    setStreak(0);
-    setBestStreak(0);
-    setTimeLeft(1200);
 
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-    timerRef.current = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          if (timerRef.current) {
-            clearInterval(timerRef.current);
-          }
-          setGameOver(true);
-          setShowResults(true);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    if (paginationRef.current) {
-      paginationRef.current.scrollLeft = 0;
-    }
-  };
 
   const calculateScore = () => {
     if (correctGuesses.length === 0) return 0;

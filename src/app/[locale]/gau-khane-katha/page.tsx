@@ -8,7 +8,7 @@ import { ImSpinner8 } from 'react-icons/im';
 import { FiSend } from 'react-icons/fi';
 import { HiOutlineClock, HiOutlineCheck } from 'react-icons/hi';
 import { CheckCircleIcon, XCircleIcon, RefreshCwIcon, Sparkles, Flame } from 'lucide-react';
-import AdSenseGoogle from '../../components/AdSenseGoogle';
+import AdSenseGoogle from '@/components/AdSenseGoogle';
 
 const StatBadges = ({ score, streak }: { score: number; streak: number }) => (
   <div className="flex items-center justify-center gap-4">
@@ -28,6 +28,15 @@ const StatBadges = ({ score, streak }: { score: number; streak: number }) => (
     </div>
   </div>
 );
+
+const shuffleArray = (array: number[]): number[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
 
 export default function RiddlesGamePage() {
   const t = useTranslations('Translations.RiddlesGame');
@@ -56,35 +65,32 @@ export default function RiddlesGamePage() {
     if (riddles[locale]?.length) {
       const indices = Array.from({ length: riddles[locale].length }, (_, i) => i);
       const shuffled = shuffleArray(indices);
-      setShuffledIndices(shuffled);
-      setCurrentShuffledIndex(0);
-      if (shuffled.length > 0) {
-        setCurrentRiddleIndex(shuffled[0]);
-      }
+      setTimeout(() => {
+        setShuffledIndices(shuffled);
+        setCurrentShuffledIndex(0);
+        if (shuffled.length > 0) {
+          setCurrentRiddleIndex(shuffled[0]);
+        }
+      }, 0);
     }
   }, [locale, riddles]);
 
-  const shuffleArray = (array: number[]): number[] => {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
+
 
   useEffect(() => {
     if (riddles[locale] && answeredRiddles.length === riddles[locale].length) {
-      setGameOver(true);
+      setTimeout(() => setGameOver(true), 0);
     }
   }, [answeredRiddles, locale, riddles]);
 
   useEffect(() => {
     if (currentRiddleIndex >= riddles[locale]?.length) {
-      setCurrentRiddleIndex(0);
-      setAnsweredRiddles([]);
-      setScore(0);
-      setGameOver(false);
+      setTimeout(() => {
+        setCurrentRiddleIndex(0);
+        setAnsweredRiddles([]);
+        setScore(0);
+        setGameOver(false);
+      }, 0);
     }
   }, [locale, riddles, currentRiddleIndex]);
 

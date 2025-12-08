@@ -1,7 +1,16 @@
-// src/app/data/logo-quiz/getLogos.js
+// src/app/data/logo-quiz/getLogos.ts
+
+export interface Logo {
+  id: string;
+  name: string;
+  imagePath: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  category: string;
+  acceptableAnswers: string[];
+}
 
 // Sample logo database
-const logoData = {
+const logoData: Record<string, Logo[]> = {
     en: [
       {
         id: 'ncell',
@@ -329,24 +338,24 @@ const logoData = {
   };
   
   // Get logos based on locale
-  export function getLogosByLocale(locale = 'en') {
+  export function getLogosByLocale(locale: string = 'en'): Logo[] {
     return logoData[locale] || logoData.en;
   }
   
   // Get logo by ID and locale
-  export function getLogoById(id, locale = 'en') {
+  export function getLogoById(id: string, locale: string = 'en'): Logo | null {
     const logos = getLogosByLocale(locale);
     return logos.find(logo => logo.id === id) || null;
   }
   
   // Export a specific difficulty level
-  export function getLogosByDifficulty(difficulty, locale = 'en') {
+  export function getLogosByDifficulty(difficulty: string, locale: string = 'en'): Logo[] {
     const logos = getLogosByLocale(locale);
     return logos.filter(logo => logo.difficulty === difficulty);
   }
   
   // Export logos by category
-  export function getLogosByCategory(category, locale = 'en') {
+  export function getLogosByCategory(category: string, locale: string = 'en'): Logo[] {
     const logos = getLogosByLocale(locale);
     return logos.filter(logo => logo.category === category);
   }

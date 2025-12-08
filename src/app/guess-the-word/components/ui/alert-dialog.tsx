@@ -3,7 +3,7 @@
 import * as React from "react"
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 
-import { cn } from "../../lib/utils" // Updated path
+import { cn } from "@/lib/guess-the-word/utils" // Updated path
 import { buttonVariants } from "./button" // Updated path
 
 const AlertDialog = AlertDialogPrimitive.Root

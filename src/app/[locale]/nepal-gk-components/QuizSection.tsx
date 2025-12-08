@@ -36,11 +36,15 @@ export default function QuizSection({
   const progressPercentage = ((currentIndex + 1) / totalQuestions) * 100;
 
   useEffect(() => {
-    setSelectedOption(null);
+    setTimeout(() => {
+      setSelectedOption(null);
+    }, 0);
   }, [currentQuestion]);
 
   useEffect(() => {
-    setIsMounted(true);
+    setTimeout(() => {
+      setIsMounted(true);
+    }, 0);
   }, []);
 
   const handleOptionClick = (option: string) => {

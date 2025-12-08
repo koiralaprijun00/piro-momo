@@ -1,11 +1,17 @@
-// district-data.js
-'use client'
-
-// Import translation data
+// src/app/data/district-data.ts
 import enDistricts from '../../../messages/name-district-en.json';
 import npDistricts from '../../../messages/name-district-np.json';
 
-// Base district data with SVG paths
+export interface District {
+  id: string;
+  imagePath: string;
+  name: string;
+  translations: {
+    en: string;
+    ne: string;
+  };
+}
+
 const baseDistrictData = [
   { id: 'kathmandu', imagePath: '/districts/Kathmandu.svg' },
   { id: 'lalitpur', imagePath: '/districts/Lalitpur.svg' },
@@ -82,21 +88,17 @@ const baseDistrictData = [
   { id: 'dadeldhura', imagePath: '/districts/Dadeldhura.svg' },
   { id: 'baitadi', imagePath: '/districts/Baitadi.svg' },
   { id: 'darchula', imagePath: '/districts/Darchula.svg' },
-  { id: 'rasuwa', imagePath: '/districts/Rasuwa.svg' }, // Added
-  { id: 'nawalparasi_west', imagePath: '/districts/West-Nawalparasi.svg' }  // Added
+  { id: 'rasuwa', imagePath: '/districts/Rasuwa.svg' },
+  { id: 'nawalparasi_west', imagePath: '/districts/West-Nawalparasi.svg' }
 ];
 
-// Create the enhanced district data with translations
-export const districtData = baseDistrictData.map(district => {
-  // Create each district with translation properties
+export const districtData: District[] = baseDistrictData.map(district => {
   return {
     ...district,
-    // Add the name field based on English translation for backward compatibility
-    name: enDistricts.districts[district.id],
-    // Add the translations object with both language versions
+    name: (enDistricts.districts as any)[district.id],
     translations: {
-      en: enDistricts.districts[district.id],
-      ne: npDistricts.districts[district.id]
+      en: (enDistricts.districts as any)[district.id],
+      ne: (npDistricts.districts as any)[district.id]
     }
   };
 });

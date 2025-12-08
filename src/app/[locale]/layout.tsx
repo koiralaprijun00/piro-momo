@@ -1,5 +1,5 @@
 import "../globals.css"; 
-import NavBar from "../components/NavBar";
+import NavBar from '@/components/NavBar';
 import "mapbox-gl/dist/mapbox-gl.css";
 import { NextIntlClientProvider } from 'next-intl';
 import { SpeedInsights } from "@vercel/speed-insights/next"

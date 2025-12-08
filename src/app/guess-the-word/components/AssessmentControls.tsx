@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { CheckCircle2, XCircle } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { cn } from '@/lib/guess-the-word/utils';
 
 interface AssessmentControlsProps {
   onAssess: (knewIt: boolean) => void;
@@ -42,6 +42,7 @@ export const AssessmentControls: React.FC<AssessmentControlsProps> = ({
             <CheckCircle2 className="w-5 h-5" />
           </div>
           <span className="font-semibold">I Knew It!</span>
+          <p className="text-gray-600 mb-6">Let&apos;s see how much you&apos;ve learned!</p>
           <span className="text-xs opacity-70">(Y)</span>
         </div>
       </Button>
@@ -63,7 +64,7 @@ export const AssessmentControls: React.FC<AssessmentControlsProps> = ({
           )}>
             <XCircle className="w-5 h-5" />
           </div>
-          <span className="font-semibold">I Didn't Know</span>
+          <span className="font-semibold">I Didn&apos;t Know</span>
           <span className="text-xs opacity-70">(N)</span>
         </div>
       </Button>

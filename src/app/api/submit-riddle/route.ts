@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import getMongoClient from '@/app/lib/mongodb';
+import getMongoClient from '@/lib/mongodb';
 import { z } from 'zod';
+import { Db } from 'mongodb';
 
 // Input validation schema
 const RiddleSubmissionSchema = z.object({
@@ -18,7 +19,7 @@ const RiddleSubmissionSchema = z.object({
 });
 
 // Rate limiting helper (basic implementation)
-async function checkRateLimit(ip: string, db: any): Promise<boolean> {
+async function checkRateLimit(ip: string, db: Db): Promise<boolean> {
   const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
   
   const submissionsFromIP = await db.collection('riddleSubmissions').countDocuments({

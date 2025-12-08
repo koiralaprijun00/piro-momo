@@ -1,13 +1,14 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
-import GameButton from '../../components/ui/GameButton';
+import GameButton from '@/components/ui/GameButton';
 import { getLogosByLocale } from '../../data/logo-quiz/getLogos';
 import { FiShare2, FiClock, FiChevronLeft, FiChevronRight, FiPause, FiPlay } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiInformationCircle } from 'react-icons/hi';
-import AdSenseGoogle from '../../components/AdSenseGoogle';
+import AdSenseGoogle from '@/components/AdSenseGoogle';
+import Image from 'next/image';
 
 interface Logo {
   id: string;
@@ -53,6 +54,17 @@ const LogoQuizGame = () => {
   const MAX_BLUR_LEVEL = 4;
   const MIN_BLUR_LEVEL = 0;
   const MAX_ATTEMPTS = 3;
+
+  // Handle timer completion - Moved up and wrapped in useCallback
+  const handleTimeUp = useCallback(() => {
+    setTimerActive(false);
+    setShowResults(true);
+    let finalScore = 0;
+    Object.values(correctAnswers).forEach(isCorrect => {
+      if (isCorrect) finalScore++;
+    });
+    setScore(finalScore);
+  }, [correctAnswers]);
 
   // Load saved progress from localStorage
   useEffect(() => {
@@ -141,7 +153,7 @@ const LogoQuizGame = () => {
       });
       setCorrectAnswers(prev => ({ ...prev, ...initialCorrectAnswers }));
     }
-  }, [locale, logosPerPage]);
+  }, [locale, logosPerPage, answers, blurLevels, attemptCounts, correctAnswers]);
 
   // Update total pages when logosPerPage changes
   useEffect(() => {
@@ -152,7 +164,7 @@ const LogoQuizGame = () => {
         setCurrentPage(Math.ceil(logos.length / logosPerPage) - 1);
       }
     }
-  }, [logosPerPage, logos.length]);
+  }, [logosPerPage, logos.length, currentPage]);
 
   // Timer effect
   useEffect(() => {
@@ -167,22 +179,11 @@ const LogoQuizGame = () => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [timeLeft, timerActive]);
+  }, [timeLeft, timerActive, handleTimeUp]);
 
   // Toggle timer pause/resume
   const toggleTimer = () => {
     setTimerActive(prev => !prev);
-  };
-
-  // Handle timer completion
-  const handleTimeUp = () => {
-    setTimerActive(false);
-    setShowResults(true);
-    let finalScore = 0;
-    Object.values(correctAnswers).forEach(isCorrect => {
-      if (isCorrect) finalScore++;
-    });
-    setScore(finalScore);
   };
 
   // Handle input change for a specific logo
@@ -464,11 +465,15 @@ const LogoQuizGame = () => {
                         transition={{ duration: 0.3 }}
                       >
                         <div className="flex items-center mb-2">
-                          <img 
-                            src={logo.imagePath} 
-                            alt={logo.name} 
-                            className="w-8 h-8 sm:w-10 sm:h-10 object-contain mr-2 sm:mr-3"
-                          />
+                          <div className="relative w-8 h-8 sm:w-10 sm:h-10 mr-2 sm:mr-3 flex-shrink-0">
+                            <Image 
+                              src={logo.imagePath} 
+                              alt={logo.name} 
+                              fill
+                              className="object-contain"
+                              sizes="40px"
+                            />
+                          </div>
                           <div>
                             <div className="font-medium text-sm sm:text-base">
                               {logo.name}
@@ -599,10 +604,12 @@ const LogoQuizGame = () => {
                             className="h-24 sm:h-36 flex items-center justify-center mb-2 cursor-pointer flex-shrink-0"
                             onClick={() => focusLogo(logo.id)}
                           >
-                            <img 
+                            <Image 
                               src={logo.imagePath} 
                               alt="Mystery Logo" 
-                              className={`max-h-full max-w-full object-contain transition duration-300 ${getBlurStyle(logo.id)}`} 
+                              fill
+                              className={`object-contain transition duration-300 ${getBlurStyle(logo.id)}`} 
+                              sizes="(max-width: 640px) 50vw, 33vw"
                             />
                           </div>
                           

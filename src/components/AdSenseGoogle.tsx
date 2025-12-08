@@ -122,7 +122,7 @@ export default function AdSenseGoogle({
       observer.disconnect();
       clearTimeout(fallbackTimer);
     };
-  }, [adSlot, adWidth, adHeight, adFormat]);
+  }, [adSlot, adWidth, adHeight, adFormat, adInitialized]);
 
   return (
     <div
@@ -142,6 +142,6 @@ export default function AdSenseGoogle({
 // Type definition
 declare global {
   interface Window {
-    adsbygoogle: any[];
+    adsbygoogle: Record<string, unknown>[];
   }
 }

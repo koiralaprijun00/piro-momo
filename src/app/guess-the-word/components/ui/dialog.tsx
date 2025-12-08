@@ -4,7 +4,7 @@ import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
 
-import { cn } from "../../lib/utils" // Reverted to original path
+import { cn } from "@/lib/guess-the-word/utils" // Reverted to original path
 
 const Dialog = DialogPrimitive.Root
 

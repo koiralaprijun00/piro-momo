@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useState } from 'react';
-import AdSenseGoogle from '../../../components/AdSenseGoogle';
+import AdSenseGoogle from '@/components/AdSenseGoogle';
 import { BiArrowBack } from "react-icons/bi";
 import Link from 'next/link';
 

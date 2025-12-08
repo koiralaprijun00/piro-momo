@@ -7,6 +7,7 @@ import '../../games/gau_khane_katha/view/gau_khane_katha_shell_screen.dart';
 import '../../games/name_district/view/name_district_shell_screen.dart';
 import '../../games/kings/view/kings_shell_screen.dart';
 import '../../games/temple/view/temple_shell_screen.dart';
+import '../../games/logo_quiz/view/logo_quiz_screen.dart';
 
 class GameDefinition {
   const GameDefinition({
@@ -231,6 +232,39 @@ const List<GameDefinition> homeGames = <GameDefinition>[
         icon: Icons.explore_rounded,
         label: 'Master Nepal\'s geography',
         color: AppPalette.lightBlue,
+      ),
+    ],
+  ),
+  GameDefinition(
+    id: 'logo-quiz',
+    routePath: LogoQuizScreen.routePath,
+    title: 'Logo Quiz',
+    eyebrow: 'Brand Master',
+    description: 'Guess famous Nepali brands from their logos.',
+    assetPath: 'assets/images/logo-quiz.png',
+    accentColors: <Color>[
+      AppPalette.primaryBlue,
+      AppPalette.nepalRed,
+      AppPalette.primaryPink,
+    ],
+    tags: <String>['Visual', 'Brands', 'Quiz'],
+    metadata: '20+ logos',
+    difficulty: 'Easy/Medium',
+    features: [
+      GameFeature(
+        icon: Icons.image_rounded,
+        label: 'Identify blurred logos',
+        color: AppPalette.primaryBlue,
+      ),
+      GameFeature(
+        icon: Icons.access_time_filled_rounded,
+        label: 'Beat the clock',
+        color: AppPalette.nepalRed,
+      ),
+      GameFeature(
+        icon: Icons.check_circle_rounded,
+        label: 'Test your brand IQ',
+        color: AppPalette.primaryPink,
       ),
     ],
   ),

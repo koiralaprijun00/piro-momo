@@ -1,6 +1,6 @@
 // src/app/api/would-you-rather/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import getMongoClient from '@/app/lib/mongodb';
+import getMongoClient from '@/lib/mongodb';
 
 // Get vote counts for a specific question
 export async function GET(request: NextRequest) {

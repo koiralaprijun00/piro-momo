@@ -1,15 +1,28 @@
-// src/app/lib/ad-debug.js
+// src/app/lib/ad-debug.ts
 
 /**
  * Utility functions to debug AdSense loading issues
  * Add this to your project and import it in pages where ads aren't showing
  */
 
+declare global {
+  interface Window {
+    adsbygoogle: Record<string, unknown>[];
+  }
+}
+
+interface AdSenseStatus {
+  scriptLoaded: boolean;
+  adsbygoogleDefined: boolean;
+  adSlotsCount: number;
+  hiddenAdsCount: number;
+}
+
 /**
  * Check if AdSense is properly initialized
  * Call this in the browser console to troubleshoot
  */
-export function checkAdSenseStatus() {
+export function checkAdSenseStatus(): AdSenseStatus {
     console.log('--- AdSense Status Check ---');
     
     // Check if the AdSense script is loaded
@@ -25,21 +38,23 @@ export function checkAdSenseStatus() {
     
     // Check if any ad containers are hidden or have zero dimensions
     const hiddenAds = Array.from(adSlots).filter(ad => {
-      const styles = window.getComputedStyle(ad);
+      const element = ad as HTMLElement;
+      const styles = window.getComputedStyle(element);
       return styles.display === 'none' || 
              styles.visibility === 'hidden' || 
-             ad.offsetWidth === 0 || 
-             ad.offsetHeight === 0;
+             element.offsetWidth === 0 || 
+             element.offsetHeight === 0;
     });
     console.log('Hidden or zero-sized ad slots:', hiddenAds.length);
     
     // Log ad containers with their dimensions
     console.log('Ad containers with dimensions:');
     adSlots.forEach((ad, index) => {
+      const element = ad as HTMLElement;
       console.log(`Ad ${index + 1}:`, {
-        width: ad.offsetWidth,
-        height: ad.offsetHeight,
-        visible: window.getComputedStyle(ad).display !== 'none'
+        width: element.offsetWidth,
+        height: element.offsetHeight,
+        visible: window.getComputedStyle(element).display !== 'none'
       });
     });
     
@@ -63,7 +78,7 @@ export function checkAdSenseStatus() {
    * Log events related to AdSense loading
    * Call this early in your page to capture ad loading events
    */
-  export function monitorAdSenseEvents() {
+  export function monitorAdSenseEvents(): void {
     // Store original method
     const originalPush = Array.prototype.push;
     
@@ -78,7 +93,7 @@ export function checkAdSenseStatus() {
       window.adsbygoogle = window.adsbygoogle || [];
       
       // Override push method to log calls
-      window.adsbygoogle.push = function(...args) {
+      window.adsbygoogle.push = function(...args: any[]) {
         console.log('adsbygoogle.push called with:', args);
         return originalPush.apply(this, args);
       };

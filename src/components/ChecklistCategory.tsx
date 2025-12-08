@@ -1,5 +1,5 @@
 // src/components/ChecklistCategory.tsx
-import { ChecklistItem } from '../data/checklist-data';
+import { ChecklistItem } from '@/app/data/checklist-data';
 import { IoCheckmark } from 'react-icons/io5';
 
 interface ChecklistCategoryProps {

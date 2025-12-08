@@ -2,7 +2,7 @@ import React from 'react';
 import { Clock, Star, Brain, Zap, Play } from 'lucide-react';
 import { Button } from './ui/button';
 import type { WordDifficulty } from '../types';
-import { cn } from '../lib/utils';
+import { cn } from '@/lib/guess-the-word/utils';
 
 interface TimerSelectorProps {
   selectedTimer: number;

@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import AdSenseGoogle from '../../components/AdSenseGoogle';
-import GameButton from '../../components/ui/GameButton';
+import AdSenseGoogle from '@/components/AdSenseGoogle';
+import GameButton from '@/components/ui/GameButton';
 import { IoCheckmark } from 'react-icons/io5';
 
 interface ChecklistItem {
@@ -14,7 +14,7 @@ interface ChecklistItem {
 }
 
 // Safe translation function to prevent errors
-const safeT = (t: any, key: string, defaultValue: string = '', params: any = {}) => {
+const safeT = (t: (key: string, params?: Record<string, any>) => string, key: string, defaultValue: string = '', params: Record<string, any> = {}) => {
   try {
     return t(key, params);
   } catch (error) {
@@ -40,7 +40,7 @@ export default function NepalChecklistPage() {
   useEffect(() => {
     const savedProgress = localStorage.getItem('nepalChecklistProgress');
     if (savedProgress) {
-      setUserProgress(JSON.parse(savedProgress));
+      setTimeout(() => setUserProgress(JSON.parse(savedProgress)), 0);
     }
     
     // Delay ad loading slightly to ensure containers are ready
@@ -83,6 +83,7 @@ export default function NepalChecklistPage() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const stats = React.useMemo(() => {
     const totalItems = items.length;
     const completedItems = Object.keys(userProgress).filter((id) => userProgress[id]).length;

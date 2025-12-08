@@ -101,7 +101,7 @@ export const GameSetupDialog: React.FC = () => { // Renamed component
               lineHeight: '1.25rem',
               color: '#6b7280',
             }}>
-              Let's have fun and learn Nepali words together!<br />
+              Let&apos;s have fun and learn Nepali words together!<br />
               Try to guess the meaning of each word and beat your friends.<br />
             </p>
           </div>
@@ -118,7 +118,7 @@ export const GameSetupDialog: React.FC = () => { // Renamed component
           }}>
             Game setup modal to select difficulty and timer duration before starting a learning session.
           </DialogDescription>
-          <TimerSelector 
+          <TimerSelector
             selectedTimer={selectedTimer}
             onTimerChange={setSelectedTimer}
             selectedDifficulty={selectedDifficulty}

@@ -107,13 +107,13 @@ export const WordCard: React.FC = () => {
 
   useEffect(() => {
     if (state.currentWord && !state.isLoadingWord) {
-      setCardFlipped(false); // Reset flip state when new word comes
+      setTimeout(() => setCardFlipped(false), 0); // Reset flip state when new word comes
     } 
   }, [state.currentWord, state.isLoadingWord]);
 
   useEffect(() => {
     if (state.meaningsVisible) {
-      setCardFlipped(true);
+      setTimeout(() => setCardFlipped(true), 0);
     }
   }, [state.meaningsVisible]);
 

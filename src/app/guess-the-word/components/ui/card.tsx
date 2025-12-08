@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { cn } from "../../lib/utils" // Reverted to original path
+import { cn } from "@/lib/guess-the-word/utils" // Reverted to original path
 
 const Card = React.forwardRef<
   HTMLDivElement,

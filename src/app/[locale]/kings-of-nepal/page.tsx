@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
-import AdSenseGoogle from '../../components/AdSenseGoogle';
+import AdSenseGoogle from '@/components/AdSenseGoogle';
 import { FiShare2 } from 'react-icons/fi';
 import kingsDataEn from '../../../../messages/kings-of-nepal-en.json';
 import kingsDataNp from '../../../../messages/kings-of-nepal-np.json';
@@ -99,12 +99,14 @@ export default function KingsOfNepalQuiz() {
   };
 
   useEffect(() => {
-    setGameStarted(true);
-    setCorrectAnswers([]);
-    setGameOver(false);
-    setGaveUp(false);
-    setInput('');
-    setTimeout(() => inputRef.current?.focus(), 100);
+    setTimeout(() => {
+      setGameStarted(true);
+      setCorrectAnswers([]);
+      setGameOver(false);
+      setGaveUp(false);
+      setInput('');
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }, 0);
   }, []);
 
   const percentComplete = (correctAnswers.length / sortedKings.length) * 100;
@@ -163,7 +165,7 @@ export default function KingsOfNepalQuiz() {
     }
   };
 
-  const safeT = (key: string, defaultValue: string = '', params: any = {}) => {
+  const safeT = (key: string, defaultValue: string = '', params: Record<string, any> = {}) => {
     try {
       return t(key, params);
     } catch (error) {

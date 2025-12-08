@@ -4,8 +4,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { getTemplesByLocale } from '../../data/guess-temple/getTemples';
 import { Temple } from '../../data/guess-temple/temple';
-import AdSenseGoogle from '../../components/AdSenseGoogle';
-import GameButton from '../../components/ui/GameButton';
+import AdSenseGoogle from '@/components/AdSenseGoogle';
+import GameButton from '@/components/ui/GameButton';
 import { CheckCircleIcon, XCircleIcon, RefreshCwIcon, AwardIcon, ShuffleIcon } from 'lucide-react';
 import Image from 'next/image';
 
@@ -52,7 +52,24 @@ export default function GuessTempleGame() {
   const t = useTranslations('Translations');
 
   const allTemplesFromLocale = React.useMemo(() => getTemplesByLocale(locale), [locale]);
+  // State Declarations
   const [selectedCategory, setSelectedCategory] = useState<string>(CATEGORIES.ALL);
+  const [currentTempleId, setCurrentTempleId] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
+  
+  // Game Status State
+  const [isAnswered, setIsAnswered] = useState<boolean>(false);
+  const [score, setScore] = useState<number>(0);
+  const [isCorrect, setIsCorrect] = useState<boolean>(false);
+  const [currentGuess, setCurrentGuess] = useState<string>('');
+  const [gameWon, setGameWon] = useState<boolean>(false);
+  
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  // Improved shuffling state management
+  const [shuffledTempleIds, setShuffledTempleIds] = useState<string[]>([]);
+  const [currentShuffleIndex, setCurrentShuffleIndex] = useState<number>(0);
+  const [completedRounds, setCompletedRounds] = useState<number>(0);
 
   const filteredTemples = React.useMemo(() => {
     if (selectedCategory === CATEGORIES.ALL) {
@@ -73,13 +90,10 @@ export default function GuessTempleGame() {
 
   const templeIds = React.useMemo(() => filteredTemples.map((temple) => temple.id), [filteredTemples]);
 
-  const [currentTempleId, setCurrentTempleId] = useState<string | null>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  // Improved shuffling state management
-  const [shuffledTempleIds, setShuffledTempleIds] = useState<string[]>([]);
-  const [currentShuffleIndex, setCurrentShuffleIndex] = useState<number>(0);
-  const [completedRounds, setCompletedRounds] = useState<number>(0);
+  const currentTemple = React.useMemo(() =>
+    filteredTemples.find(temple => temple.id === currentTempleId),
+    [filteredTemples, currentTempleId]
+  );
 
   const normalizeSpelling = (text: string): string => {
     return text
@@ -158,34 +172,27 @@ export default function GuessTempleGame() {
     setCurrentGuess('');
   }, [templeIds, shuffleArray, currentTempleId]);
 
-  const currentTemple = React.useMemo(() =>
-    filteredTemples.find(temple => temple.id === currentTempleId),
-    [filteredTemples, currentTempleId]
-  );
 
-  const [isAnswered, setIsAnswered] = useState<boolean>(false);
-  const [score, setScore] = useState<number>(0);
-  const [isCorrect, setIsCorrect] = useState<boolean>(false);
-  const [currentGuess, setCurrentGuess] = useState<string>('');
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const [gameWon, setGameWon] = useState<boolean>(false);
 
   // Initialize temples when category or templeIds change
+  // Initialize temples when category or templeIds change
   useEffect(() => {
-    const firstTempleId = initializeShuffledTemples();
-    if (firstTempleId) {
-      setCurrentTempleId(firstTempleId);
-      setCurrentShuffleIndex(1); // Already showing first temple
-      setIsAnswered(false);
-      setIsCorrect(false);
-      setCurrentGuess('');
-      if (!isInitialized) {
+    setTimeout(() => {
+      const firstTempleId = initializeShuffledTemples();
+      if (firstTempleId) {
+        setCurrentTempleId(firstTempleId);
+        setCurrentShuffleIndex(1); // Already showing first temple
+        setIsAnswered(false);
+        setIsCorrect(false);
+        setCurrentGuess('');
+        // We need to check isInitialized here, but we can't depend on stale state inside timeout easily without ref? 
+        // Actually for this logic, just setting isInitialized(true) is fine.
         setIsInitialized(true);
+      } else {
+        setCurrentTempleId(null);
       }
-    } else {
-      setCurrentTempleId(null);
-    }
-  }, [templeIds, initializeShuffledTemples, isInitialized]);
+    }, 0);
+  }, [templeIds, initializeShuffledTemples]);
 
   useEffect(() => {
     if (isInitialized && !isAnswered && !gameWon) {

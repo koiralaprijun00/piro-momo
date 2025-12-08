@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import ProductCard from "../../components/ProductCard";
-import SocialShare from "@/app/components/SocialShare";
+import ProductCard from '@/components/ProductCard';
+import SocialShare from '@/components/SocialShare';
 import { getProductsByLocale } from "../../data/spend-binod-money/getProducts"; // Import utility
 import { Product } from "../../data/spend-binod-money/product"; // Import Product type
-import GameButton from "../../components/ui/GameButton";
+import GameButton from '@/components/ui/GameButton';
 import { useTranslations, useLocale } from "next-intl"; // Import useLocale
 import Link from "next/link";
 import Image from "next/image";

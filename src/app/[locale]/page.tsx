@@ -1,15 +1,11 @@
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
+import FeedbackButton from '@/components/FeedbackButton';
 import { useTranslations, useLocale } from 'next-intl';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 
-// Dynamically import non-critical components
-const FeedbackButton = dynamic(() => import('../components/FeedbackButton'), {
-  ssr: false,
-});
+
 
 // Centralized card data
 const cards = [
@@ -99,7 +95,7 @@ const cards = [
 // Add type for Card props
 interface CardProps {
   data: (typeof cards)[0]; // Use typeof cards[0] for better type inference
-  t: any;
+  t: (key: string) => string;
 }
 
 function Card({ data, t }: CardProps) {

@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { getQuestionsByLocale } from '../../data/would-you-rather/getQuestions';
-import GameButton from '../../components/ui/GameButton';
-import AdSenseGoogle from '../../components/AdSenseGoogle';
+import GameButton from '@/components/ui/GameButton';
+import AdSenseGoogle from '@/components/AdSenseGoogle';
 import { FiShare2, FiRefreshCw, FiSend } from 'react-icons/fi';
 import { ImSpinner8 } from 'react-icons/im';
 import { useLocale } from 'next-intl';
@@ -34,27 +34,20 @@ const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
   const [realVoteCounts, setRealVoteCounts] = useState<{[key: string]: {optionA: number, optionB: number}}>({});
 
-  useEffect(() => {
-    if (allQuestions.length > 0) {
-      shuffleQuestions();
-    }
-  }, [allQuestions]);
-
-  const shuffleQuestions = () => {
+  const shuffleQuestions = React.useCallback(() => {
     const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
     setQuestions(shuffled);
     setCurrentQuestionIndex(0);
     setSelectedOption(null);
-  };
+  }, [allQuestions]);
 
-  
   useEffect(() => {
-    if (questions.length > 0 && currentQuestionIndex < questions.length) {
-      fetchVoteCounts(questions[currentQuestionIndex].id);
+    if (allQuestions.length > 0) {
+      shuffleQuestions();
     }
-  }, [questions, currentQuestionIndex]);
+  }, [allQuestions, shuffleQuestions]);
 
-  const fetchVoteCounts = async (questionId: string) => {
+  const fetchVoteCounts = React.useCallback(async (questionId: string) => {
     try {
       if (realVoteCounts[questionId]) return;
       
@@ -77,7 +70,13 @@ const [isSubmitting, setIsSubmitting] = useState(false);
     } catch (error) {
       console.error('Error fetching vote counts:', error);
     }
-  };
+  }, [realVoteCounts]);
+
+  useEffect(() => {
+    if (questions.length > 0 && currentQuestionIndex < questions.length) {
+      fetchVoteCounts(questions[currentQuestionIndex].id);
+    }
+  }, [questions, currentQuestionIndex, fetchVoteCounts]);
 
   const submitVote = async (questionId: string, vote: 'A' | 'B') => {
     try {

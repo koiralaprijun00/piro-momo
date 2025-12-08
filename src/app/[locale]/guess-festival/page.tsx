@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useTranslations, useLocale } from "next-intl";
-import { getFestivalsByLocale } from "../../data/guess-festival/getFestivals"; // Import utility
-import { Festival } from "../../data/guess-festival/festival"; // Import Festival type
-import AdSenseGoogle from "../../components/AdSenseGoogle";
-import GameButton from "../../components/ui/GameButton";
+import { getFestivalsByLocale } from "@/app/data/guess-festival/getFestivals"; // Import utility
+import { Festival } from "@/app/data/guess-festival/festival"; // Import Festival type
+import AdSenseGoogle from "@/components/AdSenseGoogle";
+import GameButton from "@/components/ui/GameButton";
 import { Sparkles, Flame } from "lucide-react";
 
 // QuizSection Component
@@ -165,9 +165,14 @@ export default function Home() {
   const locale = useLocale();
   const t = useTranslations("Translations"); // Add translations hook
 
-  // Load festivals based on locale
-  const festivals = getFestivalsByLocale(locale);
-  const festivalIds = festivals.map((festival) => festival.id);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    // Force hydration match
+    setTimeout(() => setMounted(true), 0);
+  }, []);
+
+  const festivals = useMemo(() => getFestivalsByLocale(locale) as Festival[], [locale]);
+  const festivalIds = useMemo(() => festivals.map((festival: Festival) => festival.id), [festivals]);
 
   const [currentFestivalId, setCurrentFestivalId] = useState<string>(festivalIds[0]); // Use string instead of FestivalId
   const [guess, setGuess] = useState<string>("");
@@ -211,30 +216,22 @@ export default function Home() {
     }
   };
 
-  const generateOptions = (correctFestivalId: string) => {
-    const otherFestivalIds = festivalIds.filter((id) => id !== correctFestivalId);
+  const generateOptions = useCallback((correctFestivalId: string) => {
+    const otherFestivalIds = festivalIds.filter((id: string) => id !== correctFestivalId);
     const randomIds = otherFestivalIds.sort(() => 0.5 - Math.random()).slice(0, 3);
     const optionIds = [correctFestivalId, ...randomIds].sort(() => 0.5 - Math.random());
-    setOptions(optionIds.map((id) => festivals.find((f) => f.id === id)!.name)); // Use festival name from data
-  };
+    setOptions(optionIds.map((id: string) => festivals.find((f: Festival) => f.id === id)!.name)); // Use festival name from data
+  }, [festivalIds, festivals]);
 
-  useEffect(() => {
-    shuffleFestivals();
-  }, []);
+  const handleTimeUp = useCallback(() => {
+    setIsAnswered(true);
+    setIsCorrect(false);
+    setFeedback(t("timeUp"));
+    setTimerActive(false);
+    setStreak(0);
+  }, [t]);
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
-    if (gameMode === "timed" && timerActive && timeLeft > 0) {
-      timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
-    } else if (gameMode === "timed" && timeLeft === 0 && !isAnswered) {
-      handleTimeUp();
-    }
-    return () => {
-      if (timer) clearInterval(timer);
-    };
-  }, [timeLeft, timerActive, gameMode, isAnswered]);
-
-  const shuffleFestivals = () => {
+  const shuffleFestivals = useCallback(() => {
     const randomIndex = Math.floor(Math.random() * festivalIds.length);
     const newFestivalId = festivalIds[randomIndex];
     setCurrentFestivalId(newFestivalId);
@@ -247,7 +244,23 @@ export default function Home() {
       setTimeLeft(30);
       setTimerActive(true);
     }
-  };
+  }, [festivalIds, generateOptions, gameMode]);
+
+  useEffect(() => {
+    setTimeout(() => shuffleFestivals(), 0);
+  }, [shuffleFestivals]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+    if (gameMode === "timed" && timerActive && timeLeft > 0) {
+      timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
+    } else if (gameMode === "timed" && timeLeft === 0 && !isAnswered) {
+      setTimeout(() => handleTimeUp(), 0);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [timeLeft, timerActive, gameMode, isAnswered, handleTimeUp]);
 
   const handleGuess = (selectedOption: string) => {
     if (isAnswered) return;
@@ -299,13 +312,7 @@ export default function Home() {
     }
   };
 
-  const handleTimeUp = () => {
-    setIsAnswered(true);
-    setIsCorrect(false);
-    setFeedback(t("timeUp"));
-    setTimerActive(false);
-    setStreak(0);
-  };
+
 
   const switchGameMode = (mode: "standard" | "timed") => {
     setGameMode(mode);

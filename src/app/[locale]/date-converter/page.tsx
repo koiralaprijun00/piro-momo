@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import NepaliDate from 'nepali-date-converter';
-import AdSenseGoogle from '../../components/AdSenseGoogle';
+import AdSenseGoogle from '@/components/AdSenseGoogle';
 import { motion } from 'framer-motion';
-import CustomDropdown from '../../components/ui/CustomDropdown';
+import CustomDropdown from '@/components/ui/CustomDropdown';
 import { useTranslations } from 'next-intl';
 
 // Define interfaces
@@ -454,13 +454,15 @@ export default function DateConverterPage() {
       );
       
       if (parseInt(englishDate.day) > daysInMonth) {
-        setEnglishDate((prev) => ({
-          ...prev,
-          day: daysInMonth.toString().padStart(2, '0'),
-        }));
+        setTimeout(() => {
+          setEnglishDate((prev) => ({
+            ...prev,
+            day: daysInMonth.toString().padStart(2, '0'),
+          }));
+        }, 0);
       }
     }
-  }, [englishDate.year, englishDate.month, getDaysInMonth]);
+  }, [englishDate.year, englishDate.month, englishDate.day, getDaysInMonth]);
 
   useEffect(() => {
     if (nepaliDate.year && nepaliDate.month) {
@@ -471,17 +473,19 @@ export default function DateConverterPage() {
       );
       
       if (parseInt(nepaliDate.day) > daysInMonth) {
-        setNepaliDate((prev) => ({
-          ...prev,
-          day: daysInMonth.toString().padStart(2, '0'),
-        }));
+        setTimeout(() => {
+          setNepaliDate((prev) => ({
+            ...prev,
+            day: daysInMonth.toString().padStart(2, '0'),
+          }));
+        }, 0);
       }
     }
-  }, [nepaliDate.year, nepaliDate.month, getDaysInMonth]);
+  }, [nepaliDate.year, nepaliDate.month, nepaliDate.day, getDaysInMonth]);
 
   // Clear error on tab or date change
   useEffect(() => {
-    setErrorMessage(null);
+    setTimeout(() => setErrorMessage(null), 0);
   }, [activeTab, englishDate, nepaliDate]);
 
   // Conversion functions

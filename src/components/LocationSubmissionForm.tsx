@@ -1,9 +1,13 @@
 'use client'
 
-import { useState, useRef, FormEvent, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import { MapPin, Send, Loader2, CheckCircle, AlertCircle, X } from 'lucide-react';
 import { HiOutlinePhotograph } from 'react-icons/hi';
 import { ImSpinner9 } from 'react-icons/im'; // Iconmonstr spinner
+import { FormEvent } from 'react'; // Re-added FormEvent as it was implicitly removed by the user's malformed line
 
 type SubmissionProps = {
   onCancel: () => void;
@@ -333,7 +337,7 @@ const handleSubmit = async (e: FormEvent) => {
               
               {isClient && !isGeolocationAvailable && (
                 <p className="mt-2 text-sm text-amber-600">
-                  Geolocation is not supported by your browser. You'll need to enter coordinates manually.
+                  Geolocation is not supported by your browser. You&apos;ll need to enter coordinates manually.
                 </p>
               )}
             </div>
@@ -417,7 +421,7 @@ const handleSubmit = async (e: FormEvent) => {
               >
                 {preview ? (
                   <div className="relative">
-                    <img src={preview} alt="Preview" className="mx-auto h-48 object-cover rounded" />
+                    <Image src={preview} alt="Preview" className="mx-auto object-cover rounded" width={192} height={192} />
                     <button
                       type="button"
                       className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"

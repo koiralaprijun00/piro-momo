@@ -1,12 +1,17 @@
-// components/DistrictMap.js
-'use client';
-
 import React, { useState, useEffect } from 'react';
-import { districtData } from '@/lib/districtData';
+import Image from 'next/image';
+import { districtData } from '@/app/data/district-data';
+import { District } from '@/app/data/district-data';
 
-const DistrictMap = ({ correctGuesses, onDistrictHover, highlightedDistrict }) => {
+interface DistrictMapProps {
+  correctGuesses: string[];
+  onDistrictHover: (id: string | null) => void;
+  highlightedDistrict: string | null;
+}
+
+const DistrictMap: React.FC<DistrictMapProps> = ({ correctGuesses, onDistrictHover, highlightedDistrict }) => {
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [nepalMap, setNepalMap] = useState(null);
+  const [nepalMap, setNepalMap] = useState<any>(null); // Type 'any' for imported svg default for now
 
   useEffect(() => {
     // Load the main Nepal outline SVG
@@ -16,21 +21,21 @@ const DistrictMap = ({ correctGuesses, onDistrictHover, highlightedDistrict }) =
     });
   }, []);
 
-  // This approach creates a dynamic map with individual district SVGs
-  // Each district SVG will have its own layer that can be manipulated
   return (
     <div className="district-map-container">
       {mapLoaded ? (
         <>
           {/* Base Nepal Map Outline */}
-          <img 
-            src={nepalMap.src} 
-            alt="Nepal Map Outline" 
+          <Image
+            src={nepalMap}
+            alt="Nepal Map Outline"
             className="w-full h-full absolute top-0 left-0"
+            width={800}
+            height={500}
           />
           
           {/* District Overlays */}
-          {districtData.map(district => (
+          {districtData.map((district: District) => (
             <div
               key={district.id}
               className={`district-overlay ${
@@ -57,16 +62,23 @@ const DistrictMap = ({ correctGuesses, onDistrictHover, highlightedDistrict }) =
   );
 };
 
+interface DistrictSVGProps {
+  id: string;
+  path: string;
+  isCorrect: boolean;
+  isHighlighted: boolean;
+}
+
 // Individual district SVG component with dynamic import
-const DistrictSVG = ({ id, path, isCorrect, isHighlighted }) => {
-  const [svg, setSvg] = useState(null);
+const DistrictSVG: React.FC<DistrictSVGProps> = ({ id, path, isCorrect, isHighlighted }) => {
+  const [svg, setSvg] = useState<any>(null);
 
   useEffect(() => {
     // Dynamically import the district SVG
     const importSVG = async () => {
       try {
-        const module = await import(`/public${path}`);
-        setSvg(module.default);
+        const svgModule = await import(`/public${path}`);
+        setSvg(svgModule.default);
       } catch (error) {
         console.error(`Error loading SVG for district ${id}:`, error);
       }
@@ -80,9 +92,11 @@ const DistrictSVG = ({ id, path, isCorrect, isHighlighted }) => {
   }
 
   return (
-    <img 
-      src={svg.src} 
+    <Image 
+      src={svg}
       alt={`District of ${id}`}
+      width={100}
+      height={100}
       className={`district-svg ${
         isCorrect 
           ? 'district-correct' 

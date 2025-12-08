@@ -1,6 +1,6 @@
 // src/app/api/would-you-rather/submit/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import getMongoClient from '@/app/lib/mongodb';
+import getMongoClient from '@/lib/mongodb';
 
 export async function POST(request: NextRequest) {
   try {
