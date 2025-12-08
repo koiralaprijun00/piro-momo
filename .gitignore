@@ -54,3 +54,10 @@ Thumbs.db
 .lock-wscript
 *.local
 
+
+# Gradle
+.gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
