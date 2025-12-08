@@ -1,0 +1,10 @@
+# Flutter mobile app - not needed for Vercel deployment
+piro_momo_games/
+
+# Development files
+.DS_Store
+*.log
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
