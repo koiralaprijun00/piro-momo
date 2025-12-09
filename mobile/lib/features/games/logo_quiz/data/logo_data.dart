@@ -1,0 +1,392 @@
+import '../domain/logo_model.dart';
+
+class LogoData {
+  static const List<Logo> enLogos = [
+    Logo(
+      id: 'ncell',
+      name: 'Ncell',
+      imagePath: 'assets/images/yo-chineu/ncell.png',
+      difficulty: 'easy',
+      category: 'telecom',
+      acceptableAnswers: ['Ncell', 'N-Cell'],
+    ),
+    Logo(
+      id: 'nabil_bank',
+      name: 'Nabil Bank',
+      imagePath: 'assets/images/yo-chineu/nabil-bank.png',
+      difficulty: 'medium',
+      category: 'banking',
+      acceptableAnswers: ['Nabil Bank', 'Nabil', 'NABIL'],
+    ),
+    Logo(
+      id: 'buddha_air',
+      name: 'Buddha Air',
+      imagePath: 'assets/images/yo-chineu/buddha-air.png',
+      difficulty: 'medium',
+      category: 'airline',
+      acceptableAnswers: ['Buddha', 'Buddha Air', 'Buddha Airlines'],
+    ),
+    Logo(
+      id: 'tata',
+      name: 'Tata',
+      imagePath: 'assets/images/yo-chineu/tata.jpg',
+      difficulty: 'easy',
+      category: 'automotive',
+      acceptableAnswers: ['Tata', 'Tata Motors', 'TATA'],
+    ),
+    Logo(
+      id: 'wai_wai',
+      name: 'Wai Wai',
+      imagePath: 'assets/images/yo-chineu/wai-wai.png',
+      difficulty: 'easy',
+      category: 'food',
+      acceptableAnswers: ['Wai Wai', 'WaiWai', 'Wai-Wai'],
+    ),
+    Logo(
+      id: 'cg',
+      name: 'CG',
+      imagePath: 'assets/images/yo-chineu/cg.png',
+      difficulty: 'medium',
+      category: 'conglomerate',
+      acceptableAnswers: ['CG', 'Chaudhary Group', 'CG Group'],
+    ),
+    Logo(
+      id: 'dish_home',
+      name: 'Dish Home',
+      imagePath: 'assets/images/yo-chineu/dish-home.png',
+      difficulty: 'medium',
+      category: 'cable',
+      acceptableAnswers: ['Dish Home', 'DishHome'],
+    ),
+    Logo(
+      id: 'ntc',
+      name: 'Nepal Telecom',
+      imagePath: 'assets/images/yo-chineu/ntc.jpg',
+      difficulty: 'easy',
+      category: 'telecom',
+      acceptableAnswers: ['Nepal Telecom', 'NTC', 'Nepal Doorsanchar'],
+    ),
+    Logo(
+      id: 'himalayan_bank',
+      name: 'Himalayan Bank',
+      imagePath: 'assets/images/yo-chineu/hbl.png',
+      difficulty: 'medium',
+      category: 'banking',
+      acceptableAnswers: ['Himalayan Bank', 'HBL', 'Himalayan Bank Limited'],
+    ),
+    Logo(
+      id: 'yeti_airlines',
+      name: 'Yeti Airlines',
+      imagePath: 'assets/images/yo-chineu/yeti-air.png',
+      difficulty: 'medium',
+      category: 'airline',
+      acceptableAnswers: ['Yeti Airlines', 'Yeti', 'Yeti Air'],
+    ),
+    Logo(
+      id: 'kumari_bank',
+      name: 'Kumari Bank',
+      imagePath: 'assets/images/yo-chineu/kumari-bank.png',
+      difficulty: 'hard',
+      category: 'banking',
+      acceptableAnswers: ['Kumari Bank', 'Kumari', 'Kumari Bank Limited'],
+    ),
+    Logo(
+      id: 'laxmi_bank',
+      name: 'Laxmi Bank',
+      imagePath: 'assets/images/yo-chineu/laxmi-bank.jpg',
+      difficulty: 'hard',
+      category: 'banking',
+      acceptableAnswers: ['Laxmi Bank', 'Laxmi', 'Lakshmi Bank'],
+    ),
+    Logo(
+      id: 'nic_asia',
+      name: 'NIC Asia Bank',
+      imagePath: 'assets/images/yo-chineu/nic-asia.png',
+      difficulty: 'hard',
+      category: 'banking',
+      acceptableAnswers: ['NIC Asia', 'NIC Asia Bank', 'NIC'],
+    ),
+    Logo(
+      id: 'nepal_investment_bank',
+      name: 'Nepal Investment Bank',
+      imagePath: 'assets/images/yo-chineu/nimb-bank.png',
+      difficulty: 'hard',
+      category: 'banking',
+      acceptableAnswers: [
+        'Nepal Investment Bank',
+        'NIBL',
+        'Nepal Investment',
+        'Investment Bank'
+      ],
+    ),
+    Logo(
+      id: 'gorkha_brewery',
+      name: 'Gorkha Brewery',
+      imagePath: 'assets/images/yo-chineu/gorkha-brewery.png',
+      difficulty: 'medium',
+      category: 'beverage',
+      acceptableAnswers: ['Gorkha Brewery', 'Gorkha', 'Gorkha Beer'],
+    ),
+    Logo(
+      id: 'esewa',
+      name: 'eSewa',
+      imagePath: 'assets/images/yo-chineu/esewa.jpg',
+      difficulty: 'easy',
+      category: 'fintech',
+      acceptableAnswers: ['eSewa', 'e-Sewa', 'E Sewa'],
+    ),
+    Logo(
+      id: 'khalti',
+      name: 'Khalti',
+      imagePath: 'assets/images/yo-chineu/khalti.png',
+      difficulty: 'medium',
+      category: 'fintech',
+      acceptableAnswers: ['Khalti', 'Khalti Digital Wallet'],
+    ),
+    Logo(
+      id: 'worldlink',
+      name: 'WorldLink',
+      imagePath: 'assets/images/yo-chineu/worldlink.png',
+      difficulty: 'easy',
+      category: 'internet',
+      acceptableAnswers: [
+        'WorldLink',
+        'World Link',
+        'Worldlink Communications'
+      ],
+    ),
+    Logo(
+      id: 'siddhartha_bank',
+      name: 'Siddhartha Bank',
+      imagePath: 'assets/images/yo-chineu/siddhartha-bank.jpg',
+      difficulty: 'hard',
+      category: 'banking',
+      acceptableAnswers: [
+        'Siddhartha Bank',
+        'Siddhartha',
+        'Siddhartha Bank Limited'
+      ],
+    ),
+    Logo(
+      id: 'khukuri_rum',
+      name: 'Khukuri Rum',
+      imagePath: 'assets/images/yo-chineu/khukuri-rum.png',
+      difficulty: 'medium',
+      category: 'beverage',
+      acceptableAnswers: ['Khukuri Rum', 'Khukuri', 'Khukuri Nepal'],
+    ),
+  ];
+
+  static const List<Logo> npLogos = [
+    Logo(
+      id: 'ncell',
+      name: 'एनसेल',
+      imagePath: 'assets/images/yo-chineu/ncell.png',
+      difficulty: 'easy',
+      category: 'दूरसञ्चार',
+      acceptableAnswers: ['एनसेल', 'Ncell', 'N-Cell'],
+    ),
+    Logo(
+      id: 'nabil_bank',
+      name: 'नबिल बैंक',
+      imagePath: 'assets/images/yo-chineu/nabil-bank.png',
+      difficulty: 'medium',
+      category: 'बैंकिङ',
+      acceptableAnswers: ['नबिल बैंक', 'नबिल', 'Nabil Bank', 'NABIL'],
+    ),
+    Logo(
+      id: 'buddha_air',
+      name: 'बुद्ध एयर',
+      imagePath: 'assets/images/yo-chineu/buddha-air.png',
+      difficulty: 'medium',
+      category: 'हवाई सेवा',
+      acceptableAnswers: ['बुद्ध एयर', 'Buddha Air', 'बुद्ध एयरलाइन्स'],
+    ),
+    Logo(
+      id: 'tata',
+      name: 'टाटा',
+      imagePath: 'assets/images/yo-chineu/tata.jpg',
+      difficulty: 'easy',
+      category: 'सवारी साधन',
+      acceptableAnswers: ['टाटा', 'Tata', 'टाटा मोटर्स', 'TATA'],
+    ),
+    Logo(
+      id: 'wai_wai',
+      name: 'वाइ वाइ',
+      imagePath: 'assets/images/yo-chineu/wai-wai.png',
+      difficulty: 'easy',
+      category: 'खाद्य',
+      acceptableAnswers: ['वाइ वाइ', 'Wai Wai', 'वाइवाइ', 'Wai-Wai'],
+    ),
+    Logo(
+      id: 'cg',
+      name: 'सीजी',
+      imagePath: 'assets/images/yo-chineu/cg.png',
+      difficulty: 'medium',
+      category: 'समूह',
+      acceptableAnswers: ['सीजी', 'चौधरी समूह', 'CG', 'Chaudhary Group'],
+    ),
+    Logo(
+      id: 'dish_home',
+      name: 'डिश होम',
+      imagePath: 'assets/images/yo-chineu/dish-home.png',
+      difficulty: 'medium',
+      category: 'केबल',
+      acceptableAnswers: ['डिश होम', 'Dish Home', 'डिशहोम'],
+    ),
+    Logo(
+      id: 'ntc',
+      name: 'नेपाल टेलिकम',
+      imagePath: 'assets/images/yo-chineu/ntc.jpg',
+      difficulty: 'easy',
+      category: 'दूरसञ्चार',
+      acceptableAnswers: ['नेपाल टेलिकम', 'NTC', 'नेपाल दूरसञ्चार'],
+    ),
+    Logo(
+      id: 'himalayan_bank',
+      name: 'हिमालयन बैंक',
+      imagePath: 'assets/images/yo-chineu/hbl.png',
+      difficulty: 'medium',
+      category: 'बैंकिङ',
+      acceptableAnswers: [
+        'हिमालयन बैंक',
+        'HBL',
+        'हिमालयन बैंक लिमिटेड',
+        'Himalayan Bank'
+      ],
+    ),
+    Logo(
+      id: 'yeti_airlines',
+      name: 'यति एयरलाइन्स',
+      imagePath: 'assets/images/yo-chineu/yeti-air.png',
+      difficulty: 'medium',
+      category: 'हवाई सेवा',
+      acceptableAnswers: ['यति एयरलाइन्स', 'Yeti Airlines', 'यति'],
+    ),
+    Logo(
+      id: 'kumari_bank',
+      name: 'कुमारी बैंक',
+      imagePath: 'assets/images/yo-chineu/kumari-bank.png',
+      difficulty: 'hard',
+      category: 'बैंकिङ',
+      acceptableAnswers: [
+        'कुमारी बैंक',
+        'कुमारी',
+        'Kumari Bank',
+        'kumari',
+        'kumari bank',
+        'कुमारी बैंक लिमिटेड'
+      ],
+    ),
+    Logo(
+      id: 'laxmi_bank',
+      name: 'लक्ष्मी बैंक',
+      imagePath: 'assets/images/yo-chineu/laxmi-bank.jpg',
+      difficulty: 'hard',
+      category: 'बैंकिङ',
+      acceptableAnswers: ['लक्ष्मी बैंक', 'लक्ष्मी', 'Laxmi Bank'],
+    ),
+    Logo(
+      id: 'nic_asia',
+      name: 'एनआईसी एशिया बैंक',
+      imagePath: 'assets/images/yo-chineu/nic-asia.png',
+      difficulty: 'hard',
+      category: 'बैंकिङ',
+      acceptableAnswers: [
+        'एनआईसी एशिया',
+        'एनआईसी एशिया बैंक',
+        'NIC Asia',
+        'NIC'
+      ],
+    ),
+    Logo(
+      id: 'nepal_investment_bank',
+      name: 'नेपाल इन्भेस्टमेन्ट बैंक',
+      imagePath: 'assets/images/yo-chineu/nimb-bank.png',
+      difficulty: 'hard',
+      category: 'बैंकिङ',
+      acceptableAnswers: [
+        'नेपाल इन्भेस्टमेन्ट बैंक',
+        'NIBL',
+        'नेपाल इन्भेस्टमेन्ट',
+        'Nepal Investment Bank'
+      ],
+    ),
+    Logo(
+      id: 'gorkha_brewery',
+      name: 'गोरखा ब्रुअरी',
+      imagePath: 'assets/images/yo-chineu/gorkha-brewery.png',
+      difficulty: 'medium',
+      category: 'पेय पदार्थ',
+      acceptableAnswers: [
+        'गोरखा ब्रुअरी',
+        'गोरखा',
+        'Gorkha Brewery',
+        'गोरखा बियर'
+      ],
+    ),
+    Logo(
+      id: 'esewa',
+      name: 'ई-सेवा',
+      imagePath: 'assets/images/yo-chineu/esewa.jpg',
+      difficulty: 'easy',
+      category: 'फिन्टेक',
+      acceptableAnswers: ['ई-सेवा', 'eSewa', 'ई सेवा', 'e-Sewa'],
+    ),
+    Logo(
+      id: 'khalti',
+      name: 'खल्ती',
+      imagePath: 'assets/images/yo-chineu/khalti.png',
+      difficulty: 'medium',
+      category: 'फिन्टेक',
+      acceptableAnswers: ['खल्ती', 'Khalti', 'खल्ती डिजिटल वालेट'],
+    ),
+    Logo(
+      id: 'worldlink',
+      name: 'वर्ल्डलिङ्क',
+      imagePath: 'assets/images/yo-chineu/worldlink.png',
+      difficulty: 'easy',
+      category: 'इन्टरनेट',
+      acceptableAnswers: [
+        'वर्ल्डलिङ्क',
+        'WorldLink',
+        'वर्ल्ड लिङ्क',
+        'वर्ल्डलिङ्क कम्युनिकेसन्स'
+      ],
+    ),
+    Logo(
+      id: 'siddhartha_bank',
+      name: 'सिद्धार्थ बैंक',
+      imagePath: 'assets/images/yo-chineu/siddhartha-bank.jpg',
+      difficulty: 'hard',
+      category: 'बैंकिङ',
+      acceptableAnswers: [
+        'सिद्धार्थ बैंक',
+        'सिद्धार्थ',
+        'Siddhartha Bank',
+        'सिद्धार्थ बैंक लिमिटेड'
+      ],
+    ),
+    Logo(
+      id: 'khukuri_rum',
+      name: 'खुकुरी रम',
+      imagePath: 'assets/images/yo-chineu/khukuri-rum.png',
+      difficulty: 'medium',
+      category: 'पेय पदार्थ',
+      acceptableAnswers: [
+        'खुकुरी रम',
+        'खुकुरी',
+        'Khukuri Rum',
+        'खुकुरी नेपाल'
+      ],
+    ),
+  ];
+
+  static List<Logo> getLogos(String locale) {
+    return locale == 'np' ? npLogos : enLogos;
+  }
+
+  static List<Logo> getByLocale(String locale) {
+    return getLogos(locale);
+  }
+}

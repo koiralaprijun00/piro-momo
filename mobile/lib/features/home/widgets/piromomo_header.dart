@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class PiromomoHeader extends StatelessWidget {
   const PiromomoHeader({
@@ -10,7 +9,6 @@ class PiromomoHeader extends StatelessWidget {
     this.referenceDate,
     this.gamesPlayed = 2,
     this.onProfilePressed,
-    this.onNotificationsPressed,
     this.currentUserEmail,
     this.currentUserPhoto,
   });
@@ -21,7 +19,6 @@ class PiromomoHeader extends StatelessWidget {
   final DateTime? referenceDate;
   final int gamesPlayed;
   final VoidCallback? onProfilePressed;
-  final VoidCallback? onNotificationsPressed;
   final String? currentUserEmail;
   final String? currentUserPhoto;
 
@@ -30,7 +27,6 @@ class PiromomoHeader extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
     const EdgeInsets horizontalPadding = EdgeInsets.symmetric(horizontal: 24);
-    final DateTime resolvedDate = referenceDate ?? DateTime.now();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -44,7 +40,6 @@ class PiromomoHeader extends StatelessWidget {
             subtitle: subtitle,
             colorScheme: colorScheme,
             onProfilePressed: onProfilePressed,
-            onNotificationsPressed: onNotificationsPressed,
             currentUserEmail: currentUserEmail,
             currentUserPhoto: currentUserPhoto,
           ),
@@ -61,7 +56,6 @@ class _HeroCard extends StatelessWidget {
     required this.subtitle,
     required this.colorScheme,
     this.onProfilePressed,
-    this.onNotificationsPressed,
     this.currentUserEmail,
     this.currentUserPhoto,
   });
@@ -71,7 +65,6 @@ class _HeroCard extends StatelessWidget {
   final String subtitle;
   final ColorScheme colorScheme;
   final VoidCallback? onProfilePressed;
-  final VoidCallback? onNotificationsPressed;
   final String? currentUserEmail;
   final String? currentUserPhoto;
 
@@ -81,19 +74,13 @@ class _HeroCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 22, 12, 12),
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              _HeroIconButton(
-                icon: Icons.notifications_none_rounded,
-                onPressed: onNotificationsPressed ??
-                    () => context.push('/notifications'),
-              ),
-              const SizedBox(width: 12),
               _ProfileIconButton(
                 email: currentUserEmail,
                 photoUrl: currentUserPhoto,
@@ -102,55 +89,25 @@ class _HeroCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
-            child: _GradientText(
-              text: appName,
-              style: textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w700,
-                letterSpacing: -0.2,
-                color: colorScheme.onSurface,
-              ),
+          const SizedBox(height: 4),
+          Text(
+            appName,
+            style: textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.w800,
+              letterSpacing: -0.5,
+              color: Colors.white,
             ),
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: 8),
           Text(
             subtitle,
-            style: textTheme.headlineSmall?.copyWith(
-              color: colorScheme.onSurface.withValues(alpha: 0.8),
-              fontWeight: FontWeight.w700,
+            style: textTheme.titleMedium?.copyWith(
+              color: Colors.white.withValues(alpha: 0.9),
+              fontWeight: FontWeight.w600,
               height: 1.2,
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _HeroIconButton extends StatelessWidget {
-  const _HeroIconButton({required this.icon, required this.onPressed});
-
-  final IconData icon;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-
-    return InkWell(
-      borderRadius: BorderRadius.circular(32),
-      onTap: onPressed,
-      child: Container(
-        height: 40,
-        width: 40,
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceVariant,
-          borderRadius: BorderRadius.circular(32),
-        ),
-        child: Icon(icon, color: colorScheme.onSurfaceVariant, size: 20),
       ),
     );
   }
@@ -193,130 +150,25 @@ class _ProfileIconButton extends StatelessWidget {
         ),
       );
     } else {
-      avatar = Icon(Icons.person_outline_rounded,
-          color: colorScheme.onSurfaceVariant, size: 20);
+      avatar = const Icon(Icons.person_rounded, color: Colors.white, size: 24);
     }
 
     return InkWell(
       borderRadius: BorderRadius.circular(32),
       onTap: onPressed,
       child: Container(
-        height: 40,
-        width: 40,
+        height: 48,
+        width: 48,
         decoration: BoxDecoration(
-          color: colorScheme.surfaceVariant,
-          borderRadius: BorderRadius.circular(32),
+          color: Colors.white.withValues(alpha: 0.1),
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.25),
+            width: 1,
+          ),
         ),
         child: Center(child: avatar),
       ),
-    );
-  }
-}
-
-class _DailyStatsRow extends StatelessWidget {
-  const _DailyStatsRow({
-    required this.date,
-    required this.streakDays,
-    required this.gamesPlayed,
-  });
-
-  final DateTime date;
-  final int streakDays;
-  final int gamesPlayed;
-
-  @override
-  Widget build(BuildContext context) {
-    // Deprecated: dashboard stats removed from header.
-    return const SizedBox.shrink();
-  }
-}
-
-class _DailyStatTile extends StatelessWidget {
-  const _DailyStatTile({
-    required this.icon,
-    required this.iconColor,
-    required this.value,
-    required this.label,
-  });
-
-  final IconData icon;
-  final Color iconColor;
-  final String value;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 2),
-          child: Icon(icon, color: iconColor, size: 18),
-        ),
-        const SizedBox(width: 6),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              value,
-              style: textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 1),
-            Text(
-              label,
-              style: textTheme.bodySmall?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _DailyDivider extends StatelessWidget {
-  const _DailyDivider({required this.color});
-
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 1,
-      height: 32,
-      margin: const EdgeInsets.symmetric(horizontal: 12),
-      color: color,
-    );
-  }
-}
-
-class _GradientText extends StatelessWidget {
-  const _GradientText({required this.text, this.style});
-
-  static const Gradient _gradient = LinearGradient(
-    colors: <Color>[Color(0xFF7C3AED), Color(0xFFA855F7)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  final String text;
-  final TextStyle? style;
-
-  @override
-  Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (Rect bounds) => _gradient.createShader(
-        Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-      ),
-      blendMode: BlendMode.srcIn,
-      child: Text(text, style: style),
     );
   }
 }

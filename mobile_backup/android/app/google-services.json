@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "693851674416",
+    "project_id": "piromomo-app",
+    "storage_bucket": "piromomo-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693851674416:android:0673fbc4d4a3d3d964daf5",
+        "android_client_info": {
+          "package_name": "com.piro_momo_games"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "693851674416-au818pssle2lgrbus1n0fo6hf37er12f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.piro_momo_games",
+            "certificate_hash": "2a2cd09b44930313712aeb359f5f088f13dc65bf"
+          }
+        },
+        {
+          "client_id": "693851674416-j52eb3f0kmc8v13m8ehkh9b0daoopnot.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.piro_momo_games",
+            "certificate_hash": "32d2a8dd6abaa46610b8278e921e7a4d23092814"
+          }
+        },
+        {
+          "client_id": "693851674416-2p38emcekgn8f0cnlkniss6onnr2vo8i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAS9qOyMxmxSZgkZsOrPMZlmnNYum1jwY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "693851674416-2p38emcekgn8f0cnlkniss6onnr2vo8i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,310 @@
+[
+  {
+    "id": "kathmandu",
+    "asset": "assets/districts/Kathmandu.svg"
+  },
+  {
+    "id": "lalitpur",
+    "asset": "assets/districts/Lalitpur.svg"
+  },
+  {
+    "id": "bhaktapur",
+    "asset": "assets/districts/Bhaktapur.svg"
+  },
+  {
+    "id": "kavrepalanchok",
+    "asset": "assets/districts/Kavrepalanchok.svg"
+  },
+  {
+    "id": "dhading",
+    "asset": "assets/districts/Dhading.svg"
+  },
+  {
+    "id": "nuwakot",
+    "asset": "assets/districts/Nuwakot.svg"
+  },
+  {
+    "id": "sindhupalchok",
+    "asset": "assets/districts/Sindhupalchok.svg"
+  },
+  {
+    "id": "dolakha",
+    "asset": "assets/districts/Dolakha.svg"
+  },
+  {
+    "id": "ramechhap",
+    "asset": "assets/districts/Ramechhap.svg"
+  },
+  {
+    "id": "sindhuli",
+    "asset": "assets/districts/Sindhuli.svg"
+  },
+  {
+    "id": "okhaldhunga",
+    "asset": "assets/districts/okhaldhunga.svg"
+  },
+  {
+    "id": "khotang",
+    "asset": "assets/districts/khotang.svg"
+  },
+  {
+    "id": "bhojpur",
+    "asset": "assets/districts/bhojpur.svg"
+  },
+  {
+    "id": "dhankuta",
+    "asset": "assets/districts/dhankuta.svg"
+  },
+  {
+    "id": "terhathum",
+    "asset": "assets/districts/Terhathum.svg"
+  },
+  {
+    "id": "sankhuwasabha",
+    "asset": "assets/districts/Sankhuwasabha.svg"
+  },
+  {
+    "id": "solukhumbu",
+    "asset": "assets/districts/Solukhumbu.svg"
+  },
+  {
+    "id": "udayapur",
+    "asset": "assets/districts/Udayapur.svg"
+  },
+  {
+    "id": "taplejung",
+    "asset": "assets/districts/Taplejung.svg"
+  },
+  {
+    "id": "panchthar",
+    "asset": "assets/districts/panchthar.svg"
+  },
+  {
+    "id": "illam",
+    "asset": "assets/districts/Illam.svg"
+  },
+  {
+    "id": "jhapa",
+    "asset": "assets/districts/jhapa.svg"
+  },
+  {
+    "id": "morang",
+    "asset": "assets/districts/morang.svg"
+  },
+  {
+    "id": "sunsari",
+    "asset": "assets/districts/Sunsari.svg"
+  },
+  {
+    "id": "saptari",
+    "asset": "assets/districts/Saptari.svg"
+  },
+  {
+    "id": "siraha",
+    "asset": "assets/districts/Siraha.svg"
+  },
+  {
+    "id": "dhanusha",
+    "asset": "assets/districts/Dhanusha.svg"
+  },
+  {
+    "id": "mahottari",
+    "asset": "assets/districts/Mahottari.svg"
+  },
+  {
+    "id": "sarlahi",
+    "asset": "assets/districts/Sarlahi.svg"
+  },
+  {
+    "id": "rautahat",
+    "asset": "assets/districts/Rautahat.svg"
+  },
+  {
+    "id": "bara",
+    "asset": "assets/districts/Bara.svg"
+  },
+  {
+    "id": "parsa",
+    "asset": "assets/districts/Parsa.svg"
+  },
+  {
+    "id": "chitwan",
+    "asset": "assets/districts/Chitwan.svg"
+  },
+  {
+    "id": "makwanpur",
+    "asset": "assets/districts/Makwanpur.svg"
+  },
+  {
+    "id": "gorkha",
+    "asset": "assets/districts/Gorkha.svg"
+  },
+  {
+    "id": "lamjung",
+    "asset": "assets/districts/Lamjung.svg"
+  },
+  {
+    "id": "tanahun",
+    "asset": "assets/districts/Tanahun.svg"
+  },
+  {
+    "id": "kaski",
+    "asset": "assets/districts/Kaski.svg"
+  },
+  {
+    "id": "syangja",
+    "asset": "assets/districts/Syangja.svg"
+  },
+  {
+    "id": "parbat",
+    "asset": "assets/districts/Parbat.svg"
+  },
+  {
+    "id": "baglung",
+    "asset": "assets/districts/Baglung.svg"
+  },
+  {
+    "id": "myagdi",
+    "asset": "assets/districts/Myagdi.svg"
+  },
+  {
+    "id": "mustang",
+    "asset": "assets/districts/Mustang.svg"
+  },
+  {
+    "id": "manang",
+    "asset": "assets/districts/Manang.svg"
+  },
+  {
+    "id": "gulmi",
+    "asset": "assets/districts/Gulmi.svg"
+  },
+  {
+    "id": "arghakhanchi",
+    "asset": "assets/districts/Arghakhanchi.svg"
+  },
+  {
+    "id": "palpa",
+    "asset": "assets/districts/Palpa.svg"
+  },
+  {
+    "id": "nawalparasi_east",
+    "asset": "assets/districts/East-Nawalparasi.svg"
+  },
+  {
+    "id": "rupandehi",
+    "asset": "assets/districts/Rupandehi.svg"
+  },
+  {
+    "id": "kapilvastu",
+    "asset": "assets/districts/Kapilvastu.svg"
+  },
+  {
+    "id": "dang",
+    "asset": "assets/districts/Dang.svg"
+  },
+  {
+    "id": "pyuthan",
+    "asset": "assets/districts/Pyuthan.svg"
+  },
+  {
+    "id": "rolpa",
+    "asset": "assets/districts/Rolpa.svg"
+  },
+  {
+    "id": "rukum_east",
+    "asset": "assets/districts/East-Rukum.svg"
+  },
+  {
+    "id": "rukum_west",
+    "asset": "assets/districts/West-Rukum.svg"
+  },
+  {
+    "id": "salyan",
+    "asset": "assets/districts/Salyan.svg"
+  },
+  {
+    "id": "banke",
+    "asset": "assets/districts/Banke.svg"
+  },
+  {
+    "id": "bardiya",
+    "asset": "assets/districts/Bardiya.svg"
+  },
+  {
+    "id": "surkhet",
+    "asset": "assets/districts/Surkhet.svg"
+  },
+  {
+    "id": "dailekh",
+    "asset": "assets/districts/Dailekh.svg"
+  },
+  {
+    "id": "jajarkot",
+    "asset": "assets/districts/Jajarkot.svg"
+  },
+  {
+    "id": "dolpa",
+    "asset": "assets/districts/Dolpa.svg"
+  },
+  {
+    "id": "jumla",
+    "asset": "assets/districts/Jumla.svg"
+  },
+  {
+    "id": "kalikot",
+    "asset": "assets/districts/Kalikot.svg"
+  },
+  {
+    "id": "mugu",
+    "asset": "assets/districts/Mugu.svg"
+  },
+  {
+    "id": "humla",
+    "asset": "assets/districts/Humla.svg"
+  },
+  {
+    "id": "bajura",
+    "asset": "assets/districts/Bajura.svg"
+  },
+  {
+    "id": "bajhang",
+    "asset": "assets/districts/Bajhang.svg"
+  },
+  {
+    "id": "achham",
+    "asset": "assets/districts/Achham.svg"
+  },
+  {
+    "id": "doti",
+    "asset": "assets/districts/Doti.svg"
+  },
+  {
+    "id": "kailali",
+    "asset": "assets/districts/Kailali.svg"
+  },
+  {
+    "id": "kanchanpur",
+    "asset": "assets/districts/Kanchanpur.svg"
+  },
+  {
+    "id": "dadeldhura",
+    "asset": "assets/districts/Dadeldhura.svg"
+  },
+  {
+    "id": "baitadi",
+    "asset": "assets/districts/Baitadi.svg"
+  },
+  {
+    "id": "darchula",
+    "asset": "assets/districts/Darchula.svg"
+  },
+  {
+    "id": "rasuwa",
+    "asset": "assets/districts/Rasuwa.svg"
+  },
+  {
+    "id": "nawalparasi_west",
+    "asset": "assets/districts/West-Nawalparasi.svg"
+  }
+]
