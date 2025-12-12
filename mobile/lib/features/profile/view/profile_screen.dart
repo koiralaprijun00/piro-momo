@@ -6,6 +6,7 @@ import '../../auth/data/auth_service.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../../../data/providers.dart';
 import '../../../core/persistence/progress_store.dart';
+import '../../../core/validation/input_validator.dart';
 
 class ProfileStats {
   const ProfileStats({
@@ -73,9 +74,48 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     });
     try {
       await task();
-    } on FirebaseAuthException catch (error) {
+    } on ArgumentError catch (error) {
+      // Handle validation errors with user-friendly messages
       setState(() {
-        _error = error.message ?? error.code;
+        _error = error.message;
+      });
+    } on FirebaseAuthException catch (error) {
+      // Handle Firebase auth errors with user-friendly messages
+      String errorMessage = error.message ?? error.code;
+      
+      // Map Firebase error codes to user-friendly messages
+      switch (error.code) {
+        case 'user-not-found':
+          errorMessage = 'No account found with this email address.';
+          break;
+        case 'wrong-password':
+          errorMessage = 'Incorrect password. Please try again.';
+          break;
+        case 'email-already-in-use':
+          errorMessage = 'An account already exists with this email address.';
+          break;
+        case 'weak-password':
+          errorMessage = 'Password is too weak. Please use a stronger password.';
+          break;
+        case 'invalid-email':
+          errorMessage = 'Invalid email address. Please check and try again.';
+          break;
+        case 'user-disabled':
+          errorMessage = 'This account has been disabled. Please contact support.';
+          break;
+        case 'too-many-requests':
+          errorMessage = 'Too many failed attempts. Please try again later.';
+          break;
+        case 'operation-not-allowed':
+          errorMessage = 'This sign-in method is not enabled.';
+          break;
+        default:
+          // Keep the original message if we don't have a specific mapping
+          break;
+      }
+      
+      setState(() {
+        _error = errorMessage;
       });
     } catch (error) {
       setState(() {
@@ -96,18 +136,34 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Future<void> _signUp(AuthService service) async {
+    final String email = _emailController.text.trim();
     final String password = _passwordController.text;
     final String confirm = _confirmPasswordController.text;
-    if (password.isEmpty) {
-      setState(() => _error = 'Password cannot be empty');
+
+    // Validate email format
+    final emailError = InputValidator.validateEmail(email);
+    if (emailError != null) {
+      setState(() => _error = emailError);
       return;
     }
-    if (password != confirm) {
-      setState(() => _error = 'Passwords do not match');
+
+    // Validate password strength
+    final passwordError = InputValidator.validatePassword(password);
+    if (passwordError != null) {
+      setState(() => _error = passwordError);
       return;
     }
+
+    // Validate password match
+    final matchError = InputValidator.validatePasswordMatch(password, confirm);
+    if (matchError != null) {
+      setState(() => _error = matchError);
+      return;
+    }
+
+    // All validation passed, proceed with sign up
     await service.signUpWithEmail(
-      email: _emailController.text.trim(),
+      email: email,
       password: password,
     );
     if (mounted) {
@@ -232,10 +288,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   foregroundColor: Colors.white,
                   backgroundColor: Colors.white.withValues(alpha: 0.1),
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  disabledForegroundColor: Colors.white.withValues(alpha: 0.5),
                 ),
-                icon: const Icon(Icons.logout_rounded, size: 18),
+                icon: _busy
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : const Icon(Icons.logout_rounded, size: 18),
                 onPressed: _busy ? null : () => _guard(authService.signOut),
-                label: const Text('Sign out'),
+                label: Text(_busy ? 'Signing out...' : 'Sign out'),
               ),
             ],
           ),
@@ -395,7 +461,34 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           const SizedBox(height: 12),
         ],
         if (_busy) ...<Widget>[
-          const LinearProgressIndicator(),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  'Please wait...',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 12),
         ],
         _FrostedCard(
@@ -411,9 +504,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   elevation: 0,
+                  disabledBackgroundColor: Colors.white.withValues(alpha: 0.5),
                 ),
-                icon: const Icon(Icons.login),
-                label: const Text('Continue with Google', style: TextStyle(fontWeight: FontWeight.w600)),
+                icon: _busy
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1F2937)),
+                        ),
+                      )
+                    : const Icon(Icons.login),
+                label: Text(
+                  _busy ? 'Signing in...' : 'Continue with Google',
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
                 onPressed:
                     _busy ? null : () => _startAuthFlow(authService.signInWithGoogle),
               ),
@@ -435,6 +541,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 label: 'Email',
                 icon: Icons.mail_outline_rounded,
                 keyboardType: TextInputType.emailAddress,
+                enabled: !_busy,
               ),
               const SizedBox(height: 12),
               _AuthField(
@@ -442,6 +549,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 label: 'Password',
                 icon: Icons.lock_outline_rounded,
                 obscureText: true,
+                enabled: !_busy,
               ),
               if (_showSignUp) ...<Widget>[
                 const SizedBox(height: 12),
@@ -450,6 +558,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   label: 'Confirm Password',
                   icon: Icons.lock_reset_rounded,
                   obscureText: true,
+                  enabled: !_busy,
                 ),
               ],
               const SizedBox(height: 14),
@@ -476,11 +585,31 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   elevation: 0,
+                  disabledBackgroundColor: Colors.white.withValues(alpha: 0.5),
                 ),
-                child: Text(
-                  _showSignUp ? 'Create Account' : 'Sign In',
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                ),
+                child: _busy
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1F2937)),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            _showSignUp ? 'Creating account...' : 'Signing in...',
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      )
+                    : Text(
+                        _showSignUp ? 'Create Account' : 'Sign In',
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
               ),
             ],
           ),
@@ -520,6 +649,7 @@ class _AuthField extends StatelessWidget {
     required this.icon,
     this.keyboardType,
     this.obscureText = false,
+    this.enabled = true,
   });
 
   final TextEditingController controller;
@@ -527,11 +657,13 @@ class _AuthField extends StatelessWidget {
   final IconData icon;
   final TextInputType? keyboardType;
   final bool obscureText;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      enabled: enabled,
       keyboardType: keyboardType,
       obscureText: obscureText,
       style: const TextStyle(color: Colors.white),

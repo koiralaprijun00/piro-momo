@@ -106,13 +106,21 @@ class RiddleAnswerCard extends StatelessWidget {
             Row(
               children: <Widget>[
                 FilledButton.icon(
-                  onPressed: showAnswer ? null : onSubmitAnswer,
-                  icon: const Icon(Icons.check_rounded),
-                  label: const Text('Submit answer'),
+                  onPressed: (showAnswer || state.isLoading) ? null : onSubmitAnswer,
+                  icon: state.isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Icon(Icons.check_rounded),
+                  label: Text(state.isLoading ? 'Submitting...' : 'Submit answer'),
                 ),
                 const SizedBox(width: 12),
                 OutlinedButton(
-                  onPressed: showAnswer ? null : onRevealAnswer,
+                  onPressed: (showAnswer || state.isLoading) ? null : onRevealAnswer,
                   child: const Text('Reveal answer'),
                 ),
               ],

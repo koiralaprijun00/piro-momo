@@ -83,9 +83,18 @@ class _NameDistrictGameContent extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
-            FilledButton(
-              onPressed: controller.loadDeck,
-              child: const Text('Try again'),
+            FilledButton.icon(
+              onPressed: state.isLoading ? null : controller.loadDeck,
+              icon: state.isLoading
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : const Icon(Icons.refresh_rounded),
+              label: Text(state.isLoading ? 'Loading...' : 'Try again'),
             ),
           ],
         ),
