@@ -62,3 +62,9 @@ gradle-app.setting
 !gradle-wrapper.jar
 .gradletasknamecache
 *.jks
+
+# Backup folders
+*_backup/
+*_backup_*/
+mobile_backup/
+mobile_dec4_backup/
