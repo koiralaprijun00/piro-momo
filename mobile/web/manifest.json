@@ -1,6 +1,6 @@
 {
-    "name": "piro_momo_games",
-    "short_name": "piro_momo_games",
+    "name": "Piro Momo",
+    "short_name": "Piro Momo",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
