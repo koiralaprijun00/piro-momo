@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart' show AssetBundle, rootBundle;
 
+import '../exceptions.dart';
 import '../models/general_knowledge_question.dart';
 
 class GeneralKnowledgeRepository {
@@ -34,15 +35,28 @@ class GeneralKnowledgeRepository {
   }
 
   Future<List<GeneralKnowledgeQuestion>> _loadFromAsset() async {
-    final String raw = await _bundle.loadString(_assetPath);
-    final List<dynamic> decoded = json.decode(raw) as List<dynamic>;
+    try {
+      final String raw = await _bundle.loadString(_assetPath);
+      final List<dynamic> decoded = json.decode(raw) as List<dynamic>;
 
-    return decoded
-        .cast<Map<String, dynamic>>()
-        .map(
-          (Map<String, dynamic> json) =>
-              GeneralKnowledgeQuestion.fromJson(json),
-        )
-        .toList(growable: false);
+      return decoded
+          .cast<Map<String, dynamic>>()
+          .map(
+            (Map<String, dynamic> json) =>
+                GeneralKnowledgeQuestion.fromJson(json),
+          )
+          .toList(growable: false);
+    } on FormatException catch (e) {
+      throw DataParseException(
+        'Failed to parse JSON from: $_assetPath',
+        originalError: e,
+      );
+    } catch (e, stackTrace) {
+      throw AssetLoadException(
+        'Failed to load asset: $_assetPath',
+        originalError: e,
+        stackTrace: stackTrace,
+      );
+    }
   }
 }

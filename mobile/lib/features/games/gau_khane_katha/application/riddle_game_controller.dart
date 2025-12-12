@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/analytics/analytics_service.dart';
 import '../../../../core/persistence/cloud_progress_service.dart';
 import '../../../../core/persistence/progress_store.dart';
+import '../../../../data/exceptions.dart';
 import '../../../../data/models/riddle_entry.dart';
 import '../../../../data/repositories/riddle_repository.dart';
 import 'riddle_game_state.dart';
@@ -75,8 +77,25 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
         isCorrect: null,
         showOnboarding: state.showOnboarding,
       );
-    } catch (error) {
-      state = state.copyWith(isLoading: false, errorMessage: error.toString());
+    } on AssetLoadException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'Failed to load riddles. Please try again later.',
+      );
+      debugPrint('RiddleGameController: Asset load error: ${e.message}');
+    } on DataParseException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'Data format error. Please contact support.',
+      );
+      debugPrint('RiddleGameController: Parse error: ${e.message}');
+    } catch (error, stackTrace) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'An unexpected error occurred. Please try again.',
+      );
+      debugPrint('RiddleGameController: Unexpected error: $error');
+      debugPrint('Stack trace: $stackTrace');
     }
   }
 

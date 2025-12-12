@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/analytics/analytics_service.dart';
 import '../../../../core/persistence/cloud_progress_service.dart';
 import '../../../../core/persistence/progress_store.dart';
+import '../../../../data/exceptions.dart';
 import '../../../../data/models/district_entry.dart';
 import '../../../../data/repositories/district_repository.dart';
 import 'name_district_game_state.dart';
@@ -53,8 +55,25 @@ class NameDistrictGameController
         clearSelection: true,
         clearAnswer: true,
       );
-    } catch (error) {
-      state = state.copyWith(isLoading: false, errorMessage: error.toString());
+    } on AssetLoadException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'Failed to load districts. Please try again later.',
+      );
+      debugPrint('NameDistrictGameController: Asset load error: ${e.message}');
+    } on DataParseException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'Data format error. Please contact support.',
+      );
+      debugPrint('NameDistrictGameController: Parse error: ${e.message}');
+    } catch (error, stackTrace) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'An unexpected error occurred. Please try again.',
+      );
+      debugPrint('NameDistrictGameController: Unexpected error: $error');
+      debugPrint('Stack trace: $stackTrace');
     }
   }
 

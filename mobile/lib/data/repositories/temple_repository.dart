@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart' show AssetBundle, rootBundle;
 
+import '../exceptions.dart';
 import '../models/temple_entry.dart';
 
 class TempleRepository {
@@ -32,11 +33,24 @@ class TempleRepository {
   }
 
   Future<List<TempleEntry>> _loadFromAsset() async {
-    final String raw = await _bundle.loadString(_assetPath);
-    final List<dynamic> decoded = json.decode(raw) as List<dynamic>;
-    return decoded
-        .cast<Map<String, dynamic>>()
-        .map(TempleEntry.fromJson)
-        .toList(growable: false);
+    try {
+      final String raw = await _bundle.loadString(_assetPath);
+      final List<dynamic> decoded = json.decode(raw) as List<dynamic>;
+      return decoded
+          .cast<Map<String, dynamic>>()
+          .map(TempleEntry.fromJson)
+          .toList(growable: false);
+    } on FormatException catch (e) {
+      throw DataParseException(
+        'Failed to parse JSON from: $_assetPath',
+        originalError: e,
+      );
+    } catch (e, stackTrace) {
+      throw AssetLoadException(
+        'Failed to load asset: $_assetPath',
+        originalError: e,
+        stackTrace: stackTrace,
+      );
+    }
   }
 }

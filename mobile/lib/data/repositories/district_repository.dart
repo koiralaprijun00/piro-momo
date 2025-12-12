@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart' show AssetBundle, rootBundle;
 
+import '../exceptions.dart';
 import '../models/district_entry.dart';
 
 class DistrictRepository {
@@ -18,31 +19,44 @@ class DistrictRepository {
       return _cache!;
     }
 
-    final Map<String, dynamic> enJson = json.decode(
-      await _bundle.loadString(_enPath),
-    ) as Map<String, dynamic>;
-    final List<dynamic> assetList = json.decode(
-      await _bundle.loadString(_assetMapPath),
-    ) as List<dynamic>;
+    try {
+      final Map<String, dynamic> enJson = json.decode(
+        await _bundle.loadString(_enPath),
+      ) as Map<String, dynamic>;
+      final List<dynamic> assetList = json.decode(
+        await _bundle.loadString(_assetMapPath),
+      ) as List<dynamic>;
 
-    final Map<String, String> enNames =
-        (enJson['districts'] as Map<String, dynamic>).map(
-      (String key, dynamic value) => MapEntry(key, value as String),
-    );
-    final List<DistrictEntry> entries = assetList.map((dynamic raw) {
-      final Map<String, dynamic> data = raw as Map<String, dynamic>;
-      final String id = data['id'] as String;
-      final String asset = data['asset'] as String;
-      return DistrictEntry(
-        id: id,
-        englishName: enNames[id] ?? id,
-        nepaliName: enNames[id] ?? id,
-        assetPath: asset,
+      final Map<String, String> enNames =
+          (enJson['districts'] as Map<String, dynamic>).map(
+        (String key, dynamic value) => MapEntry(key, value as String),
       );
-    }).toList(growable: false);
+      final List<DistrictEntry> entries = assetList.map((dynamic raw) {
+        final Map<String, dynamic> data = raw as Map<String, dynamic>;
+        final String id = data['id'] as String;
+        final String asset = data['asset'] as String;
+        return DistrictEntry(
+          id: id,
+          englishName: enNames[id] ?? id,
+          nepaliName: enNames[id] ?? id,
+          assetPath: asset,
+        );
+      }).toList(growable: false);
 
-    _cache = entries;
-    return entries;
+      _cache = entries;
+      return entries;
+    } on FormatException catch (e) {
+      throw DataParseException(
+        'Failed to parse district JSON data',
+        originalError: e,
+      );
+    } catch (e, stackTrace) {
+      throw AssetLoadException(
+        'Failed to load district assets: $_enPath or $_assetMapPath',
+        originalError: e,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
 }
