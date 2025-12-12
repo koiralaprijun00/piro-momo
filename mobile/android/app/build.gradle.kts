@@ -19,17 +19,23 @@ android {
     }
 
     signingConfigs {
-        create("release") {
-            storeFile = file("../upload-keystore.jks")
-            storePassword = "ironmaiden"
-            keyAlias = "upload"
-            keyPassword = "ironmaiden"
+        val keystoreFile = file("../upload-keystore.jks")
+        if (keystoreFile.exists()) {
+            create("release") {
+                storeFile = keystoreFile
+                storePassword = "ironmaiden"
+                keyAlias = "upload"
+                keyPassword = "ironmaiden"
+            }
         }
     }
 
     buildTypes {
         getByName("release") {
-            signingConfig = signingConfigs.getByName("release")
+            val keystoreFile = file("../upload-keystore.jks")
+            if (keystoreFile.exists() && signingConfigs.findByName("release") != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             isMinifyEnabled = false
             isShrinkResources = false
         }
