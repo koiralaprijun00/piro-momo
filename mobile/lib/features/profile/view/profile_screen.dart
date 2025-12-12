@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../auth/data/auth_service.dart';
@@ -117,9 +118,38 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       setState(() {
         _error = errorMessage;
       });
-    } catch (error) {
+    } on PlatformException catch (error) {
+      // Handle platform-specific errors (like Google Sign-In)
+      String errorMessage = 'Sign-in failed. Please try again.';
+      
+      if (error.code == 'sign_in_failed' || error.code == 'sign_in_canceled') {
+        if (error.message?.contains('ApiException: 10') == true) {
+          errorMessage = 'Google Sign-In configuration error. Please contact support.';
+        } else if (error.message?.contains('ApiException: 12500') == true) {
+          errorMessage = 'Google Sign-In was canceled.';
+        } else if (error.message?.contains('sign_in_failed') == true) {
+          errorMessage = 'Google Sign-In failed. Please try again.';
+        }
+      }
+      
       setState(() {
-        _error = error.toString();
+        _error = errorMessage;
+      });
+    } catch (error) {
+      // Handle any other errors with a user-friendly message
+      String errorMessage = 'An error occurred. Please try again.';
+      
+      // If it's a string error, try to extract a readable message
+      final errorString = error.toString();
+      if (errorString.contains('PlatformException')) {
+        errorMessage = 'Sign-in failed. Please try again.';
+      } else if (errorString.length < 100) {
+        // Only show short error messages directly
+        errorMessage = errorString;
+      }
+      
+      setState(() {
+        _error = errorMessage;
       });
     } finally {
       if (mounted) {
@@ -799,22 +829,27 @@ class _ErrorBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.red.withValues(alpha: 0.15),
+        color: Colors.red.shade900.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.red.withValues(alpha: 0.4)),
+        border: Border.all(color: Colors.red.shade700, width: 1),
       ),
       child: Row(
         children: <Widget>[
-          const Icon(Icons.error_outline, color: Colors.red),
+          const Icon(Icons.error_outline, color: Colors.white, size: 20),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               message,
-              style: const TextStyle(color: Colors.red),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],
