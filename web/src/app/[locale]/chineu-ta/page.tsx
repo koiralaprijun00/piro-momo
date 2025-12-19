@@ -39,6 +39,7 @@ const LogoQuizGame = () => {
   } = useLogoQuiz(initialLogos, locale);
 
   const [currentFocusedLogo, setCurrentFocusedLogo] = useState<string | null>(null);
+  const focusTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   // Resize listener
   useEffect(() => {
@@ -54,6 +55,20 @@ const LogoQuizGame = () => {
 
   const totalPages = Math.ceil(state.logos.length / logosPerPage);
 
+  // Pagination clamping
+  useEffect(() => {
+    if (state.currentPage >= totalPages && totalPages > 0) {
+      setPage(totalPages - 1);
+    }
+  }, [totalPages, state.currentPage, setPage]);
+
+  // Focus timeout cleanup
+  useEffect(() => {
+    return () => {
+      if (focusTimeoutRef.current) clearTimeout(focusTimeoutRef.current);
+    };
+  }, []);
+
   const formatTimeForDisplay = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -65,8 +80,8 @@ const LogoQuizGame = () => {
       e.preventDefault();
       checkAnswer(logoId);
       
-      // Auto-focus logic can be improved later with refs, keeping simple for now
-      setTimeout(() => {
+      if (focusTimeoutRef.current) clearTimeout(focusTimeoutRef.current);
+      focusTimeoutRef.current = setTimeout(() => {
         const nextInput = document.querySelector(`input[data-logo-id="${logoId}"]`) as HTMLInputElement;
         nextInput?.focus({ preventScroll: true });
       }, 50);
@@ -172,7 +187,6 @@ const LogoQuizGame = () => {
                       logo={logo}
                       answer={state.answers[logo.id] || ''}
                       isCorrect={state.correctAnswers[logo.id]}
-                      blurLevel={state.blurLevels[logo.id]}
                       attemptCount={state.attemptCounts[logo.id]}
                       maxAttempts={3}
                       isFocused={currentFocusedLogo === logo.id}

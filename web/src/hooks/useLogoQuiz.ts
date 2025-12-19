@@ -5,7 +5,6 @@ export interface GameState {
   logos: Logo[];
   answers: Record<string, string>;
   correctAnswers: Record<string, boolean>;
-  blurLevels: Record<string, number>;
   attemptCounts: Record<string, number>;
   score: number;
   timeLeft: number;
@@ -26,7 +25,6 @@ export type GameAction =
   | { type: 'SUBMIT_GAME' }
   | { type: 'RESET_GAME'; logos: Logo[] };
 
-const MAX_BLUR_LEVEL = 4;
 const INITIAL_TIME = 300;
 
 function gameReducer(state: GameState, action: GameAction): GameState {
@@ -34,13 +32,11 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     case 'INITIALIZE': {
       const { logos, savedState } = action;
       const initialAnswers: Record<string, string> = {};
-      const initialBlurLevels: Record<string, number> = {};
       const initialAttemptCounts: Record<string, number> = {};
       const initialCorrectAnswers: Record<string, boolean> = {};
 
       logos.forEach((logo) => {
         initialAnswers[logo.id] = '';
-        initialBlurLevels[logo.id] = MAX_BLUR_LEVEL;
         initialAttemptCounts[logo.id] = 0;
         initialCorrectAnswers[logo.id] = false;
       });
@@ -50,7 +46,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         logos,
         answers: { ...initialAnswers, ...(savedState?.answers || {}) },
         correctAnswers: { ...initialCorrectAnswers, ...(savedState?.correctAnswers || {}) },
-        blurLevels: { ...initialBlurLevels, ...(savedState?.blurLevels || {}) },
         attemptCounts: { ...initialAttemptCounts, ...(savedState?.attemptCounts || {}) },
         score: savedState?.score || 0,
         timeLeft: savedState?.timeLeft || INITIAL_TIME,
@@ -62,6 +57,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'UPDATE_ANSWER':
+      // Prevent updates if already correct or out of attempts
+      if (state.correctAnswers[action.logoId] || (state.attemptCounts[action.logoId] || 0) >= 3) {
+        return state;
+      }
       return {
         ...state,
         answers: { ...state.answers, [action.logoId]: action.value }
@@ -69,14 +68,19 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
     case 'CHECK_ANSWER': {
       const { logoId, isCorrect } = action;
-      const newAttemptCount = (state.attemptCounts[logoId] || 0) + (isCorrect ? 0 : 1);
-      const newBlurLevel = isCorrect ? 0 : Math.max(MAX_BLUR_LEVEL - newAttemptCount, 0);
+      const currentAttempts = state.attemptCounts[logoId] || 0;
+      
+      // Safety: don't check if already correct or max attempts reached
+      if (state.correctAnswers[logoId] || currentAttempts >= 3) {
+        return state;
+      }
+
+      const newAttemptCount = isCorrect ? currentAttempts : currentAttempts + 1;
 
       return {
         ...state,
         correctAnswers: { ...state.correctAnswers, [logoId]: isCorrect },
         attemptCounts: { ...state.attemptCounts, [logoId]: newAttemptCount },
-        blurLevels: { ...state.blurLevels, [logoId]: newBlurLevel },
         score: isCorrect && !state.correctAnswers[logoId] ? state.score + 1 : state.score,
       };
     }
@@ -108,7 +112,6 @@ const initialState: GameState = {
   logos: [],
   answers: {},
   correctAnswers: {},
-  blurLevels: {},
   attemptCounts: {},
   score: 0,
   timeLeft: INITIAL_TIME,
@@ -159,6 +162,9 @@ export const useLogoQuiz = (initialLogos: Logo[], locale: string) => {
   }, []);
 
   const checkAnswer = useCallback((logoId: string) => {
+    // Enforcement: stop checking if already correct or out of attempts
+    if (state.correctAnswers[logoId] || (state.attemptCounts[logoId] || 0) >= 3) return;
+
     const logo = state.logos.find(l => l.id === logoId);
     if (!logo) return;
 
@@ -169,7 +175,7 @@ export const useLogoQuiz = (initialLogos: Logo[], locale: string) => {
                       logo.name.toLowerCase() === userAnswer;
 
     dispatch({ type: 'CHECK_ANSWER', logoId, isCorrect, feedback: isCorrect ? 'Correct!' : 'Incorrect' });
-  }, [state.answers, state.logos]);
+  }, [state.answers, state.correctAnswers, state.attemptCounts, state.logos]);
 
   const toggleTimer = useCallback(() => dispatch({ type: 'TOGGLE_TIMER' }), []);
   const setPage = useCallback((page: number) => dispatch({ type: 'SET_PAGE', page }), []);

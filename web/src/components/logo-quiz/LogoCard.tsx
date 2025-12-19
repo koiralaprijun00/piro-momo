@@ -6,7 +6,6 @@ interface LogoCardProps {
   logo: Logo;
   answer: string;
   isCorrect: boolean;
-  blurLevel: number;
   attemptCount: number;
   maxAttempts: number;
   isFocused: boolean;
@@ -20,7 +19,6 @@ const LogoCard: React.FC<LogoCardProps> = ({
   logo,
   answer,
   isCorrect,
-  blurLevel,
   attemptCount,
   maxAttempts,
   isFocused,
@@ -76,8 +74,8 @@ const LogoCard: React.FC<LogoCardProps> = ({
             isCorrect
               ? 'border-green-500 bg-green-50 text-green-700'
               : 'border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
-          }`}
-          disabled={isCorrect}
+          } ${attemptCount >= 3 && !isCorrect ? 'bg-red-50 border-red-200 text-red-700' : ''}`}
+          disabled={isCorrect || attemptCount >= 3}
         />
       </div>
 
