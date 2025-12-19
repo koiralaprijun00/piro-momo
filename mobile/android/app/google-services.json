@@ -30,14 +30,6 @@
           }
         },
         {
-          "client_id": "693851674416-va9l8td2k3tv7a656k5u646dk7f5kfbr.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.piro_momo_games",
-            "certificate_hash": "7e2530bd98bd41f98354d41ecf5989b18f411c91"
-          }
-        },
-        {
           "client_id": "693851674416-2p38emcekgn8f0cnlkniss6onnr2vo8i.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -10,8 +10,6 @@ const options: MongoClientOptions = {
   serverSelectionTimeoutMS: 60000,
   ssl: true,
   tls: true,
-  tlsAllowInvalidCertificates: true,
-  tlsAllowInvalidHostnames: true,
   retryWrites: false,
   retryReads: false,
 };
@@ -40,6 +38,10 @@ export const getMongoClient = (): Promise<MongoClient> => {
       globalWithMongo._mongoClient = connectedClient;
       return connectedClient;
     });
+  }
+
+  if (!globalWithMongo._mongoClientPromise) {
+    throw new Error('MongoClient promise is not initialized');
   }
 
   return globalWithMongo._mongoClientPromise;

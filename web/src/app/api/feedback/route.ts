@@ -1,9 +1,27 @@
 import { NextResponse } from 'next/server';
 import clientPromise from "@/lib/mongodb";
 
+import { z } from 'zod';
+
+const FeedbackSchema = z.object({
+  feedback: z.string().min(1, 'Feedback is required'),
+  email: z.string().email('Invalid email address').optional().or(z.literal('')),
+});
+
 export async function POST(request: Request) {
   try {
-    const { feedback, email } = await request.json();
+    const body = await request.json();
+    
+    // Validate input using Zod
+    const validatedData = FeedbackSchema.safeParse(body);
+    if (!validatedData.success) {
+      return NextResponse.json(
+        { error: 'Invalid input', details: validatedData.error.flatten() },
+        { status: 400 }
+      );
+    }
+
+    const { feedback, email } = validatedData.data;
     
     // Connect to MongoDB using your existing client
     const client = await clientPromise();

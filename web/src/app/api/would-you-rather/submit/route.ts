@@ -2,17 +2,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getMongoClient from '@/lib/mongodb';
 
+import { z } from 'zod';
+
+const WYRSchema = z.object({
+  question: z.string().min(5, 'Question must be at least 5 characters long'),
+  fullName: z.string().min(2, 'Name must be at least 2 characters long'),
+});
+
 export async function POST(request: NextRequest) {
   try {
-    const { question, fullName } = await request.json();
-    
-    if (!question || !question.trim()) {
-      return NextResponse.json({ error: 'Question is required' }, { status: 400 });
+    const body = await request.json();
+
+    // Validate input using Zod
+    const validatedData = WYRSchema.safeParse(body);
+    if (!validatedData.success) {
+      return NextResponse.json(
+        { error: 'Invalid input', details: validatedData.error.flatten() },
+        { status: 400 }
+      );
     }
-    
-    if (!fullName || !fullName.trim()) {
-      return NextResponse.json({ error: 'Full name is required' }, { status: 400 });
-    }
+
+    const { question, fullName } = validatedData.data;
     
     // Connect to MongoDB
     const client = await getMongoClient();

@@ -119,41 +119,79 @@ const LogoQuizGame = () => {
     localStorage.setItem('logoQuizState', JSON.stringify(gameState));
   }, [answers, correctAnswers, score, timeLeft, currentPage, timerActive, blurLevels, attemptCounts]);
 
-  // Initialize game with logos
+  // Initialize game with logos - Only run when locale changes or on reset
   useEffect(() => {
     const logoData = getLogosByLocale(locale);
     if (logoData.length > 0) {
+      // Shuffle logos ONLY on initial load or locale change
       const shuffled = [...logoData].sort(() => 0.5 - Math.random());
-      
       setLogos(shuffled);
       setTotalPages(Math.ceil(shuffled.length / logosPerPage));
-      
+    }
+  }, [locale, logosPerPage, locale]); // Removed answers, blurLevels, etc.
+
+  // Sync state with logos when they change
+  useEffect(() => {
+    if (logos.length > 0) {
       const initialAnswers: Record<string, string> = {};
       const initialFeedback: Record<string, string> = {};
       const initialBlurLevels: Record<string, number> = {};
       const initialAttemptCounts: Record<string, number> = {};
-      
-      shuffled.forEach(logo => {
-        initialAnswers[logo.id] = answers[logo.id] || '';
+      const initialCorrectAnswers: Record<string, boolean> = {};
+
+      logos.forEach(logo => {
+        initialAnswers[logo.id] = answers[logo.id] !== undefined ? answers[logo.id] : '';
         initialFeedback[logo.id] = '';
         initialBlurLevels[logo.id] = blurLevels[logo.id] !== undefined 
           ? blurLevels[logo.id] 
           : MAX_BLUR_LEVEL;
         initialAttemptCounts[logo.id] = attemptCounts[logo.id] || 0;
-      });
-      
-      setAnswers(prev => ({ ...prev, ...initialAnswers }));
-      setFeedback(prev => ({ ...prev, ...initialFeedback }));
-      setBlurLevels(initialBlurLevels);
-      setAttemptCounts(prev => ({ ...prev, ...initialAttemptCounts }));
-      
-      const initialCorrectAnswers: Record<string, boolean> = {};
-      shuffled.forEach(logo => {
         initialCorrectAnswers[logo.id] = correctAnswers[logo.id] || false;
       });
-      setCorrectAnswers(prev => ({ ...prev, ...initialCorrectAnswers }));
+
+      // Only update state if it's not already initialized for these logos
+      // This prevents resetting progress while typing
+      setAnswers(prev => {
+        const next = { ...prev };
+        logos.forEach(l => {
+          if (next[l.id] === undefined) next[l.id] = '';
+        });
+        return next;
+      });
+      
+      setFeedback(prev => {
+        const next = { ...prev };
+        logos.forEach(l => {
+          if (next[l.id] === undefined) next[l.id] = '';
+        });
+        return next;
+      });
+
+      setBlurLevels(prev => {
+        const next = { ...prev };
+        logos.forEach(l => {
+          if (next[l.id] === undefined) next[l.id] = MAX_BLUR_LEVEL;
+        });
+        return next;
+      });
+
+      setAttemptCounts(prev => {
+        const next = { ...prev };
+        logos.forEach(l => {
+          if (next[l.id] === undefined) next[l.id] = 0;
+        });
+        return next;
+      });
+
+      setCorrectAnswers(prev => {
+        const next = { ...prev };
+        logos.forEach(l => {
+          if (next[l.id] === undefined) next[l.id] = false;
+        });
+        return next;
+      });
     }
-  }, [locale, logosPerPage, answers, blurLevels, attemptCounts, correctAnswers]);
+  }, [logos]); // Only depends on logos
 
   // Update total pages when logosPerPage changes
   useEffect(() => {

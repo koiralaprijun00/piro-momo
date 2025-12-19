@@ -46,13 +46,13 @@ export default function LocationSubmissionForm({ onCancel }: SubmissionProps) {
     
     // Validate file type
     if (!file.type.match('image.*')) {
-      setErrors(prev => ({ ...prev, image: 'Please upload an image file' }));
+      setErrors((prev: Record<string, string>) => ({ ...prev, image: 'Please upload an image file' }));
       return;
     }
     
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setErrors(prev => ({ ...prev, image: 'Image size should be less than 5MB' }));
+      setErrors((prev: Record<string, string>) => ({ ...prev, image: 'Image size should be less than 5MB' }));
       return;
     }
     
@@ -67,7 +67,7 @@ export default function LocationSubmissionForm({ onCancel }: SubmissionProps) {
     
     // Clear error if exists
     if (errors.image) {
-      setErrors(prev => {
+      setErrors((prev: Record<string, string>) => {
         const newErrors = { ...prev };
         delete newErrors.image;
         return newErrors;
@@ -78,12 +78,12 @@ export default function LocationSubmissionForm({ onCancel }: SubmissionProps) {
   // Get user's current location
   const getCurrentLocation = () => {
     if (!isGeolocationAvailable) {
-      setErrors(prev => ({ ...prev, geolocation: 'Geolocation is not supported by your browser' }));
+      setErrors((prev: Record<string, string>) => ({ ...prev, geolocation: 'Geolocation is not supported by your browser' }));
       return;
     }
     
     setIsGettingLocation(true);
-    setErrors(prev => {
+    setErrors((prev: Record<string, string>) => {
       const newErrors = { ...prev };
       delete newErrors.geolocation;
       delete newErrors.lat;
@@ -114,7 +114,7 @@ export default function LocationSubmissionForm({ onCancel }: SubmissionProps) {
             break;
         }
         
-        setErrors(prev => ({ ...prev, geolocation: errorMessage }));
+        setErrors((prev: Record<string, string>) => ({ ...prev, geolocation: errorMessage }));
         setIsGettingLocation(false);
       },
       {
@@ -199,7 +199,7 @@ const handleSubmit = async (e: FormEvent) => {
           // If in production and we get a timeout, use fallback image
           if (uploadResponse.status === 504 || uploadResponse.status === 500) {
             console.log('Image upload failed, using fallback image');
-            imageUrl = 'https://res.cloudinary.com/duz68qptr/image/upload/v1/geo-nepal/default_location.jpg';
+            imageUrl = process.env.NEXT_PUBLIC_DEFAULT_LOCATION_IMAGE || 'https://res.cloudinary.com/duz68qptr/image/upload/v1/geo-nepal/default_location.jpg';
           } else {
             const errorText = await uploadResponse.text();
             console.error('Image upload failed:', errorText);
@@ -214,7 +214,7 @@ const handleSubmit = async (e: FormEvent) => {
         // If upload fails in production, use a fallback image
         if (process.env.NODE_ENV === 'production') {
           console.error('Upload error, using fallback:', uploadError);
-          imageUrl = 'https://res.cloudinary.com/duz68qptr/image/upload/v1/geo-nepal/default_location.jpg';
+          imageUrl = process.env.NEXT_PUBLIC_DEFAULT_LOCATION_IMAGE || 'https://res.cloudinary.com/duz68qptr/image/upload/v1/geo-nepal/default_location.jpg';
         } else {
           throw uploadError;
         }
@@ -261,7 +261,7 @@ const handleSubmit = async (e: FormEvent) => {
     router.push('/geo-nepal');
   } catch (error) {
     console.error('Error submitting location:', error);
-    setErrors(prev => ({
+    setErrors((prev: Record<string, string>) => ({
       ...prev,
       submit: error instanceof Error ? error.message : 'Failed to submit location. Please try again.',
     }));
@@ -288,7 +288,7 @@ const handleSubmit = async (e: FormEvent) => {
             type="text"
             id="name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
             className={`w-full px-3 py-2 border rounded-md ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
             placeholder="e.g., Annapurna Base Camp"
             disabled={isSubmitting}
@@ -352,7 +352,7 @@ const handleSubmit = async (e: FormEvent) => {
                 type="text"
                 id="lat"
                 value={lat}
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setLat(e.target.value);
                   if (isClient) setLocationMethod('manual');
                 }}
@@ -371,7 +371,7 @@ const handleSubmit = async (e: FormEvent) => {
                 type="text"
                 id="lng"
                 value={lng}
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setLng(e.target.value);
                   if (isClient) setLocationMethod('manual');
                 }}
@@ -397,7 +397,7 @@ const handleSubmit = async (e: FormEvent) => {
           <textarea
             id="funFact"
             value={funFact}
-            onChange={(e) => setFunFact(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFunFact(e.target.value)}
             className={`w-full px-3 py-2 border rounded-md ${errors.funFact ? 'border-red-500' : 'border-gray-300'}`}
             rows={3}
             placeholder="Share an interesting fact about this location"
@@ -425,7 +425,7 @@ const handleSubmit = async (e: FormEvent) => {
                     <button
                       type="button"
                       className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-                      onClick={(e) => {
+                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                         e.stopPropagation();
                         setImageFile(null);
                         setPreview(null);
