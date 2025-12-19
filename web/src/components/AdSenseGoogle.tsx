@@ -42,87 +42,91 @@ export default function AdSenseGoogle({
   // Override with any custom sizes
   if (style.width) adWidth = typeof style.width === 'string' ? style.width : `${style.width}px`;
   if (style.height) adHeight = typeof style.height === 'string' ? style.height : `${style.height}px`;
+  const isInitializedRef = useRef(false);
 
   // Initialize the ad
   useEffect(() => {
-    if (typeof window === 'undefined' || !adRef.current) return;
+    if (typeof window === 'undefined' || !adRef.current || isInitializedRef.current) return;
 
-    // Force reinitialize even if previously initialized
     const initAd = () => {
+      if (isInitializedRef.current || !adRef.current) return;
+      
       try {
-        // Clear any existing content
-        if (adRef.current) {
-          adRef.current.innerHTML = '';
+        // Clear any existing content to be safe
+        adRef.current.innerHTML = '';
+      
+        // Create ad element
+        const adElement = document.createElement('ins');
+        adElement.className = 'adsbygoogle';
+        adElement.style.display = 'block';
+        adElement.style.width = adWidth;
+        adElement.style.height = adHeight;
         
-          // Create ad element
-          const adElement = document.createElement('ins');
-          adElement.className = 'adsbygoogle';
-          adElement.style.display = 'block';
-          adElement.style.width = adWidth;
-          adElement.style.height = adHeight;
-          
-          // Set attributes without data-nscript
-          adElement.setAttribute('data-ad-client', 'ca-pub-4708248697764153');
-          adElement.setAttribute('data-ad-slot', adSlot);
-          
-          if (adFormat === 'auto') {
-            adElement.setAttribute('data-ad-format', 'auto');
-            adElement.setAttribute('data-full-width-responsive', 'true');
-          } else {
-            adElement.setAttribute('data-full-width-responsive', 'false');
+        // Set attributes
+        adElement.setAttribute('data-ad-client', 'ca-pub-4708248697764153');
+        adElement.setAttribute('data-ad-slot', adSlot);
+        
+        if (adFormat === 'auto') {
+          adElement.setAttribute('data-ad-format', 'auto');
+          adElement.setAttribute('data-full-width-responsive', 'true');
+        } else {
+          adElement.setAttribute('data-full-width-responsive', 'false');
+        }
+        
+        // Append to container
+        adRef.current.appendChild(adElement);
+        
+        // Mark as initialized BEFORE pushing to prevent race conditions
+        isInitializedRef.current = true;
+        setAdInitialized(true);
+
+        // Define push function
+        const pushAd = () => {
+          try {
+            if (window.adsbygoogle) {
+              (window.adsbygoogle = window.adsbygoogle || []).push({});
+            }
+          } catch (e) {
+            console.error('Inner AdSense push error:', e);
           }
-          
-          // Append to container
-          adRef.current.appendChild(adElement);
-          
-          // Ensure adsbygoogle is defined and push the ad
-          if (window.adsbygoogle) {
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-            setAdInitialized(true);
-          } else {
-            // Create a retry mechanism for slower loading environments
-            const retryTimer = setTimeout(() => {
-              if (window.adsbygoogle) {
-                (window.adsbygoogle = window.adsbygoogle || []).push({});
-                setAdInitialized(true);
-              }
-            }, 1000);
-            
-            return () => clearTimeout(retryTimer);
-          }
+        };
+
+        if (window.adsbygoogle) {
+          pushAd();
+        } else {
+          // Retry if script isn't loaded yet
+          const retryTimer = setTimeout(pushAd, 1000);
+          return () => clearTimeout(retryTimer);
         }
       } catch (error) {
         console.error('AdSense initialization error:', error);
       }
     };
 
-    // Use a lower threshold for better detection
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
+        if (entries[0].isIntersecting && !isInitializedRef.current) {
           initAd();
           observer.disconnect();
         }
       },
-      { threshold: 0.01 } // Lower threshold to trigger on minimal visibility
+      { threshold: 0.1 }
     );
 
-    if (adRef.current) {
-      observer.observe(adRef.current);
-    }
+    observer.observe(adRef.current);
 
-    // Fallback initialization after a delay (to ensure ads load even if visibility detection fails)
+    // Initial check in case it's already visible
     const fallbackTimer = setTimeout(() => {
-      if (!adInitialized && adRef.current) {
+      if (!isInitializedRef.current) {
         initAd();
       }
-    }, 2000);
+    }, 1500);
 
     return () => {
       observer.disconnect();
       clearTimeout(fallbackTimer);
     };
-  }, [adSlot, adWidth, adHeight, adFormat, adInitialized]);
+  }, [adSlot, adWidth, adHeight, adFormat]);
 
   return (
     <div
