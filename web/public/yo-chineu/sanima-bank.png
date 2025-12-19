@@ -1,0 +1,1439 @@
+<!DOCTYPE html><html lang="en-US"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width"/><link rel="shortcut icon" href=""/><meta name="next-head-count" content="3"/><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><meta property="og:description" content="SANIMA BANK LTD"/><meta property="og:image"/><meta property="og:site_name" content="SANIMA BANK LTD"/><style>
+body{
+  display:block;
+}
+#globalLoader{
+    position: fixed;
+    z-index: 1700;
+    background-color: #fff;
+    width: 100vw;
+    height: 100vh;
+    top:0;
+    left:0;
+}
+.loader{
+    position:absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width:208px;
+    text-align:center;
+}
+
+#Layer_1{
+  enable-background:new 0 0 208 34; 
+  xml:space:preserve;
+   width: 208px;
+        height: 34px;
+}
+
+@-webkit-keyframes animate-svg-stroke-1 {
+  0% {
+      stroke-dashoffset: 101.11444091796875px;
+      stroke-dasharray: 101.11444091796875px;
+  }
+
+  100% {
+      stroke-dashoffset: 202.2288818359375px;
+      stroke-dasharray: 101.11444091796875px;
+  }
+}
+
+@keyframes animate-svg-stroke-1 {
+  0% {
+      stroke-dashoffset: 101.11444091796875px;
+      stroke-dasharray: 101.11444091796875px;
+  }
+
+  100% {
+      stroke-dashoffset: 202.2288818359375px;
+      stroke-dasharray: 101.11444091796875px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-1 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+@keyframes animate-svg-fill-1 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+.svg-elem-1 {
+  -webkit-animation: animate-svg-stroke-1 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s both,
+      animate-svg-fill-1 0.9s cubic-bezier(0.86, 0, 0.07, 1) 0.8s both;
+  animation: animate-svg-stroke-1 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s both,
+      animate-svg-fill-1 0.9s cubic-bezier(0.86, 0, 0.07, 1) 0.8s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-2 {
+  0% {
+      stroke-dashoffset: 101.11266326904297px;
+      stroke-dasharray: 101.11266326904297px;
+  }
+
+  100% {
+      stroke-dashoffset: 202.22532653808594px;
+      stroke-dasharray: 101.11266326904297px;
+  }
+}
+
+@keyframes animate-svg-stroke-2 {
+  0% {
+      stroke-dashoffset: 101.11266326904297px;
+      stroke-dasharray: 101.11266326904297px;
+  }
+
+  100% {
+      stroke-dashoffset: 202.22532653808594px;
+      stroke-dasharray: 101.11266326904297px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-2 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+@keyframes animate-svg-fill-2 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+.svg-elem-2 {
+  -webkit-animation: animate-svg-stroke-2 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.12s both,
+      animate-svg-fill-2 0.9s cubic-bezier(0.86, 0, 0.07, 1) 0.9s both;
+  animation: animate-svg-stroke-2 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.12s both,
+      animate-svg-fill-2 0.9s cubic-bezier(0.86, 0, 0.07, 1) 0.9s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-3 {
+  0% {
+      stroke-dashoffset: 111.25788116455078px;
+      stroke-dasharray: 111.25788116455078px;
+  }
+
+  100% {
+      stroke-dashoffset: 222.51576232910156px;
+      stroke-dasharray: 111.25788116455078px;
+  }
+}
+
+@keyframes animate-svg-stroke-3 {
+  0% {
+      stroke-dashoffset: 111.25788116455078px;
+      stroke-dasharray: 111.25788116455078px;
+  }
+
+  100% {
+      stroke-dashoffset: 222.51576232910156px;
+      stroke-dasharray: 111.25788116455078px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-3 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+@keyframes animate-svg-fill-3 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+.svg-elem-3 {
+  -webkit-animation: animate-svg-stroke-3 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.24s both,
+      animate-svg-fill-3 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1s both;
+  animation: animate-svg-stroke-3 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.24s both,
+      animate-svg-fill-3 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-4 {
+  0% {
+      stroke-dashoffset: 22.698421478271484px;
+      stroke-dasharray: 22.698421478271484px;
+  }
+
+  100% {
+      stroke-dashoffset: 45.39684295654297px;
+      stroke-dasharray: 22.698421478271484px;
+  }
+}
+
+@keyframes animate-svg-stroke-4 {
+  0% {
+      stroke-dashoffset: 22.698421478271484px;
+      stroke-dasharray: 22.698421478271484px;
+  }
+
+  100% {
+      stroke-dashoffset: 45.39684295654297px;
+      stroke-dasharray: 22.698421478271484px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-4 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+@keyframes animate-svg-fill-4 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+.svg-elem-4 {
+  -webkit-animation: animate-svg-stroke-4 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.36s both,
+      animate-svg-fill-4 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.1s both;
+  animation: animate-svg-stroke-4 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.36s both,
+      animate-svg-fill-4 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.1s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-5 {
+  0% {
+      stroke-dashoffset: 61.067378997802734px;
+      stroke-dasharray: 61.067378997802734px;
+  }
+
+  100% {
+      stroke-dashoffset: 122.13475799560547px;
+      stroke-dasharray: 61.067378997802734px;
+  }
+}
+
+@keyframes animate-svg-stroke-5 {
+  0% {
+      stroke-dashoffset: 61.067378997802734px;
+      stroke-dasharray: 61.067378997802734px;
+  }
+
+  100% {
+      stroke-dashoffset: 122.13475799560547px;
+      stroke-dasharray: 61.067378997802734px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-5 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+@keyframes animate-svg-fill-5 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+.svg-elem-5 {
+  -webkit-animation: animate-svg-stroke-5 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.48s both,
+      animate-svg-fill-5 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.2000000000000002s both;
+  animation: animate-svg-stroke-5 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.48s both,
+      animate-svg-fill-5 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.2000000000000002s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-6 {
+  0% {
+      stroke-dashoffset: 118.91635131835938px;
+      stroke-dasharray: 118.91635131835938px;
+  }
+
+  100% {
+      stroke-dashoffset: 237.83270263671875px;
+      stroke-dasharray: 118.91635131835938px;
+  }
+}
+
+@keyframes animate-svg-stroke-6 {
+  0% {
+      stroke-dashoffset: 118.91635131835938px;
+      stroke-dasharray: 118.91635131835938px;
+  }
+
+  100% {
+      stroke-dashoffset: 237.83270263671875px;
+      stroke-dasharray: 118.91635131835938px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-6 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+@keyframes animate-svg-fill-6 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+.svg-elem-6 {
+  -webkit-animation: animate-svg-stroke-6 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s both,
+      animate-svg-fill-6 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.3s both;
+  animation: animate-svg-stroke-6 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s both,
+      animate-svg-fill-6 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.3s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-7 {
+  0% {
+      stroke-dashoffset: 176.98678588867188px;
+      stroke-dasharray: 176.98678588867188px;
+  }
+
+  100% {
+      stroke-dashoffset: 353.97357177734375px;
+      stroke-dasharray: 176.98678588867188px;
+  }
+}
+
+@keyframes animate-svg-stroke-7 {
+  0% {
+      stroke-dashoffset: 176.98678588867188px;
+      stroke-dasharray: 176.98678588867188px;
+  }
+
+  100% {
+      stroke-dashoffset: 353.97357177734375px;
+      stroke-dasharray: 176.98678588867188px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-7 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+@keyframes animate-svg-fill-7 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+.svg-elem-7 {
+  -webkit-animation: animate-svg-stroke-7 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.72s both,
+      animate-svg-fill-7 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.4000000000000001s both;
+  animation: animate-svg-stroke-7 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.72s both,
+      animate-svg-fill-7 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.4000000000000001s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-8 {
+  0% {
+      stroke-dashoffset: 101.1160659790039px;
+      stroke-dasharray: 101.1160659790039px;
+  }
+
+  100% {
+      stroke-dashoffset: 202.2321319580078px;
+      stroke-dasharray: 101.1160659790039px;
+  }
+}
+
+@keyframes animate-svg-stroke-8 {
+  0% {
+      stroke-dashoffset: 101.1160659790039px;
+      stroke-dasharray: 101.1160659790039px;
+  }
+
+  100% {
+      stroke-dashoffset: 202.2321319580078px;
+      stroke-dasharray: 101.1160659790039px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-8 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+@keyframes animate-svg-fill-8 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+.svg-elem-8 {
+  -webkit-animation: animate-svg-stroke-8 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.84s both,
+      animate-svg-fill-8 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.5s both;
+  animation: animate-svg-stroke-8 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.84s both,
+      animate-svg-fill-8 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.5s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-9 {
+  0% {
+      stroke-dashoffset: 118.78460693359375px;
+      stroke-dasharray: 118.78460693359375px;
+  }
+
+  100% {
+      stroke-dashoffset: 237.5692138671875px;
+      stroke-dasharray: 118.78460693359375px;
+  }
+}
+
+@keyframes animate-svg-stroke-9 {
+  0% {
+      stroke-dashoffset: 118.78460693359375px;
+      stroke-dasharray: 118.78460693359375px;
+  }
+
+  100% {
+      stroke-dashoffset: 237.5692138671875px;
+      stroke-dasharray: 118.78460693359375px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-9 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+@keyframes animate-svg-fill-9 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+.svg-elem-9 {
+  -webkit-animation: animate-svg-stroke-9 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.96s both,
+      animate-svg-fill-9 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.6s both;
+  animation: animate-svg-stroke-9 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.96s both,
+      animate-svg-fill-9 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.6s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-10 {
+  0% {
+      stroke-dashoffset: 158.7579803466797px;
+      stroke-dasharray: 158.7579803466797px;
+  }
+
+  100% {
+      stroke-dashoffset: 317.5159606933594px;
+      stroke-dasharray: 158.7579803466797px;
+  }
+}
+
+@keyframes animate-svg-stroke-10 {
+  0% {
+      stroke-dashoffset: 158.7579803466797px;
+      stroke-dasharray: 158.7579803466797px;
+  }
+
+  100% {
+      stroke-dashoffset: 317.5159606933594px;
+      stroke-dasharray: 158.7579803466797px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-10 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+@keyframes animate-svg-fill-10 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+.svg-elem-10 {
+  -webkit-animation: animate-svg-stroke-10 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.08s both,
+      animate-svg-fill-10 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.7000000000000002s both;
+  animation: animate-svg-stroke-10 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.08s both,
+      animate-svg-fill-10 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.7000000000000002s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-11 {
+  0% {
+      stroke-dashoffset: 147.8519287109375px;
+      stroke-dasharray: 147.8519287109375px;
+  }
+
+  100% {
+      stroke-dashoffset: 295.703857421875px;
+      stroke-dasharray: 147.8519287109375px;
+  }
+}
+
+@keyframes animate-svg-stroke-11 {
+  0% {
+      stroke-dashoffset: 147.8519287109375px;
+      stroke-dasharray: 147.8519287109375px;
+  }
+
+  100% {
+      stroke-dashoffset: 295.703857421875px;
+      stroke-dasharray: 147.8519287109375px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-11 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+@keyframes animate-svg-fill-11 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+.svg-elem-11 {
+  -webkit-animation: animate-svg-stroke-11 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s both,
+      animate-svg-fill-11 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.8s both;
+  animation: animate-svg-stroke-11 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s both,
+      animate-svg-fill-11 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.8s both;
+}
+
+.st0 {
+  fill: #005B31;
+}
+
+.st1 {
+  fill: none;
+  stroke: #005B31;
+  stroke-miterlimit: 10;
+}
+
+.st2 {
+  fill: #007DC5;
+}
+
+.st3 {
+  fill: none;
+  stroke: #007DC5;
+  stroke-miterlimit: 10;
+}
+
+.st4 {
+  fill: #005B31;
+  stroke: #005B31;
+  stroke-miterlimit: 10;
+}
+
+.st5 {
+  fill: #007DC5;
+  stroke: #007DC5;
+  stroke-miterlimit: 10;
+}
+
+@-webkit-keyframes loader-opacity {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+@keyframes loader-opacity {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+
+.lds-ellipsis {
+  display: inline-block;
+  position:relative;
+  width: 80px;
+  height: 80px;
+  top: -24px;
+  animation: loader-opacity 4s ease-in 0s 1;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #005B31;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}</style><link rel="stylesheet" type="text/css" href="https://sabalchatbot.sanimabank.com/embed/embed.css"/><link rel="preload" href="/_next/static/css/545cf948236faf40.css" as="style"/><link rel="stylesheet" href="/_next/static/css/545cf948236faf40.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js"></script><script defer="" src="/_next/static/chunks/9782-2caa6a4821f9e032.js"></script><script defer="" src="/_next/static/chunks/9373.f9cd233817a8b90c.js"></script><script defer="" src="/_next/static/chunks/1bfc9850-704de46ec40c0a25.js"></script><script defer="" src="/_next/static/chunks/252f366e-97af8b3e2f91b935.js"></script><script defer="" src="/_next/static/chunks/95b64a6e-f0d8d9955b4c3f2c.js"></script><script defer="" src="/_next/static/chunks/545f34e4-169ec73edf3d5c61.js"></script><script defer="" src="/_next/static/chunks/ae51ba48.c4efc3be50b2ab8e.js"></script><script defer="" src="/_next/static/chunks/1033-9096c101d6a3d73f.js"></script><script defer="" src="/_next/static/chunks/715-a2a8a6899b42db4f.js"></script><script defer="" src="/_next/static/chunks/1263-80e45c76b0ef5773.js"></script><script defer="" src="/_next/static/chunks/5675-3667e1573b1c63fd.js"></script><script defer="" src="/_next/static/chunks/3589-88cddd6b302d0b24.js"></script><script defer="" src="/_next/static/chunks/1990-cfc2b2ef3d4e781a.js"></script><script defer="" src="/_next/static/chunks/1602-d11391a7c2a06b90.js"></script><script defer="" src="/_next/static/chunks/6893-4c39188992e2f8c8.js"></script><script defer="" src="/_next/static/chunks/8212-390f24928dcf3afc.js"></script><script defer="" src="/_next/static/chunks/1633-5f1a99dc0408435a.js"></script><script defer="" src="/_next/static/chunks/9048-d82279224d8f725f.js"></script><script defer="" src="/_next/static/chunks/2434-cb2e6f025ca8753d.js"></script><script defer="" src="/_next/static/chunks/7868-280a6d54215086c7.js"></script><script defer="" src="/_next/static/chunks/6496-78f64d6225cc1d58.js"></script><script defer="" src="/_next/static/chunks/8425-c530a134107a4368.js"></script><script defer="" src="/_next/static/chunks/4446-18db2b708f4f54fc.js"></script><script defer="" src="/_next/static/chunks/8007.d57d3314c0e335aa.js"></script><script defer="" src="/_next/static/chunks/9742-0d7b4ef8c81cd48a.js"></script><script defer="" src="/_next/static/chunks/4538-176cfc42fc2433c9.js"></script><script defer="" src="/_next/static/chunks/9183.294d34c675ad6b5f.js"></script><script defer="" src="/_next/static/chunks/5141.9ae8a1c90fb230e6.js"></script><script defer="" src="/_next/static/chunks/75fc9c18-55217e80064ded2b.js"></script><script defer="" src="/_next/static/chunks/933-710a42d0719229b0.js"></script><script defer="" src="/_next/static/chunks/5515.593416586e0dbfb4.js"></script><script src="/_next/static/chunks/webpack-0fa9aa36bc23eb45.js" defer=""></script><script src="/_next/static/chunks/framework-79bce4a3a540b080.js" defer=""></script><script src="/_next/static/chunks/main-d9a8b5dc2b0e2367.js" defer=""></script><script src="/_next/static/chunks/pages/_app-f94bf6cee34c335a.js" defer=""></script><script src="/_next/static/chunks/4689-c22f228fa50aa8b1.js" defer=""></script><script src="/_next/static/chunks/pages/404-fea97e4df019ec66.js" defer=""></script><script src="/_next/static/FN4MGo16qR0OWAknw1Ebd/_buildManifest.js" defer=""></script><script src="/_next/static/FN4MGo16qR0OWAknw1Ebd/_ssgManifest.js" defer=""></script><style id="__jsx-767074795">.container.jsx-767074795{opacity:0;pointerevents:none;-webkit-transition:opacity 200ms linear;-moz-transition:opacity 200ms linear;-o-transition:opacity 200ms linear;transition:opacity 200ms linear}.bar.jsx-767074795{background:green;height:2px;left:0;margin-left:-100%;position:fixed;top:0;-webkit-transition:margin-left 200ms linear;-moz-transition:margin-left 200ms linear;-o-transition:margin-left 200ms linear;transition:margin-left 200ms linear;width:100%;z-index:1031}.spinner.jsx-767074795{-webkit-box-shadow:0 0 10px#29d,0 0 5px#29d;-moz-box-shadow:0 0 10px#29d,0 0 5px#29d;box-shadow:0 0 10px#29d,0 0 5px#29d;display:block;height:100%;opacity:1;position:absolute;right:0;-webkit-transform:rotate(3deg)translate(0px,-4px);-moz-transform:rotate(3deg)translate(0px,-4px);-ms-transform:rotate(3deg)translate(0px,-4px);-o-transform:rotate(3deg)translate(0px,-4px);transform:rotate(3deg)translate(0px,-4px);width:100px}</style></head><body><div id="globalLoader"><div class="loader"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 208 34"><path class="st4 svg-elem-1" d="M28.6,33.4v-1.8l-0.9,0.6c-1,0.6-2.2,1-3.4,1.1c-1.5,0-2.9-0.6-3.8-1.6c-0.9-0.9-1.4-2.2-1.4-3.6l0-0.5 c0.2-6.7,9-8.1,9.1-8.1l0.5-0.1v-0.8c0-2.5-1.3-3.8-3.7-3.8c-1.2,0-2.4,0.3-3.3,0.6l1.4-4c1.3-0.5,3-0.8,4.7-0.8 c4.2,0,6.6,3.1,6.6,8.5v11.5c0,0.9,0.2,1.8,0.5,2.6H28.6z M27.9,23.3c-0.3,0.1-0.6,0.2-0.8,0.3c-0.1,0-0.2,0.1-0.3,0.1 c-0.1,0-2,0.7-2.6,2.3c-0.3,0.8-0.2,1.7,0.3,2.3c0.5,0.7,1.3,1.1,2.2,1.1c0.4,0,1-0.1,1.6-0.5l0.2-0.2v-5.7L27.9,23.3z"></path><path class="st4 svg-elem-2" d="M110.7,33.4v-1.8l-0.9,0.6c-1,0.6-2.2,1-3.4,1.1c-1.5,0-2.9-0.6-3.8-1.6c-0.9-0.9-1.4-2.2-1.4-3.6l0-0.5 c0.2-6.7,9-8.1,9.1-8.1l0.5-0.1v-0.8c0-2.5-1.3-3.8-3.7-3.8c-1.2,0-2.4,0.3-3.3,0.6l1.4-4c1.4-0.5,3-0.8,4.7-0.8 c4.2,0,6.6,3.1,6.6,8.5v11.5c0,0.9,0.2,1.8,0.5,2.6H110.7z M110.1,23.3c-0.3,0.1-0.6,0.2-0.8,0.3c-0.1,0-0.2,0.1-0.3,0.1 c-0.1,0-2,0.7-2.6,2.3c-0.3,0.8-0.2,1.7,0.3,2.3c0.5,0.7,1.3,1.1,2.2,1.1c0.4,0,1-0.1,1.6-0.5l0.2-0.2v-5.7L110.1,23.3z"></path><path class="st4 svg-elem-3" d="M1.3,31.9c1.1,0.6,2.1,0.9,3,1.1c0.8,0.2,2,0.3,3.3,0.3c2.7,0,4.8-0.9,6.4-2.7c1.7-2,2.5-4.3,2.5-7.2 c0-1.8-0.4-3.3-1.3-4.8c-0.9-1.8-2.7-3.5-4.4-5.2c-1-0.9-1.6-1.6-1.9-2.2C8.4,10.6,8.2,9.8,8.2,9c0-1.1,0.5-1.8,0.9-2.2 c0.7-0.6,1.5-0.9,2.2-0.9c0.8,0,1.7,0.2,2.5,0.7c0.6,0.3,1.1,0.7,1.7,1.2l0.1-5.9C14.8,1.5,14.1,1.3,13,1c-1-0.3-1.9-0.4-3-0.4 C7.5,0.6,5.6,1.4,4,3.1C2.3,4.9,1.5,7,1.5,9.8c0,1.6,0.4,3.1,1.2,4.4c0.9,1.5,2.3,3.1,4.3,5c0.9,0.7,1.6,1.5,2.1,2.4 c0.4,0.8,0.7,1.7,0.7,2.7c0,1-0.3,1.8-0.9,2.6C8.3,27.6,7.4,28,6.5,28c-1.3,0-2.6-0.6-3.4-1.1c-0.7-0.5-1.3-1-1.7-1.5V31.9z"></path><path class="st5 svg-elem-4" d="M63.3,7.3c-1.8,0-3.3-1.5-3.3-3.3s1.5-3.3,3.3-3.3s3.3,1.5,3.3,3.3S65.1,7.3,63.3,7.3z"></path><path class="st4 svg-elem-5" d="M59.9,33.4c0.4-0.8,0.5-1.7,0.5-2.6V13.3c0-0.9-0.2-1.8-0.5-2.6h6.7c-0.4,0.8-0.5,1.7-0.5,2.6v17.4 c0,0.9,0.2,1.8,0.5,2.6H59.9z"></path><path class="st4 svg-elem-6" d="M38.5,33.4c0.4-0.8,0.5-1.7,0.5-2.6V13.3c0-0.9-0.2-1.8-0.5-2.6h6.2V14l1-1.6c0.3-0.5,1.8-1.7,4.6-1.7 c0.2,0,5.2,0.3,5.3,5.5l0,14.6c0,0.9,0.2,1.7,0.5,2.5h-6.8c0.4-0.8,0.5-1.7,0.5-2.6V19.8c0-1.2,0-2.1-0.5-2.8 c-0.3-0.7-1.1-1.2-2.1-1.2c-0.9,0-1.7,0.3-2.5,0.9L44.7,17v13.8c0,0.9,0.2,1.8,0.5,2.6H38.5z"></path><path class="st4 svg-elem-7" d="M92.2,33.4c0.4-0.9,0.5-1.9,0.3-2.8l0-10.7c0-1.2,0-2.1-0.5-2.8c-0.3-0.7-1.1-1.2-2.1-1.2 c-0.8,0-1.6,0.3-2.4,0.8l-0.3,0.2v13.8c0,0.9,0.2,1.8,0.5,2.6h-6.7c0.4-0.8,0.5-1.7,0.5-2.6V19.8c0-1.2,0-2.1-0.5-2.8 c-0.4-0.7-1.1-1.2-2.1-1.2c-0.9,0-1.7,0.3-2.5,0.9L76.4,17v13.8c0,0.9,0.2,1.8,0.5,2.6h-6.7c0.4-0.8,0.5-1.7,0.5-2.6V13.3 c0-0.9-0.2-1.8-0.5-2.6h6.2V14l1-1.6c0.3-0.5,1.8-1.7,4.6-1.7c0,0,2.9,0.1,4.4,2.4l0.4,0.6l0.5-0.5c1.9-2.1,4.4-2.4,5.7-2.4 c0.2,0,5.2,0.3,5.3,5.5l0,14.6c0,0.9,0.2,1.8,0.5,2.6H92.2z"></path><path class="st5 svg-elem-8" d="M155.6,33.4v-1.8l-0.9,0.6c-1,0.6-2.2,1-3.4,1.1c-1.5,0-2.9-0.6-3.8-1.6c-0.9-0.9-1.4-2.2-1.4-3.6l0-0.5 c0.2-6.7,9-8.1,9.1-8.1l0.5-0.1l0-0.8c0-2.5-1.3-3.8-3.7-3.8c-1.2,0-2.4,0.3-3.3,0.6l1.4-4c1.3-0.5,3-0.8,4.7-0.8 c4.2,0,6.6,3.1,6.6,8.5v11.5c0,1,0.2,1.8,0.5,2.6H155.6z M155,23.3c-0.3,0.1-0.6,0.2-0.8,0.3c-0.1,0-0.2,0.1-0.3,0.1 c-0.1,0-2,0.7-2.6,2.3c-0.3,0.8-0.2,1.7,0.3,2.3c0.5,0.7,1.3,1.1,2.2,1.1c0.4,0,1-0.1,1.6-0.5l0.2-0.2v-5.7L155,23.3z"></path><path class="st5 svg-elem-9" d="M165.6,33.4c0.4-0.8,0.5-1.7,0.5-2.6V13.3c0-0.9-0.2-1.8-0.5-2.6h6.2V14l1-1.6c0.3-0.5,1.8-1.7,4.6-1.7 c0.2,0,5.2,0.3,5.3,5.5l0,14.6c0,0.9,0.2,1.8,0.5,2.5h-6.8c0.4-0.8,0.5-1.7,0.5-2.6V19.8c0-1.2,0-2.1-0.5-2.8 c-0.4-0.7-1.1-1.2-2.1-1.2c-0.9,0-1.7,0.3-2.5,0.9l-0.2,0.2v13.8c0,0.9,0.2,1.8,0.5,2.6H165.6z"></path><path class="st5 svg-elem-10" d="M123.6,33.5c0.4-0.8,0.5-1.7,0.5-2.6V3.3c0-0.9-0.2-1.8-0.5-2.6h8.6c3.2,0,5.7,0.7,7.4,2.1 c1.7,1.4,2.6,3.3,2.6,5.8c0,2.5-0.9,4.4-2.6,5.8l-0.1,0l0,0.1c-0.2,0.3-0.5,0.4-0.9,0.6l-1.1,0.5l1.1,0.5c0.9,0.4,1.6,0.8,2.1,1.3 c1.9,1.5,2.8,3.8,2.8,6.9c0,3-0.9,5.2-2.8,6.8c-1.7,1.6-4.4,2.5-8,2.5H123.6z M130.4,28.5h0.7c1.8,0,3.2-0.5,4.2-1.3 c1-0.8,1.5-2.1,1.6-3.9c0-1.6-0.5-2.8-1.5-3.6c-1-0.8-2.5-1.2-4.2-1.2h-0.7V28.5z M130.2,14.2h0.8c1.5,0,2.7-0.4,3.7-1.2 c0.9-0.8,1.4-2,1.4-3.5c0-1.4-0.5-2.5-1.3-3.2c-0.7-0.7-1.9-1.1-3.5-1.1h-1.1V14.2z"></path><path class="st5 svg-elem-11" d="M199.5,33.3c-0.1-0.1-0.1-0.3-0.2-0.4c-0.1-0.2-0.2-0.4-0.2-0.5c-0.1-0.3-0.2-0.6-0.3-0.7c0,0-0.1-0.1-0.1-0.1 l-5.6-9.2v8.3c0,0.9,0.2,1.8,0.5,2.6h-6.7c0.4-0.8,0.5-1.7,0.5-2.6V3.1c0-0.9-0.2-1.8-0.5-2.6h6.7c-0.4,0.8-0.5,1.7-0.5,2.6v18.2 l5.1-6.6c0.6-0.8,1-1.5,1.2-2.2c0.2-0.5,0.3-1.1,0.4-1.7c0,0,0,0,0,0h6.9c-0.2,0.2-1.2,1.5-1.2,1.5c-0.2,0.3-0.6,0.7-0.9,1.1 c-1.3,1.5-3.4,3.8-5.1,6.3l-1.1,1.6l2.7,3.9c2.3,3.3,3.8,5.5,4.8,6.8c0,0,0.9,1.2,1,1.3H199.5z"></path></svg><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div></div><div id="__next" data-reactroot=""><div class="jsx-767074795 container"><div class="jsx-767074795 bar"><div class="jsx-767074795 spinner"></div></div></div><div><div class="main-header" id="mainNav"><div class="header-top py-2"><div class="container"><div class="row"><div class=" col-xl-12 col-md-12 col-12"><div class="d-flex justify-content-end align-items-center "><ul class="list-unstyled p-0 m-0 d-flex header-top-quick-menu"><li class="small"><a href="tel:01-5970033">01-5970033</a></li></ul><div class="d-flex np-en ms-3"></div></div></div></div></div></div><div class="header-bottom"><div class="container"><div class="d-flex justify-content-between align-items-center position-relative"><div class="header-logo py-1"><a class="position-relative d-block image-link" href="/"><span style="box-sizing:border-box;display:block;overflow:hidden;width:initial;height:initial;background:none;opacity:1;border:0;margin:0;padding:0;position:absolute;top:0;left:0;bottom:0;right:0"><img alt="sanima-logo" object-fit="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" decoding="async" data-nimg="fill" class="img-fluid" style="position:absolute;top:0;left:0;bottom:0;right:0;box-sizing:border-box;padding:0;border:none;margin:auto;display:block;width:0;height:0;min-width:100%;max-width:100%;min-height:100%;max-height:100%"/><noscript><img alt="sanima-logo" object-fit="cover" sizes="100vw" srcSet="/_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=640&amp;q=75 640w, /_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=750&amp;q=75 750w, /_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=828&amp;q=75 828w, /_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=3840&amp;q=75 3840w" src="/_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=3840&amp;q=75" decoding="async" data-nimg="fill" style="position:absolute;top:0;left:0;bottom:0;right:0;box-sizing:border-box;padding:0;border:none;margin:auto;display:block;width:0;height:0;min-width:100%;max-width:100%;min-height:100%;max-height:100%" class="img-fluid" loading="lazy"/></noscript></span></a><div class="text-muted small mt-1" style="font-size:clamp(13px, 1.5vw, 16px)">Licensed by Nepal Rastra Bank</div></div><div class="notification-wrapper notification-wrapper-mobile d-md-none d-block"><a class="ant-dropdown-trigger btn btn-primary--bg-light position-relative"><div class="ant-space ant-space-horizontal ant-space-align-center"><div class="ant-space-item"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M224 512c35.32 0 63.97-28.65 63.97-64H160.03c0 35.35 28.65 64 63.97 64zm215.39-149.71c-19.32-20.76-55.47-51.99-55.47-154.29 0-77.7-54.48-139.9-127.94-155.16V32c0-17.67-14.32-32-31.98-32s-31.98 14.33-31.98 32v20.84C118.56 68.1 64.08 130.3 64.08 208c0 102.3-36.15 133.53-55.47 154.29-6 6.45-8.66 14.16-8.61 21.71.11 16.4 12.98 32 32.1 32h383.8c19.12 0 32-15.6 32.1-32 .05-7.55-2.61-15.27-8.61-21.71z"></path></svg></div></div></a></div><div class="menu-wrapper d-md-flex d-none nav-right-wrapper"><ul class="menu top-nav list-unstyled p-0 "></ul><div class="search-sanima-wrapper d-inline"><button class="btn btn-primary--bg-light"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button></div><div class="notification-wrapper"><a class="ant-dropdown-trigger btn btn-primary--bg-light position-relative"><div class="ant-space ant-space-horizontal ant-space-align-center"><div class="ant-space-item"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M224 512c35.32 0 63.97-28.65 63.97-64H160.03c0 35.35 28.65 64 63.97 64zm215.39-149.71c-19.32-20.76-55.47-51.99-55.47-154.29 0-77.7-54.48-139.9-127.94-155.16V32c0-17.67-14.32-32-31.98-32s-31.98 14.33-31.98 32v20.84C118.56 68.1 64.08 130.3 64.08 208c0 102.3-36.15 133.53-55.47 154.29-6 6.45-8.66 14.16-8.61 21.71.11 16.4 12.98 32 32.1 32h383.8c19.12 0 32-15.6 32.1-32 .05-7.55-2.61-15.27-8.61-21.71z"></path></svg></div></div></a></div></div><div class="header-actions-wrapper"><div class="search-sanima-wrapper d-inline ms-2 pe-1"><button class="btn btn-primary--bg-light px-0 mx-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button></div><div class="d-flex np-en"></div><button class="btn header__btn-mobile ps-2"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M32 96v64h448V96H32zm0 128v64h448v-64H32zm0 128v64h448v-64H32z"></path></svg></button></div></div></div><div class="primary-border primary-border-btm position-relative"><div class="container px-0"><div class="d-flex justify-content-between align-items-center"><div class="menu-wrapper w-100"><section class="quicklinks-section " id="quicklink-wrapper"><div class="container"><ul class="list-unstyled p-0 m-0 quicklinks-wrapper"></ul></div></section></div></div></div></div></div></div><style>
+body{
+  display:block;
+}
+#globalLoader{
+    position: fixed;
+    z-index: 1700;
+    background-color: #fff;
+    width: 100vw;
+    height: 100vh;
+    top:0;
+    left:0;
+}
+.loader{
+    position:absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width:208px;
+    text-align:center;
+}
+
+#Layer_1{
+  enable-background:new 0 0 208 34; 
+  xml:space:preserve;
+   width: 208px;
+        height: 34px;
+}
+
+@-webkit-keyframes animate-svg-stroke-1 {
+  0% {
+      stroke-dashoffset: 101.11444091796875px;
+      stroke-dasharray: 101.11444091796875px;
+  }
+
+  100% {
+      stroke-dashoffset: 202.2288818359375px;
+      stroke-dasharray: 101.11444091796875px;
+  }
+}
+
+@keyframes animate-svg-stroke-1 {
+  0% {
+      stroke-dashoffset: 101.11444091796875px;
+      stroke-dasharray: 101.11444091796875px;
+  }
+
+  100% {
+      stroke-dashoffset: 202.2288818359375px;
+      stroke-dasharray: 101.11444091796875px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-1 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+@keyframes animate-svg-fill-1 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+.svg-elem-1 {
+  -webkit-animation: animate-svg-stroke-1 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s both,
+      animate-svg-fill-1 0.9s cubic-bezier(0.86, 0, 0.07, 1) 0.8s both;
+  animation: animate-svg-stroke-1 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s both,
+      animate-svg-fill-1 0.9s cubic-bezier(0.86, 0, 0.07, 1) 0.8s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-2 {
+  0% {
+      stroke-dashoffset: 101.11266326904297px;
+      stroke-dasharray: 101.11266326904297px;
+  }
+
+  100% {
+      stroke-dashoffset: 202.22532653808594px;
+      stroke-dasharray: 101.11266326904297px;
+  }
+}
+
+@keyframes animate-svg-stroke-2 {
+  0% {
+      stroke-dashoffset: 101.11266326904297px;
+      stroke-dasharray: 101.11266326904297px;
+  }
+
+  100% {
+      stroke-dashoffset: 202.22532653808594px;
+      stroke-dasharray: 101.11266326904297px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-2 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+@keyframes animate-svg-fill-2 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+.svg-elem-2 {
+  -webkit-animation: animate-svg-stroke-2 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.12s both,
+      animate-svg-fill-2 0.9s cubic-bezier(0.86, 0, 0.07, 1) 0.9s both;
+  animation: animate-svg-stroke-2 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.12s both,
+      animate-svg-fill-2 0.9s cubic-bezier(0.86, 0, 0.07, 1) 0.9s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-3 {
+  0% {
+      stroke-dashoffset: 111.25788116455078px;
+      stroke-dasharray: 111.25788116455078px;
+  }
+
+  100% {
+      stroke-dashoffset: 222.51576232910156px;
+      stroke-dasharray: 111.25788116455078px;
+  }
+}
+
+@keyframes animate-svg-stroke-3 {
+  0% {
+      stroke-dashoffset: 111.25788116455078px;
+      stroke-dasharray: 111.25788116455078px;
+  }
+
+  100% {
+      stroke-dashoffset: 222.51576232910156px;
+      stroke-dasharray: 111.25788116455078px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-3 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+@keyframes animate-svg-fill-3 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+.svg-elem-3 {
+  -webkit-animation: animate-svg-stroke-3 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.24s both,
+      animate-svg-fill-3 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1s both;
+  animation: animate-svg-stroke-3 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.24s both,
+      animate-svg-fill-3 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-4 {
+  0% {
+      stroke-dashoffset: 22.698421478271484px;
+      stroke-dasharray: 22.698421478271484px;
+  }
+
+  100% {
+      stroke-dashoffset: 45.39684295654297px;
+      stroke-dasharray: 22.698421478271484px;
+  }
+}
+
+@keyframes animate-svg-stroke-4 {
+  0% {
+      stroke-dashoffset: 22.698421478271484px;
+      stroke-dasharray: 22.698421478271484px;
+  }
+
+  100% {
+      stroke-dashoffset: 45.39684295654297px;
+      stroke-dasharray: 22.698421478271484px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-4 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+@keyframes animate-svg-fill-4 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+.svg-elem-4 {
+  -webkit-animation: animate-svg-stroke-4 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.36s both,
+      animate-svg-fill-4 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.1s both;
+  animation: animate-svg-stroke-4 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.36s both,
+      animate-svg-fill-4 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.1s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-5 {
+  0% {
+      stroke-dashoffset: 61.067378997802734px;
+      stroke-dasharray: 61.067378997802734px;
+  }
+
+  100% {
+      stroke-dashoffset: 122.13475799560547px;
+      stroke-dasharray: 61.067378997802734px;
+  }
+}
+
+@keyframes animate-svg-stroke-5 {
+  0% {
+      stroke-dashoffset: 61.067378997802734px;
+      stroke-dasharray: 61.067378997802734px;
+  }
+
+  100% {
+      stroke-dashoffset: 122.13475799560547px;
+      stroke-dasharray: 61.067378997802734px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-5 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+@keyframes animate-svg-fill-5 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+.svg-elem-5 {
+  -webkit-animation: animate-svg-stroke-5 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.48s both,
+      animate-svg-fill-5 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.2000000000000002s both;
+  animation: animate-svg-stroke-5 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.48s both,
+      animate-svg-fill-5 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.2000000000000002s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-6 {
+  0% {
+      stroke-dashoffset: 118.91635131835938px;
+      stroke-dasharray: 118.91635131835938px;
+  }
+
+  100% {
+      stroke-dashoffset: 237.83270263671875px;
+      stroke-dasharray: 118.91635131835938px;
+  }
+}
+
+@keyframes animate-svg-stroke-6 {
+  0% {
+      stroke-dashoffset: 118.91635131835938px;
+      stroke-dasharray: 118.91635131835938px;
+  }
+
+  100% {
+      stroke-dashoffset: 237.83270263671875px;
+      stroke-dasharray: 118.91635131835938px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-6 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+@keyframes animate-svg-fill-6 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+.svg-elem-6 {
+  -webkit-animation: animate-svg-stroke-6 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s both,
+      animate-svg-fill-6 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.3s both;
+  animation: animate-svg-stroke-6 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s both,
+      animate-svg-fill-6 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.3s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-7 {
+  0% {
+      stroke-dashoffset: 176.98678588867188px;
+      stroke-dasharray: 176.98678588867188px;
+  }
+
+  100% {
+      stroke-dashoffset: 353.97357177734375px;
+      stroke-dasharray: 176.98678588867188px;
+  }
+}
+
+@keyframes animate-svg-stroke-7 {
+  0% {
+      stroke-dashoffset: 176.98678588867188px;
+      stroke-dasharray: 176.98678588867188px;
+  }
+
+  100% {
+      stroke-dashoffset: 353.97357177734375px;
+      stroke-dasharray: 176.98678588867188px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-7 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+@keyframes animate-svg-fill-7 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 91, 49);
+  }
+}
+
+.svg-elem-7 {
+  -webkit-animation: animate-svg-stroke-7 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.72s both,
+      animate-svg-fill-7 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.4000000000000001s both;
+  animation: animate-svg-stroke-7 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.72s both,
+      animate-svg-fill-7 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.4000000000000001s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-8 {
+  0% {
+      stroke-dashoffset: 101.1160659790039px;
+      stroke-dasharray: 101.1160659790039px;
+  }
+
+  100% {
+      stroke-dashoffset: 202.2321319580078px;
+      stroke-dasharray: 101.1160659790039px;
+  }
+}
+
+@keyframes animate-svg-stroke-8 {
+  0% {
+      stroke-dashoffset: 101.1160659790039px;
+      stroke-dasharray: 101.1160659790039px;
+  }
+
+  100% {
+      stroke-dashoffset: 202.2321319580078px;
+      stroke-dasharray: 101.1160659790039px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-8 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+@keyframes animate-svg-fill-8 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+.svg-elem-8 {
+  -webkit-animation: animate-svg-stroke-8 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.84s both,
+      animate-svg-fill-8 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.5s both;
+  animation: animate-svg-stroke-8 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.84s both,
+      animate-svg-fill-8 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.5s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-9 {
+  0% {
+      stroke-dashoffset: 118.78460693359375px;
+      stroke-dasharray: 118.78460693359375px;
+  }
+
+  100% {
+      stroke-dashoffset: 237.5692138671875px;
+      stroke-dasharray: 118.78460693359375px;
+  }
+}
+
+@keyframes animate-svg-stroke-9 {
+  0% {
+      stroke-dashoffset: 118.78460693359375px;
+      stroke-dasharray: 118.78460693359375px;
+  }
+
+  100% {
+      stroke-dashoffset: 237.5692138671875px;
+      stroke-dasharray: 118.78460693359375px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-9 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+@keyframes animate-svg-fill-9 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+.svg-elem-9 {
+  -webkit-animation: animate-svg-stroke-9 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.96s both,
+      animate-svg-fill-9 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.6s both;
+  animation: animate-svg-stroke-9 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.96s both,
+      animate-svg-fill-9 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.6s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-10 {
+  0% {
+      stroke-dashoffset: 158.7579803466797px;
+      stroke-dasharray: 158.7579803466797px;
+  }
+
+  100% {
+      stroke-dashoffset: 317.5159606933594px;
+      stroke-dasharray: 158.7579803466797px;
+  }
+}
+
+@keyframes animate-svg-stroke-10 {
+  0% {
+      stroke-dashoffset: 158.7579803466797px;
+      stroke-dasharray: 158.7579803466797px;
+  }
+
+  100% {
+      stroke-dashoffset: 317.5159606933594px;
+      stroke-dasharray: 158.7579803466797px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-10 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+@keyframes animate-svg-fill-10 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+.svg-elem-10 {
+  -webkit-animation: animate-svg-stroke-10 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.08s both,
+      animate-svg-fill-10 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.7000000000000002s both;
+  animation: animate-svg-stroke-10 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.08s both,
+      animate-svg-fill-10 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.7000000000000002s both;
+}
+
+@-webkit-keyframes animate-svg-stroke-11 {
+  0% {
+      stroke-dashoffset: 147.8519287109375px;
+      stroke-dasharray: 147.8519287109375px;
+  }
+
+  100% {
+      stroke-dashoffset: 295.703857421875px;
+      stroke-dasharray: 147.8519287109375px;
+  }
+}
+
+@keyframes animate-svg-stroke-11 {
+  0% {
+      stroke-dashoffset: 147.8519287109375px;
+      stroke-dasharray: 147.8519287109375px;
+  }
+
+  100% {
+      stroke-dashoffset: 295.703857421875px;
+      stroke-dasharray: 147.8519287109375px;
+  }
+}
+
+@-webkit-keyframes animate-svg-fill-11 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+@keyframes animate-svg-fill-11 {
+  0% {
+      fill: transparent;
+  }
+
+  100% {
+      fill: rgb(0, 125, 197);
+  }
+}
+
+.svg-elem-11 {
+  -webkit-animation: animate-svg-stroke-11 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s both,
+      animate-svg-fill-11 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.8s both;
+  animation: animate-svg-stroke-11 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s both,
+      animate-svg-fill-11 0.9s cubic-bezier(0.86, 0, 0.07, 1) 1.8s both;
+}
+
+.st0 {
+  fill: #005B31;
+}
+
+.st1 {
+  fill: none;
+  stroke: #005B31;
+  stroke-miterlimit: 10;
+}
+
+.st2 {
+  fill: #007DC5;
+}
+
+.st3 {
+  fill: none;
+  stroke: #007DC5;
+  stroke-miterlimit: 10;
+}
+
+.st4 {
+  fill: #005B31;
+  stroke: #005B31;
+  stroke-miterlimit: 10;
+}
+
+.st5 {
+  fill: #007DC5;
+  stroke: #007DC5;
+  stroke-miterlimit: 10;
+}
+
+@-webkit-keyframes loader-opacity {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+@keyframes loader-opacity {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+
+.lds-ellipsis {
+  display: inline-block;
+  position:relative;
+  width: 80px;
+  height: 80px;
+  top: -24px;
+  animation: loader-opacity 4s ease-in 0s 1;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #005B31;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}</style><div id="globalLoader"><div class="loader"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 208 34"><path class="st4 svg-elem-1" d="M28.6,33.4v-1.8l-0.9,0.6c-1,0.6-2.2,1-3.4,1.1c-1.5,0-2.9-0.6-3.8-1.6c-0.9-0.9-1.4-2.2-1.4-3.6l0-0.5 c0.2-6.7,9-8.1,9.1-8.1l0.5-0.1v-0.8c0-2.5-1.3-3.8-3.7-3.8c-1.2,0-2.4,0.3-3.3,0.6l1.4-4c1.3-0.5,3-0.8,4.7-0.8 c4.2,0,6.6,3.1,6.6,8.5v11.5c0,0.9,0.2,1.8,0.5,2.6H28.6z M27.9,23.3c-0.3,0.1-0.6,0.2-0.8,0.3c-0.1,0-0.2,0.1-0.3,0.1 c-0.1,0-2,0.7-2.6,2.3c-0.3,0.8-0.2,1.7,0.3,2.3c0.5,0.7,1.3,1.1,2.2,1.1c0.4,0,1-0.1,1.6-0.5l0.2-0.2v-5.7L27.9,23.3z"></path><path class="st4 svg-elem-2" d="M110.7,33.4v-1.8l-0.9,0.6c-1,0.6-2.2,1-3.4,1.1c-1.5,0-2.9-0.6-3.8-1.6c-0.9-0.9-1.4-2.2-1.4-3.6l0-0.5 c0.2-6.7,9-8.1,9.1-8.1l0.5-0.1v-0.8c0-2.5-1.3-3.8-3.7-3.8c-1.2,0-2.4,0.3-3.3,0.6l1.4-4c1.4-0.5,3-0.8,4.7-0.8 c4.2,0,6.6,3.1,6.6,8.5v11.5c0,0.9,0.2,1.8,0.5,2.6H110.7z M110.1,23.3c-0.3,0.1-0.6,0.2-0.8,0.3c-0.1,0-0.2,0.1-0.3,0.1 c-0.1,0-2,0.7-2.6,2.3c-0.3,0.8-0.2,1.7,0.3,2.3c0.5,0.7,1.3,1.1,2.2,1.1c0.4,0,1-0.1,1.6-0.5l0.2-0.2v-5.7L110.1,23.3z"></path><path class="st4 svg-elem-3" d="M1.3,31.9c1.1,0.6,2.1,0.9,3,1.1c0.8,0.2,2,0.3,3.3,0.3c2.7,0,4.8-0.9,6.4-2.7c1.7-2,2.5-4.3,2.5-7.2 c0-1.8-0.4-3.3-1.3-4.8c-0.9-1.8-2.7-3.5-4.4-5.2c-1-0.9-1.6-1.6-1.9-2.2C8.4,10.6,8.2,9.8,8.2,9c0-1.1,0.5-1.8,0.9-2.2 c0.7-0.6,1.5-0.9,2.2-0.9c0.8,0,1.7,0.2,2.5,0.7c0.6,0.3,1.1,0.7,1.7,1.2l0.1-5.9C14.8,1.5,14.1,1.3,13,1c-1-0.3-1.9-0.4-3-0.4 C7.5,0.6,5.6,1.4,4,3.1C2.3,4.9,1.5,7,1.5,9.8c0,1.6,0.4,3.1,1.2,4.4c0.9,1.5,2.3,3.1,4.3,5c0.9,0.7,1.6,1.5,2.1,2.4 c0.4,0.8,0.7,1.7,0.7,2.7c0,1-0.3,1.8-0.9,2.6C8.3,27.6,7.4,28,6.5,28c-1.3,0-2.6-0.6-3.4-1.1c-0.7-0.5-1.3-1-1.7-1.5V31.9z"></path><path class="st5 svg-elem-4" d="M63.3,7.3c-1.8,0-3.3-1.5-3.3-3.3s1.5-3.3,3.3-3.3s3.3,1.5,3.3,3.3S65.1,7.3,63.3,7.3z"></path><path class="st4 svg-elem-5" d="M59.9,33.4c0.4-0.8,0.5-1.7,0.5-2.6V13.3c0-0.9-0.2-1.8-0.5-2.6h6.7c-0.4,0.8-0.5,1.7-0.5,2.6v17.4 c0,0.9,0.2,1.8,0.5,2.6H59.9z"></path><path class="st4 svg-elem-6" d="M38.5,33.4c0.4-0.8,0.5-1.7,0.5-2.6V13.3c0-0.9-0.2-1.8-0.5-2.6h6.2V14l1-1.6c0.3-0.5,1.8-1.7,4.6-1.7 c0.2,0,5.2,0.3,5.3,5.5l0,14.6c0,0.9,0.2,1.7,0.5,2.5h-6.8c0.4-0.8,0.5-1.7,0.5-2.6V19.8c0-1.2,0-2.1-0.5-2.8 c-0.3-0.7-1.1-1.2-2.1-1.2c-0.9,0-1.7,0.3-2.5,0.9L44.7,17v13.8c0,0.9,0.2,1.8,0.5,2.6H38.5z"></path><path class="st4 svg-elem-7" d="M92.2,33.4c0.4-0.9,0.5-1.9,0.3-2.8l0-10.7c0-1.2,0-2.1-0.5-2.8c-0.3-0.7-1.1-1.2-2.1-1.2 c-0.8,0-1.6,0.3-2.4,0.8l-0.3,0.2v13.8c0,0.9,0.2,1.8,0.5,2.6h-6.7c0.4-0.8,0.5-1.7,0.5-2.6V19.8c0-1.2,0-2.1-0.5-2.8 c-0.4-0.7-1.1-1.2-2.1-1.2c-0.9,0-1.7,0.3-2.5,0.9L76.4,17v13.8c0,0.9,0.2,1.8,0.5,2.6h-6.7c0.4-0.8,0.5-1.7,0.5-2.6V13.3 c0-0.9-0.2-1.8-0.5-2.6h6.2V14l1-1.6c0.3-0.5,1.8-1.7,4.6-1.7c0,0,2.9,0.1,4.4,2.4l0.4,0.6l0.5-0.5c1.9-2.1,4.4-2.4,5.7-2.4 c0.2,0,5.2,0.3,5.3,5.5l0,14.6c0,0.9,0.2,1.8,0.5,2.6H92.2z"></path><path class="st5 svg-elem-8" d="M155.6,33.4v-1.8l-0.9,0.6c-1,0.6-2.2,1-3.4,1.1c-1.5,0-2.9-0.6-3.8-1.6c-0.9-0.9-1.4-2.2-1.4-3.6l0-0.5 c0.2-6.7,9-8.1,9.1-8.1l0.5-0.1l0-0.8c0-2.5-1.3-3.8-3.7-3.8c-1.2,0-2.4,0.3-3.3,0.6l1.4-4c1.3-0.5,3-0.8,4.7-0.8 c4.2,0,6.6,3.1,6.6,8.5v11.5c0,1,0.2,1.8,0.5,2.6H155.6z M155,23.3c-0.3,0.1-0.6,0.2-0.8,0.3c-0.1,0-0.2,0.1-0.3,0.1 c-0.1,0-2,0.7-2.6,2.3c-0.3,0.8-0.2,1.7,0.3,2.3c0.5,0.7,1.3,1.1,2.2,1.1c0.4,0,1-0.1,1.6-0.5l0.2-0.2v-5.7L155,23.3z"></path><path class="st5 svg-elem-9" d="M165.6,33.4c0.4-0.8,0.5-1.7,0.5-2.6V13.3c0-0.9-0.2-1.8-0.5-2.6h6.2V14l1-1.6c0.3-0.5,1.8-1.7,4.6-1.7 c0.2,0,5.2,0.3,5.3,5.5l0,14.6c0,0.9,0.2,1.8,0.5,2.5h-6.8c0.4-0.8,0.5-1.7,0.5-2.6V19.8c0-1.2,0-2.1-0.5-2.8 c-0.4-0.7-1.1-1.2-2.1-1.2c-0.9,0-1.7,0.3-2.5,0.9l-0.2,0.2v13.8c0,0.9,0.2,1.8,0.5,2.6H165.6z"></path><path class="st5 svg-elem-10" d="M123.6,33.5c0.4-0.8,0.5-1.7,0.5-2.6V3.3c0-0.9-0.2-1.8-0.5-2.6h8.6c3.2,0,5.7,0.7,7.4,2.1 c1.7,1.4,2.6,3.3,2.6,5.8c0,2.5-0.9,4.4-2.6,5.8l-0.1,0l0,0.1c-0.2,0.3-0.5,0.4-0.9,0.6l-1.1,0.5l1.1,0.5c0.9,0.4,1.6,0.8,2.1,1.3 c1.9,1.5,2.8,3.8,2.8,6.9c0,3-0.9,5.2-2.8,6.8c-1.7,1.6-4.4,2.5-8,2.5H123.6z M130.4,28.5h0.7c1.8,0,3.2-0.5,4.2-1.3 c1-0.8,1.5-2.1,1.6-3.9c0-1.6-0.5-2.8-1.5-3.6c-1-0.8-2.5-1.2-4.2-1.2h-0.7V28.5z M130.2,14.2h0.8c1.5,0,2.7-0.4,3.7-1.2 c0.9-0.8,1.4-2,1.4-3.5c0-1.4-0.5-2.5-1.3-3.2c-0.7-0.7-1.9-1.1-3.5-1.1h-1.1V14.2z"></path><path class="st5 svg-elem-11" d="M199.5,33.3c-0.1-0.1-0.1-0.3-0.2-0.4c-0.1-0.2-0.2-0.4-0.2-0.5c-0.1-0.3-0.2-0.6-0.3-0.7c0,0-0.1-0.1-0.1-0.1 l-5.6-9.2v8.3c0,0.9,0.2,1.8,0.5,2.6h-6.7c0.4-0.8,0.5-1.7,0.5-2.6V3.1c0-0.9-0.2-1.8-0.5-2.6h6.7c-0.4,0.8-0.5,1.7-0.5,2.6v18.2 l5.1-6.6c0.6-0.8,1-1.5,1.2-2.2c0.2-0.5,0.3-1.1,0.4-1.7c0,0,0,0,0,0h6.9c-0.2,0.2-1.2,1.5-1.2,1.5c-0.2,0.3-0.6,0.7-0.9,1.1 c-1.3,1.5-3.4,3.8-5.1,6.3l-1.1,1.6l2.7,3.9c2.3,3.3,3.8,5.5,4.8,6.8c0,0,0.9,1.2,1,1.3H199.5z"></path></svg><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div></div><footer class="sanima_footer"><div class="container top__footer"><div class="row"><div class="col-lg-3 col-12 sanima_details"><div class="footer_logo mb-1"><a class="position-relative d-block" href="/"><span style="box-sizing:border-box;display:block;overflow:hidden;width:initial;height:initial;background:none;opacity:1;border:0;margin:0;padding:0;position:absolute;top:0;left:0;bottom:0;right:0"><img alt="sanima bank logo" object-fit="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" decoding="async" data-nimg="fill" class="img-fluid" style="position:absolute;top:0;left:0;bottom:0;right:0;box-sizing:border-box;padding:0;border:none;margin:auto;display:block;width:0;height:0;min-width:100%;max-width:100%;min-height:100%;max-height:100%"/><noscript><img alt="sanima bank logo" object-fit="cover" sizes="100vw" srcSet="/_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=640&amp;q=75 640w, /_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=750&amp;q=75 750w, /_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=828&amp;q=75 828w, /_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=3840&amp;q=75 3840w" src="/_next/image?url=%2Fstatic%2Fimages%2Flogo_bank.png&amp;w=3840&amp;q=75" decoding="async" data-nimg="fill" style="position:absolute;top:0;left:0;bottom:0;right:0;box-sizing:border-box;padding:0;border:none;margin:auto;display:block;width:0;height:0;min-width:100%;max-width:100%;min-height:100%;max-height:100%" class="img-fluid" loading="lazy"/></noscript></span></a></div><div class="mb-3 text-muted">Licensed by Nepal Rastra Bank</div><div class="mb-2 fw-bold">Sanima Bank Limited</div><ul class="list-unstyled m-0"><li></li><li> </li><li></li><li></li><li>|</li><li></li></ul><div class="my-5 footer__social_share d-flex flex-wrap"></div></div><div class="col-lg-9 col-12 sanima_footer_menu desktop"><div class="row"></div></div><div class="col-12 sanima_footer_menu mobile"><div class="ant-collapse ant-collapse-icon-position-start" role="tablist"></div></div></div><div class="footer_app_section d-flex justify-content-md-end justify-content-center"></div></div><div class="bg-primary copyright__footer_container py-4"><div class="container"><div class="d-flex justify-content-between flex-wrap copyright__footer"><div class="section__left text-white">Copyright © 2025 SANIMA BANK LIMITED<!-- --> <!-- -->  All Rights Reserved. <!-- -->Crafted By<!-- -->  <a href="https://amniltech.com/" class="text-white" target="_blank" rel="noopener noreferrer">AMNIL Technologies Pvt.Ltd</a></div><div class="section__right"><div class="menu"></div></div></div></div></div></footer></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"_nextI18Next":{"initialI18nStore":{"en":{"common":{"app-name":"Sanima Bank Limited","email":"E-mail","mobile":"Mobile","address":"Address","language":{"english":"English","nepali":"नेपाली"},"header":{"quick-links":"Quick Links","email-the-details":"Email the details","send-app-link":"Send download link to mobile?","details-title":"Are you interested in","details-small":"Please fill in the information below and we will contact you soon."},"homepage":{"our-activities":"Our Activities","projects":"Projects","customer-testimonials":"Customer Testimonials"},"global":{"cancel":"Cancel","submit":"Submit","read-more":"Read More","search-nearby":"Search near me","reset":"Reset","total":"Total","download":"Download"},"branch":{"branch-manager":"Branch Manager","operation-incharge":"Operation Incharge","branch-manager-details":"Branch Manager Details","operation-manager-details":"Operation Incharge Details","extened-counter":"Extended Counter"},"calculator":{"emi":"EMI","simple-interest":"Simple Interest","compound-interest":"Compound Interest","deposit-interest":"Deposit Interest","loan-amount":"Loan Amount","iterest-rate":"Interest Rate","loan-term":"Loan Tenure","in-rupees":"in rupees","per-annum":"per annum","in-years":"in years","in-months":"in months","rs":"Rs","monthly-emi":"Monthly EMI","principal":"Principal","interest-payable":"Interest Payable","total-amount-payable":"Total Amount Payable","deposit-interest-payable":"Interest Receivable","deposit-total-amount-payable":"Total Amount Receivable","compound-time":"Compound Time","deposit-type":"Deposit Type","deposit-amount":"Deposit Amount","deposit-term":"Deposit Tenure","tax-amount":"Tax Amount","yearly":"Yearly","semi-anually":"Semi-anually","quartly":"Quarterly","monthly":"Monthly","individual":"Individual","corporate":"Corporate","interest-rate":"Interest Rate"},"exchange-rate":{"cash":"Cash Buy","non-cash":"Non Cash Buy","sell":"Sell","currency":"Currency","unit":"Unit","usd-bellow":"(For USD deno below 20)","info-message":"Could not find rates for the given date {selectedDate}. The below displayed forex information information is of {latestDate}","note-1":"Rates are indicative only and are subject to change depending on market conditions.","note-2":"For buying Foreign Currency Cash denomination of 50 or above, non cash rate will apply."},"gold-rate":{"rupee":"Nrs.","fine-gold":"Fine-gold","tejabi-gold":"Tejabi-gold","silver":"Silver","tola":"Tola","gram":"Gram","info-message":"Could not find rates for the given date {selectedDate}. The below displayed gold information is of {latestDate}","note-1":"Rates are indicative only and are subject to change depending on market conditions."},"stock":{"stock-update":"Stock Update","max-price":"Max Price","min-price":"Min Price","closing-price":"Closing Price"},"related-products":"Related products","we-cant-seem":"We can't seem to find any results.","no-data-found":"No data found","no-position":"No positions available.","show-more-products":"Show More Products","as-of":"As of","forex":"Forex","help-text":"Help Text","gold-silver-rate":"Gold/Silver Price","updated-on":"Updated on","explore-more":"Explore more in","buy":"Buy","sell":"Sell","time":"Time","date":"Date","b-s":"B.S.","tola":"tola","gram":"gram","search":"Search","filter":"Filter","all-merchants":"All Merchants","all-reports":"All Reports","all-category":"All Category","all-sub-category":"All Sub-Category","all-district":"All District","all-province":"All Province","all-merchant":"All Merchant","all-month":"All Month","all-year":"All Year","all-location":"All Location","view-detail":"View Detail","apply-now":"Apply Now","otp-resend":"Resend OTP","list-view":"List View","map-view":"Map View","branches":"Branches","connect-with-us":"Connect with us","atm":"ATM","all":"All","android":"Android","ios":"IOS","cancel":"Cancel","learn-more":"Learn More","send-to-mobile-number":"Send to Mobile Number","sorry":"Sorry!","the-requested-page-was-not-found":"The requested page was not found","it-seems-you-have-ventured-onto-a-broken-link":"It seems you have ventured onto a broken link","notes":"Notes","all-provience":"All Province","what-are-you-looking-for":"What are you looking for?","new":"New","deposit":"Deposit","loan":"Loan","open-positions":"Open Positions","open-position":"Open Position","posted-date":"Posted date","deadline":"Deadline","application-deadline":"Application deadline","job-code":"Job code","view-more-story":"View more stories","branch-atm":{"outside-valley":"Outside Valley","inside-valley":"Inside Valley","from":"From","to":"To","extened-hours":"Extended Hours"},"gallery":"Gallery","merchant":{"learn-more":"Learn More","interest-rate":"Interest Rate","interest-payment":"Interest Payment","quick-view":"Quick View","most-popular":"Most Popular","new":"Most Recent","website":"Website","publish-date":"Publish Date","expiry-date":"Expiry Date","discount":"Discount","product-compare":"Product Compare","view-more":"View more","view-less":"View less"},"contact-us":{"call-us":"CALL US","find-us":"FIND US","social-media":"Social media","download-text":"Download Nabil SmartBank App","locate":"Locate our","or":"or","complaints-info":"We're listening. Click below to send us your compliments, suggestions or complaints","booking-info":"If you have a work related query, feel free to book an appointment"},"footer":{"go-to-visted-page":"You will be redirected to your last visited page. If you would like to continue to the same page please press cancel.","last-visited":"Last Visited on {Date}","follow-us":"Follow us","customer-support":"Customer Support","sitemap":"Sitemap","swift":"SWIFT","term-condition":"Term \u0026 Conditions","locate-in-map":"Locate in map","copy-right-text":"Copyright © {{date}} SANIMA BANK LIMITED","crafted-by":"Crafted By","amnil-tech":"AMNIL Technologies Pvt.Ltd"},"notice":"Notice","know-more":"Know More","grevience":{"form-title":"How may I help you ?","full-name":"Full Name","email-address":"Email Address","contact-number":"Contact Number","service-category":"Service Category","service-type":"Service Type","service-sub-type":"Service Sub Type","your-message":"Your Message","send-message":"Send Message","required":"{label} is required."},"testimonial":{"view-story":"View Story"},"iCard":{"accountHolder":"Do you have any account in Nabil Bank ?","yes":"Yes","no":"No","general-info":"General Information","small-title":"Same information as in supplied while opening account","account-number":"Account Number","pan-number":"Pan Number","full-name":"Full Name","mobile-number":"Mobile Number","email-address":"Email Address","contact-number":"Contact Number","requested-amount":"Requested Amount","upload":"Upload PAN Certificate","fileType":"jpg, png, pdf etc.","service-request":"Service Request","preferred-branch":"Preferred Branch to Collect","province":"Province","card-date":"Preferred card collection date","card-type":"Card Type","tc-agree":"I accept the","tc":"Terms \u0026 Conditions","apply":"Apply","verify":"Verify","required":"{label} is required.","instant_card":"Instant Card : Readily available card without name.","personalized_card":"Personalised Card: Name printed card.","instant_time":"It takes 1 day to complete","personalized_time_1":"It takes 4 days to complete","personalized_time_2":"It takes 6 days to complete","enter-otp-no":"Enter OTP Number","otp-verification":"OTP Verification","otp-success1":"Your iCard has been processed.","otp-success2":" You will be receiving confirmation email. You can also view iCard details in Nabil SmartBank App.","continue":"Continue"},"faq":{"title":"FAQs","everything":"Everything","we-are-listening":"We're listening.","click-below":" Click below to send us your compliments, suggestions or complaints.","schedule-an-appointment":"Schedule an Appointment","grievance":"Grievance"},"creditCard":{"title":"Eligibility Check/Lead Generation","subtitle-1":"About You :","subtitle-2":"Residental Status :","subtitle-3":"Contact Details :","subtitle-4":"Work \u0026 Income Details :","subtitle-5":"Your Bank Details :","first-name":"First Name","middle-name":"Middle Name","last-name":"Last Name","nationality":"Nationality","dob":"DOB","dependents":"No. of Dependants","residental-status":"Residental Status","email":"Email Address","mobile":"Mobile Number","income-source":"Income Source","occupationtype":"Type of Occupation","annual-gross":"Annual Gross Income","occupation-length":"Length of Occupation","account-number":"Account Number","app-type":"Select App Type","prefered-branch":"Prefered Branch","salutation":"Salutation","card-type":"Card Type","home-class":"Residental Status","monthly-income":"Monthly Income","occupational-income":"Occupational Income","otp-success":"Your OTP Code for Credit Card Application has been verified. Please use the link sent to your email or click on continue to proceed with your application.","otp-five-times":"You are only allowed to request OTP code 5 times per day. Your request count has reached the limit for today.","otp-queries":"Please try again or contact the bank in case of any queries.","otp-verification":"OTP Verification","enter-otp-no":"Enter OTP Number"},"appointment":{"meeting-about":"Select Banking Type","appointment-reason":"Appointment Reason And Purpose of Meet","meeting-from":"How would you like to meet ?","byPhone":"By Phone","inPerson":"In Person","branch":"Preferred Branch","contact-number":"Mobile Number","availability":"When are you available?","available-date":"Which day works for you ?","available-time":"Which time works for you ?","about-you":"We just need a little information about you.","first-name":"First Name","middle-name":"Middle Name","last-name":"Last Name","email-address":"Email Address","appointment-person":"If someone (spouse, business partner, etc.) will be joining you during your appointment","appointment-person-info":"spouse, business partner, etc.","select":"Select Banking Type","apply":"Apply","required":"Required"},"loanEligibility":{"loan-eligibility-calculator":"Check Loan Eligibility","first-name":"First Name ","middle-name":"Middle Name ","last-name":"Last Name ","salutation":"Salutation ","mr":"Mr","mrs":"Mrs","miss":"Miss","nationality":"Nationality ","date-of-birth":"Date of Birth","mobile-number":"Mobile Number ","email-address":"Email Address ","preferred-branch":"Preferred Branch ","monthly-salary":"Monthly Salary ","loan-type":"Loan Type ","other-EMI":"Other EMIs ","interest-rate":"Interest Rate % ","loan-amount":"Loan Amount ","loan-tenure":"Loan Tenure (in months) ","check-eligibility":"Check Eligibility","monthly-salary-description":"Monthly","required":"{label} is required.","loan-tenure-in-months":"In months","interest-rate-in-percentage":"%","congratulation":"CONGRATULATION!","with-reference":"With reference to preliminary information you have provided, you are QUALIFIED for Nabil ","please-click":"Please click apply button below to proceed further.","you-can-enjoy":" You can enjoy a maximum credit limit of up to ","npr":"NPR","please-note":"Please note that this limit is subject to reduction based on Bank's Verification of Documents.","your-maximum":"Your maximum loan eligibility amount is ","your-loan-emi":"Your Loan EMI is ","for-further-process":"For further process, please visit your nearest Nabil Bank Branch.","failure":"\u003cdiv style='text-align:center;margin-bottom:1.5rem;margin-top:1rem'\u003e\u003ch4 style='font-weight:bold;color:#dc3545;'\u003eSORRY !\u003c/h4\u003e\u003cp style='margin-bottom:0.25rem'\u003eYour loan eligibility has failed.\u003c/p\u003e\u003cp style='margin-bottom:0.25rem'\u003eThank you for taking time for checking your loan eligibility.\u003c/p\u003e\u003cp style='margin-bottom:0.25rem'\u003eWe will be in touch with you.\u003c/p\u003e\u003c/div\u003e","success-loan-application":"\u003cdiv style='text-align:center;margin-bottom:1.5rem;margin-top:1rem'\u003e\u003ch3 style='font-weight:bold;color:#27A967;'\u003eSuccessful\u003c/h3\u003e\u003cp style='margin-bottom:0.25rem'\u003eYour loan application has been success. Please check your mail.\u003c/p\u003e\u003c/div\u003e","success-credit-application":"\u003cdiv style='text-align:center;margin-bottom:1.5rem;margin-top:1rem'\u003e\u003ch3 style='font-weight:bold;color:#27A967;'\u003eSuccessful\u003c/h3\u003e\u003cp style='margin-bottom:0.25rem'\u003eYour credit application has been success. Please check your mail.\u003c/p\u003e\u003c/div\u003e","success-career-application":"\u003cdiv style='text-align:center;margin-bottom:1.5rem;margin-top:1rem'\u003e\u003ch3 style='font-weight:bold;color:#27A967;'\u003eSuccessful\u003c/h3\u003e\u003cp style='margin-bottom:0.25rem'\u003eYour job request has been success. Your Job Applicant Code is \u003c/p\u003e\u003c/div\u003e","successful":"Successful","your-job":"Your job request has been success. Your Job Applicant Code is ","failure-credit-application":"\u003cdiv style='text-align:center;margin-bottom:1.5rem;margin-top:1rem'\u003e\u003ch4 style='font-weight:bold;color:#dc3545;'\u003eSORRY !\u003c/h4\u003e\u003cp style='margin-bottom:0.25rem'\u003eYour credit card eligibility has failed.\u003c/p\u003e\u003cp style='margin-bottom:0.25rem'\u003eThank you for taking the time for checking your credit card eligibility.\u003c/p\u003e\u003cp style='margin-bottom:0.25rem'\u003eWe will be in touch with you.\u003c/p\u003e\u003cp style='margin-bottom:0.25rem'\u003eWould you be interested in taking debit cards?\u003c/p\u003e\u003c/div\u003e"},"loanApplication":{"lead-generation":"Lead Generation","institution-details":"Institution Details","select-an-option":"Select an Option","facility-requirements":"Facility Requirements","type-of-business":"Type of Business","institution-name":"Institution Name","registration-no":"Registration No","registered-date":"Registered Date","registered-place":"Registered Place","last-renewed-date":"Last Renewed Date","pan-vat-no":"PAN/VAT No","pan-registered-place":"Pan Registered Place","pan-registered-date":"Pan Registered Date","office-no":"Office Phone Number","mobile-no":"Mobile Number","factory-godown-address":"Factory/Godown Address","industry-license":"Industry License","valid-till":" Valid Till","head-office":"Head Office Address","official-email-address":"Official Email Address","nature-of-business":"Nature of Business","contact-person":"Contact Person","phone-number":"Phone Number","address":"Address","required":"{label} is required.","facility":"Facility","amount":"Amount","total-amount":"Total Amount","purpose":"Purpose","tenure":"Tenure (In Month)","proprietor":"Full Name","gender":"Gender","share-holding":"Share Holding %","fathers-name":"Father's Name","grand-fathers-name":"Grand Father's Name","spouse-name":"Spouse Name","citizenship-number":"Citizenship Number","citizenship-issued-place":"Citizenship Issued Place","citizenship-issued-date":"Citizenship Issued Date","office":"Office Name","name":"Name","relationship-with-proprietor":"Relationship With Owner","details-of-guatantors":"Details of Guarantors","details-of-owners":"Details of Owners","collateral":"Collateral","property-owner":"Property Owner","property-owner-relation-with-proprietor":"Property owner relation with proprietor/director","location":"Location","street-name":"Street Name/Tole/Road Name","ward-number":"Ward Number","house-number":"House Number","vdc-municipality":"VDC/Municipality","district":"District","provience":"Provience","kitta-no":"Kitta Number","land-area":"Land Area","building-area":"Building Area","nearest-prominent-landmark":"Nearest Prominent Landmark \u0026 distance","motorable-road-access":"Motorable Road Access?","access-road-width":"Access Road Width(ft)","date-of-ownership":"Date of Ownership","primary-security-details":"Primary Security Details","raw-material-quantity":"Raw Material Amount","work-in-process-quantity":"Work in Process Amount","finished-products-quantity":"Finished Products Amount","account-receivable":"Account Receivable","less-payables":"Payables","primary-security":"Primary Security available for DP","security-statement-date":"Statement Date","other-date":"Date","designation":"Designation","preferred-branch":"Preferred Branch","branch":"Branch","vehicle":{"third-party-name":"Third Party name","engine-no":"Engine No","vin-no":"Vin No","chasis-no":"Chassis No","model-no":"Model No","color":"Color","vehicle-type":"Vehicle Type","register-province":"Registered Province","registration-date":"Registration Date","registration-no":"Registration No"},"shares":{"name-of-shareholder":" Name of shareholder","company-name":"Company Name","boid":"BOID","no-of-share":"No. of shares"}},"review":{"title":"Reviews","full-name":"Full Name","email-address":"Email Address","phone":"Mobile Number","your-review":"Your Review","rating-feedback":"Feedback Rating","code":"Code","apply":"Submit Review","over-all":"Overall","no-reviews":"No Reviews"},"product":{"title":"Product","product-name":"Product Name","learn-more":"Learn More","interest-rate":"Interest Rate","interest-payment":"Interest Payment","minimum-balance":"Minimum Balance","quick-view":"Quick View","most-popular":"Most Popular","new":"Most Recent","ascending":"Asc (A-Z)","descending":"Desc (Z-A)","product-compare":"Product Compare","select-product-compare":"Select product to compare ...","anually":"Anually","view-more":"View more","view-less":"View less","write-review":"Write a review","additional-data":"Additional Data","features":"Features","document":"Document","faq":"FAQ","review":"Review"},"service":{"learn-more":"Learn More","interest-rate":"Interest Rate","interest-payment":"Interest Payment","quick-view":"Quick View","most-popular":"Most Popular","new":"Most Recent","product-compare":"Product Compare","view-more":"View more","view-less":"View less"},"notices":{"new":"New"},"career":{"applied-position":"Position Applied For","applied-department":"Applied Department","preferred-branch":"Preferred Branch","preferred-department":"Preferred Department","preferred-examCenter":"Preferred Exam Center","select-position":"-- Select Position --","select-department":"-- Select Department --","select-preferred-branch":"-- Select Preferred Branch --","select-preferred-location-for-internship":"-- Select Preferred Location for Internship --","select-preferred-center":"-- Select Preferred Exam Center --","personal-information":"Personal Information","preferred-location":"Preferred Location for Internship","age":"Age","department":"Department","position":"Position","status":"Status","gender":"Gender","select-gender":"-- Select Gender --","dobAD":"DOB (AD)","dobBS":"DOB (BS)","grand-fatherName":"Grand Father's Name","mother-name":"Mother's Name","father-name":"Father's Name","birth-place":"Place of Birth","blood-group":"Blood Group","citizen-number":"Citizenship Number","issued-district":"Citizenship Issued District","select-issuedDistrict":"-- Select District --","issuedDateAD":"Citizenship Issued Date (AD)","issuedDateBS":"Citizenship Issued Date (BS)","marital-status":"Marital Status","select-maritalStatus":"-- Select Marital Status --","telephone":"Home Telephone","immediate-contact":"Immediate Contact Person","contact-number":"Contact Number","immediate-relation":"Relation with the applicant","permanent-address":"Permanent Address","persent-address":"Present Address","province":"Province","select-province":"-- Select Province --","zone":"Zone","select-zone":"-- Select Zone --","district":"District","select-district":"-- Select District --","municipality":"Municipality / VDC","house-no":"House Number","ward":"Ward Number","tole":"Tole","same-as-permanent":"Same as Permanent","education":"Education (Starting from highest degree)","training":"Trainings","experience":"Experience: Starting with your present position (recent three)","select":"Select","organization-name":"Name of Current Organization","current-experience":"Current Experience","current-designation":"Current Designation","functional-area":"Functional Area","select-functional":"-- Select Functional --","from-date":"From Date","to-date":"To Date","last-date":"Date of Last Promotion","salary-perMonth":"Salary Per Month","current-jobRes":"Major Job Responsibilities Held","leaving-reason":"Reason For Leaving","current_docs":"Document","current_img":"Photos","expected-salary":"Expected Salary","banking-experience":"Total Banking Experience","banking-year":"Years","banking-month":"Months","professional-ref":"Professional Reference","professional-notes":"Note: List two persons, not related to you (Family members/Relatives), who are familiar with your character and qualifications.","worked_NBL":"Are You Working/Have you ever worked in Nabil?","immediate-details":"Detail if any immediate family or first cousin is currently working in Nabil","branch":"Branch","select-branch":"-- Select Branch --","docs-image":"Documents/Photos","file-size":".pdf, .jpeg : Max Size 2MB","lastest-image":"Lastest Photo","updated-resume":"Updated Resume","lastest-degree":"Lastest Degree","citizenship":"Citizenship","recommendation-letter":"Recommendation / Application Letter from College","other-detail":"Other Detail","core-banking":"Core Banking","network-exp":"Network Experience","domain-exp":"Domain Experience","license-holder":"License Holder for 2 Wheeler","select-one":"-- Select One --","application":"Application","terms":"Terms \u0026 Conditions","terms-info":"I certify that the information I have provided here in above is true, complete and correct. I understand that any misrepresentation this document may lead to cancellation of my candidate at any stage and even to termination of my appointment/dismissal discovered that the data furnished by me is false. I further declare that if selected for appointed in the bank, I am willing to go outside Kathmandu valley as per the requirement of the bank, bank reserves the right to reject any or all the applications without any information whatsoever.","institution-name":"Name and Address of Institution","university":"University","cgpa":"CGPA Obtained","percentage":"Percentage (%)","passing":"Year of Passing (A.D)","specialization":"Major or Area of Specialization","degree":"Degree Received","training-name":"Name","institute-name":"Name of Institute","duration":"Duration","completion-year":"Year of Completion (A.D.)","organizations-name":"Name of Organization","designation":"Designation","total-months":"Total Months","job-responsibilities":"Major Job Responsibilities","salary-per-month":"Salary per Month","reason-for-leaving":"Reason For Leaving","full-address":"Full Address","cbs-experience":"CBS Experience","cbs":"CBS","current-institution":"Current Institution Name","current-role":"Current Role","current-position":"Current Position","service-period":"Service Period in Current Position","account-tracker":"Track Your Account","unique-code":"Applicant Unique Code","uniquecode-placeholder":"Enter applicant unique code","applicant-address":"Applicant Applicant Email Address","applicantAddress-placeholder":"Enter applicant email address","foreign_degree":"Marksheet/Transcript"},"document":{"title":"Please type all the text/characters as printed in the document.","info-type":"Information Type","select-infoType":"-- Select Information Type --","addresse-name":"Name of Addresse","account-name":"Account Name","account-currency":"Account Currency","select-currency":"-- Select Currency --","closing-blcTitle":"Closing Balance (only numbers without currency)","closing-blc":"Closing Balance","account-number":"Account Number","reference-number":"Reference Number","date":"Issued date","applicant-name":"Applicant Name","beneficiary-name":"Beneficiary Name","gtee-number":"GTEE Number","currency":"Currency","guaranty-amt":"Guaranty Amount","issue-date":"Issue Date","expiry-date":"Expiry Date"},"board-members":"Board Members","cluster-heads":"Cluster Heads","province-managers":"Province Heads","faqs":{"got-question":"Got a question?","click-below":"","Schedule an Appointment":"Schedule an Appointment","grievance":"Grievance"},"fixedDeposit":{"accountHolder":"Do you have any account in Nabil Bank ?","yes":"Yes","no":"No","personal-info":"Personal Information","fixed-deposit-heading":"Fixed Deposit Information","small-title":"Same information as in supplied while opening account","account-number":"Account Number","full-name":"Full Name","mobile-number":"Mobile Number","email-address":"Email Address","interest-rate":"Interest Rate","deposit-amount":"Deposit Amount","interest-amount":"Interest Amount","tenure":"Tenure","fileType":"jpg, png, pdf etc.","service-request":"Service Request","preferred-branch":"Preferred Branch to Collect","province":"Province","card-date":"Preferred card collection date","card-type":"Card Type","tc-agree":"I accept the","tc":"Terms \u0026 Conditions","apply":"Apply","verify":"Verify","required":"{label} is required.","instant_card":"Instant Card : Readily available card without name.","personalized_card":"Personalised Card: Name printed card.","instant_time":"It takes 1 day to complete","personalized_time_1":"It takes 4 days to complete","personalized_time_2":"It takes 6 days to complete","lead-success1":"The form has been submitted.","lead-success2":"Bank will contact you for further details.","otp-success1":"Your FD account opening has been processed.","otp-success2":" You will be receiving confirmation email. You can also view FD account details in Nabil SmartBank App.","preferred-branchWord":"Preferred Branch","currency":"Currency","fd-type":"FD Type"}}}},"initialLocale":"en","userConfig":{"i18n":{"localeDetection":false,"locales":["en","np"],"defaultLocale":"en"},"trailingSlash":true,"default":{"i18n":{"localeDetection":false,"locales":["en","np"],"defaultLocale":"en"},"trailingSlash":true}}}},"__N_SSG":true},"page":"/404","query":{},"buildId":"FN4MGo16qR0OWAknw1Ebd","runtimeConfig":{"NEXT_PUBLIC_BASE_IMAGE_URL":".","NEXT_PUBLIC_BASE_URL":".","NEXT_PUBLIC_BASE_URI":"."},"isFallback":false,"dynamicIds":[59373,45141,60487],"gsp":true,"locale":"en","locales":["en","np"],"defaultLocale":"en","scriptLoader":[]}</script></body></html>

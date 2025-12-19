@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/fav.png" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1.0"
+    />
+    <meta
+      name="description"
+      content="Hamrobazar.com is Nepal's No. 1 Marketplace which enables to list wide variety of new or used product online. We at hamrobazar.com believe that Internet is a great promotional vehicle as well as communication channel for connecting buyers and sellers. Hamrobazar.com is perfect solution which helps to list your products and find great deals."
+      data-rh="true"
+    />
+    <meta
+      name="og:description"
+      content="Hamrobazar.com is Nepal's No. 1 Marketplace which enables to list wide variety of new or used product online. We at hamrobazar.com believe that Internet is a great promotional vehicle as well as communication channel for connecting buyers and sellers. Hamrobazar.com is perfect solution which helps to list your products and find great deals."
+    />
+    <meta
+      name="twitter:description"
+      content="Hamrobazar.com is Nepal's No. 1 Marketplace which enables to list wide variety of new or used product online. We at hamrobazar.com believe that Internet is a great promotional vehicle as well as communication channel for connecting buyers and sellers. Hamrobazar.com is perfect solution which helps to list your products and find great deals."
+    />
+
+    <meta property="og:site_name" content="Hamrobazar" />
+    <meta property="og:type" content="website" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <title>Hamrobazar - Nepal's Online Marketplace for Shopping</title>
+    <meta
+      name="title"
+      content="Hamrobazar - Nepal's Online Marketplace for Shopping"
+    />
+    <meta
+      name="description"
+      content="Hamrobazar.com is Nepal's No. 1 Marketplace which enables to list wide variety of new or used product online. We at hamrobazar.com believe that Internet is a great promotional vehicle as well as communication channel for connecting buyers and sellers. Hamrobazar.com is perfect solution which helps to list your products and find great deals."
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hamrobazaar.com/" />
+    <meta
+      property="og:title"
+      content="Hamrobazar - Nepal's Online Marketplace for Shopping"
+    />
+    <meta
+      property="og:description"
+      content="Hamrobazar.com is Nepal's No. 1 Marketplace which enables to list wide variety of new or used product online. We at hamrobazar.com believe that Internet is a great promotional vehicle as well as communication channel for connecting buyers and sellers. Hamrobazar.com is perfect solution which helps to list your products and find great deals."
+    />
+    <meta
+      property="og:image"
+      content="https://cdn02.hamrobazaar.com/Assets/DefaultOGImage.png?x-image-process=image/format,jpg"
+    />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://hamrobazaar.com/" />
+    <meta
+      property="twitter:title"
+      content="Hamrobazar - Nepal's Online Marketplace for Shopping"
+    />
+
+    <meta
+      property="twitter:description"
+      content="Hamrobazar.com is Nepal's No. 1 Marketplace which enables to list wide variety of new or used product online. We at hamrobazar.com believe that Internet is a great promotional vehicle as well as communication channel for connecting buyers and sellers. Hamrobazar.com is perfect solution which helps to list your products and find great deals."
+    />
+    <meta
+      property="twitter:image"
+      content="https://cdn02.hamrobazaar.com/Assets/DefaultOGImage.png?x-image-process=image/format,jpg"
+    />
+
+    <meta
+      property="og:image:alt"
+      content="Hamrobazar - Nepal's Online Marketplace for Shopping"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Hamrobazar - Nepal's Online Marketplace for Shopping"
+    />
+
+    <meta
+      property="og:image:secure_url"
+      content="https://cdn02.hamrobazaar.com/Assets/DefaultOGImage.png?x-image-process=image/format,jpg"
+    />
+
+    <script src="https://www.google.com/recaptcha/api.js?render=6LeNtdAdAAAAAPEodlw0Oc-mOxoy50ceHWdwsH76"></script>
+  <script defer src="/static/js/bundle.js"></script></head>
+  <body>
+    <div id="hb__root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+      } else {
+        console.log('Service Worker is not supported by browser.')
+      }
+    </script>
+
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "a00f0066748d4fa08b5e4ec3c060c99e"}'
+    ></script>
+
+    <!-- Google adsence -->
+    <script
+      async
+      src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+    ></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org/",
+        "@type": "WebSite",
+        "name": "Hamro Bazar",
+        "url": "https://hamrobazaar.com/",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://hamrobazaar.com/search/product?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+  </body>
+</html>
