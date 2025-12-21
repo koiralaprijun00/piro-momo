@@ -10,6 +10,10 @@ import { FaTwitter } from "react-icons/fa"
 import { FaInstagram } from "react-icons/fa"
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
 import { BiChevronDown } from 'react-icons/bi';
+import { useAuth } from '@/context/AuthContext';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
     const t = useTranslations('Translations');
@@ -19,6 +23,16 @@ const Navbar = () => {
     const buttonRef = useRef<HTMLButtonElement | null>(null);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const dropdownButtonRef = useRef<HTMLButtonElement | null>(null);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const userMenuRef = useRef<HTMLDivElement | null>(null);
+    const userMenuButtonRef = useRef<HTMLButtonElement | null>(null);
+    const { user } = useAuth();
+    const pathname = usePathname();
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -26,6 +40,19 @@ const Navbar = () => {
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
+    };
+
+    const toggleUserMenu = () => {
+        setIsUserMenuOpen(!isUserMenuOpen);
+    };
+
+    const handleSignOut = async () => {
+        try {
+            await signOut(auth);
+            setIsUserMenuOpen(false);
+        } catch (error) {
+            console.error('Error signing out:', error);
+        }
     };
 
     // Close menu when clicking outside
@@ -62,12 +89,30 @@ const Navbar = () => {
         };
     }, [isDropdownOpen]);
 
+    // Close user menu when clicking outside
+    useEffect(() => {
+        if (!isUserMenuOpen) return;
+        
+        const handleClickOutside = (event: MouseEvent) => {
+            if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node) && 
+                userMenuButtonRef.current && !userMenuButtonRef.current.contains(event.target as Node)) {
+                setIsUserMenuOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isUserMenuOpen]);
+
     // Handle escape key to close menu
     useEffect(() => {
         const handleEscKey = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
                 if (isMenuOpen) setIsMenuOpen(false);
                 if (isDropdownOpen) setIsDropdownOpen(false);
+                if (isUserMenuOpen) setIsUserMenuOpen(false);
             }
         };
 
@@ -75,7 +120,7 @@ const Navbar = () => {
         return () => {
             document.removeEventListener('keydown', handleEscKey);
         };
-    }, [isMenuOpen, isDropdownOpen]);
+    }, [isMenuOpen, isDropdownOpen, isUserMenuOpen]);
 
     // Focus management for mobile menu
     useEffect(() => {
@@ -157,6 +202,65 @@ const Navbar = () => {
                         {/* Share Button Component */}
                         <NavBarShareButton />
 
+                        {/* Auth Buttons - Desktop */}
+                        <div className="hidden md:flex items-center space-x-2">
+                            {!isMounted ? (
+                                // Render a placeholder or nothing during server-side rendering/initial hydration to avoid mismatch
+                                <div className="w-[140px] h-[36px]"></div> 
+                            ) : user ? (
+                                <div className="relative">
+                                    <button
+                                        ref={userMenuButtonRef}
+                                        onClick={toggleUserMenu}
+                                        className="flex items-center space-x-2 text-gray-600 hover:text-orange-500 transition-colors duration-200 px-3 py-2 rounded-md hover:bg-orange-50"
+                                        aria-expanded={isUserMenuOpen}
+                                        aria-haspopup="true"
+                                    >
+                                        <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-medium">
+                                            {user.displayName?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U'}
+                                        </div>
+                                        <BiChevronDown className={`transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
+                                    </button>
+                                    
+                                    {isUserMenuOpen && (
+                                        <div 
+                                            ref={userMenuRef}
+                                            className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10"
+                                        >
+                                            <Link
+                                                href={`${pathname.split('/').slice(0, 2).join('/')}/profile`}
+                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                                                onClick={() => setIsUserMenuOpen(false)}
+                                            >
+                                                Profile
+                                            </Link>
+                                            <button
+                                                onClick={handleSignOut}
+                                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                                            >
+                                                Sign Out
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <>
+                                    <Link
+                                        href={`${pathname.split('/').slice(0, 2).join('/')}/auth/signin`}
+                                        className="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200"
+                                    >
+                                        Sign In
+                                    </Link>
+                                    <Link
+                                        href={`${pathname.split('/').slice(0, 2).join('/')}/auth/signin?mode=signup`}
+                                        className="bg-orange-500 text-white hover:bg-orange-600 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200"
+                                    >
+                                        Sign Up
+                                    </Link>
+                                </>
+                            )}
+                        </div>
+
                         {/* Hamburger menu button - visible only on mobile */}
                         <button 
                             ref={buttonRef}
@@ -236,6 +340,46 @@ const Navbar = () => {
                 >
                     <div className="container mx-auto px-4 py-3">
                         <div className="flex flex-col space-y-1">
+                            {/* Auth buttons in mobile menu */}
+                            {!isMounted ? null : user ? (
+                                <>
+                                    <Link 
+                                        href={`${pathname.split('/').slice(0, 2).join('/')}/profile`}
+                                        className={linkClasses}
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        Profile
+                                    </Link>
+                                    <button
+                                        onClick={() => {
+                                            handleSignOut();
+                                            setIsMenuOpen(false);
+                                        }}
+                                        className="text-left text-gray-600 hover:text-orange-500 hover:bg-orange-50 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200"
+                                    >
+                                        Sign Out
+                                    </button>
+                                    <div className="border-t border-gray-200 my-2"></div>
+                                </>
+                            ) : (
+                                <>
+                                    <Link 
+                                        href={`${pathname.split('/').slice(0, 2).join('/')}/auth/signin`}
+                                        className={linkClasses}
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        Sign In
+                                    </Link>
+                                    <Link 
+                                        href={`${pathname.split('/').slice(0, 2).join('/')}/auth/signin?mode=signup`}
+                                        className="bg-orange-500 text-white hover:bg-orange-600 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        Sign Up
+                                    </Link>
+                                    <div className="border-t border-gray-200 my-2"></div>
+                                </>
+                            )}
                             {/* Show all links in mobile menu */}
                             {allLinks.map((link, index) => (
                                 <Link 
