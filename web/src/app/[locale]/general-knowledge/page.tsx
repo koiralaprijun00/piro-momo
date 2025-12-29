@@ -7,7 +7,6 @@ import QuizSection from "../nepal-gk-components/QuizSection";
 import { getQuestionsByLocale } from "@/app/data/general-knowledge/getQuestions";
 import AdSenseGoogle from '@/components/AdSenseGoogle';
 import ShareScore from "@/components/ShareScore";
-import ShareScore from "@/components/ShareScore";
 import GameButton from '@/components/ui/GameButton';
 import CustomDropdown from '@/components/ui/CustomDropdown';
 import ContainedConfetti from '@/lib/confetti';
