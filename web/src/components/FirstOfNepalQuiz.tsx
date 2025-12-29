@@ -28,7 +28,9 @@ export default function FirstOfNepalQuiz({ locale }: FirstOfNepalQuizProps) {
     if (savedState) {
         try {
             const parsed = JSON.parse(savedState);
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setHighScore(parsed.highScore || 0);
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setQuizzesCompleted(parsed.quizzesCompleted || 0);
         } catch (e) {
             console.error("Failed to parse First of Nepal state", e);
