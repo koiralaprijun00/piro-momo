@@ -57,8 +57,37 @@ export default function NepalGKQuiz() {
     feedback: "",
   });
   const [score, setScore] = useState<number>(0);
+  const [highScore, setHighScore] = useState<number>(0);
+  const [totalGamesPlayed, setTotalGamesPlayed] = useState<number>(0);
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Load from localStorage
+  useEffect(() => {
+    const savedState = localStorage.getItem('generalKnowledgeState');
+    if (savedState) {
+        try {
+            const parsed = JSON.parse(savedState);
+            setHighScore(parsed.highScore || 0);
+            setTotalGamesPlayed(parsed.totalGamesPlayed || 0);
+             // Note: We don't restore current game state (score, index) as quizzes usually restart on refresh
+        } catch (e) {
+            console.error("Failed to parse General Knowledge state", e);
+        }
+    }
+  }, []);
+
+  // Save to localStorage
+  useEffect(() => {
+    if (highScore > 0 || totalGamesPlayed > 0) {
+        const stateToSave = {
+            highScore,
+            totalGamesPlayed,
+            lastPlayed: new Date().toISOString()
+        };
+        localStorage.setItem('generalKnowledgeState', JSON.stringify(stateToSave));
+    }
+  }, [highScore, totalGamesPlayed]);
 
   // Add category filter state
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -174,6 +203,13 @@ export default function NepalGKQuiz() {
     // Check if this is the last question and trigger confetti
     if (currentQuestionIndex === shuffledQuestions.length - 1) {
       setShowConfetti(true);
+      setTotalGamesPlayed(prev => prev + 1);
+      
+      // Calculate final score including this guess if correct
+      const finalScore = isGuessCorrect ? score + 10 : score;
+      if (finalScore > highScore) {
+          setHighScore(finalScore);
+      }
     }
 
     // Prevent spam clicks

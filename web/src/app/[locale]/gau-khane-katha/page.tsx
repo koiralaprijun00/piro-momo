@@ -48,6 +48,7 @@ export default function RiddlesGamePage() {
   const [attempts, setAttempts] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
   const [streak, setStreak] = useState<number>(0);
+  const [bestStreak, setBestStreak] = useState<number>(0);
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [answeredRiddles, setAnsweredRiddles] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -57,6 +58,36 @@ export default function RiddlesGamePage() {
   const [riddle, setRiddle] = useState<string>('');
   const [showInput, setShowInput] = useState<boolean>(false);
   const [shuffledIndices, setShuffledIndices] = useState<number[]>([]);
+
+  // Load from localStorage
+  useEffect(() => {
+    const savedState = localStorage.getItem('gauKhaneKathaState');
+    if (savedState) {
+        try {
+            const parsed = JSON.parse(savedState);
+            setScore(parsed.score || 0);
+            setStreak(parsed.streak || 0);
+            setBestStreak(parsed.bestStreak || 0);
+            setAnsweredRiddles(parsed.answeredRiddles || []);
+        } catch (e) {
+            console.error("Failed to parse Gau Khane Katha state", e);
+        }
+    }
+  }, []);
+
+  // Save to localStorage
+  useEffect(() => {
+    if (score > 0 || answeredRiddles.length > 0) {
+        const stateToSave = {
+            score,
+            streak,
+            bestStreak,
+            answeredRiddles,
+            lastPlayed: new Date().toISOString()
+        };
+        localStorage.setItem('gauKhaneKathaState', JSON.stringify(stateToSave));
+    }
+  }, [score, streak, bestStreak, answeredRiddles]);
 
   const riddles: RiddlesData = riddlesData;
   const maxAttempts = 3;
@@ -110,7 +141,11 @@ export default function RiddlesGamePage() {
     if (isCorrect) {
       setIsCorrect(true);
       setScore((prevScore) => prevScore + 1);
-      setStreak((prev) => prev + 1);
+      const newStreak = streak + 1;
+      setStreak(newStreak);
+      if (newStreak > bestStreak) {
+        setBestStreak(newStreak);
+      }
       setAnsweredRiddles((prev) =>
         prev.includes(currentRiddle.id) ? prev : [...prev, currentRiddle.id]
       );

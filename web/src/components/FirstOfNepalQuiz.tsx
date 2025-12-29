@@ -16,9 +16,37 @@ export default function FirstOfNepalQuiz({ locale }: FirstOfNepalQuizProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
   const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+  const [quizzesCompleted, setQuizzesCompleted] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
+
+    // Load from localStorage
+  useEffect(() => {
+    const savedState = localStorage.getItem('firstOfNepalState');
+    if (savedState) {
+        try {
+            const parsed = JSON.parse(savedState);
+            setHighScore(parsed.highScore || 0);
+            setQuizzesCompleted(parsed.quizzesCompleted || 0);
+        } catch (e) {
+            console.error("Failed to parse First of Nepal state", e);
+        }
+    }
+  }, []);
+
+  // Save to localStorage
+  useEffect(() => {
+    if (highScore > 0 || quizzesCompleted > 0) {
+        const stateToSave = {
+            highScore,
+            quizzesCompleted,
+            lastPlayed: new Date().toISOString()
+        };
+        localStorage.setItem('firstOfNepalState', JSON.stringify(stateToSave));
+    }
+  }, [highScore, quizzesCompleted]);
   
   const MAX_QUESTIONS = 8; // Limit to 8 questions
   
@@ -112,6 +140,10 @@ export default function FirstOfNepalQuiz({ locale }: FirstOfNepalQuizProps) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       setShowResult(true);
+      setQuizzesCompleted(prev => prev + 1);
+      if (score > highScore) {
+          setHighScore(score);
+      }
     }
   };
 

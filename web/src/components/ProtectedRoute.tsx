@@ -9,8 +9,12 @@ export default function ProtectedRoute({ children, locale }: { children: React.R
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push(`/${locale}/auth/signin`);
+    if (!loading) {
+      if (!user) {
+        router.push(`/${locale}/auth/signin`);
+      } else if (!user.emailVerified) {
+        router.push(`/${locale}/auth/verify-email`);
+      }
     }
   }, [user, loading, router, locale]);
 

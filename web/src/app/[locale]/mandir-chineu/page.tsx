@@ -58,8 +58,10 @@ export default function GuessTempleGame() {
   const [isInitialized, setIsInitialized] = useState(false);
   
   // Game Status State
+  // Game Status State
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
+  const [highScore, setHighScore] = useState<number>(0);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [currentGuess, setCurrentGuess] = useState<string>('');
   const [gameWon, setGameWon] = useState<boolean>(false);
@@ -70,6 +72,35 @@ export default function GuessTempleGame() {
   const [shuffledTempleIds, setShuffledTempleIds] = useState<string[]>([]);
   const [currentShuffleIndex, setCurrentShuffleIndex] = useState<number>(0);
   const [completedRounds, setCompletedRounds] = useState<number>(0);
+
+   // Load from localStorage
+   useEffect(() => {
+    const savedState = localStorage.getItem('mandirChineuState');
+    if (savedState) {
+        try {
+            const parsed = JSON.parse(savedState);
+            // Only restore persistent stats, not current game state like isAnswered to avoid weird UI states
+            setScore(parsed.score || 0);
+            setHighScore(parsed.highScore || 0);
+            setCompletedRounds(parsed.completedRounds || 0);
+        } catch (e) {
+            console.error("Failed to parse Mandir Chineu state", e);
+        }
+    }
+  }, []);
+
+  // Save to localStorage
+  useEffect(() => {
+     if (score > 0 || highScore > 0) {
+        const stateToSave = {
+            score,
+            highScore,
+            completedRounds,
+            lastPlayed: new Date().toISOString()
+        };
+        localStorage.setItem('mandirChineuState', JSON.stringify(stateToSave));
+     }
+  }, [score, highScore, completedRounds]);
 
   const filteredTemples = React.useMemo(() => {
     if (selectedCategory === CATEGORIES.ALL) {
@@ -219,6 +250,9 @@ export default function GuessTempleGame() {
       const points = currentTemple.points || 10;
       newScore = score + points;
       setScore(newScore);
+      if (newScore > highScore) {
+        setHighScore(newScore);
+      }
       setIsCorrect(true);
       if (newScore >= 100) {
         setGameWon(true);
@@ -227,7 +261,7 @@ export default function GuessTempleGame() {
       setIsCorrect(false);
     }
     setIsAnswered(true);
-  }, [isAnswered, currentTemple, currentTempleId, score, gameWon]);
+  }, [isAnswered, currentTemple, currentTempleId, score, gameWon, highScore]);
 
   const handleInputGuess = useCallback(() => {
     if (!currentGuess.trim() || gameWon) return;

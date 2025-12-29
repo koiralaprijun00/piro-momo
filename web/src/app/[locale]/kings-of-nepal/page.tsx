@@ -98,16 +98,45 @@ export default function KingsOfNepalQuiz() {
     });
   };
 
+  /* 
+    State Logic:
+    1. Check localStorage on mount.
+    2. If found, load it.
+    3. If not found, start fresh.
+    4. Save to localStorage on any state change.
+  */
+
   useEffect(() => {
-    setTimeout(() => {
-      setGameStarted(true);
-      setCorrectAnswers([]);
-      setGameOver(false);
-      setGaveUp(false);
-      setInput('');
-      setTimeout(() => inputRef.current?.focus(), 100);
-    }, 0);
+    const savedState = localStorage.getItem('kingsOfNepalState');
+    if (savedState) {
+      try {
+        const parsed = JSON.parse(savedState);
+        setCorrectAnswers(parsed.correctAnswers || []);
+        setGameOver(parsed.gameOver || false);
+        setGaveUp(parsed.gaveUp || false);
+        setGameStarted(true); // Always started if we have state
+      } catch (e) {
+        console.error("Failed to parse saved state", e);
+        setGameStarted(true);
+      }
+    } else {
+       // Start fresh
+       setGameStarted(true);
+    }
   }, []);
+
+  // Persist state
+  useEffect(() => {
+    if (gameStarted) { // Only save if game has properly initialized/started
+        const stateToSave = {
+            correctAnswers,
+            gameOver,
+            gaveUp,
+            lastPlayed: new Date().toISOString()
+        };
+        localStorage.setItem('kingsOfNepalState', JSON.stringify(stateToSave));
+    }
+  }, [correctAnswers, gameOver, gaveUp, gameStarted]);
 
   const percentComplete = (correctAnswers.length / sortedKings.length) * 100;
 
@@ -118,9 +147,10 @@ export default function KingsOfNepalQuiz() {
       !correctAnswers.includes(king.id) && isAnswerCorrect(value, king)
     );
     if (matchedKing) {
-      setCorrectAnswers(prev => [...prev, matchedKing.id]);
+      const newCorrect = [...correctAnswers, matchedKing.id];
+      setCorrectAnswers(newCorrect);
       setInput('');
-      if (correctAnswers.length + 1 === sortedKings.length) {
+      if (newCorrect.length === sortedKings.length) {
         setGameOver(true);
       }
     }
@@ -133,6 +163,8 @@ export default function KingsOfNepalQuiz() {
     setGaveUp(false);
     setInput('');
     setTimeout(() => inputRef.current?.focus(), 100);
+    // Clear legacy or previous state explicitly if implementing a "hard reset"
+    localStorage.removeItem('kingsOfNepalState'); 
   };
 
   const handleGiveUp = () => {

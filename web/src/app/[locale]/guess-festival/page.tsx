@@ -179,6 +179,7 @@ export default function Home() {
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
   const [streak, setStreak] = useState<number>(0);
+  const [bestStreak, setBestStreak] = useState<number>(0);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [feedback, setFeedback] = useState<string>("");
   const [gameMode, setGameMode] = useState<"standard" | "timed">("standard");
@@ -186,6 +187,37 @@ export default function Home() {
   const [timerActive, setTimerActive] = useState<boolean>(false);
   const [festivalHistory, setFestivalHistory] = useState<string[]>([]); // Use string[] instead of FestivalId[]
   const [options, setOptions] = useState<string[]>([]);
+
+  // Load from localStorage
+  useEffect(() => {
+    const savedState = localStorage.getItem('guessFestivalState');
+    if (savedState) {
+        try {
+            const parsed = JSON.parse(savedState);
+            setScore(parsed.score || 0);
+            setStreak(parsed.streak || 0);
+            setBestStreak(parsed.bestStreak || 0);
+            setFestivalHistory(parsed.festivalHistory || []);
+            // We could restore gameMode etc, but sticking to core stats is safer for game flow
+        } catch (e) {
+            console.error("Failed to parse Guess Festival state", e);
+        }
+    }
+  }, []);
+
+  // Save to localStorage
+  useEffect(() => {
+    if (score > 0 || festivalHistory.length > 0) { // Only save if played
+        const stateToSave = {
+            score,
+            streak,
+            bestStreak,
+            festivalHistory,
+            lastPlayed: new Date().toISOString()
+        };
+        localStorage.setItem('guessFestivalState', JSON.stringify(stateToSave));
+    }
+  }, [score, streak, bestStreak, festivalHistory]);
 
   const getCurrentFestival = (): Festival => {
     return festivals.find((festival) => festival.id === currentFestivalId)!;
@@ -273,7 +305,11 @@ export default function Home() {
       setScore((prevScore) => prevScore + newPoints);
       setFeedback(`+${newPoints} ${t("points")}`);
       setIsCorrect(true);
-      setStreak((prev) => prev + 1);
+      const newStreak = streak + 1;
+      setStreak(newStreak);
+      if (newStreak > bestStreak) {
+        setBestStreak(newStreak);
+      }
     } else {
       setFeedback(t("tryAgain"));
       setIsCorrect(false);

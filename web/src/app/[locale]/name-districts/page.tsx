@@ -97,7 +97,7 @@ const NepalDistrictQuiz: React.FC = () => {
     setCurrentGuess('');
     setFeedback('');
     setStreak(0);
-    setBestStreak(0);
+    // Do not reset best streak on restart
     setTimeLeft(1200);
 
     if (inputRef.current) {
@@ -128,14 +128,40 @@ const NepalDistrictQuiz: React.FC = () => {
 
 
 
+  // Load from localStorage
   useEffect(() => {
-    setTimeout(() => startGame(), 0);
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
+    const savedState = localStorage.getItem('nameDistrictsState');
+    let restored = false;
+    if (savedState) {
+        try {
+            const parsed = JSON.parse(savedState);
+            setCorrectGuesses(parsed.correctGuesses || []);
+            setBestStreak(parsed.bestStreak || 0);
+            if (parsed.correctGuesses && parsed.correctGuesses.length > 0) {
+               setGameStarted(true);
+               restored = true;
+            }
+        } catch (e) {
+            console.error("Failed to parse Name Districts state", e);
+        }
+    }
+    
+    if (!restored) {
+        setTimeout(() => startGame(), 0);
+    }
   }, [startGame]);
+
+  // Save to localStorage
+  useEffect(() => {
+    if (correctGuesses.length > 0 || bestStreak > 0) {
+        const stateToSave = {
+            correctGuesses,
+            bestStreak,
+            lastPlayed: new Date().toISOString()
+        };
+        localStorage.setItem('nameDistrictsState', JSON.stringify(stateToSave));
+    }
+  }, [correctGuesses, bestStreak]);
 
   // Check for game completion
   useEffect(() => {

@@ -48,8 +48,21 @@ const Navbar = () => {
 
     const handleSignOut = async () => {
         try {
+            // Clear all game-related local storage to prevent data bleeding between accounts
+            const gameKeys = [
+                'logoQuizState_en', 'logoQuizState_np', 
+                'vocabGameStats', 'vocabGameSession', 
+                'nepalChecklistProgress', 'kingsOfNepalState', 
+                'guessFestivalState', 'mandirChineuState', 
+                'gauKhaneKathaState', 'nameDistrictsState', 
+                'generalKnowledgeState', 'firstOfNepalState'
+            ];
+            
+            gameKeys.forEach(key => localStorage.removeItem(key));
+            
             await signOut(auth);
             setIsUserMenuOpen(false);
+            window.location.reload(); // Reload to ensure clean state
         } catch (error) {
             console.error('Error signing out:', error);
         }
@@ -247,15 +260,9 @@ const Navbar = () => {
                                 <>
                                     <Link
                                         href={`${pathname.split('/').slice(0, 2).join('/')}/auth/signin`}
-                                        className="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200"
-                                    >
-                                        Sign In
-                                    </Link>
-                                    <Link
-                                        href={`${pathname.split('/').slice(0, 2).join('/')}/auth/signin?mode=signup`}
                                         className="bg-orange-500 text-white hover:bg-orange-600 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200"
                                     >
-                                        Sign Up
+                                        Sign In / Sign Up
                                     </Link>
                                 </>
                             )}
@@ -365,17 +372,10 @@ const Navbar = () => {
                                 <>
                                     <Link 
                                         href={`${pathname.split('/').slice(0, 2).join('/')}/auth/signin`}
-                                        className={linkClasses}
-                                        onClick={() => setIsMenuOpen(false)}
-                                    >
-                                        Sign In
-                                    </Link>
-                                    <Link 
-                                        href={`${pathname.split('/').slice(0, 2).join('/')}/auth/signin?mode=signup`}
                                         className="bg-orange-500 text-white hover:bg-orange-600 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
-                                        Sign Up
+                                        Sign In / Sign Up
                                     </Link>
                                     <div className="border-t border-gray-200 my-2"></div>
                                 </>

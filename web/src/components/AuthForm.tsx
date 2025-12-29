@@ -8,7 +8,8 @@ import {
   updateProfile,
   signInWithPopup,
   GoogleAuthProvider,
-  FacebookAuthProvider
+  FacebookAuthProvider,
+  sendEmailVerification
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { FirebaseError } from 'firebase/app';
@@ -24,6 +25,7 @@ export default function AuthForm({ locale, defaultMode = 'signin' }: AuthFormPro
   const [mode, setMode] = useState<'signin' | 'signup'>(defaultMode);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -34,14 +36,22 @@ export default function AuthForm({ locale, defaultMode = 'signin' }: AuthFormPro
     setError(null);
     setLoading(true);
 
+    if (mode === 'signup' && password !== confirmPassword) {
+      setError('Passwords do not match.');
+      setLoading(false);
+      return;
+    }
+
     try {
       if (mode === 'signup') {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(userCredential.user, { displayName });
+        await sendEmailVerification(userCredential.user);
+        router.push(`/${locale}/auth/verify-email`);
       } else {
         await signInWithEmailAndPassword(auth, email, password);
+        router.push(`/${locale}/profile`);
       }
-      router.push(`/${locale}/profile`);
     } catch (err) {
       if (err instanceof FirebaseError) {
         setError(getErrorMessage(err.code));
@@ -215,6 +225,21 @@ export default function AuthForm({ locale, defaultMode = 'signin' }: AuthFormPro
             className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+
+        {mode === 'signup' && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        )}
 
         <GameButton
           type="primary"
