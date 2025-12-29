@@ -214,7 +214,7 @@ export default function NepalGKQuiz() {
 
     // Prevent spam clicks
     setTimeout(() => setIsProcessing(false), 300);
-  }, [currentQuestion, currentQuestionIndex, feedbackState.isAnswered, isProcessing, shuffledQuestions.length, t]);
+  }, [currentQuestion, currentQuestionIndex, feedbackState.isAnswered, isProcessing, shuffledQuestions.length, t, score, highScore]);
 
   // Move to next question
   const handleNextQuestion = useCallback(() => {
