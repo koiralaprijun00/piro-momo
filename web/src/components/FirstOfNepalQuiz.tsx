@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect, useCallback } from 'react';
 import { X, Check, XCircle, BookOpen } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -28,9 +29,7 @@ export default function FirstOfNepalQuiz({ locale }: FirstOfNepalQuizProps) {
     if (savedState) {
         try {
             const parsed = JSON.parse(savedState);
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setHighScore(parsed.highScore || 0);
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setQuizzesCompleted(parsed.quizzesCompleted || 0);
         } catch (e) {
             console.error("Failed to parse First of Nepal state", e);
