@@ -8,6 +8,7 @@ import { Festival } from "@/app/data/guess-festival/festival"; // Import Festiva
 import AdSenseGoogle from "@/components/AdSenseGoogle";
 import GameButton from "@/components/ui/GameButton";
 import { Sparkles, Flame } from "lucide-react";
+import ShareScore from "@/components/ShareScore";
 
 // QuizSection Component
 interface QuizSectionProps {

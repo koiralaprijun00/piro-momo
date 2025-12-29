@@ -9,6 +9,7 @@ import AdSenseGoogle from '@/components/AdSenseGoogle';
 import GameButton from '@/components/ui/GameButton';
 import { CheckCircleIcon, XCircleIcon, RefreshCwIcon, AwardIcon, ShuffleIcon } from 'lucide-react';
 import Image from 'next/image';
+import ShareScore from "@/components/ShareScore";
 
 // Define categories
 const CATEGORIES = {
@@ -549,9 +550,13 @@ export default function GuessTempleGame() {
                         <GameButton onClick={restartGame} type="primary" className="flex-1">
                           {t('guessTemple.playAgain', { defaultValue: 'Play Again' })}
                         </GameButton>
-                        <GameButton onClick={handleShareScore} type="success" className="flex-1">
-                          {t('shareScore', { defaultValue: 'Share Your Victory!' })}
-                        </GameButton>
+                        <ShareScore 
+                          score={score} 
+                          total={templeIds?.length || 100} 
+                          gameTitle="Mandir Chineu" 
+                          gameUrl="mandir-chineu"
+                          className="flex-1"
+                        />
                       </div>
                     </div>
                   ) : !isAnswered ? (

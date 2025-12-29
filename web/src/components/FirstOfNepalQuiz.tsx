@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { X, Check, XCircle, BookOpen } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import ShareScore from './ShareScore';
 
 interface QuizQuestion {
   question: string;
@@ -262,9 +263,18 @@ export default function FirstOfNepalQuiz({ locale }: FirstOfNepalQuizProps) {
                     ? t('goodScore')
                     : t('keepLearning')}
                 </p>
+                
+                <ShareScore 
+                  score={score} 
+                  total={MAX_QUESTIONS} 
+                  gameTitle="Firsts of Nepal Quiz" 
+                  gameUrl="first-of-nepal"
+                  className="my-4"
+                />
+
                 <button
                   onClick={resetQuiz}
-                  className="bg-gradient-to-r from-red-600 to-blue-600 text-white px-6 py-2 rounded-lg hover:from-red-700 hover:to-blue-700 transition-all"
+                  className="bg-gradient-to-r from-red-600 to-blue-600 text-white px-6 py-2 rounded-lg hover:from-red-700 hover:to-blue-700 transition-all w-full"
                 >
                   {t('tryAgain')}
                 </button>

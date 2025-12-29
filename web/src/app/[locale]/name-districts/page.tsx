@@ -427,21 +427,13 @@ const NepalDistrictQuiz: React.FC = () => {
                 {safeT('selectFromOptions', 'Choose from options:')}
               </div>
               
-              <div className="flex flex-col gap-2">
-                {options.map((option, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleMultipleChoiceSelection(option)}
-                    className={`w-full py-2 px-3 font-bold rounded-lg text-sm text-center transition-colors duration-200 ${
-                      incorrectOption === option
-                        ? 'bg-red-100 text-red-800 border-2 border-red-500'
-                        : 'bg-blue-50 hover:bg-blue-100 text-blue-800'
-                    }`}
-                  >
-                    {option}
-                  </button>
-                ))}
-              </div>
+                <ShareScore 
+                  score={correctGuesses.length} 
+                  total={TOTAL_DISTRICTS} 
+                  gameTitle="Name Districts of Nepal" 
+                  gameUrl="name-districts"
+                  className="w-full mt-4"
+                />
             </>
           ) : (
             <div className="bg-green-50 p-3 rounded-lg flex items-center">

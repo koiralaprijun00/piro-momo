@@ -9,6 +9,7 @@ import { ImSpinner8 } from 'react-icons/im';
 import { FiSend } from 'react-icons/fi';
 import { HiOutlineClock, HiOutlineCheck } from 'react-icons/hi';
 import { CheckCircleIcon, XCircleIcon, RefreshCwIcon, Sparkles, Flame } from 'lucide-react';
+import ShareScore from "@/components/ShareScore";
 import AdSenseGoogle from '@/components/AdSenseGoogle';
 
 const StatBadges = ({ score, streak }: { score: number; streak: number }) => (
@@ -456,13 +457,22 @@ export default function RiddlesGamePage() {
                           <p className="text-sm">{t('playAgainMessage')}</p>
                         </div>
                       )}
-                      <button
-                        onClick={restartGame}
-                        className="inline-flex items-center justify-center gap-2 py-2 sm:py-3 px-4 sm:px-6 border border-transparent rounded-lg shadow-sm text-sm sm:text-base font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
-                      >
-                        <RefreshCwIcon className="w-5 h-5" />
-                        {t('playAgainButton')}
-                      </button>
+                      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                        <button
+                          onClick={restartGame}
+                          className="inline-flex items-center justify-center gap-2 py-2 sm:py-3 px-4 sm:px-6 border border-transparent rounded-lg shadow-sm text-sm sm:text-base font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out w-full sm:w-auto"
+                        >
+                          <RefreshCwIcon className="w-5 h-5" />
+                          {t('playAgainButton')}
+                        </button>
+                        <ShareScore 
+                          score={score} 
+                          total={riddles[locale]?.length || 0} 
+                          gameTitle="Gau Khane Katha" 
+                          gameUrl="gau-khane-katha"
+                          className="w-full sm:w-auto"
+                        />
+                      </div>
                     </div>
                   )}
                 </div>

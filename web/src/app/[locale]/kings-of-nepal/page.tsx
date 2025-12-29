@@ -5,6 +5,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
 import AdSenseGoogle from '@/components/AdSenseGoogle';
+import ShareScore from '@/components/ShareScore';
 import { FiShare2 } from 'react-icons/fi';
 import kingsDataEn from '../../../../messages/kings-of-nepal-en.json';
 import kingsDataNp from '../../../../messages/kings-of-nepal-np.json';
@@ -271,13 +272,13 @@ export default function KingsOfNepalQuiz() {
                     >
                       {safeT('playAgainButton', 'Play Again')}
                     </button>
-                    <button
-                      onClick={handleShareScore}
-                      className="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md transition flex items-center justify-center"
-                    >
-                      <FiShare2 className="h-5 w-5 mr-2" />
-                      {safeT('shareScoreButton', 'Share Score')}
-                    </button>
+                    <ShareScore 
+                      score={correctAnswers.length} 
+                      total={sortedKings.length} 
+                      gameTitle="Kings of Nepal" 
+                      gameUrl="kings-of-nepal"
+                      className="w-full"
+                    />
                   </div>
                 )}
 

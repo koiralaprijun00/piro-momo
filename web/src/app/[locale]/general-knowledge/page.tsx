@@ -6,6 +6,8 @@ import { useTranslations, useLocale } from "next-intl";
 import QuizSection from "../nepal-gk-components/QuizSection";
 import { getQuestionsByLocale } from "@/app/data/general-knowledge/getQuestions";
 import AdSenseGoogle from '@/components/AdSenseGoogle';
+import ShareScore from "@/components/ShareScore";
+import ShareScore from "@/components/ShareScore";
 import GameButton from '@/components/ui/GameButton';
 import CustomDropdown from '@/components/ui/CustomDropdown';
 import ContainedConfetti from '@/lib/confetti';
@@ -440,19 +442,14 @@ export default function NepalGKQuiz() {
         : safeT("nepalGk.tryAgain", "Keep exploring Nepal's rich knowledge!")}
     </p>
     
-    {/* Action buttons with improved design */}
     <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
-      <GameButton 
-        onClick={handleShareScore} 
-        type="primary" 
-        size="lg"
-        className="px-6 py-3 flex items-center justify-center"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-        </svg>
-        {safeT("nepalGk.shareScore", "Share Score")}
-      </GameButton>
+      <ShareScore 
+          score={score} 
+          total={shuffledQuestions.length * 10} 
+          gameTitle={t("nepalGk.title")} 
+          gameUrl="general-knowledge"
+          className="w-full sm:w-auto"
+        />
       
       <GameButton 
         onClick={restartGame} 
