@@ -77,14 +77,10 @@ export default function ProfilePageContent() {
           </div>
 
            {/* Aggregate Stats Mini-Cards */}
-           <div className="grid grid-cols-2 gap-4 w-full md:w-auto">
-              <div className="bg-blue-50 p-4 rounded-xl text-center">
+           <div className="w-full md:w-auto">
+              <div className="bg-blue-50 p-4 rounded-xl text-center min-w-[120px]">
                   <p className="text-2xl font-bold text-blue-600">{totalScore}</p>
                   <p className="text-xs text-blue-800 font-medium uppercase tracking-wide">Total Score</p>
-              </div>
-              <div className="bg-green-50 p-4 rounded-xl text-center">
-                  <p className="text-2xl font-bold text-green-600">{checklistCompleted}</p>
-                  <p className="text-xs text-green-800 font-medium uppercase tracking-wide">Achievements</p>
               </div>
            </div>
         </div>
