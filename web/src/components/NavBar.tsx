@@ -347,16 +347,17 @@ const Navbar = () => {
                         isMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
                     }`}
                 >
-                    <div className="container mx-auto px-4 py-3">
+                <div className="container mx-auto px-4 py-4">
                         <div className="flex flex-col space-y-1">
                             {/* Auth buttons in mobile menu */}
                             {!isMounted ? null : user ? (
                                 <>
                                     <Link 
                                         href={`${pathname.split('/').slice(0, 2).join('/')}/profile`}
-                                        className={linkClasses}
+                                        className="flex items-center text-gray-700 hover:text-orange-500 hover:bg-orange-50 px-3 py-3 rounded-lg text-base font-medium transition-all duration-200"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
+                                        <FaUser className="mr-3 text-gray-400" />
                                         Profile
                                     </Link>
                                     <button
@@ -364,22 +365,26 @@ const Navbar = () => {
                                             handleSignOut();
                                             setIsMenuOpen(false);
                                         }}
-                                        className="text-left text-gray-600 hover:text-orange-500 hover:bg-orange-50 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200"
+                                        className="flex items-center text-left text-gray-700 hover:text-orange-500 hover:bg-orange-50 px-3 py-3 rounded-lg text-base font-medium transition-all duration-200"
                                     >
+                                        <svg className="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                        </svg>
                                         Sign Out
                                     </button>
-                                    <div className="border-t border-gray-200 my-2"></div>
+                                    <div className="border-t border-gray-100 my-2"></div>
                                 </>
                             ) : (
                                 <>
                                     <Link 
                                         href={`${pathname.split('/').slice(0, 2).join('/')}/auth/signin`}
-                                        className="bg-orange-500 text-white hover:bg-orange-600 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200"
+                                        className="flex items-center text-gray-700 hover:text-orange-500 hover:bg-orange-50 px-3 py-3 rounded-lg text-base font-medium transition-all duration-200"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
+                                        <FaUser className="mr-3 text-gray-400" />
                                         Sign In / Sign Up
                                     </Link>
-                                    <div className="border-t border-gray-200 my-2"></div>
+                                    <div className="border-t border-gray-100 my-2"></div>
                                 </>
                             )}
                             {/* Show all links in mobile menu */}
@@ -387,7 +392,7 @@ const Navbar = () => {
                                 <Link 
                                     key={index}
                                     href={link.href} 
-                                    className={linkClasses}
+                                    className="text-gray-700 hover:text-orange-500 hover:bg-orange-50 px-3 py-3 rounded-lg text-base font-medium transition-all duration-200"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
                                     {link.label}
