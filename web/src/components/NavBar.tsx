@@ -6,7 +6,7 @@ import Link from "next/link"
 import LocaleSwitcher from "./LocaleSwitcher"
 import NavBarShareButton from "./NavShareButton" // Import the share button component
 import { useTranslations } from 'next-intl';
-import { FaTwitter } from "react-icons/fa"
+import { FaTwitter, FaUser } from "react-icons/fa"
 import { FaInstagram } from "react-icons/fa"
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
 import { BiChevronDown } from 'react-icons/bi';
@@ -260,9 +260,13 @@ const Navbar = () => {
                                 <>
                                     <Link
                                         href={`${pathname.split('/').slice(0, 2).join('/')}/auth/signin`}
-                                        className="bg-orange-500 text-white hover:bg-orange-600 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200"
+                                        className="group flex items-center text-gray-500 hover:text-orange-500 transition-all duration-200 px-2 py-2 rounded-md hover:bg-orange-50"
+                                        aria-label="Sign In"
                                     >
-                                        Sign In / Sign Up
+                                        <FaUser className="text-lg" />
+                                        <span className="max-w-0 overflow-hidden group-hover:max-w-[100px] transition-all duration-500 ease-in-out whitespace-nowrap">
+                                            <span className="ml-2 text-sm font-medium">Sign In</span>
+                                        </span>
                                     </Link>
                                 </>
                             )}
