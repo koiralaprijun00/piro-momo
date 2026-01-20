@@ -57,8 +57,8 @@ export const BADGES: Badge[] = [
   },
   {
     id: 'ghummakad',
-    nameNepali: 'घुम्मक्कड',
-    nameEnglish: 'Ghummakad (Wanderer)',
+    nameNepali: 'डुलुवा',
+    nameEnglish: 'Dulwa (Wanderer)',
     description: 'Play all 10 games',
     category: 'explorer',
     icon: '🗺️',
@@ -163,8 +163,8 @@ export const BADGES: Badge[] = [
   },
   {
     id: 'logo_chinne',
-    nameNepali: 'लोगो चिन्ने',
-    nameEnglish: 'Logo Chinne (Logo Identifier)',
+    nameNepali: 'लोगो विज्ञ',
+    nameEnglish: 'Logo Expert',
     description: 'Identify 30+ logos',
     category: 'special',
     icon: '🏢',
