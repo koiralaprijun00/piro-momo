@@ -166,8 +166,7 @@ const Navbar = () => {
         { href: "/mandir-chineu", label: t('games.guessTemple.title') },
         { href: "/gau-khane-katha", label: t('RiddlesGame.title')},
         { href: "/date-converter", label: t('nepaliDateConverterTitle') || 'Date Converter' },
-        { href: "/life-checklist", label: t('nepalChecklist.navbarTitle') },
-        { href: "https://www.nepalihawa.com", label: t('nepalihawa.title'), target: "_blank", rel: "noopener noreferrer" }
+        { href: "/life-checklist", label: t('nepalChecklist.navbarTitle') }
         // Add more games as needed
     ];
 
@@ -326,8 +325,6 @@ const Navbar = () => {
                                             href={link.href}
                                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500"
                                             onClick={() => setIsDropdownOpen(false)}
-                                            target={link.target}
-                                            rel={link.rel}
                                         >
                                             {link.label}
                                         </Link>
