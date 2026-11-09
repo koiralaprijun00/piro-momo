@@ -1,8 +1,0 @@
-  void showCategoryPicker() {
-    state = state.copyWith(
-      showOnboarding: true,
-      showSummary: false,
-      isAnswered: false,
-      clearSelection: true,
-    );
-  }
