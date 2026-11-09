@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
-import Link from "next/link"
+// Locale-aware Link: '/spend' becomes '/en/spend' or '/np/spend' (no redirect).
+import { Link } from '@/i18n/navigation';
 import LocaleSwitcher from "./LocaleSwitcher"
 import NavBarShareButton from "./NavShareButton" // Import the share button component
 import { useTranslations } from 'next-intl';
@@ -14,7 +15,6 @@ import { useAuth } from '@/context/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { allGameStorageKeys, clearSaved } from '@/lib/storage';
-import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
     const t = useTranslations('Translations');
@@ -28,7 +28,6 @@ const Navbar = () => {
     const userMenuRef = useRef<HTMLDivElement | null>(null);
     const userMenuButtonRef = useRef<HTMLButtonElement | null>(null);
     const { user } = useAuth();
-    const pathname = usePathname();
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -234,7 +233,7 @@ const Navbar = () => {
                                             className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10"
                                         >
                                             <Link
-                                                href={`${pathname.split('/').slice(0, 2).join('/')}/profile`}
+                                                href="/profile"
                                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500"
                                                 onClick={() => setIsUserMenuOpen(false)}
                                             >
@@ -252,7 +251,7 @@ const Navbar = () => {
                             ) : (
                                 <>
                                     <Link
-                                        href={`${pathname.split('/').slice(0, 2).join('/')}/auth/signin`}
+                                        href="/auth/signin"
                                         className="group flex items-center text-gray-500 hover:text-orange-500 transition-all duration-200 px-2 py-2 rounded-md hover:bg-orange-50"
                                         aria-label="Sign In"
                                     >
@@ -346,7 +345,7 @@ const Navbar = () => {
                             {!isMounted ? null : user ? (
                                 <>
                                     <Link 
-                                        href={`${pathname.split('/').slice(0, 2).join('/')}/profile`}
+                                        href="/profile"
                                         className="flex items-center text-gray-700 hover:text-orange-500 hover:bg-orange-50 px-3 py-3 rounded-lg text-base font-medium transition-all duration-200"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
@@ -370,7 +369,7 @@ const Navbar = () => {
                             ) : (
                                 <>
                                     <Link 
-                                        href={`${pathname.split('/').slice(0, 2).join('/')}/auth/signin`}
+                                        href="/auth/signin"
                                         className="flex items-center text-gray-700 hover:text-orange-500 hover:bg-orange-50 px-3 py-3 rounded-lg text-base font-medium transition-all duration-200"
                                         onClick={() => setIsMenuOpen(false)}
                                     >

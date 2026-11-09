@@ -1,20 +1,9 @@
 import React from "react";
-import Link from "next/link";
-import Head from "next/head";
+import { Link } from "@/i18n/navigation";
 
 const AboutPage = () => {
   return (
     <>
-      <Head>
-        <title>About Piromomo - Interactive Nepal Games & Quizzes | Learn Nepali Culture Online</title>
-        <meta name="description" content="Discover Nepal's culture, history, and geography through fun interactive games. Test your knowledge of Nepali festivals, kings, districts, landmarks, and more with Piromomo." />
-        <meta name="keywords" content="Nepal games online, Nepali cultural games, Nepal quiz games, interactive Nepal experiences, Nepali educational games, Nepal festivals quiz, Nepal geography games, Nepali history quizzes, learn Nepali culture" />
-        <link rel="canonical" href="https://piromomo.com/about" />
-        <meta property="og:title" content="About Piromomo - Interactive Nepal Games & Quizzes" />
-        <meta property="og:description" content="Piromomo offers an interactive platform to learn about Nepal's rich culture, history, and geography through engaging games. Perfect for Nepalis and global learners." />
-        <meta property="og:url" content="https://piromomo.com/about" />
-        <meta property="og:type" content="website" />
-      </Head>
       
       <div className="max-w-4xl mx-auto px-4 py-12">
         <header className="mb-12 text-left">

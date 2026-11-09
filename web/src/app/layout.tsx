@@ -9,7 +9,11 @@ import { HTML_LANG, type SiteLocale } from '@/lib/site';
 const GA_MEASUREMENT_ID = 'G-X744G6P5C9';
 
 export const metadata: Metadata = {
-  title: "Piromomo: The Fun Side of Nepal You Didn't Know You Needed!",
+  // Fallback only: every page sets its own title in lib/seo.ts.
+  title: {
+    default: "Piromomo: The Fun Side of Nepal You Didn't Know You Needed!",
+    template: "%s | Piromomo",
+  },
   description:
     "Interactive Nepali games like guess the king, gau khane katha, and other quizzes for connecting with Nepali culture and friends abroad.",
   metadataBase: new URL("https://piromomo.com"),

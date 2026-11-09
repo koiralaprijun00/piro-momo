@@ -1,6 +1,7 @@
 // pages/blog.js
 import Head from 'next/head';
-import Link from 'next/link';
+// Locale-aware Link: '/spend' becomes '/en/spend' or '/np/spend' (no redirect).
+import { Link } from '@/i18n/navigation';
 import { TbArrowBigLeftLinesFilled } from "react-icons/tb";
 import FAQSection from '@/components/FAQSection';
 

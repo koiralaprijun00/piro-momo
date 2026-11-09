@@ -7,7 +7,8 @@ import { getProductsByLocale } from "../../data/spend-binod-money/getProducts"; 
 import { Product } from "../../data/spend-binod-money/product"; // Import Product type
 import GameButton from '@/components/ui/GameButton';
 import { useTranslations, useLocale } from "next-intl"; // Import useLocale
-import Link from "next/link";
+// Locale-aware Link: '/spend' becomes '/en/spend' or '/np/spend' (no redirect).
+import { Link } from '@/i18n/navigation';
 import Image from "next/image";
 
 interface Purchases {

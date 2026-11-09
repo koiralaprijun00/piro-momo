@@ -2,7 +2,8 @@
 'use client';
 
 import { useState, useEffect, useRef, useMemo } from 'react';
-import Link from 'next/link';
+// Locale-aware Link: '/spend' becomes '/en/spend' or '/np/spend' (no redirect).
+import { Link } from '@/i18n/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import AdSenseGoogle from '@/components/AdSenseGoogle';
 import { FiShare2 } from 'react-icons/fi';

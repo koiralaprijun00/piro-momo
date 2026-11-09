@@ -5,7 +5,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 import AdSenseGoogle from '@/components/AdSenseGoogle';
 import { BiArrowBack } from "react-icons/bi";
-import Link from 'next/link';
+// Locale-aware Link: '/spend' becomes '/en/spend' or '/np/spend' (no redirect).
+import { Link } from '@/i18n/navigation';
 
 
 export default function KingsOfNepalBlog() {

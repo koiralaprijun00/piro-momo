@@ -1,4 +1,5 @@
-import Link from 'next/link';
+// Locale-aware Link: '/spend' becomes '/en/spend' or '/np/spend' (no redirect).
+import { Link } from '@/i18n/navigation';
 import Image from 'next/image';
 import FeedbackButton from '@/components/FeedbackButton';
 import { useTranslations, useLocale } from 'next-intl';

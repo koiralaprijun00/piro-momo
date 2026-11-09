@@ -4,7 +4,8 @@ import { useState, useRef } from 'react';
 import { Search, X } from 'lucide-react';
 import Image from 'next/image';
 import { RiCircleLine } from 'react-icons/ri';
-import Link from 'next/link';
+// Locale-aware Link: '/spend' becomes '/en/spend' or '/np/spend' (no redirect).
+import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import AdSenseGoogle from '@/components/AdSenseGoogle'; // Import AdSense component
 import FirstOfNepalQuiz from '@/components/FirstOfNepalQuiz';

@@ -4,6 +4,10 @@ import { NextIntlClientProvider } from 'next-intl';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Script from "next/script";
 import { AuthProvider } from '@/context/AuthContext';
+import { pageMetadata } from '@/lib/seo';
+
+// Home page search metadata; each game's own layout.tsx overrides it for that page.
+export const generateMetadata = pageMetadata('');
 
 // RootLayout as an async server component with params as a Promise
 export default async function LocaleLayout({
