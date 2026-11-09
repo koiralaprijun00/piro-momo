@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
 import AdSenseGoogle from '@/components/AdSenseGoogle';
 import { FiShare2 } from 'react-icons/fi';
+import { STORAGE_KEYS, readSaved, writeSaved, type SavedKingsOfNepal } from '@/lib/storage';
 import kingsDataEn from '../../../../messages/kings-of-nepal-en.json';
 import kingsDataNp from '../../../../messages/kings-of-nepal-np.json';
 
@@ -39,10 +40,12 @@ const toNepaliNumerals = (num: string): string => {
 
 export default function KingsOfNepalQuiz() {
   const [input, setInput] = useState('');
-  const [gameStarted, setGameStarted] = useState(true);
-  const [gameOver, setGameOver] = useState(false);
+  // playing ──name every king──▶ won
+  //    └──────give up──────────▶ gaveUp      (Play again returns to playing)
+  const [status, setStatus] = useState<'playing' | 'won' | 'gaveUp'>('playing');
+  const gameOver = status !== 'playing';
+  const gaveUp = status === 'gaveUp';
   const [correctAnswers, setCorrectAnswers] = useState<string[]>([]);
-  const [gaveUp, setGaveUp] = useState(false);
   
   const t = useTranslations('Translations');
   const locale = useLocale();
@@ -99,45 +102,26 @@ export default function KingsOfNepalQuiz() {
     });
   };
 
-  /* 
-    State Logic:
-    1. Check localStorage on mount.
-    2. If found, load it.
-    3. If not found, start fresh.
-    4. Save to localStorage on any state change.
-  */
-
+  // Restore saved progress once, then save on every change (same key and shape as before).
+  const restored = useRef(false);
   useEffect(() => {
-    const savedState = localStorage.getItem('kingsOfNepalState');
-    if (savedState) {
-      try {
-        const parsed = JSON.parse(savedState);
-        setCorrectAnswers(parsed.correctAnswers || []);
-        setGameOver(parsed.gameOver || false);
-        setGaveUp(parsed.gaveUp || false);
-        setGameStarted(true); // Always started if we have state
-      } catch (e) {
-        console.error("Failed to parse saved state", e);
-        setGameStarted(true);
-      }
-    } else {
-       // Start fresh
-       setGameStarted(true);
+    const saved = readSaved<SavedKingsOfNepal>(STORAGE_KEYS.kingsOfNepal);
+    if (saved) {
+      setCorrectAnswers(Array.isArray(saved.correctAnswers) ? saved.correctAnswers : []);
+      setStatus(saved.gaveUp ? 'gaveUp' : saved.gameOver ? 'won' : 'playing');
     }
+    restored.current = true;
   }, []);
 
-  // Persist state
   useEffect(() => {
-    if (gameStarted) { // Only save if game has properly initialized/started
-        const stateToSave = {
-            correctAnswers,
-            gameOver,
-            gaveUp,
-            lastPlayed: new Date().toISOString()
-        };
-        localStorage.setItem('kingsOfNepalState', JSON.stringify(stateToSave));
-    }
-  }, [correctAnswers, gameOver, gaveUp, gameStarted]);
+    if (!restored.current) return;
+    writeSaved<SavedKingsOfNepal>(STORAGE_KEYS.kingsOfNepal, {
+      correctAnswers,
+      gameOver,
+      gaveUp,
+      lastPlayed: new Date().toISOString(),
+    });
+  }, [correctAnswers, gameOver, gaveUp]);
 
   const percentComplete = (correctAnswers.length / sortedKings.length) * 100;
 
@@ -152,25 +136,21 @@ export default function KingsOfNepalQuiz() {
       setCorrectAnswers(newCorrect);
       setInput('');
       if (newCorrect.length === sortedKings.length) {
-        setGameOver(true);
+        setStatus('won');
       }
     }
   };
 
   const startGame = () => {
-    setGameStarted(true);
     setCorrectAnswers([]);
-    setGameOver(false);
-    setGaveUp(false);
+    setStatus('playing');
     setInput('');
     setTimeout(() => inputRef.current?.focus(), 100);
-    // Clear legacy or previous state explicitly if implementing a "hard reset"
-    localStorage.removeItem('kingsOfNepalState'); 
+    // The save effect overwrites the saved game with this fresh one.
   };
 
   const handleGiveUp = () => {
-    setGameOver(true);
-    setGaveUp(true);
+    setStatus('gaveUp');
   };
 
   const handlePlayAgain = () => {
@@ -245,16 +225,7 @@ export default function KingsOfNepalQuiz() {
                   </div>
                 </div>
 
-                {!gameStarted && !gameOver && (
-                  <button
-                    onClick={startGame}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition"
-                  >
-                    {safeT('startQuiz', 'Start Quiz')}
-                  </button>
-                )}
-
-                {gameStarted && !gameOver && (
+                {!gameOver && (
                   <button
                     onClick={handleGiveUp}
                     className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-md transition"
@@ -290,7 +261,7 @@ export default function KingsOfNepalQuiz() {
             <div className="md:w-2/3">
               <div className="bg-gradient-to-br from-blue-600 to-red-500 p-1 rounded-xl shadow-lg">
                 <div className="bg-white rounded-lg p-6">
-                  {gameStarted && !gameOver && (
+                  {!gameOver && (
                     <div>
                       <div className="mb-4">
                         <h2 className="text-xl font-bold mb-2">{t('KingsofNepalTitle')}</h2>

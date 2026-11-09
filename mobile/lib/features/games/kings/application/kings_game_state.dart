@@ -1,4 +1,5 @@
 import '../../../../data/models/king_entry.dart';
+import '../../shared/application/game_phase.dart';
 
 class KingsGameState {
   const KingsGameState({
@@ -52,6 +53,16 @@ class KingsGameState {
   final String? lastMatchedId;
 
   bool get hasError => errorMessage != null;
+
+  /// Current lifecycle phase (see [GamePhase]).
+  GamePhase get phase => resolveGamePhase(
+        showOnboarding: showOnboarding,
+        isLoading: isLoading,
+        hasContent: deck.isNotEmpty,
+        hasError: hasError,
+        isFinished: showSummary || isComplete,
+        isAnswered: false,
+      );
   bool get isComplete => deck.isNotEmpty && guessedIds.length >= deck.length;
   int get remaining => deck.length - guessedIds.length;
 

@@ -1,5 +1,8 @@
 import '../../../../data/models/riddle_entry.dart';
+import '../../shared/application/game_phase.dart';
 
+/// Status of a riddle suggestion. Not used yet: the mobile app has no
+/// suggestion form until it can send suggestions to the real API.
 enum SubmissionStatus { idle, submitting, success, failure }
 
 class RiddleGameState {
@@ -72,6 +75,16 @@ class RiddleGameState {
   int get totalCount => deck.length;
   int get completedCount => completedIds.length;
   bool get hasError => errorMessage != null;
+
+  /// Current lifecycle phase (see [GamePhase]).
+  GamePhase get phase => resolveGamePhase(
+        showOnboarding: showOnboarding,
+        isLoading: isLoading,
+        hasContent: deck.isNotEmpty,
+        hasError: hasError,
+        isFinished: completed,
+        isAnswered: showAnswer,
+      );
 
   RiddleGameState copyWith({
     List<RiddleEntry>? deck,

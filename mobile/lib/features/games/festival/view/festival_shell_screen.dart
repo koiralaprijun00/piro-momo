@@ -7,6 +7,7 @@ import '../application/festival_game_providers.dart';
 import '../application/festival_game_state.dart';
 import '../application/festival_game_controller.dart';
 import '../../../../data/models/festival_question.dart';
+import '../../shared/application/game_phase.dart';
 import '../../shared/widgets/header_stat_chip.dart';
 import '../../shared/widgets/quiz_option_tile.dart';
 import '../../shared/widgets/glass_header.dart';
@@ -46,19 +47,17 @@ class _FestivalGameContent extends StatelessWidget {
       (g) => g.id == 'guess-festival',
     );
 
-    if (state.showOnboarding) {
-      return _FestivalOnboarding(
-        controller: controller,
-        isLoading: state.isLoading,
-        game: game,
-      );
-    }
-
-    if (state.isLoading && state.deck.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (state.hasError) {
+    // One switch over the game's phase instead of a chain of flag checks.
+    switch (state.phase) {
+      case GamePhase.onboarding:
+        return _FestivalOnboarding(
+          controller: controller,
+          isLoading: state.isLoading,
+          game: game,
+        );
+      case GamePhase.loading:
+        return const Center(child: CircularProgressIndicator());
+      case GamePhase.error:
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -89,6 +88,10 @@ class _FestivalGameContent extends StatelessWidget {
           ],
         ),
       );
+      case GamePhase.playing:
+      case GamePhase.answered:
+      case GamePhase.finished:
+        break;
     }
 
     final question = state.currentQuestion;

@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useReducer, useRef } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import QuizSection from "../nepal-gk-components/QuizSection";
 import { getQuestionsByLocale } from "@/app/data/general-knowledge/getQuestions";
@@ -9,6 +8,8 @@ import AdSenseGoogle from '@/components/AdSenseGoogle';
 import GameButton from '@/components/ui/GameButton';
 import CustomDropdown from '@/components/ui/CustomDropdown';
 import ContainedConfetti from '@/lib/confetti';
+import { gkReducer, initialGkState, POINTS_PER_QUESTION } from '@/lib/games/generalKnowledge';
+import { STORAGE_KEYS, readSaved, writeSaved, type SavedGeneralKnowledge } from '@/lib/storage';
 
 export interface Question {
   id: string;
@@ -46,51 +47,7 @@ export default function NepalGKQuiz() {
   // Load questions based on locale
   const gkQuestions = getQuestionsByLocale(locale) as Question[];
 
-  // Game state
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const [feedbackState, setFeedbackState] = useState<{
-    isAnswered: boolean;
-    isCorrect: boolean;
-    feedback: string;
-  }>({
-    isAnswered: false,
-    isCorrect: false,
-    feedback: "",
-  });
-  const [score, setScore] = useState<number>(0);
-  const [highScore, setHighScore] = useState<number>(0);
-  const [totalGamesPlayed, setTotalGamesPlayed] = useState<number>(0);
-  const [showConfetti, setShowConfetti] = useState<boolean>(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  // Load from localStorage
-  useEffect(() => {
-    const savedState = localStorage.getItem('generalKnowledgeState');
-    if (savedState) {
-        try {
-            const parsed = JSON.parse(savedState);
-            setHighScore(parsed.highScore || 0);
-            setTotalGamesPlayed(parsed.totalGamesPlayed || 0);
-             // Note: We don't restore current game state (score, index) as quizzes usually restart on refresh
-        } catch (e) {
-            console.error("Failed to parse General Knowledge state", e);
-        }
-    }
-  }, []);
-
-  // Save to localStorage
-  useEffect(() => {
-    if (highScore > 0 || totalGamesPlayed > 0) {
-        const stateToSave = {
-            highScore,
-            totalGamesPlayed,
-            lastPlayed: new Date().toISOString()
-        };
-        localStorage.setItem('generalKnowledgeState', JSON.stringify(stateToSave));
-    }
-  }, [highScore, totalGamesPlayed]);
-
-  // Add category filter state
+  // Category filter
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   // Get all available categories with normalized names
@@ -102,9 +59,9 @@ export default function NepalGKQuiz() {
       }
       return category.trim();
     };
-  
+
     const categoryCountMap: Record<string, { originalNames: string[], count: number }> = {};
-  
+
     gkQuestions.forEach((q) => {
       const normalizedName = normalizeCategory(q.category || '');
       if (!categoryCountMap[normalizedName]) {
@@ -117,15 +74,15 @@ export default function NepalGKQuiz() {
       }
       categoryCountMap[normalizedName].count++;
     });
-  
+
     const uniqueCategories = [{
       id: "all",
       name: safeT("nepalGk.allCategories", "All Categories"),
       originalNames: ["all"]
     }];
-  
+
     Object.entries(categoryCountMap)
-      .sort((a, b) => b[1].count - a[1].count) // 🔥 sort by count (descending)
+      .sort((a, b) => b[1].count - a[1].count) // sort by count (descending)
       .forEach(([normalizedName, { originalNames, count }]) => {
         uniqueCategories.push({
           id: normalizedName,
@@ -133,119 +90,81 @@ export default function NepalGKQuiz() {
           originalNames
         });
       });
-  
+
     return uniqueCategories;
   }, [gkQuestions, safeT]);
-  
 
   // Filter questions by selected category
   const filteredQuestions = useMemo(() => {
     if (selectedCategory === "all") {
       return gkQuestions;
     }
-    
-    // Find the selected category in our normalized list
     const selectedCategoryObj = categories.find(cat => cat.id === selectedCategory);
-    
     if (!selectedCategoryObj) {
       return [];
     }
-    
-    // Filter questions that match any of the original category names
-    return gkQuestions.filter((q) => 
+    return gkQuestions.filter((q) =>
       selectedCategoryObj.originalNames.includes(q.category || '')
     );
   }, [selectedCategory, gkQuestions, categories]);
 
-  // Memoize shuffled questions
-  const shuffledQuestions = useMemo(() => {
-    return shuffleArray(filteredQuestions);
+  // Game state machine. The first render uses the unshuffled list so server and
+  // browser render the same thing; the shuffled deck is dealt right after mounting.
+  const [game, dispatch] = useReducer(gkReducer<Question>, filteredQuestions, initialGkState<Question>);
+  const { phase, deck: shuffledQuestions, index: currentQuestionIndex, selected, lastCorrect, score, highScore, totalGamesPlayed } = game;
+
+  // Deal a freshly shuffled deck on load and whenever the category or language changes.
+  useEffect(() => {
+    dispatch({ type: 'NEW_DECK', deck: shuffleArray(filteredQuestions) });
   }, [filteredQuestions]);
 
-  // Initialize and handle category changes
+  // Restore lifetime stats once.
+  const restored = useRef(false);
   useEffect(() => {
-    setTimeout(() => {
-      setCurrentQuestionIndex(0);
-      setFeedbackState({
-        isAnswered: false,
-        isCorrect: false,
-        feedback: "",
-      });
-      setScore(0);
-      setShowConfetti(false);
-    }, 0);
-  }, [selectedCategory]);
-
-  // Current question
-  const currentQuestion = shuffledQuestions[currentQuestionIndex];
-
-  // Handle user's guess
-  const handleGuess = useCallback((selectedOption: string) => {
-    if (feedbackState.isAnswered || isProcessing) return;
-    
-    setIsProcessing(true);
-    const isGuessCorrect = selectedOption === currentQuestion.correctAnswer;
-
-    if (isGuessCorrect) {
-      setScore((prevScore) => prevScore + 10);
-      setFeedbackState({
-        isAnswered: true,
-        isCorrect: true,
-        feedback: `+10 ${t("points") || "points"}`,
-      });
-    } else {
-      setFeedbackState({
-        isAnswered: true,
-        isCorrect: false,
-        feedback: t("incorrect") || "Incorrect",
-      });
+    const saved = readSaved<SavedGeneralKnowledge>(STORAGE_KEYS.generalKnowledge);
+    if (saved) {
+      dispatch({ type: 'RESTORE', highScore: saved.highScore || 0, totalGamesPlayed: saved.totalGamesPlayed || 0 });
     }
-
-    // Check if this is the last question and trigger confetti
-    if (currentQuestionIndex === shuffledQuestions.length - 1) {
-      setShowConfetti(true);
-      setTotalGamesPlayed(prev => prev + 1);
-      
-      // Calculate final score including this guess if correct
-      const finalScore = isGuessCorrect ? score + 10 : score;
-      if (finalScore > highScore) {
-          setHighScore(finalScore);
-      }
-    }
-
-    // Prevent spam clicks
-    setTimeout(() => setIsProcessing(false), 300);
-  }, [currentQuestion, currentQuestionIndex, feedbackState.isAnswered, isProcessing, shuffledQuestions.length, t, score, highScore]);
-
-  // Move to next question
-  const handleNextQuestion = useCallback(() => {
-    if (currentQuestionIndex < shuffledQuestions.length - 1) {
-      setFeedbackState({
-        isAnswered: false,
-        isCorrect: false,
-        feedback: "",
-      });
-      
-      // Use a small delay before changing the question
-      setTimeout(() => {
-        setCurrentQuestionIndex((prev) => prev + 1);
-      }, 50);
-    }
-  }, [currentQuestionIndex, shuffledQuestions.length]);
-
-  // Restart the game
-  const restartGame = useCallback(() => {
-    setCurrentQuestionIndex(0);
-    setFeedbackState({
-      isAnswered: false,
-      isCorrect: false,
-      feedback: "",
-    });
-    setScore(0);
-    setShowConfetti(false);
+    restored.current = true;
   }, []);
 
-  // Handle category change
+  // Save lifetime stats (same key and shape as before).
+  useEffect(() => {
+    if (!restored.current) return;
+    if (highScore > 0 || totalGamesPlayed > 0) {
+      writeSaved<SavedGeneralKnowledge>(STORAGE_KEYS.generalKnowledge, {
+        highScore,
+        totalGamesPlayed,
+        lastPlayed: new Date().toISOString(),
+      });
+    }
+  }, [highScore, totalGamesPlayed]);
+
+  const currentQuestion = shuffledQuestions[currentQuestionIndex];
+  const feedbackState = {
+    isAnswered: phase !== 'asking',
+    isCorrect: lastCorrect,
+    feedback:
+      phase === 'asking'
+        ? ""
+        : lastCorrect
+          ? `+${POINTS_PER_QUESTION} ${t("points") || "points"}`
+          : t("incorrect") || "Incorrect",
+  };
+
+  const handleGuess = useCallback((selectedOption: string) => {
+    dispatch({ type: 'GUESS', option: selectedOption });
+  }, []);
+
+  const handleNextQuestion = useCallback(() => {
+    dispatch({ type: 'NEXT' });
+  }, []);
+
+  // Restart with a freshly shuffled deck.
+  const restartGame = useCallback(() => {
+    dispatch({ type: 'NEW_DECK', deck: shuffleArray(filteredQuestions) });
+  }, [filteredQuestions]);
+
   const handleCategoryChange = useCallback((category: string | number) => {
     if (typeof category === "string") {
       setSelectedCategory(category);
@@ -400,6 +319,7 @@ export default function NepalGKQuiz() {
         isLastQuestion={currentQuestionIndex === shuffledQuestions.length - 1}
         feedback={feedbackState.feedback}
         isCorrect={feedbackState.isCorrect}
+        selectedOption={selected}
       />
     )}
                       

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { ImSpinner8 } from 'react-icons/im';
 import { IoCloseOutline } from 'react-icons/io5';
 import { BsCheckLg } from 'react-icons/bs';
+import { useRequest, ensureOk } from '@/lib/requestStatus';
 
 
 interface FeedbackModalProps {
@@ -15,9 +16,10 @@ interface FeedbackModalProps {
 export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
   const [feedback, setFeedback] = useState('');
   const [email, setEmail] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const submission = useRequest({ fallbackError: 'Failed to submit feedback. Please try again later.' });
+  const submitted = submission.isSuccess;
+  const isSubmitting = submission.isSubmitting;
+  const error = submission.errorMessage;
   const modalRef = useRef<HTMLDivElement>(null);
 
 
@@ -53,17 +55,18 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
     };
   }, [isOpen, onClose]);
 
-  // Handle submit
+  // Close the modal a few seconds after a successful submit (cancelled if the modal unmounts).
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+  }, []);
+
+  // Handle submit: idle → submitting → success | error
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!feedback.trim()) return;
-    
-    setIsSubmitting(true);
-    setError(null);
-    
-    try {
-      // Send feedback to your MongoDB API endpoint
+    if (!feedback.trim() || isSubmitting) return;
+
+    const ok = await submission.run(async () => {
       const response = await fetch('/api/feedback', {
         method: 'POST',
         headers: {
@@ -74,27 +77,17 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           email: email.trim() || null,
         }),
       });
-      
-      if (!response.ok) {
-        throw new Error('Failed to submit feedback');
-      }
-      
-      // Show success message
-      setSubmitted(true);
-      
-      // Reset the form after a few seconds
-      setTimeout(() => {
+      await ensureOk(response, 'Failed to submit feedback. Please try again later.');
+    });
+
+    if (ok) {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+      closeTimer.current = setTimeout(() => {
         setFeedback('');
         setEmail('');
+        submission.reset();
         onClose();
-        setSubmitted(false);
       }, 3000);
-      
-    } catch (err) {
-      console.error('Error submitting feedback:', err);
-      setError('Failed to submit feedback. Please try again later.');
-    } finally {
-      setIsSubmitting(false);
     }
   };
 

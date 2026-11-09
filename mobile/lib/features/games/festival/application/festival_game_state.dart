@@ -1,4 +1,5 @@
 import '../../../../data/models/festival_question.dart';
+import '../../shared/application/game_phase.dart';
 
 class FestivalGameState {
   const FestivalGameState({
@@ -57,6 +58,17 @@ class FestivalGameState {
   }
 
   bool get hasError => errorMessage != null;
+
+  /// Current lifecycle phase (see [GamePhase]).
+  GamePhase get phase => resolveGamePhase(
+        showOnboarding: showOnboarding,
+        isLoading: isLoading,
+        hasContent: deck.isNotEmpty,
+        hasError: hasError,
+        // Endless: the deck reshuffles after the last question, so it never finishes.
+        isFinished: false,
+        isAnswered: isAnswered,
+      );
   bool get isComplete =>
       deck.isNotEmpty && correctCount + incorrectCount >= deck.length;
 

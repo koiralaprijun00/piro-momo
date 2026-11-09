@@ -22,6 +22,25 @@ export const initialGameState: GameState = {
   unknownWords: 0,
 };
 
+/**
+ * The phase of the current word, worked out from the reducer's flags:
+ *
+ *   setup ──START_SESSION──▶ idle ──SELECT_NEXT_WORD──▶ loading ──SET_CURRENT_WORD──▶ timing
+ *   timing ──timer hits 0 | SHOW_MEANINGS──▶ assessing ──FINALIZE_ASSESSMENT──▶ idle
+ *
+ * Actions that don't fit the current phase are ignored, so a double click or a late
+ * timer tick can't count a word twice.
+ */
+export type WordPhase = 'setup' | 'idle' | 'loading' | 'timing' | 'assessing';
+
+export function getWordPhase(state: GameState): WordPhase {
+  if (!state.sessionStarted) return 'setup';
+  if (state.isLoadingWord) return 'loading';
+  if (!state.currentWord || state.assessmentDone) return 'idle';
+  if (state.meaningsVisible) return 'assessing';
+  return 'timing';
+}
+
 export const gameReducer = (state: GameState, action: GameAction): GameState => {
   switch (action.type) {
     case 'START_SESSION':
@@ -64,7 +83,9 @@ export const gameReducer = (state: GameState, action: GameAction): GameState => 
         timeLeft: state.timerDuration,
       };
       
-    case 'TIMER_TICK':
+    case 'TIMER_TICK': {
+      // A tick only counts while the timer is running for a word.
+      if (getWordPhase(state) !== 'timing') return state;
       const newTimeLeft = Math.max(0, state.timeLeft - 1);
       return {
         ...state,
@@ -74,18 +95,24 @@ export const gameReducer = (state: GameState, action: GameAction): GameState => 
           meaningsVisible: true,
         }),
       };
+    }
       
     case 'SHOW_MEANINGS':
+      if (getWordPhase(state) !== 'timing') return state;
       return {
         ...state,
         isTimerRunning: false,
         meaningsVisible: true,
       };
       
-    case 'FINALIZE_ASSESSMENT': // MAKE_EARLY_ASSESSMENT case is missing, which is good.
+    case 'FINALIZE_ASSESSMENT':
+      // Each word is assessed exactly once, and only after its meanings are shown.
+      if (getWordPhase(state) !== 'assessing') return state;
       return {
         ...state,
         assessmentDone: true,
+        knownWords: state.knownWords + (action.payload.knewIt ? 1 : 0),
+        unknownWords: state.unknownWords + (action.payload.knewIt ? 0 : 1),
       };
       
     case 'SET_CLIENT_MOUNTED':

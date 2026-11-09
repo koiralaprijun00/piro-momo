@@ -16,6 +16,8 @@ interface QuizSectionProps {
   isLastQuestion?: boolean;
   feedback?: string;
   isCorrect?: boolean;
+  /** The option the player picked for this question (null while unanswered). */
+  selectedOption?: string | null;
 }
 
 export default function QuizSection({
@@ -27,19 +29,13 @@ export default function QuizSection({
   currentIndex,
   isLastQuestion = false,
   feedback = "",
-  isCorrect = false
+  isCorrect = false,
+  selectedOption = null
 }: QuizSectionProps) {
   const t = useTranslations('Translations');
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
   const progressPercentage = ((currentIndex + 1) / totalQuestions) * 100;
-
-  useEffect(() => {
-    setTimeout(() => {
-      setSelectedOption(null);
-    }, 0);
-  }, [currentQuestion]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -49,7 +45,6 @@ export default function QuizSection({
 
   const handleOptionClick = (option: string) => {
     if (!isAnswered) {
-      setSelectedOption(option);
       handleGuess(option);
     }
   };

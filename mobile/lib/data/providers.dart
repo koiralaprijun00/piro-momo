@@ -59,7 +59,11 @@ final Provider<CloudProgressService> cloudProgressServiceProvider =
     Provider<CloudProgressService>((Ref ref) {
   final AsyncValue<User?> authState = ref.watch(authStateProvider);
   final String? userId = authState.asData?.value?.uid;
-  return CloudProgressService(userId: userId);
+  return CloudProgressService(
+    userId: userId,
+    // Checked at sync time, so verifying an email starts syncing without restarting games.
+    isVerified: () => FirebaseAuth.instance.currentUser?.emailVerified ?? false,
+  );
 });
 
 final Provider<AnalyticsService> analyticsServiceProvider =

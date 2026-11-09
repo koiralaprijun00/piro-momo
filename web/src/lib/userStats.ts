@@ -2,6 +2,8 @@ import { db } from './firebase';
 import { doc, getDoc, setDoc, updateDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import { UserStats, LogoQuizStats, VocabGameStats, LifeChecklistStats, UserBadge } from './types';
 import { calculateEarnedBadges, getNewBadges } from './badges';
+import { mergeUserStats } from './statsMerge';
+import { STORAGE_KEYS } from './storage';
 
 const COLLECTION_NAME = 'user_stats';
 
@@ -16,8 +18,8 @@ export const syncLocalDataToFirestore = async (userId: string) => {
   // 1. Sync Logo Quiz
   // We'll check both en and np states and merge them if possible, or just pick one. 
   // For simplicity, let's grab 'en' first, then 'np', and merge.
-  const logoQuizEn = localStorage.getItem('logoQuizState_en');
-  const logoQuizNp = localStorage.getItem('logoQuizState_np');
+  const logoQuizEn = localStorage.getItem(STORAGE_KEYS.logoQuiz('en'));
+  const logoQuizNp = localStorage.getItem(STORAGE_KEYS.logoQuiz('np'));
   
   if (logoQuizEn || logoQuizNp) {
     const combinedLogos: LogoQuizStats['logos'] = {};
@@ -61,8 +63,8 @@ export const syncLocalDataToFirestore = async (userId: string) => {
   }
 
   // 2. Sync Vocab Game
-  const vocabStats = localStorage.getItem('vocabGameStats');
-  const vocabSession = localStorage.getItem('vocabGameSession'); // Use for last date
+  const vocabStats = localStorage.getItem(STORAGE_KEYS.vocabStats);
+  const vocabSession = localStorage.getItem(STORAGE_KEYS.vocabSession); // Use for last date
   
   if (vocabStats) {
       try {
@@ -87,15 +89,21 @@ export const syncLocalDataToFirestore = async (userId: string) => {
   }
 
     // 3. Life Checklist
-    const checklistData = localStorage.getItem('nepalChecklistProgress');
+    const checklistData = localStorage.getItem(STORAGE_KEYS.lifeChecklist);
     if (checklistData) {
       try {
           const parsedChecklist = JSON.parse(checklistData);
           // parsedChecklist is likely array of booleans or IDs
           // Adapt based on actual structure. Assuming simple list of checked IDs for now based on typical implementation
           // Logic from page.tsx: const [checkedItems, setCheckedItems] = useState<string[]>(...)
+          // The checklist page saves `{ [itemId]: checked }`; older data may be a plain list of ids.
+          const completedItems: string[] = Array.isArray(parsedChecklist)
+            ? parsedChecklist
+            : Object.entries(parsedChecklist as Record<string, boolean>)
+                .filter(([, checked]) => checked)
+                .map(([itemId]) => itemId);
           localStats.lifeChecklist = {
-            completedItems: Array.isArray(parsedChecklist) ? parsedChecklist : [],
+            completedItems,
             lastUpdated: new Date().toISOString()
           };
       } catch (e) {
@@ -104,7 +112,7 @@ export const syncLocalDataToFirestore = async (userId: string) => {
     }
 
     // 4. Kings of Nepal
-    const kingsData = localStorage.getItem('kingsOfNepalState');
+    const kingsData = localStorage.getItem(STORAGE_KEYS.kingsOfNepal);
     if (kingsData) {
         try {
             const parsed = JSON.parse(kingsData);
@@ -119,7 +127,7 @@ export const syncLocalDataToFirestore = async (userId: string) => {
     }
 
     // 5. Guess Festival
-    const festivalData = localStorage.getItem('guessFestivalState');
+    const festivalData = localStorage.getItem(STORAGE_KEYS.guessFestival);
     if (festivalData) {
         try {
             const parsed = JSON.parse(festivalData);
@@ -136,7 +144,7 @@ export const syncLocalDataToFirestore = async (userId: string) => {
     }
 
     // 6. Mandir Chineu (Guess Temple)
-    const mandirData = localStorage.getItem('mandirChineuState');
+    const mandirData = localStorage.getItem(STORAGE_KEYS.mandirChineu);
     if (mandirData) {
         try {
             const parsed = JSON.parse(mandirData);
@@ -152,7 +160,7 @@ export const syncLocalDataToFirestore = async (userId: string) => {
     }
 
     // 7. Gau Khane Katha (Riddles)
-    const riddlesData = localStorage.getItem('gauKhaneKathaState');
+    const riddlesData = localStorage.getItem(STORAGE_KEYS.gauKhaneKatha);
     if (riddlesData) {
         try {
             const parsed = JSON.parse(riddlesData);
@@ -169,7 +177,7 @@ export const syncLocalDataToFirestore = async (userId: string) => {
     }
 
     // 8. Name Districts
-    const districtsData = localStorage.getItem('nameDistrictsState');
+    const districtsData = localStorage.getItem(STORAGE_KEYS.nameDistricts);
     if (districtsData) {
         try {
             const parsed = JSON.parse(districtsData);
@@ -184,7 +192,7 @@ export const syncLocalDataToFirestore = async (userId: string) => {
     }
 
     // 9. General Knowledge
-    const gkData = localStorage.getItem('generalKnowledgeState');
+    const gkData = localStorage.getItem(STORAGE_KEYS.generalKnowledge);
     if (gkData) {
         try {
             const parsed = JSON.parse(gkData);
@@ -199,7 +207,7 @@ export const syncLocalDataToFirestore = async (userId: string) => {
     }
 
     // 10. First of Nepal
-    const firstsData = localStorage.getItem('firstOfNepalState');
+    const firstsData = localStorage.getItem(STORAGE_KEYS.firstOfNepal);
     if (firstsData) {
         try {
             const parsed = JSON.parse(firstsData);
@@ -227,10 +235,10 @@ export const syncLocalDataToFirestore = async (userId: string) => {
           const existingDoc = await getDoc(userRef);
           const existingStats = existingDoc.exists() ? existingDoc.data() as UserStats : null;
           
-          // Merge local with existing
-          const mergedStats: UserStats = {
-              ...existingStats,
-              ...localStats,
+          // Merge local with existing, keeping the higher score / all solved items
+          // so a new or reset device can never overwrite better progress in the cloud.
+          const mergedStats = {
+              ...mergeUserStats(existingStats, localStats),
               userId
           } as UserStats;
           
@@ -252,7 +260,6 @@ export const syncLocalDataToFirestore = async (userId: string) => {
           }
           
           await setDoc(userRef, mergedStats, { merge: true });
-          console.log("Synced local stats to Firestore", newBadges.length > 0 ? `(${newBadges.length} new badges!)` : '');
       } catch (err) {
           console.error("Failed to sync stats", err);
       }

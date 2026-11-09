@@ -1,9 +1,12 @@
 import "./globals.css";
-import "mapbox-gl/dist/mapbox-gl.css";
 import { Metadata } from "next";
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Script from 'next/script';
+import { getLocale } from 'next-intl/server';
+import { HTML_LANG, type SiteLocale } from '@/lib/site';
+
+const GA_MEASUREMENT_ID = 'G-X744G6P5C9';
 
 export const metadata: Metadata = {
   title: "Piromomo: The Fun Side of Nepal You Didn't Know You Needed!",
@@ -33,22 +36,24 @@ export const metadata: Metadata = {
       "Interactive Nepali games like guess the king, gau khane katha, and other quizzes for connecting with Nepali culture and friends abroad.",
     images: ["https://piromomo.com/momo.png"],
   },
-  alternates: {
-    canonical: "https://piromomo.com",
-  }
+  // No site-wide canonical: a single canonical here marked every page as a copy of the
+  // home page. Language versions are listed in /sitemap.xml instead.
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // 'np' pages are Nepali, whose language code is 'ne'.
+  const locale = (await getLocale()) as SiteLocale;
+  const lang = HTML_LANG[locale] ?? 'en';
+
   return (
-    <html lang="en" translate="no" suppressHydrationWarning>
+    <html lang={lang} translate="no" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <meta name="google" content="notranslate" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link
           rel="preload"
           href="/spend-money.png"
@@ -57,7 +62,6 @@ export default function RootLayout({
           fetchPriority="high"
         />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://api.mapbox.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://googleads.g.doubleclick.net" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
@@ -69,12 +73,6 @@ export default function RootLayout({
           strategy="lazyOnload"
           crossOrigin="anonymous"
         />
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link
-          href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css"
-          rel="stylesheet"
-        />
       </head>
       <body className="antialiased">
         {children}
@@ -83,8 +81,15 @@ export default function RootLayout({
         <Script
           id="gtag-script"
           strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=G-X744G6P5C9`}
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
         />
+        {/* Starts Google Analytics. Without this, gtag.js loads but records nothing. */}
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');`}
+        </Script>
       </body>
     </html>
   );

@@ -57,6 +57,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       TextEditingController();
   bool _busy = false;
   String? _error;
+  String? _notice;
   bool _showSignUp = false;
   bool _closeAfterAuth = false;
 
@@ -72,6 +73,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     setState(() {
       _busy = true;
       _error = null;
+      _notice = null;
     });
     try {
       await task();
@@ -285,6 +287,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     AuthService authService,
     User? user,
   ) {
+    // Unverified email accounts must verify first (same rule as the web app).
+    if (user != null && !AuthService.isVerified(user)) {
+      return _buildVerifyEmail(context, theme, authService, user);
+    }
+
     if (_closeAfterAuth && user != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
@@ -429,6 +436,112 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
 
     // Auth flow
+    return _buildSignIn(context, theme, colorScheme, authService);
+  }
+
+  Widget _buildVerifyEmail(
+    BuildContext context,
+    ThemeData theme,
+    AuthService authService,
+    User user,
+  ) {
+    final ButtonStyle primaryStyle = FilledButton.styleFrom(
+      backgroundColor: Colors.white,
+      foregroundColor: const Color(0xFF1F2937),
+      minimumSize: const Size(double.infinity, 50),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 0,
+      disabledBackgroundColor: Colors.white.withValues(alpha: 0.5),
+    );
+    final ButtonStyle secondaryStyle = TextButton.styleFrom(
+      foregroundColor: Colors.white,
+      minimumSize: const Size(double.infinity, 44),
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        const Icon(Icons.mark_email_unread_outlined, size: 56, color: Colors.white),
+        const SizedBox(height: 16),
+        Text(
+          'Verify your email',
+          style: theme.textTheme.headlineSmall?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'We sent a verification link to ${user.email ?? 'your email'}. '
+          'Open it, then come back and tap the button below.',
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: Colors.white.withValues(alpha: 0.9),
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 20),
+        FilledButton(
+          style: primaryStyle,
+          onPressed: _busy
+              ? null
+              : () => _guard(() async {
+                    final bool verified = await authService.reloadAndCheckVerified();
+                    if (!verified) {
+                      throw ArgumentError(
+                        'Your email is not verified yet. Check your inbox (and spam folder) for the link.',
+                      );
+                    }
+                    // Re-read the user so the whole app sees the verified account.
+                    ref.invalidate(authStateProvider);
+                  }),
+          child: const Text("I've verified my email"),
+        ),
+        const SizedBox(height: 8),
+        TextButton(
+          style: secondaryStyle,
+          onPressed: _busy
+              ? null
+              : () async {
+                  await _guard(authService.sendEmailVerification);
+                  if (mounted && _error == null) {
+                    setState(() => _notice = 'Verification email sent. Check your inbox.');
+                  }
+                },
+          child: const Text('Resend verification email'),
+        ),
+        TextButton(
+          style: secondaryStyle,
+          onPressed: _busy ? null : () => _guard(authService.signOut),
+          child: const Text('Sign out'),
+        ),
+        if (_busy) ...<Widget>[
+          const SizedBox(height: 12),
+          const LinearProgressIndicator(),
+        ],
+        if (_notice != null) ...<Widget>[
+          const SizedBox(height: 12),
+          Text(
+            _notice!,
+            style: theme.textTheme.bodySmall?.copyWith(color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
+        ],
+        if (_error != null) ...<Widget>[
+          const SizedBox(height: 14),
+          _ErrorBanner(message: _error!),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildSignIn(
+    BuildContext context,
+    ThemeData theme,
+    ColorScheme colorScheme,
+    AuthService authService,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,

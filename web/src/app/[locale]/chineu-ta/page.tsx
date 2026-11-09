@@ -10,7 +10,7 @@ import AdSenseGoogle from '@/components/AdSenseGoogle';
 import GameButton from '@/components/ui/GameButton';
 
 // Refactored imports
-import { useLogoQuiz } from '@/hooks/useLogoQuiz';
+import { useLogoQuiz, MAX_ATTEMPTS } from '@/hooks/useLogoQuiz';
 import LogoCard from '@/components/logo-quiz/LogoCard';
 import GameHeader from '@/components/logo-quiz/GameHeader';
 import ResultsScreen from '@/components/logo-quiz/ResultsScreen';
@@ -188,7 +188,7 @@ const LogoQuizGame = () => {
                       answer={state.answers[logo.id] || ''}
                       isCorrect={state.correctAnswers[logo.id]}
                       attemptCount={state.attemptCounts[logo.id]}
-                      maxAttempts={3}
+                      maxAttempts={MAX_ATTEMPTS}
                       isFocused={currentFocusedLogo === logo.id}
                       onInputChange={(val) => updateAnswer(logo.id, val)}
                       onKeyDown={(e) => handleKeyDown(e, logo.id)}

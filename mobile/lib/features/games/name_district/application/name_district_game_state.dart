@@ -1,4 +1,5 @@
 import '../../../../data/models/district_entry.dart';
+import '../../shared/application/game_phase.dart';
 
 class NameDistrictGameState {
   const NameDistrictGameState({
@@ -60,6 +61,16 @@ class NameDistrictGameState {
   }
 
   bool get hasError => errorMessage != null;
+
+  /// Current lifecycle phase (see [GamePhase]).
+  GamePhase get phase => resolveGamePhase(
+        showOnboarding: showOnboarding,
+        isLoading: isLoading,
+        hasContent: deck.isNotEmpty,
+        hasError: hasError,
+        isFinished: false,
+        isAnswered: isAnswered,
+      );
 
   NameDistrictGameState copyWith({
     List<DistrictEntry>? deck,

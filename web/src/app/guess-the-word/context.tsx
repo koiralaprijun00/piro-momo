@@ -62,12 +62,8 @@ export const GameStateProvider: React.FC<GameStateProviderProps> = ({ children }
       dispatch({ type: 'SHOW_MEANINGS' });
     },
     finalizeAssessment: (knewIt: boolean) => {
+      // The reducer records the result and updates the known/unknown counts in one step.
       dispatch({ type: 'FINALIZE_ASSESSMENT', payload: { knewIt } });
-      if (knewIt) {
-        dispatch({ type: 'INCREMENT_KNOWN_WORDS' });
-      } else {
-        dispatch({ type: 'INCREMENT_UNKNOWN_WORDS' });
-      }
     },
     setClientMounted: (mounted: boolean) => {
       dispatch({ type: 'SET_CLIENT_MOUNTED', payload: { mounted } });

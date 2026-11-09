@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import getMongoClient from '@/lib/mongodb';
 import { z } from 'zod';
 import { Db } from 'mongodb';
+import { getClientIp } from '@/lib/api';
 
 // Input validation schema
 const RiddleSubmissionSchema = z.object({
@@ -13,9 +14,7 @@ const RiddleSubmissionSchema = z.object({
     .trim()
     .min(2, { message: 'Name must be at least 2 characters long' })
     .max(50, { message: 'Name cannot exceed 50 characters' }),
-  locale: z.enum(['en', 'np'], { 
-    errorMap: () => ({ message: 'Invalid locale' }) 
-  })
+  locale: z.enum(['en', 'np'], { message: 'Invalid locale' })
 });
 
 // Rate limiting helper (basic implementation)
@@ -31,10 +30,7 @@ async function checkRateLimit(ip: string, db: Db): Promise<boolean> {
 }
 
 export async function POST(request: NextRequest) {
-  // Get client IP address
-  const ip = request.headers.get('x-forwarded-for') || 
-             request.headers.get('x-real-ip') || 
-             'unknown';
+  const ip = getClientIp(request);
 
   try {
     // Parse and validate request body
@@ -83,7 +79,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { 
           error: 'Invalid input', 
-          details: error.errors.map(e => e.message) 
+          details: error.issues.map((issue) => issue.message) 
         }, 
         { status: 400 }
       );
@@ -98,16 +94,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-}
-
-// Optional: Add CORS handling if needed
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'
-    }
-  });
 }

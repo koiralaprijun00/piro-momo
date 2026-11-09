@@ -90,7 +90,7 @@ class LogoQuizController extends StateNotifier<LogoQuizState> {
 
   void updateAnswer(String answer) {
     final Logo? logo = state.currentLogo;
-    if (logo == null || state.isGameOver) return;
+    if (logo == null || state.isGameOver || state.isResolved(logo.id)) return;
 
     final Map<String, String> newAnswers = Map<String, String>.from(state.answers);
     newAnswers[logo.id] = answer;
@@ -105,6 +105,8 @@ class LogoQuizController extends StateNotifier<LogoQuizState> {
 
     final Logo? logo = state.currentLogo;
     if (logo == null) return;
+    // No more guesses once a logo is solved or out of attempts.
+    if (state.isOutOfAttempts(logo.id)) return;
 
     final String rawAnswer =
         (providedAnswer ?? state.answers[logo.id] ?? '').trim();
@@ -138,11 +140,17 @@ class LogoQuizController extends StateNotifier<LogoQuizState> {
       );
     } else if (!isCorrect) {
       final Map<String, int> newAttempts = Map<String, int>.from(state.attempts);
-      newAttempts[logo.id] = (newAttempts[logo.id] ?? 0) + 1;
+      final int usedAttempts = (newAttempts[logo.id] ?? 0) + 1;
+      newAttempts[logo.id] = usedAttempts;
 
       final Map<String, String> newFeedback =
           Map<String, String>.from(state.feedback);
-      newFeedback[logo.id] = 'Incorrect. Try again!';
+      final int remaining = LogoQuizState.maxAttempts - usedAttempts;
+      newFeedback[logo.id] = remaining <= 0
+          ? 'Out of attempts. It was ${logo.name}.'
+          : remaining == 1
+              ? 'Incorrect. Last attempt!'
+              : 'Incorrect. Try again!';
 
       state = state.copyWith(
         attempts: newAttempts,
@@ -152,9 +160,10 @@ class LogoQuizController extends StateNotifier<LogoQuizState> {
       );
     }
 
-    // All correct? end game
-    if (state.correctAnswers.length == state.logos.length ||
-        state.timeLeft <= 0) {
+    // Every logo solved or out of attempts (or time is up)? End the game.
+    final bool allResolved =
+        state.logos.every((Logo l) => state.isResolved(l.id));
+    if (allResolved || state.timeLeft <= 0) {
       _endGame();
     }
   }

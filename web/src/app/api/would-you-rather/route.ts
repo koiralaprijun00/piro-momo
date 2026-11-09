@@ -1,6 +1,7 @@
 // src/app/api/would-you-rather/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import getMongoClient from '@/lib/mongodb';
+import { getClientIp, readJson } from '@/lib/api';
 
 // Get vote counts for a specific question
 export async function GET(request: NextRequest) {
@@ -8,7 +9,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const questionId = searchParams.get('questionId');
     
-    if (!questionId) {
+    if (!questionId || questionId.length > 100) {
       return NextResponse.json({ error: 'Question ID is required' }, { status: 400 });
     }
     
@@ -50,19 +51,19 @@ export async function GET(request: NextRequest) {
 // Submit a new vote
 export async function POST(request: NextRequest) {
   try {
-    const { questionId, vote } = await request.json();
-    
-    if (!questionId || !vote || (vote !== 'A' && vote !== 'B')) {
+    const body = (await readJson(request)) as { questionId?: unknown; vote?: unknown } | null;
+    const questionId = body?.questionId;
+    const vote = body?.vote;
+
+    if (typeof questionId !== 'string' || questionId.length === 0 || questionId.length > 100 || (vote !== 'A' && vote !== 'B')) {
       return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
     }
     
     const client = await getMongoClient();
     const db = client.db();
     
-    // Get the IP address of the user to prevent duplicate votes
-    const ip = request.headers.get('x-forwarded-for') || 
-               request.headers.get('x-real-ip') || 
-               'unknown';
+    // One vote per visitor per question (changing your vote replaces it)
+    const ip = getClientIp(request);
     
     // Check if this IP has already voted on this question
     const existingVote = await db.collection('wouldYouRatherVotes').findOne({

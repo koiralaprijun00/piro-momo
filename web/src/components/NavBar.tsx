@@ -13,6 +13,7 @@ import { BiChevronDown } from 'react-icons/bi';
 import { useAuth } from '@/context/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import { allGameStorageKeys, clearSaved } from '@/lib/storage';
 import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
@@ -50,16 +51,8 @@ const Navbar = () => {
     const handleSignOut = async () => {
         try {
             // Clear all game-related local storage to prevent data bleeding between accounts
-            const gameKeys = [
-                'logoQuizState_en', 'logoQuizState_np', 
-                'vocabGameStats', 'vocabGameSession', 
-                'nepalChecklistProgress', 'kingsOfNepalState', 
-                'guessFestivalState', 'mandirChineuState', 
-                'gauKhaneKathaState', 'nameDistrictsState', 
-                'generalKnowledgeState', 'firstOfNepalState'
-            ];
-            
-            gameKeys.forEach(key => localStorage.removeItem(key));
+            // (The cloud copy is safe: syncing keeps the higher score, so nothing is lost.)
+            allGameStorageKeys().forEach(clearSaved);
             
             await signOut(auth);
             setIsUserMenuOpen(false);

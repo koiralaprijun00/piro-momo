@@ -1,13 +1,20 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import { useTranslations, useLocale } from "next-intl";
 import { getFestivalsByLocale } from "@/app/data/guess-festival/getFestivals"; // Import utility
 import { Festival } from "@/app/data/guess-festival/festival"; // Import Festival type
 import AdSenseGoogle from "@/components/AdSenseGoogle";
 import GameButton from "@/components/ui/GameButton";
 import { Sparkles, Flame } from "lucide-react";
+import {
+  festivalReducer,
+  initialFestivalState,
+  pickNextFestivalId,
+  type FestivalMode,
+  type Round,
+} from "@/lib/games/festival";
+import { STORAGE_KEYS, readSaved, writeSaved, type SavedGuessFestival } from "@/lib/storage";
 
 // QuizSection Component
 interface QuizSectionProps {
@@ -164,65 +171,85 @@ const StatBadges: React.FC<{ score: number; streak: number }> = ({ score, streak
 // Main Home Component
 export default function Home() {
   const locale = useLocale();
-  const t = useTranslations("Translations"); // Add translations hook
-
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    // Force hydration match
-    setTimeout(() => setMounted(true), 0);
-  }, []);
+  const t = useTranslations("Translations");
 
   const festivals = useMemo(() => getFestivalsByLocale(locale) as Festival[], [locale]);
   const festivalIds = useMemo(() => festivals.map((festival: Festival) => festival.id), [festivals]);
 
-  const [currentFestivalId, setCurrentFestivalId] = useState<string>(festivalIds[0]); // Use string instead of FestivalId
-  const [guess, setGuess] = useState<string>("");
-  const [isAnswered, setIsAnswered] = useState<boolean>(false);
-  const [score, setScore] = useState<number>(0);
-  const [streak, setStreak] = useState<number>(0);
-  const [bestStreak, setBestStreak] = useState<number>(0);
-  const [isCorrect, setIsCorrect] = useState<boolean>(false);
-  const [feedback, setFeedback] = useState<string>("");
-  const [gameMode, setGameMode] = useState<"standard" | "timed">("standard");
-  const [timeLeft, setTimeLeft] = useState<number>(30);
-  const [timerActive, setTimerActive] = useState<boolean>(false);
-  const [festivalHistory, setFestivalHistory] = useState<string[]>([]); // Use string[] instead of FestivalId[]
-  const [options, setOptions] = useState<string[]>([]);
+  const [game, dispatch] = useReducer(festivalReducer, initialFestivalState);
+  const { phase, mode: gameMode, round, outcome, pointsAwarded, timeLeft, score, streak, bestStreak, history } = game;
 
-  // Load from localStorage
+  // Builds a round (festival + 4 shuffled options). Randomness stays out of the reducer.
+  const buildRound = useCallback(
+    (previousHistory: string[], currentId: string | null): Round | null => {
+      const festivalId = pickNextFestivalId(festivalIds, previousHistory, currentId);
+      if (!festivalId) return null;
+      const others = festivalIds.filter((id) => id !== festivalId).sort(() => 0.5 - Math.random()).slice(0, 3);
+      const optionIds = [festivalId, ...others].sort(() => 0.5 - Math.random());
+      const options = optionIds
+        .map((id) => festivals.find((f) => f.id === id)?.name)
+        .filter((name): name is string => Boolean(name));
+      return { festivalId, options };
+    },
+    [festivalIds, festivals]
+  );
+
+  // Restore saved stats once, then start the first round (and a new one when the language changes).
+  const restored = useRef(false);
   useEffect(() => {
-    const savedState = localStorage.getItem('guessFestivalState');
-    if (savedState) {
-        try {
-            const parsed = JSON.parse(savedState);
-            setScore(parsed.score || 0);
-            setStreak(parsed.streak || 0);
-            setBestStreak(parsed.bestStreak || 0);
-            setFestivalHistory(parsed.festivalHistory || []);
-            // We could restore gameMode etc, but sticking to core stats is safer for game flow
-        } catch (e) {
-            console.error("Failed to parse Guess Festival state", e);
-        }
+    const saved = readSaved<SavedGuessFestival>(STORAGE_KEYS.guessFestival);
+    if (saved) {
+      dispatch({
+        type: 'RESTORE',
+        score: saved.score || 0,
+        streak: saved.streak || 0,
+        bestStreak: saved.bestStreak || 0,
+        history: Array.isArray(saved.festivalHistory) ? saved.festivalHistory : [],
+      });
     }
+    restored.current = true;
   }, []);
 
-  // Save to localStorage
   useEffect(() => {
-    if (score > 0 || festivalHistory.length > 0) { // Only save if played
-        const stateToSave = {
-            score,
-            streak,
-            bestStreak,
-            festivalHistory,
-            lastPlayed: new Date().toISOString()
-        };
-        localStorage.setItem('guessFestivalState', JSON.stringify(stateToSave));
-    }
-  }, [score, streak, bestStreak, festivalHistory]);
+    const first = buildRound([], null);
+    if (first) dispatch({ type: 'NEXT_ROUND', round: first });
+  }, [buildRound]);
 
-  const getCurrentFestival = (): Festival => {
-    return festivals.find((festival) => festival.id === currentFestivalId)!;
-  };
+  // Save stats (same key and shape as before, so profile sync keeps working).
+  useEffect(() => {
+    if (!restored.current) return;
+    if (score > 0 || history.length > 0) {
+      writeSaved<SavedGuessFestival>(STORAGE_KEYS.guessFestival, {
+        score,
+        streak,
+        bestStreak,
+        festivalHistory: history,
+        lastPlayed: new Date().toISOString(),
+      });
+    }
+  }, [score, streak, bestStreak, history]);
+
+  // Timed mode: one interval while a question is open. The reducer handles time running out.
+  useEffect(() => {
+    if (gameMode !== 'timed' || phase !== 'asking') return;
+    const timer = setInterval(() => dispatch({ type: 'TICK' }), 1000);
+    return () => clearInterval(timer);
+  }, [gameMode, phase, round]);
+
+  const getCurrentFestival = (): Festival | undefined =>
+    festivals.find((festival) => festival.id === round?.festivalId);
+
+  const isAnswered = phase === 'revealed';
+  const isCorrect = outcome === 'correct';
+  const options = round?.options ?? [];
+  const feedback =
+    outcome === 'correct'
+      ? `+${pointsAwarded} ${t("points")}`
+      : outcome === 'timeout'
+        ? t("timeUp")
+        : outcome === 'wrong'
+          ? t("tryAgain")
+          : "";
 
   const handleShareScore = async () => {
     const shareMessage = t("shareMessage", {
@@ -249,125 +276,32 @@ export default function Home() {
     }
   };
 
-  const generateOptions = useCallback((correctFestivalId: string) => {
-    const otherFestivalIds = festivalIds.filter((id: string) => id !== correctFestivalId);
-    const randomIds = otherFestivalIds.sort(() => 0.5 - Math.random()).slice(0, 3);
-    const optionIds = [correctFestivalId, ...randomIds].sort(() => 0.5 - Math.random());
-    setOptions(optionIds.map((id: string) => festivals.find((f: Festival) => f.id === id)!.name)); // Use festival name from data
-  }, [festivalIds, festivals]);
-
-  const handleTimeUp = useCallback(() => {
-    setIsAnswered(true);
-    setIsCorrect(false);
-    setFeedback(t("timeUp"));
-    setTimerActive(false);
-    setStreak(0);
-  }, [t]);
-
-  const shuffleFestivals = useCallback(() => {
-    const randomIndex = Math.floor(Math.random() * festivalIds.length);
-    const newFestivalId = festivalIds[randomIndex];
-    setCurrentFestivalId(newFestivalId);
-    generateOptions(newFestivalId);
-    setGuess("");
-    setIsAnswered(false);
-    setIsCorrect(false);
-    setFeedback("");
-    if (gameMode === "timed") {
-      setTimeLeft(30);
-      setTimerActive(true);
-    }
-  }, [festivalIds, generateOptions, gameMode]);
-
-  useEffect(() => {
-    setTimeout(() => shuffleFestivals(), 0);
-  }, [shuffleFestivals]);
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
-    if (gameMode === "timed" && timerActive && timeLeft > 0) {
-      timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
-    } else if (gameMode === "timed" && timeLeft === 0 && !isAnswered) {
-      setTimeout(() => handleTimeUp(), 0);
-    }
-    return () => {
-      if (timer) clearInterval(timer);
-    };
-  }, [timeLeft, timerActive, gameMode, isAnswered, handleTimeUp]);
-
   const handleGuess = (selectedOption: string) => {
-    if (isAnswered) return;
-
     const currentFestival = getCurrentFestival();
-    const isGuessCorrect = selectedOption === currentFestival.name;
-
-    if (isGuessCorrect) {
-      const newPoints = Math.max(1) * (gameMode === "timed" ? 2 : 1);
-      setScore((prevScore) => prevScore + newPoints);
-      setFeedback(`+${newPoints} ${t("points")}`);
-      setIsCorrect(true);
-      const newStreak = streak + 1;
-      setStreak(newStreak);
-      if (newStreak > bestStreak) {
-        setBestStreak(newStreak);
-      }
-    } else {
-      setFeedback(t("tryAgain"));
-      setIsCorrect(false);
-      setStreak(0);
-    }
-
-    setGuess(selectedOption);
-    setIsAnswered(true);
-    setFestivalHistory((prev) => [...prev, currentFestivalId]);
-    if (gameMode === "timed") setTimerActive(false);
+    if (!currentFestival) return;
+    dispatch({ type: 'GUESS', option: selectedOption, correctName: currentFestival.name });
   };
 
   const handleNextFestival = () => {
-    let availableFestivalIds = festivalIds.filter(
-      (id) => !festivalHistory.slice(-Math.min(3, festivalIds.length - 1)).includes(id)
-    );
-
-    if (availableFestivalIds.length === 0) {
-      setFestivalHistory([currentFestivalId]);
-      availableFestivalIds = festivalIds.filter((id) => id !== currentFestivalId);
-    }
-
-    const nextIndex = Math.floor(Math.random() * availableFestivalIds.length);
-    const newFestivalId = availableFestivalIds[nextIndex];
-
-    setCurrentFestivalId(newFestivalId);
-    generateOptions(newFestivalId);
-    setGuess("");
-    setIsAnswered(false);
-    setIsCorrect(false);
-    setFeedback("");
-
-    if (gameMode === "timed") {
-      setTimeLeft(30);
-      setTimerActive(true);
-    }
+    const next = buildRound(history, round?.festivalId ?? null);
+    if (next) dispatch({ type: 'NEXT_ROUND', round: next });
   };
 
-
-
-  const switchGameMode = (mode: "standard" | "timed") => {
-    setGameMode(mode);
-    restartGame();
+  const switchGameMode = (mode: FestivalMode) => {
+    const next = buildRound([], null);
+    if (next) dispatch({ type: 'SET_MODE', mode, round: next });
   };
 
   const restartGame = () => {
-    setScore(0);
-    setStreak(0);
-    setFestivalHistory([]);
-    shuffleFestivals();
-    if (gameMode === "timed") {
-      setTimeLeft(30);
-      setTimerActive(true);
-    }
+    const next = buildRound([], null);
+    if (next) dispatch({ type: 'RESTART', round: next });
   };
 
   const currentFestival = getCurrentFestival();
+
+  if (!currentFestival) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen w-full">

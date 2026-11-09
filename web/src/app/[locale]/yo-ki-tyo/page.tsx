@@ -8,6 +8,7 @@ import AdSenseGoogle from '@/components/AdSenseGoogle';
 import { FiShare2, FiRefreshCw, FiSend } from 'react-icons/fi';
 import { ImSpinner8 } from 'react-icons/im';
 import { useLocale } from 'next-intl';
+import { useRequest, ensureOk } from '@/lib/requestStatus';
 
 interface WouldYouRatherQuestion {
   id: string;
@@ -27,8 +28,10 @@ export default function WouldYouRatherPage() {
   const [showInput, setShowInput] = useState(false);
 const [question, setQuestion] = useState('');
 const [fullName, setFullName] = useState('');
-const [submitted, setSubmitted] = useState(false);
-const [isSubmitting, setIsSubmitting] = useState(false);
+  // idle → submitting → success (thank-you for 3s) | error (shown under the form)
+  const submission = useRequest({ resetAfterMs: 3000 });
+  const submitted = submission.isSuccess;
+  const isSubmitting = submission.isSubmitting;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<'A' | 'B' | null>(null);
   const [loading, setLoading] = useState(false);
@@ -106,20 +109,21 @@ const [isSubmitting, setIsSubmitting] = useState(false);
       
     } catch (error) {
       console.error('Error submitting vote:', error);
-      setQuestions(prevQuestions => {
-        const updatedQuestions = [...prevQuestions];
-        if (vote === 'A') {
-          updatedQuestions[currentQuestionIndex] = {
-            ...updatedQuestions[currentQuestionIndex],
-            optionAVotes: updatedQuestions[currentQuestionIndex].optionAVotes + 1
-          };
-        } else {
-          updatedQuestions[currentQuestionIndex] = {
-            ...updatedQuestions[currentQuestionIndex],
-            optionBVotes: updatedQuestions[currentQuestionIndex].optionBVotes + 1
-          };
-        }
-        return updatedQuestions;
+      // Count the player's vote locally in the same place the results are read from,
+      // so their choice still shows up when the server is unreachable.
+      const votedQuestion = questions.find((q) => q.id === questionId);
+      setRealVoteCounts(prev => {
+        const base = prev[questionId] ?? {
+          optionA: votedQuestion?.optionAVotes ?? 0,
+          optionB: votedQuestion?.optionBVotes ?? 0,
+        };
+        return {
+          ...prev,
+          [questionId]: {
+            optionA: base.optionA + (vote === 'A' ? 1 : 0),
+            optionB: base.optionB + (vote === 'B' ? 1 : 0),
+          },
+        };
       });
     } finally {
       setLoading(false);
@@ -210,41 +214,26 @@ const [isSubmitting, setIsSubmitting] = useState(false);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!question.trim() || !fullName.trim()) return;
-    
-    try {
-      setIsSubmitting(true);
-      
+    const ok = await submission.run(async () => {
       const response = await fetch('/api/would-you-rather/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           question: question.trim(),
-          fullName: fullName.trim() 
+          fullName: fullName.trim()
         }),
       });
-      
-      if (!response.ok) {
-        throw new Error('Failed to submit question');
-      }
-      
-      // Show success message
-      setSubmitted(true);
+      await ensureOk(
+        response,
+        locale === 'np' ? 'प्रश्न पठाउन सकिएन। फेरि प्रयास गर्नुहोस्।' : 'Error submitting question. Please try again.'
+      );
+    });
+    if (ok) {
+      setShowInput(false);
       setQuestion('');
       setFullName('');
-      
-      // Reset form after a delay
-      setTimeout(() => {
-        setShowInput(false);
-        setSubmitted(false);
-      }, 3000);
-      
-    } catch (error) {
-      console.error('Error submitting question:', error);
-      alert(t('wouldYouRather.errorSubmitting') || 'Error submitting question. Please try again.');
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -407,15 +396,14 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                   {t('wouldYouRather.submitDescription') || 'Submit your own questions for possible inclusion in the game!'}
                 </p>
 
-                {showInput ? (
-                  submitted ? (
+                {submitted ? (
                     <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded-md flex items-center">
                       <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <p className="font-medium">{t('wouldYouRather.thankYou') || 'धन्यवाद! तपाईंको प्रश्न पठाइएको छ।'}</p>
                     </div>
-                  ) : (
+                  ) : showInput ? (
                     <form onSubmit={handleSubmit} className="space-y-3">
                       <div>
                         <label htmlFor="fullName" className="block text-sm font-medium text-yellow-800 mb-1">
@@ -447,6 +435,11 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                         />
                       </div>
                       
+                      {submission.errorMessage && (
+                        <p role="alert" className="text-sm text-red-600">
+                          {submission.errorMessage}
+                        </p>
+                      )}
                       <div className="flex justify-end">
                         <button
                           type="submit"
@@ -469,7 +462,6 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                         </button>
                       </div>
                     </form>
-                  )
                 ) : (
                   <button
                     onClick={() => setShowInput(true)}

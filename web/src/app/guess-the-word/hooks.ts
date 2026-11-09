@@ -298,7 +298,7 @@ export const useFinalAssessment = () => {
 
   const finalAssessment = useCallback(
     (knewIt: boolean) => {
-      if (!state.currentWord || busyRef.current) return;
+      if (!state.currentWord || busyRef.current || state.assessmentDone || !state.meaningsVisible) return;
 
       busyRef.current = true;
       setIsProcessing(true);
@@ -329,6 +329,8 @@ export const useFinalAssessment = () => {
     },
     [
       state.currentWord,
+      state.assessmentDone,
+      state.meaningsVisible,
       srSystem,
       updateSessionData,
       sessionData,

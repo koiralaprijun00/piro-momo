@@ -31,8 +31,11 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-# Environment variables
+# Environment variables (secrets: never commit)
 .env
+.env.*
+.env*.local
+!.env.example
 
 # WebP images (if generated)
 *.webp

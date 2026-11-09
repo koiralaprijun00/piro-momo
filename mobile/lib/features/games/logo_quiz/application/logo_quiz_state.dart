@@ -1,6 +1,10 @@
 import '../domain/logo_model.dart';
+import '../../shared/application/game_phase.dart';
 
 class LogoQuizState {
+  /// Wrong guesses allowed per logo. Same rule as the web app.
+  static const int maxAttempts = 3;
+
   final List<Logo> logos;
   final Map<String, int> attempts;
   final Map<String, bool> correctAnswers;
@@ -41,6 +45,24 @@ class LogoQuizState {
           : null;
 
   bool get hasError => errorMessage != null;
+
+  /// Current lifecycle phase (see [GamePhase]).
+  GamePhase get phase => resolveGamePhase(
+        showOnboarding: showOnboarding,
+        isLoading: isLoading,
+        hasContent: logos.isNotEmpty,
+        hasError: hasError,
+        isFinished: isGameOver || showSummary,
+        isAnswered: false,
+      );
+
+  /// True when the player used all wrong guesses for this logo without solving it.
+  bool isOutOfAttempts(String logoId) =>
+      correctAnswers[logoId] != true && (attempts[logoId] ?? 0) >= maxAttempts;
+
+  /// A logo is resolved once it is solved or out of attempts; it takes no more guesses.
+  bool isResolved(String logoId) =>
+      correctAnswers[logoId] == true || isOutOfAttempts(logoId);
 
   String get currentLogoId => currentLogo?.id ?? '';
 

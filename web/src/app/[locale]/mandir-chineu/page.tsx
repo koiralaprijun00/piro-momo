@@ -9,6 +9,7 @@ import AdSenseGoogle from '@/components/AdSenseGoogle';
 import GameButton from '@/components/ui/GameButton';
 import { CheckCircleIcon, XCircleIcon, RefreshCwIcon, AwardIcon, ShuffleIcon } from 'lucide-react';
 import Image from 'next/image';
+import { STORAGE_KEYS, readSaved, writeSaved, type SavedMandirChineu } from '@/lib/storage';
 
 // Define categories
 const CATEGORIES = {
@@ -47,6 +48,14 @@ const DISTRICT_MAPPINGS = {
   }
 };
 
+/** Points needed to win the game. */
+const WIN_SCORE = 100;
+
+type TempleRound =
+  | { phase: 'asking' }
+  | { phase: 'revealed'; correct: boolean }
+  | { phase: 'won' };
+
 // Main Component
 export default function GuessTempleGame() {
   const locale = useLocale();
@@ -60,32 +69,38 @@ export default function GuessTempleGame() {
   
   // Game Status State
   // Game Status State
-  const [isAnswered, setIsAnswered] = useState<boolean>(false);
+  // One explicit round phase instead of separate isAnswered / isCorrect / gameWon flags:
+  //   asking ──guess──▶ revealed ──next──▶ asking
+  //     └──guess reaching WIN_SCORE──▶ won ──restart──▶ asking
+  const [round, setRound] = useState<TempleRound>({ phase: 'asking' });
+  const isAnswered = round.phase === 'revealed';
+  const isCorrect = round.phase === 'revealed' && round.correct;
+  const gameWon = round.phase === 'won';
   const [score, setScore] = useState<number>(0);
   const [highScore, setHighScore] = useState<number>(0);
-  const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [currentGuess, setCurrentGuess] = useState<string>('');
-  const [gameWon, setGameWon] = useState<boolean>(false);
   
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   // Improved shuffling state management
   const [shuffledTempleIds, setShuffledTempleIds] = useState<string[]>([]);
   const [currentShuffleIndex, setCurrentShuffleIndex] = useState<number>(0);
+  // Lifetime total (saved and synced) vs rounds in the current region (shown on screen).
   const [completedRounds, setCompletedRounds] = useState<number>(0);
+  const [roundsThisCategory, setRoundsThisCategory] = useState<number>(0);
 
    // Load from localStorage
    useEffect(() => {
-    const savedState = localStorage.getItem('mandirChineuState');
-    if (savedState) {
-        try {
-            const parsed = JSON.parse(savedState);
+    const parsed = readSaved<SavedMandirChineu>(STORAGE_KEYS.mandirChineu);
+    if (parsed) {
+        {
             // Only restore persistent stats, not current game state like isAnswered to avoid weird UI states
-            setScore(parsed.score || 0);
+            const savedScore = parsed.score || 0;
+            setScore(savedScore);
             setHighScore(parsed.highScore || 0);
             setCompletedRounds(parsed.completedRounds || 0);
-        } catch (e) {
-            console.error("Failed to parse Mandir Chineu state", e);
+            // A saved score that already reached the target means the game was won.
+            if (savedScore >= WIN_SCORE) setRound({ phase: 'won' });
         }
     }
   }, []);
@@ -93,13 +108,12 @@ export default function GuessTempleGame() {
   // Save to localStorage
   useEffect(() => {
      if (score > 0 || highScore > 0) {
-        const stateToSave = {
+        writeSaved<SavedMandirChineu>(STORAGE_KEYS.mandirChineu, {
             score,
             highScore,
             completedRounds,
             lastPlayed: new Date().toISOString()
-        };
-        localStorage.setItem('mandirChineuState', JSON.stringify(stateToSave));
+        });
      }
   }, [score, highScore, completedRounds]);
 
@@ -156,7 +170,7 @@ export default function GuessTempleGame() {
       const shuffled = shuffleArray(templeIds);
       setShuffledTempleIds(shuffled);
       setCurrentShuffleIndex(0);
-      setCompletedRounds(0);
+      setRoundsThisCategory(0);
       return shuffled[0];
     }
     return null;
@@ -174,6 +188,7 @@ export default function GuessTempleGame() {
       setShuffledTempleIds(newShuffled);
       setCurrentShuffleIndex(1); // Move to second item since we'll return first
       setCompletedRounds(prev => prev + 1);
+      setRoundsThisCategory(prev => prev + 1);
       return newShuffled[0];
     }
     
@@ -198,9 +213,8 @@ export default function GuessTempleGame() {
     setCurrentShuffleIndex(1); // Move to second item since we'll show first
     setCurrentTempleId(newShuffled[0]);
     
-    // Reset game state for new temple
-    setIsAnswered(false);
-    setIsCorrect(false);
+    // Reset the round for the new temple (a won game stays won until restart)
+    setRound((prev) => (prev.phase === 'won' ? prev : { phase: 'asking' }));
     setCurrentGuess('');
   }, [templeIds, shuffleArray, currentTempleId]);
 
@@ -214,8 +228,7 @@ export default function GuessTempleGame() {
       if (firstTempleId) {
         setCurrentTempleId(firstTempleId);
         setCurrentShuffleIndex(1); // Already showing first temple
-        setIsAnswered(false);
-        setIsCorrect(false);
+        setRound((prev) => (prev.phase === 'won' ? prev : { phase: 'asking' }));
         setCurrentGuess('');
         // We need to check isInitialized here, but we can't depend on stale state inside timeout easily without ref? 
         // Actually for this logic, just setting isInitialized(true) is fine.
@@ -254,14 +267,10 @@ export default function GuessTempleGame() {
       if (newScore > highScore) {
         setHighScore(newScore);
       }
-      setIsCorrect(true);
-      if (newScore >= 100) {
-        setGameWon(true);
-      }
+      setRound(newScore >= WIN_SCORE ? { phase: 'won' } : { phase: 'revealed', correct: true });
     } else {
-      setIsCorrect(false);
+      setRound({ phase: 'revealed', correct: false });
     }
-    setIsAnswered(true);
   }, [isAnswered, currentTemple, currentTempleId, score, gameWon, highScore]);
 
   const handleInputGuess = useCallback(() => {
@@ -278,17 +287,14 @@ export default function GuessTempleGame() {
       setCurrentTempleId(nextTempleId);
     }
 
-    setIsAnswered(false);
-    setIsCorrect(false);
+    setRound({ phase: 'asking' });
     setCurrentGuess('');
   }, [getNextShuffledTemple, gameWon]);
 
   const restartGame = useCallback(() => {
     setScore(0);
-    setIsAnswered(false);
-    setIsCorrect(false);
+    setRound({ phase: 'asking' });
     setCurrentGuess('');
-    setGameWon(false);
 
     const firstTempleId = initializeShuffledTemples();
     if (firstTempleId) {
@@ -317,11 +323,9 @@ export default function GuessTempleGame() {
 
   const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(event.target.value);
-    setIsAnswered(false);
-    setIsCorrect(false);
+    setRound({ phase: 'asking' });
     setCurrentGuess('');
     setScore(0);
-    setGameWon(false);
     // initializeShuffledTemples will be called by useEffect when templeIds changes
   };
 
@@ -524,8 +528,8 @@ export default function GuessTempleGame() {
                   {templeIds.length > 1 && (
                     <div className="mb-4 text-center">
                       <div className="text-xs text-gray-500">
-                        Round {completedRounds + 1} • Temple {Math.min(currentShuffleIndex, templeIds.length)} of {templeIds.length}
-                        {completedRounds > 0 && ` (${completedRounds} round${completedRounds > 1 ? 's' : ''} completed)`}
+                        Round {roundsThisCategory + 1} • Temple {Math.min(currentShuffleIndex, templeIds.length)} of {templeIds.length}
+                        {roundsThisCategory > 0 && ` (${roundsThisCategory} round${roundsThisCategory > 1 ? 's' : ''} completed)`}
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                         <div 
@@ -543,7 +547,7 @@ export default function GuessTempleGame() {
                         {t('guessTemple.gameWonTitle', { defaultValue: 'Congratulations! You Won!' })}
                       </h2>
                       <p className="text-lg text-gray-700">
-                        {t('guessTemple.gameWonMessage', { defaultValue: 'You reached {winScore} points and mastered the temples!', winScore: 100 })}
+                        {t('guessTemple.gameWonMessage', { defaultValue: 'You reached {winScore} points and mastered the temples!', winScore: WIN_SCORE })}
                       </p>
                       <div className="flex flex-col sm:flex-row gap-3 justify-center">
                         <GameButton onClick={restartGame} type="primary" className="flex-1">

@@ -280,33 +280,10 @@ class RiddleGameController extends StateNotifier<RiddleGameState> {
     );
   }
 
-  Future<void> submitRiddleSuggestion({
-    required String name,
-    required String riddle,
-  }) async {
-    if (name.trim().isEmpty || riddle.trim().isEmpty) {
-      return;
-    }
-
-    state = state.copyWith(submissionStatus: SubmissionStatus.submitting);
-
-    try {
-      await Future<void>.delayed(const Duration(milliseconds: 800));
-      state = state.copyWith(submissionStatus: SubmissionStatus.success);
-      unawaited(
-        Future<void>.delayed(const Duration(seconds: 3), () {
-          state = state.copyWith(submissionStatus: SubmissionStatus.idle);
-        }),
-      );
-    } catch (_) {
-      state = state.copyWith(submissionStatus: SubmissionStatus.failure);
-      unawaited(
-        Future<void>.delayed(const Duration(seconds: 3), () {
-          state = state.copyWith(submissionStatus: SubmissionStatus.idle);
-        }),
-      );
-    }
-  }
+  // Riddle suggestions are intentionally not supported on mobile yet.
+  // The old submitRiddleSuggestion() only waited 800 ms and reported success
+  // without sending anything. When this is built, POST to the web app's
+  // /api/submit-riddle endpoint and drive `submissionStatus` from the real result.
 
   bool _matchesAnswer(String input, RiddleEntry entry) {
     final String normalizedInput = input.toLowerCase().trim();

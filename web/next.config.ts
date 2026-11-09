@@ -3,8 +3,9 @@ import createNextIntlPlugin from 'next-intl/plugin';
  
 const nextConfig: NextConfig = {
     images: {
-      domains: ['lh3.googleusercontent.com'],
-      },
+      // Google profile photos (signed-in users' avatars)
+      remotePatterns: [{ protocol: 'https', hostname: 'lh3.googleusercontent.com' }],
+    },
 };
  
 const withNextIntl = createNextIntlPlugin();

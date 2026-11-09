@@ -192,7 +192,6 @@ export default function BadgeDisplay({ stats }: BadgeDisplayProps) {
       });
       
       // Show celebration (optional - could add confetti here)
-      console.log('🎉 Badge unlocked!', badgeId);
     } catch (error) {
       console.error('Error unlocking badge:', error);
     }

@@ -14,6 +14,26 @@ class AuthService {
 
   Stream<User?> authStateChanges() => _auth.authStateChanges();
 
+  /// Same rule as the web app: only users with a verified email count as signed in
+  /// for account features (profile, cloud sync).
+  static bool isVerified(User? user) => user != null && user.emailVerified;
+
+  /// Sends (or re-sends) the verification email to the signed-in user.
+  Future<void> sendEmailVerification() async {
+    final User? user = _auth.currentUser;
+    if (user != null && !user.emailVerified) {
+      await user.sendEmailVerification();
+    }
+  }
+
+  /// Refreshes the user from Firebase and reports whether the email is now verified.
+  Future<bool> reloadAndCheckVerified() async {
+    final User? user = _auth.currentUser;
+    if (user == null) return false;
+    await user.reload();
+    return _auth.currentUser?.emailVerified ?? false;
+  }
+
   Future<void> signOut() async {
     await _auth.signOut();
     if (!kIsWeb) {
@@ -130,10 +150,11 @@ class AuthService {
       throw ArgumentError(passwordError);
     }
 
-    // Proceed with Firebase account creation
-    await _auth.createUserWithEmailAndPassword(
+    // Proceed with Firebase account creation, then send the verification email
+    final UserCredential credential = await _auth.createUserWithEmailAndPassword(
       email: email.trim(),
       password: password,
     );
+    await credential.user?.sendEmailVerification();
   }
 }

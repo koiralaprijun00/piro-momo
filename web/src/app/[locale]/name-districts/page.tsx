@@ -1,11 +1,12 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useReducer } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import Image from 'next/image';
 import { districtData } from '../../data/district-data';
 import AdSenseGoogle from '@/components/AdSenseGoogle';
+import { districtReducer, initialDistrictState, districtScore, optionIdsFor } from '@/lib/games/districts';
+import { STORAGE_KEYS, readSaved, writeSaved, type SavedNameDistricts } from '@/lib/storage';
 
 const TOTAL_DISTRICTS = districtData.length;
 
@@ -61,139 +62,93 @@ const NepalDistrictQuiz: React.FC = () => {
   }, [tDistricts]);
 
   // Game state
-  const [gameStarted, setGameStarted] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(1200); // 20 minutes
-  const [randomizedDistricts, setRandomizedDistricts] = useState(districtData);
-  const [currentDistrictIndex, setCurrentDistrictIndex] = useState(0);
-  const [correctGuesses, setCorrectGuesses] = useState<string[]>([]);
-  const [gameOver, setGameOver] = useState(false);
-  const [showResults, setShowResults] = useState(false);
+  const allIds = React.useMemo(() => districtData.map((d) => d.id), []);
+  const districtById = React.useMemo(() => new Map(districtData.map((d) => [d.id, d])), []);
 
-  // UI state
+  const [game, dispatch] = useReducer(districtReducer, allIds, initialDistrictState);
+  const { phase, order, cursor: currentDistrictIndex, correctIds: correctGuesses, timeLeft, streak, bestStreak } = game;
+  const showResults = phase === 'finished';
+  const randomizedDistricts = React.useMemo(
+    () => order.map((id) => districtById.get(id)).filter((d): d is (typeof districtData)[number] => Boolean(d)),
+    [order, districtById]
+  );
+
   const [currentGuess, setCurrentGuess] = useState('');
-  const [feedback, setFeedback] = useState('');
-  const [streak, setStreak] = useState(0);
-  const [bestStreak, setBestStreak] = useState(0);
-  const [options, setOptions] = useState<string[]>([]);
+  // Short visual cues for a wrong answer (cleared after 1s).
   const [incorrectOption, setIncorrectOption] = useState<string | null>(null);
   const [isInputIncorrect, setIsInputIncorrect] = useState(false);
+  const cueTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
 
-  // Fisher-Yates shuffle algorithm
-
-
-  // Auto-start the game on mount and reset scroll
-  // Auto-start the game on mount and reset scroll
   const startGame = React.useCallback(() => {
-    const shuffled = shuffleArray([...districtData]);
-    setRandomizedDistricts(shuffled);
-    setCurrentDistrictIndex(0);
-    setGameStarted(true);
-    setGameOver(false);
-    setShowResults(false);
-    setCorrectGuesses([]);
+    dispatch({ type: 'START', order: shuffleArray(allIds) });
     setCurrentGuess('');
-    setFeedback('');
-    setStreak(0);
-    // Do not reset best streak on restart
-    setTimeLeft(1200);
-
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-    timerRef.current = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          if (timerRef.current) {
-            clearInterval(timerRef.current);
-          }
-          setGameOver(true);
-          setShowResults(true);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
+    inputRef.current?.focus();
     if (paginationRef.current) {
       paginationRef.current.scrollLeft = 0;
     }
-  }, []);
+  }, [allIds]);
 
-
-
-  // Load from localStorage
+  // On first load: resume saved progress (with a running clock) or start a new game.
+  const restored = useRef(false);
   useEffect(() => {
-    const savedState = localStorage.getItem('nameDistrictsState');
-    let restored = false;
-    if (savedState) {
-        try {
-            const parsed = JSON.parse(savedState);
-            setCorrectGuesses(parsed.correctGuesses || []);
-            setBestStreak(parsed.bestStreak || 0);
-            if (parsed.correctGuesses && parsed.correctGuesses.length > 0) {
-               setGameStarted(true);
-               restored = true;
-            }
-        } catch (e) {
-            console.error("Failed to parse Name Districts state", e);
-        }
+    const saved = readSaved<SavedNameDistricts>(STORAGE_KEYS.nameDistricts);
+    const savedIds = Array.isArray(saved?.correctGuesses) ? saved.correctGuesses : [];
+    if (savedIds.length > 0) {
+      dispatch({ type: 'RESUME', order: shuffleArray(allIds), correctIds: savedIds, bestStreak: saved?.bestStreak || 0 });
+    } else {
+      dispatch({ type: 'START', order: shuffleArray(allIds) });
     }
-    
-    if (!restored) {
-        setTimeout(() => startGame(), 0);
-    }
-  }, [startGame]);
+    restored.current = true;
+  }, [allIds]);
 
-  // Save to localStorage
+  // Save progress (same key and shape as before).
   useEffect(() => {
+    if (!restored.current) return;
     if (correctGuesses.length > 0 || bestStreak > 0) {
-        const stateToSave = {
-            correctGuesses,
-            bestStreak,
-            lastPlayed: new Date().toISOString()
-        };
-        localStorage.setItem('nameDistrictsState', JSON.stringify(stateToSave));
+      writeSaved<SavedNameDistricts>(STORAGE_KEYS.nameDistricts, {
+        correctGuesses,
+        bestStreak,
+        lastPlayed: new Date().toISOString(),
+      });
     }
   }, [correctGuesses, bestStreak]);
 
-  // Check for game completion
+  // Game clock: runs until the game is finished, and stops when leaving the page.
+  const isRunning = phase !== 'finished';
   useEffect(() => {
-    if (correctGuesses.length === TOTAL_DISTRICTS && gameStarted) {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-      setTimeout(() => {
-        setGameOver(true);
-        setShowResults(true);
-      }, 0);
-    }
-  }, [correctGuesses, gameStarted]);
+    if (!isRunning) return;
+    const timer = setInterval(() => dispatch({ type: 'TICK' }), 1000);
+    return () => clearInterval(timer);
+  }, [isRunning]);
 
-  // Generate multiple choice options
+  // After a correct answer, pause briefly on "Correct!" and then move on.
   useEffect(() => {
-    if (randomizedDistricts.length > 0 && currentDistrictIndex < randomizedDistricts.length) {
-      const currentDistrict = randomizedDistricts[currentDistrictIndex];
-      const availableDistricts = districtData.filter(d => d.id !== currentDistrict.id);
-      const shuffledDistricts = shuffleArray(availableDistricts);
-      const distractors = shuffledDistricts.slice(0, 2);
-      const choices = [
-        safeTDistricts(currentDistrict.id),
-        ...distractors.map(d => safeTDistricts(d.id)),
-      ];
+    if (phase !== 'celebrating') return;
+    const timer = setTimeout(() => dispatch({ type: 'ADVANCE' }), 1500);
+    return () => clearTimeout(timer);
+  }, [phase]);
 
-      setTimeout(() => setOptions(shuffleArray(choices)), 0);
-    }
-  }, [currentDistrictIndex, randomizedDistricts, tDistricts, safeTDistricts]);
+  // Clear any pending visual cue on unmount.
+  useEffect(() => () => {
+    if (cueTimerRef.current) clearTimeout(cueTimerRef.current);
+  }, []);
 
-  // Scroll pagination to active district
+  const showCue = (apply: () => void, clear: () => void) => {
+    apply();
+    if (cueTimerRef.current) clearTimeout(cueTimerRef.current);
+    cueTimerRef.current = setTimeout(clear, 1000);
+  };
+
+  // Multiple-choice options for the current district (pure, so no effect needed).
+  const options = React.useMemo(
+    () => optionIdsFor(order, currentDistrictIndex, allIds).map((id) => safeTDistricts(id)),
+    [order, currentDistrictIndex, allIds, safeTDistricts]
+  );
+
+  // Keep the active district visible in the pagination strip, and focus the input.
   useEffect(() => {
     if (paginationRef.current) {
       const activeButton = paginationRef.current.children[currentDistrictIndex];
@@ -205,11 +160,14 @@ const NepalDistrictQuiz: React.FC = () => {
         });
       }
     }
-  }, [currentDistrictIndex]);
+    if (phase === 'playing') inputRef.current?.focus();
+  }, [currentDistrictIndex, phase]);
+
+  const setCurrentDistrictIndex = (index: number) => dispatch({ type: 'GO_TO', cursor: index });
 
   const handleGuess = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!currentGuess.trim()) return;
+    if (!currentGuess.trim() || phase !== 'playing') return;
 
     const currentDistrict = randomizedDistricts[currentDistrictIndex];
     if (!currentDistrict) return;
@@ -221,90 +179,38 @@ const NepalDistrictQuiz: React.FC = () => {
       (isNepali ? currentDistrict.translations?.ne?.toLowerCase() : currentDistrict.translations?.en?.toLowerCase()) === guess;
 
     if (isCorrect) {
-      handleCorrectAnswer(currentDistrict);
+      setCurrentGuess('');
+      dispatch({ type: 'CORRECT', districtId: currentDistrict.id });
     } else {
-      setFeedback(safeT('incorrect', 'Incorrect'));
-      setStreak(0);
-      setIsInputIncorrect(true);
-      setTimeout(() => setIsInputIncorrect(false), 1000);
+      dispatch({ type: 'WRONG' });
+      showCue(() => setIsInputIncorrect(true), () => setIsInputIncorrect(false));
     }
   };
 
   const handleMultipleChoiceSelection = (selectedOption: string) => {
+    if (phase !== 'playing') return;
     const currentDistrict = randomizedDistricts[currentDistrictIndex];
+    if (!currentDistrict) return;
     const isCorrect = safeTDistricts(currentDistrict.id).toLowerCase() === selectedOption.toLowerCase();
 
     if (isCorrect) {
-      handleCorrectAnswer(currentDistrict);
+      setCurrentGuess('');
+      dispatch({ type: 'CORRECT', districtId: currentDistrict.id });
     } else {
-      setFeedback(safeT('incorrect', 'Incorrect'));
-      setStreak(0);
-      setIncorrectOption(selectedOption);
-      setTimeout(() => setIncorrectOption(null), 1000);
+      dispatch({ type: 'WRONG' });
+      showCue(() => setIncorrectOption(selectedOption), () => setIncorrectOption(null));
     }
   };
 
-  const handleCorrectAnswer = (district: { id: string }) => {
-    if (!correctGuesses.includes(district.id)) {
-      setCorrectGuesses(prev => [...prev, district.id]);
-    }
-    setFeedback(safeT('correct', 'Correct! {district}', { district: safeTDistricts(district.id) }));
-    setCurrentGuess('');
-    const newStreak = streak + 1;
-    setStreak(newStreak);
-    if (newStreak > bestStreak) {
-      setBestStreak(newStreak);
-    }
-    setTimeout(() => {
-      goToNextDistrict();
-    }, 1500);
-  };
-
-  const goToNextDistrict = () => {
-    if (currentDistrictIndex < randomizedDistricts.length - 1) {
-      setCurrentDistrictIndex(prev => prev + 1);
-      setFeedback('');
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    } else if (currentDistrictIndex === randomizedDistricts.length - 1 && correctGuesses.length < TOTAL_DISTRICTS) {
-      const unansweredIndices = randomizedDistricts
-        .map((district, index) => ({ district, index }))
-        .filter(item => !correctGuesses.includes(item.district.id))
-        .map(item => item.index);
-      if (unansweredIndices.length > 0) {
-        setCurrentDistrictIndex(unansweredIndices[0]);
-        setFeedback(safeT('remainingDistricts', '', { count: unansweredIndices.length }));
-      }
-    } else {
-      setGameOver(true);
-      setShowResults(true);
-    }
-  };
+  const goToNextDistrict = () => dispatch({ type: 'ADVANCE' });
 
   const goToPrevDistrict = () => {
-    if (currentDistrictIndex > 0) {
-      setCurrentDistrictIndex(prev => prev - 1);
-      setFeedback('');
-    }
+    if (currentDistrictIndex > 0) dispatch({ type: 'GO_TO', cursor: currentDistrictIndex - 1 });
   };
 
+  const calculateScore = () => districtScore(game);
 
-
-  const calculateScore = () => {
-    if (correctGuesses.length === 0) return 0;
-    const baseScore = correctGuesses.length * 100;
-    const timeBonus = timeLeft > 0 ? Math.floor(timeLeft / 10) : 0;
-    return Math.floor(baseScore + timeBonus);
-  };
-
-  const handleGiveUp = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-    setGameOver(true);
-    setShowResults(true);
-  };
+  const handleGiveUp = () => dispatch({ type: 'GIVE_UP' });
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);

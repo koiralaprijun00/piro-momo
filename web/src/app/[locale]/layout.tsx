@@ -1,6 +1,5 @@
 import "../globals.css"; 
 import NavBar from '@/components/NavBar';
-import "mapbox-gl/dist/mapbox-gl.css";
 import { NextIntlClientProvider } from 'next-intl';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Script from "next/script";
@@ -49,7 +48,7 @@ export default async function LocaleLayout({
       };
     } catch (firstOfNepalError) {
       // If First of Nepal messages can't be loaded, continue with just the main messages
-      console.log(`No separate First of Nepal messages found for "${resolvedLocale}", continuing with main messages only.`);
+      console.warn(`No separate First of Nepal messages found for "${resolvedLocale}", continuing with main messages only.`);
     }
   } catch (error) {
     // Fallback to English if the locale file is not found
@@ -71,7 +70,7 @@ export default async function LocaleLayout({
         ...ennameDistrictMessages
       };
     } catch (firstOfNepalError) {
-      console.log('No English First of Nepal messages found for fallback.');
+      console.warn('No English First of Nepal messages found for fallback.');
     }
   }
 

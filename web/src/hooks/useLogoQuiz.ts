@@ -1,5 +1,6 @@
 import { useReducer, useEffect, useCallback, useRef } from 'react';
 import { Logo } from '@/app/data/logo-quiz/getLogos';
+import { STORAGE_KEYS, readSaved, writeSaved, clearSaved } from '@/lib/storage';
 
 export interface GameState {
   logos: Logo[];
@@ -26,6 +27,25 @@ export type GameAction =
   | { type: 'RESET_GAME'; logos: Logo[] };
 
 const INITIAL_TIME = 300;
+/** Same rule as the mobile app: three wrong guesses per logo. */
+export const MAX_ATTEMPTS = 3;
+
+/**
+ * The quiz's phases, worked out from its state:
+ *
+ *   loading ──INITIALIZE──▶ playing ⇄ paused (TOGGLE_TIMER)
+ *                              │
+ *                              └── time runs out | SUBMIT_GAME ──▶ finished
+ */
+export type LogoQuizPhase = 'loading' | 'playing' | 'paused' | 'finished';
+
+export function getLogoQuizPhase(
+  state: Pick<GameState, 'isInitialized' | 'showResults' | 'timerActive' | 'timeLeft'>
+): LogoQuizPhase {
+  if (!state.isInitialized) return 'loading';
+  if (state.showResults || state.timeLeft <= 0) return 'finished';
+  return state.timerActive ? 'playing' : 'paused';
+}
 
 function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
@@ -48,17 +68,20 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         correctAnswers: { ...initialCorrectAnswers, ...(savedState?.correctAnswers || {}) },
         attemptCounts: { ...initialAttemptCounts, ...(savedState?.attemptCounts || {}) },
         score: savedState?.score || 0,
-        timeLeft: savedState?.timeLeft || INITIAL_TIME,
+        timeLeft: savedState?.timeLeft ?? INITIAL_TIME,
         currentPage: savedState?.currentPage || 0,
-        timerActive: savedState?.timerActive ?? true,
-        showResults: savedState?.showResults || false,
+        timerActive: (savedState?.timerActive ?? true) && !savedState?.showResults,
+        // A saved game whose clock already reached 0 is finished (older versions could save it frozen at 0:00).
+        showResults:
+          Boolean(savedState?.showResults) ||
+          (typeof savedState?.timeLeft === 'number' && savedState.timeLeft <= 0),
         isInitialized: true,
       };
     }
 
     case 'UPDATE_ANSWER':
       // Prevent updates if already correct or out of attempts
-      if (state.correctAnswers[action.logoId] || (state.attemptCounts[action.logoId] || 0) >= 3) {
+      if (state.showResults || state.correctAnswers[action.logoId] || (state.attemptCounts[action.logoId] || 0) >= MAX_ATTEMPTS) {
         return state;
       }
       return {
@@ -71,7 +94,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const currentAttempts = state.attemptCounts[logoId] || 0;
       
       // Safety: don't check if already correct or max attempts reached
-      if (state.correctAnswers[logoId] || currentAttempts >= 3) {
+      if (state.showResults || state.correctAnswers[logoId] || currentAttempts >= MAX_ATTEMPTS) {
         return state;
       }
 
@@ -85,19 +108,26 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
-    case 'TICK':
-      if (state.timeLeft <= 0) {
-        return { ...state, timerActive: false, showResults: true };
+    case 'TICK': {
+      // Ticks only count while the clock is running.
+      if (getLogoQuizPhase(state) !== 'playing') return state;
+      const timeLeft = Math.max(0, state.timeLeft - 1);
+      // Reaching 0 ends the game in the same step, so the clock can never freeze at 0:00.
+      if (timeLeft === 0) {
+        return { ...state, timeLeft: 0, timerActive: false, showResults: true };
       }
-      return { ...state, timeLeft: state.timeLeft - 1 };
+      return { ...state, timeLeft };
+    }
 
     case 'TOGGLE_TIMER':
+      if (state.showResults || state.timeLeft <= 0) return state;
       return { ...state, timerActive: !state.timerActive };
 
     case 'SET_PAGE':
       return { ...state, currentPage: action.page };
 
     case 'SUBMIT_GAME':
+      if (state.showResults) return state;
       return { ...state, showResults: true, timerActive: false };
 
     case 'RESET_GAME':
@@ -125,37 +155,31 @@ export const useLogoQuiz = (initialLogos: Logo[], locale: string) => {
   const [state, dispatch] = useReducer(gameReducer, initialState);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Load from localStorage
+  // Load from localStorage (a corrupted save starts a fresh game instead of crashing)
   useEffect(() => {
-    const saved = localStorage.getItem(`logoQuizState_${locale}`);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      dispatch({ type: 'INITIALIZE', logos: initialLogos, savedState: parsed });
-    } else {
-      dispatch({ type: 'INITIALIZE', logos: initialLogos });
-    }
+    const saved = readSaved<GameState>(STORAGE_KEYS.logoQuiz(locale));
+    dispatch({ type: 'INITIALIZE', logos: initialLogos, savedState: saved ?? undefined });
   }, [initialLogos, locale]);
 
   // Save to localStorage
   useEffect(() => {
     if (state.isInitialized) {
-      localStorage.setItem(`logoQuizState_${locale}`, JSON.stringify(state));
+      writeSaved(STORAGE_KEYS.logoQuiz(locale), state);
     }
   }, [state, locale]);
 
-  // Timer logic
+  const phase = getLogoQuizPhase(state);
+
+  // Timer: one interval while playing. The reducer decides when time is up.
   useEffect(() => {
-    if (state.timerActive && state.timeLeft > 0 && !state.showResults) {
-      timerRef.current = setInterval(() => {
-        dispatch({ type: 'TICK' });
-      }, 1000);
-    } else {
-      if (timerRef.current) clearInterval(timerRef.current);
-    }
+    if (phase !== 'playing') return;
+    timerRef.current = setInterval(() => {
+      dispatch({ type: 'TICK' });
+    }, 1000);
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [state.timerActive, state.timeLeft, state.showResults]);
+  }, [phase]);
 
   const updateAnswer = useCallback((logoId: string, value: string) => {
     dispatch({ type: 'UPDATE_ANSWER', logoId, value });
@@ -163,7 +187,7 @@ export const useLogoQuiz = (initialLogos: Logo[], locale: string) => {
 
   const checkAnswer = useCallback((logoId: string) => {
     // Enforcement: stop checking if already correct or out of attempts
-    if (state.correctAnswers[logoId] || (state.attemptCounts[logoId] || 0) >= 3) return;
+    if (state.showResults || state.correctAnswers[logoId] || (state.attemptCounts[logoId] || 0) >= MAX_ATTEMPTS) return;
 
     const logo = state.logos.find(l => l.id === logoId);
     if (!logo) return;
@@ -175,19 +199,20 @@ export const useLogoQuiz = (initialLogos: Logo[], locale: string) => {
                       logo.name.toLowerCase() === userAnswer;
 
     dispatch({ type: 'CHECK_ANSWER', logoId, isCorrect, feedback: isCorrect ? 'Correct!' : 'Incorrect' });
-  }, [state.answers, state.correctAnswers, state.attemptCounts, state.logos]);
+  }, [state.answers, state.correctAnswers, state.attemptCounts, state.logos, state.showResults]);
 
   const toggleTimer = useCallback(() => dispatch({ type: 'TOGGLE_TIMER' }), []);
   const setPage = useCallback((page: number) => dispatch({ type: 'SET_PAGE', page }), []);
   const submitGame = useCallback(() => dispatch({ type: 'SUBMIT_GAME' }), []);
   
   const resetGame = useCallback((newLogos: Logo[]) => {
-    localStorage.removeItem(`logoQuizState_${locale}`);
+    clearSaved(STORAGE_KEYS.logoQuiz(locale));
     dispatch({ type: 'INITIALIZE', logos: newLogos });
   }, [locale]);
 
   return {
     state,
+    phase,
     updateAnswer,
     checkAnswer,
     toggleTimer,

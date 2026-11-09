@@ -1,4 +1,5 @@
 import '../../../../data/models/temple_entry.dart';
+import '../../shared/application/game_phase.dart';
 
 class TempleGameState {
   const TempleGameState({
@@ -55,6 +56,16 @@ class TempleGameState {
   }
 
   bool get hasError => errorMessage != null;
+
+  /// Current lifecycle phase (see [GamePhase]).
+  GamePhase get phase => resolveGamePhase(
+        showOnboarding: showOnboarding,
+        isLoading: isLoading,
+        hasContent: deck.isNotEmpty,
+        hasError: hasError,
+        isFinished: hasWon,
+        isAnswered: isAnswered,
+      );
   bool get hasWon => score >= 100;
 
   TempleGameState copyWith({

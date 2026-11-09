@@ -424,7 +424,10 @@ class _BottomInputCard extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final logo = state.currentLogo;
     final bool isAnswered = logo != null && state.correctAnswers[logo.id] == true;
-    final bool canSubmit = !isAnswered && answerController.text.trim().isNotEmpty;
+    final bool isOutOfAttempts = logo != null && state.isOutOfAttempts(logo.id);
+    final bool canSubmit = !isAnswered &&
+        !isOutOfAttempts &&
+        answerController.text.trim().isNotEmpty;
     final String? feedback =
         logo == null ? null : state.feedback[logo.id];
 
@@ -448,7 +451,7 @@ class _BottomInputCard extends StatelessWidget {
               controller: answerController,
               onChanged: controller.updateAnswer,
               onSubmitted: controller.checkAnswer,
-              enabled: !isAnswered && !state.isGameOver,
+              enabled: !isAnswered && !isOutOfAttempts && !state.isGameOver,
               decoration: InputDecoration(
                 hintText: 'Enter logo name...',
                 filled: true,

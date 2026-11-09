@@ -28,7 +28,7 @@ const LogoCard: React.FC<LogoCardProps> = ({
   placeholder,
 }) => {
   const getBlurClass = () => {
-    if (isCorrect || attemptCount >= 3) return 'blur-0';
+    if (isCorrect || attemptCount >= maxAttempts) return 'blur-0';
     switch (attemptCount) {
       case 0: return 'blur-xl';
       case 1: return 'blur-lg';
@@ -74,8 +74,8 @@ const LogoCard: React.FC<LogoCardProps> = ({
             isCorrect
               ? 'border-green-500 bg-green-50 text-green-700'
               : 'border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
-          } ${attemptCount >= 3 && !isCorrect ? 'bg-red-50 border-red-200 text-red-700' : ''}`}
-          disabled={isCorrect || attemptCount >= 3}
+          } ${attemptCount >= maxAttempts && !isCorrect ? 'bg-red-50 border-red-200 text-red-700' : ''}`}
+          disabled={isCorrect || attemptCount >= maxAttempts}
         />
       </div>
 

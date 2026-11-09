@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useReducer, useRef } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { RiddlesData } from '../../data/gau-khane-katha/gau-khane-katha-type';
 import { riddlesData } from '../../data/gau-khane-katha/gau-khane-katha-data';
@@ -10,6 +9,14 @@ import { FiSend } from 'react-icons/fi';
 import { HiOutlineClock, HiOutlineCheck } from 'react-icons/hi';
 import { CheckCircleIcon, XCircleIcon, RefreshCwIcon, Sparkles, Flame } from 'lucide-react';
 import AdSenseGoogle from '@/components/AdSenseGoogle';
+import {
+  riddleReducer,
+  initialRiddleState,
+  currentRiddleIndex,
+  MAX_RIDDLE_ATTEMPTS,
+} from '@/lib/games/riddles';
+import { STORAGE_KEYS, readSaved, writeSaved, type SavedGauKhaneKatha } from '@/lib/storage';
+import { useRequest, ensureOk } from '@/lib/requestStatus';
 
 const StatBadges = ({ score, streak }: { score: number; streak: number }) => (
   <div className="flex items-center justify-center gap-4">
@@ -42,208 +49,107 @@ const shuffleArray = (array: number[]): number[] => {
 export default function RiddlesGamePage() {
   const t = useTranslations('Translations.RiddlesGame');
   const locale = useLocale() as 'en' | 'np';
-  const [currentRiddleIndex, setCurrentRiddleIndex] = useState<number>(0);
+  const riddles: RiddlesData = riddlesData;
+  const maxAttempts = MAX_RIDDLE_ATTEMPTS;
+
+  const [game, dispatch] = useReducer(riddleReducer, initialRiddleState);
+  const { phase, attempts, outcome, score, streak, bestStreak, answeredIds } = game;
   const [userAnswer, setUserAnswer] = useState<string>('');
-  const [showAnswer, setShowAnswer] = useState<boolean>(false);
-  const [isCorrect, setIsCorrect] = useState<boolean>(false);
-  const [attempts, setAttempts] = useState<number>(0);
-  const [score, setScore] = useState<number>(0);
-  const [streak, setStreak] = useState<number>(0);
-  const [bestStreak, setBestStreak] = useState<number>(0);
-  const [gameOver, setGameOver] = useState<boolean>(false);
-  const [answeredRiddles, setAnsweredRiddles] = useState<string[]>([]);
-  const [submitted, setSubmitted] = useState<boolean>(false);
-  const [currentShuffledIndex, setCurrentShuffledIndex] = useState<number>(0);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  // Riddle submission form
   const [fullName, setFullName] = useState<string>('');
   const [riddle, setRiddle] = useState<string>('');
   const [showInput, setShowInput] = useState<boolean>(false);
-  const [shuffledIndices, setShuffledIndices] = useState<number[]>([]);
+  const submission = useRequest({ resetAfterMs: 3000 });
 
-  // Load from localStorage
+  const localeRiddles = useMemo(() => riddles[locale] ?? [], [riddles, locale]);
+  const riddleIds = useMemo(() => localeRiddles.map((r) => r.id), [localeRiddles]);
+
+  // Restore saved stats once.
+  const restored = useRef(false);
   useEffect(() => {
-    const savedState = localStorage.getItem('gauKhaneKathaState');
-    if (savedState) {
-        try {
-            const parsed = JSON.parse(savedState);
-            setScore(parsed.score || 0);
-            setStreak(parsed.streak || 0);
-            setBestStreak(parsed.bestStreak || 0);
-            setAnsweredRiddles(parsed.answeredRiddles || []);
-        } catch (e) {
-            console.error("Failed to parse Gau Khane Katha state", e);
-        }
+    const saved = readSaved<SavedGauKhaneKatha>(STORAGE_KEYS.gauKhaneKatha);
+    if (saved) {
+      dispatch({
+        type: 'RESTORE',
+        score: saved.score || 0,
+        streak: saved.streak || 0,
+        bestStreak: saved.bestStreak || 0,
+        answeredIds: Array.isArray(saved.answeredRiddles) ? saved.answeredRiddles : [],
+      });
     }
+    restored.current = true;
   }, []);
 
-  // Save to localStorage
+  // Shuffle a new order whenever the language changes.
   useEffect(() => {
-    if (score > 0 || answeredRiddles.length > 0) {
-        const stateToSave = {
-            score,
-            streak,
-            bestStreak,
-            answeredRiddles,
-            lastPlayed: new Date().toISOString()
-        };
-        localStorage.setItem('gauKhaneKathaState', JSON.stringify(stateToSave));
-    }
-  }, [score, streak, bestStreak, answeredRiddles]);
+    const order = shuffleArray(Array.from({ length: localeRiddles.length }, (_, i) => i));
+    dispatch({ type: 'START', order, ids: riddleIds });
+  }, [localeRiddles, riddleIds]);
 
-  const riddles: RiddlesData = riddlesData;
-  const maxAttempts = 3;
-
+  // Save stats (same key and shape as before).
   useEffect(() => {
-    if (riddles[locale]?.length) {
-      const indices = Array.from({ length: riddles[locale].length }, (_, i) => i);
-      const shuffled = shuffleArray(indices);
-      setTimeout(() => {
-        setShuffledIndices(shuffled);
-        setCurrentShuffledIndex(0);
-        if (shuffled.length > 0) {
-          setCurrentRiddleIndex(shuffled[0]);
-        }
-      }, 0);
+    if (!restored.current) return;
+    if (score > 0 || answeredIds.length > 0) {
+      writeSaved<SavedGauKhaneKatha>(STORAGE_KEYS.gauKhaneKatha, {
+        score,
+        streak,
+        bestStreak,
+        answeredRiddles: answeredIds,
+        lastPlayed: new Date().toISOString(),
+      });
     }
-  }, [locale, riddles]);
+  }, [score, streak, bestStreak, answeredIds]);
 
-
-
-  useEffect(() => {
-    if (riddles[locale] && answeredRiddles.length === riddles[locale].length) {
-      setTimeout(() => setGameOver(true), 0);
-    }
-  }, [answeredRiddles, locale, riddles]);
-
-  useEffect(() => {
-    if (currentRiddleIndex >= riddles[locale]?.length) {
-      setTimeout(() => {
-        setCurrentRiddleIndex(0);
-        setAnsweredRiddles([]);
-        setScore(0);
-        setGameOver(false);
-      }, 0);
-    }
-  }, [locale, riddles, currentRiddleIndex]);
-
-  const currentRiddle = riddles[locale]?.[currentRiddleIndex];
+  const riddleIndex = currentRiddleIndex(game);
+  const currentRiddle = riddleIndex !== null ? localeRiddles[riddleIndex] : undefined;
+  const gameOver = phase === 'finished';
+  const showAnswer = phase === 'revealed';
+  const isCorrect = outcome === 'correct';
 
   const checkAnswer = () => {
     if (!currentRiddle) return;
-
-    const primaryAnswer = currentRiddle.answer.toLowerCase();
-    const userAnswerLower = userAnswer.toLowerCase().trim();
-    let isCorrect = userAnswerLower === primaryAnswer;
-
-    if (!isCorrect && locale === 'np' && currentRiddle.answerEn) {
-      isCorrect = userAnswerLower === currentRiddle.answerEn.toLowerCase();
-    }
-
-    if (isCorrect) {
-      setIsCorrect(true);
-      setScore((prevScore) => prevScore + 1);
-      const newStreak = streak + 1;
-      setStreak(newStreak);
-      if (newStreak > bestStreak) {
-        setBestStreak(newStreak);
-      }
-      setAnsweredRiddles((prev) =>
-        prev.includes(currentRiddle.id) ? prev : [...prev, currentRiddle.id]
-      );
-      setShowAnswer(true);
-    } else {
-      setIsCorrect(false);
-      const newAttempts = attempts + 1;
-      setAttempts(newAttempts);
-      if (newAttempts >= maxAttempts) {
-        setShowAnswer(true);
-        setStreak(0);
-      } else {
-        setUserAnswer('');
-      }
-    }
+    const answer = userAnswer.toLowerCase().trim();
+    const correct =
+      answer === currentRiddle.answer.toLowerCase() ||
+      (locale === 'np' && !!currentRiddle.answerEn && answer === currentRiddle.answerEn.toLowerCase());
+    dispatch({ type: 'SUBMIT', correct, riddleId: currentRiddle.id });
+    // A wrong guess with attempts left clears the box for the next try.
+    if (!correct && attempts + 1 < maxAttempts) setUserAnswer('');
   };
 
   const nextRiddle = () => {
-    if (!isCorrect) {
-      setStreak(0);
-    }
-
-    setShowAnswer(false);
-    setIsCorrect(false);
     setUserAnswer('');
-    setAttempts(0);
-
-    if (!shuffledIndices || shuffledIndices.length === 0) {
-      setGameOver(true);
-      return;
-    }
-
-    let foundNextIndex = false;
-    let nextShuffledIndex = (currentShuffledIndex + 1) % shuffledIndices.length;
-    const startingShuffledIndex = nextShuffledIndex;
-
-    do {
-      const candidateRiddleIndex = shuffledIndices[nextShuffledIndex];
-      const candidateRiddle = riddles[locale][candidateRiddleIndex];
-
-      if (candidateRiddle && !answeredRiddles.includes(candidateRiddle.id)) {
-        setCurrentRiddleIndex(candidateRiddleIndex);
-        setCurrentShuffledIndex(nextShuffledIndex);
-        foundNextIndex = true;
-        break;
-      }
-
-      nextShuffledIndex = (nextShuffledIndex + 1) % shuffledIndices.length;
-      if (nextShuffledIndex === startingShuffledIndex) {
-        break;
-      }
-    } while (!foundNextIndex);
-
-    if (!foundNextIndex) {
-      setGameOver(true);
-    }
+    dispatch({ type: 'NEXT', ids: riddleIds });
   };
 
   const restartGame = () => {
-    const indices = Array.from({ length: riddles[locale].length }, (_, i) => i);
-    const shuffled = shuffleArray([...indices]);
-    setShuffledIndices(shuffled);
-    setCurrentShuffledIndex(0);
-    setCurrentRiddleIndex(shuffled[0]);
     setUserAnswer('');
-    setShowAnswer(false);
-    setIsCorrect(false);
-    setScore(0);
-    setStreak(0);
-    setGameOver(false);
-    setAnsweredRiddles([]);
-    setAttempts(0);
+    const order = shuffleArray(Array.from({ length: localeRiddles.length }, (_, i) => i));
+    dispatch({ type: 'RESTART', order });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      await fetch('/api/submit-riddle', {
+    const ok = await submission.run(async () => {
+      const response = await fetch('/api/submit-riddle', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fullName, riddle, locale }),
       });
-      setIsSubmitting(false);
-      setSubmitted(true);
-      setTimeout(() => {
-        setSubmitted(false);
-        setShowInput(false);
-        setFullName('');
-        setRiddle('');
-      }, 3000);
-    } catch (error) {
-      console.error('Submission failed:', error);
-      setIsSubmitting(false);
+      await ensureOk(
+        response,
+        locale === 'np' ? 'पठाउन सकिएन। फेरि प्रयास गर्नुहोस्।' : 'Could not submit your riddle. Please try again.'
+      );
+    });
+    if (ok) {
+      setShowInput(false);
+      setFullName('');
+      setRiddle('');
     }
   };
+  const isSubmitting = submission.isSubmitting;
+  const submitted = submission.isSuccess;
 
   if (!currentRiddle) {
     return (
@@ -476,15 +382,14 @@ export default function RiddlesGamePage() {
                   {t('submitDescription') ||
                     'Submit your own riddles for possible inclusion in the game!'}
                 </p>
-                {showInput ? (
-                  submitted ? (
+                {submitted ? (
                     <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded-md flex items-center">
                       <HiOutlineCheck className="w-5 h-5 mr-2" />
                       <p className="font-medium">
                         {t('thankYou') || 'Thank you! Your riddle has been submitted.'}
                       </p>
                     </div>
-                  ) : (
+                  ) : showInput ? (
                     <form onSubmit={handleSubmit} className="space-y-3">
                       <div>
                         <label
@@ -520,6 +425,11 @@ export default function RiddlesGamePage() {
                           rows={3}
                         />
                       </div>
+                      {submission.errorMessage && (
+                        <p role="alert" className="text-sm text-red-600">
+                          {submission.errorMessage}
+                        </p>
+                      )}
                       <div className="flex justify-end">
                         <button
                           type="submit"
@@ -544,7 +454,6 @@ export default function RiddlesGamePage() {
                         </button>
                       </div>
                     </form>
-                  )
                 ) : (
                   <button
                     onClick={() => setShowInput(true)}

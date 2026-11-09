@@ -1,4 +1,5 @@
 import '../../../../data/models/general_knowledge_question.dart';
+import '../../shared/application/game_phase.dart';
 
 class GeneralKnowledgeGameState {
   const GeneralKnowledgeGameState({
@@ -69,6 +70,16 @@ class GeneralKnowledgeGameState {
   }
 
   bool get hasError => errorMessage != null;
+
+  /// Current lifecycle phase (see [GamePhase]).
+  GamePhase get phase => resolveGamePhase(
+        showOnboarding: showOnboarding,
+        isLoading: isLoading,
+        hasContent: deck.isNotEmpty,
+        hasError: hasError,
+        isFinished: showSummary,
+        isAnswered: isAnswered,
+      );
 
   GeneralKnowledgeGameState copyWith({
     List<GeneralKnowledgeQuestion>? deck,

@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { X, Check, XCircle, BookOpen } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { STORAGE_KEYS, readSaved, writeSaved, type SavedFirstOfNepal } from '@/lib/storage';
 
 interface QuizQuestion {
   question: string;
@@ -19,33 +20,29 @@ export default function FirstOfNepalQuiz({ locale }: FirstOfNepalQuizProps) {
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [quizzesCompleted, setQuizzesCompleted] = useState(0);
-  const [showResult, setShowResult] = useState(false);
-  const [showFeedback, setShowFeedback] = useState(false);
+  // asking ──answer──▶ feedback ──next──▶ asking … last question ──▶ result ──reset──▶ asking
+  const [phase, setPhase] = useState<'asking' | 'feedback' | 'result'>('asking');
+  const showResult = phase === 'result';
+  const showFeedback = phase === 'feedback';
   const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
 
     // Load from localStorage
   useEffect(() => {
-    const savedState = localStorage.getItem('firstOfNepalState');
-    if (savedState) {
-        try {
-            const parsed = JSON.parse(savedState);
-            setHighScore(parsed.highScore || 0);
-            setQuizzesCompleted(parsed.quizzesCompleted || 0);
-        } catch (e) {
-            console.error("Failed to parse First of Nepal state", e);
-        }
+    const parsed = readSaved<SavedFirstOfNepal>(STORAGE_KEYS.firstOfNepal);
+    if (parsed) {
+        setHighScore(parsed.highScore || 0);
+        setQuizzesCompleted(parsed.quizzesCompleted || 0);
     }
   }, []);
 
   // Save to localStorage
   useEffect(() => {
     if (highScore > 0 || quizzesCompleted > 0) {
-        const stateToSave = {
+        writeSaved<SavedFirstOfNepal>(STORAGE_KEYS.firstOfNepal, {
             highScore,
             quizzesCompleted,
             lastPlayed: new Date().toISOString()
-        };
-        localStorage.setItem('firstOfNepalState', JSON.stringify(stateToSave));
+        });
     }
   }, [highScore, quizzesCompleted]);
   
@@ -87,17 +84,14 @@ export default function FirstOfNepalQuiz({ locale }: FirstOfNepalQuizProps) {
     setQuizQuestions(randomizedQuestions);
   }, [t, locale, shuffleArray]);
 
-  // Initialize randomized questions when quiz opens
-  useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => generateRandomQuestions(), 0);
-    }
-  }, [isOpen, generateRandomQuestions]);
 
   const currentQuestion = quizQuestions[currentQuestionIndex];
 
+  const totalQuestions = quizQuestions.length;
+
   const handleAnswer = () => {
-    setShowFeedback(true);
+    if (phase !== 'asking' || !currentQuestion) return;
+    setPhase('feedback');
     const userAnswerLower = userAnswer.toLowerCase().trim();
     const correctAnswerLower = currentQuestion?.correctAnswer.toLowerCase().trim();
     const correctFirstNameLower = correctAnswerLower.split(' ')[0];
@@ -135,12 +129,13 @@ export default function FirstOfNepalQuiz({ locale }: FirstOfNepalQuizProps) {
   };
 
   const handleNext = () => {
-    setShowFeedback(false);
+    if (phase !== 'feedback') return;
     setUserAnswer('');
-    if (currentQuestionIndex < MAX_QUESTIONS - 1) {
+    if (currentQuestionIndex < totalQuestions - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setPhase('asking');
     } else {
-      setShowResult(true);
+      setPhase('result');
       setQuizzesCompleted(prev => prev + 1);
       if (score > highScore) {
           setHighScore(score);
@@ -152,8 +147,7 @@ export default function FirstOfNepalQuiz({ locale }: FirstOfNepalQuizProps) {
     setCurrentQuestionIndex(0);
     setUserAnswer('');
     setScore(0);
-    setShowResult(false);
-    setShowFeedback(false);
+    setPhase('asking');
     generateRandomQuestions(); // Regenerate questions for a new quiz
   };
 
@@ -161,7 +155,11 @@ export default function FirstOfNepalQuiz({ locale }: FirstOfNepalQuizProps) {
     <>
       {!isOpen && (
        <button
-       onClick={() => setIsOpen(true)}
+       onClick={() => {
+         // Every time the quiz opens it starts fresh with new questions.
+         resetQuiz();
+         setIsOpen(true);
+       }}
        className="fixed bottom-4 right-4 bg-gradient-to-r from-red-600 to-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:from-red-700 hover:to-blue-700 transition-all flex items-center gap-2 font-medium"
      >
            <BookOpen size={18} />
@@ -229,7 +227,7 @@ export default function FirstOfNepalQuiz({ locale }: FirstOfNepalQuizProps) {
                 </div>
                 <div className="flex justify-between items-center mt-4 pt-3 border-t">
                   <span className="text-sm text-gray-500">
-                    {t('questionProgress', { current: currentQuestionIndex + 1, total: MAX_QUESTIONS })}
+                    {t('questionProgress', { current: currentQuestionIndex + 1, total: totalQuestions })}
                   </span>
                   {!showFeedback ? (
                     <button
@@ -253,12 +251,12 @@ export default function FirstOfNepalQuiz({ locale }: FirstOfNepalQuizProps) {
               <div className="text-center space-y-4">
                 <h3 className="text-xl font-semibold text-gray-800">{t('quizComplete')}</h3>
                 <div className="text-2xl font-bold text-red-600">
-                  {score} / {MAX_QUESTIONS}
+                  {score} / {totalQuestions}
                 </div>
                 <p className="text-gray-600">
-                  {score === MAX_QUESTIONS
+                  {score === totalQuestions
                     ? t('perfectScore')
-                    : score > MAX_QUESTIONS / 2
+                    : score > totalQuestions / 2
                     ? t('goodScore')
                     : t('keepLearning')}
                 </p>
