@@ -229,6 +229,29 @@ export const PAGE_SEO: Record<string, PageSeo> = {
         'विक्रम सम्वत् र अंग्रेजी मितिबीच दुवैतर्फ तुरुन्तै मिति रूपान्तरण गर्नुहोस्।',
     },
   },
+  '/privacy': {
+    en: {
+      title: 'Privacy Policy',
+      description:
+        'What Piromomo and the Piro Momo Android app collect, why, who processes it, and how to delete your account and data.',
+    },
+    np: {
+      title: 'गोपनीयता नीति',
+      description:
+        'पिरोमोमो वेबसाइट र एन्ड्रोइड एपले कुन जानकारी किन राख्छ, र खाता तथा डाटा कसरी मेटाउने।',
+    },
+  },
+  '/delete-account': {
+    en: {
+      title: 'Delete Your Account',
+      description:
+        'How to permanently delete your Piromomo account and the game progress saved for it, on the website or in the Android app.',
+    },
+    np: {
+      title: 'खाता मेटाउनुहोस्',
+      description: 'वेबसाइट वा एन्ड्रोइड एपबाट आफ्नो पिरोमोमो खाता र सुरक्षित प्रगति स्थायी रूपमा कसरी मेटाउने।',
+    },
+  },
   '/about': {
     en: {
       title: 'About Piromomo',

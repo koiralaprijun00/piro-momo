@@ -1,5 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Sign-in, cloud progress and fonts need the network. Flutter only adds this
+         permission to debug builds, so release builds must ask for it here. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:label="Piro Momo"
         android:name="${applicationName}"
@@ -35,6 +39,11 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Lets the app open the privacy policy and account pages in the browser. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="https"/>
         </intent>
     </queries>
 

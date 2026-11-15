@@ -10,6 +10,7 @@ import GameStatCard from './GameStatCard';
 import { FaGamepad, FaTasks, FaLanguage, FaEdit, FaSync, FaCrown, FaCalendarAlt, FaLandmark, FaQuestionCircle, FaMapMarkedAlt, FaBrain, FaMedal } from 'react-icons/fa';
 import { BsFire } from 'react-icons/bs';
 import BadgeDisplay from './BadgeDisplay';
+import { Link } from '@/i18n/navigation';
 
 export default function ProfilePageContent() {
   const { user } = useAuth();
@@ -291,6 +292,11 @@ export default function ProfilePageContent() {
                 </div>
             </div>
         </div>
+        <p className="mt-8 text-center text-sm text-gray-500">
+          <Link href="/privacy" className="underline hover:text-gray-700">Privacy policy</Link>
+          {' · '}
+          <Link href="/delete-account" className="underline hover:text-red-600">Delete account</Link>
+        </p>
       </div>
     </div>
   );

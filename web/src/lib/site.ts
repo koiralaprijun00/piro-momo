@@ -34,4 +34,6 @@ export const PUBLIC_PATHS: { path: string; priority: number }[] = [
   { path: '/districts-of-nepal', priority: 0.8 },
   { path: '/about', priority: 0.6 },
   { path: '/about-binod', priority: 0.6 },
+  { path: '/privacy', priority: 0.3 },
+  { path: '/delete-account', priority: 0.2 },
 ];

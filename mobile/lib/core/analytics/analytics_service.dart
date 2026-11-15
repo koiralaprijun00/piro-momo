@@ -1,3 +1,7 @@
+import 'package:flutter/foundation.dart';
+
+/// Game events (answers, rounds). Nothing is sent anywhere: events are only
+/// printed in debug builds, so release builds collect no analytics data.
 class AnalyticsService {
   const AnalyticsService();
 
@@ -5,8 +9,8 @@ class AnalyticsService {
     String name, {
     Map<String, Object?> parameters = const <String, Object?>{},
   }) async {
-    // Placeholder hook: replace with Firebase Analytics or preferred provider.
-    // ignore: avoid_print
-    print('analytics: $name -> $parameters');
+    if (kDebugMode) {
+      debugPrint('analytics: $name -> $parameters');
+    }
   }
 }

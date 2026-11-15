@@ -15,7 +15,7 @@ export default function ContentPage({
   title: string;
   intro: string[];
   /** Button that sends readers to the matching game. */
-  cta: { href: string; label: string };
+  cta?: { href: string; label: string };
   children: ReactNode;
 }) {
   return (
@@ -31,12 +31,14 @@ export default function ContentPage({
               <p key={text.slice(0, 24)}>{text}</p>
             ))}
           </div>
-          <Link
-            href={cta.href}
-            className="inline-block mt-5 rounded-full bg-gradient-to-r from-blue-600 to-red-500 px-6 py-2.5 font-semibold text-white shadow-md transition hover:opacity-90 hover:shadow-lg"
-          >
-            {cta.label} →
-          </Link>
+          {cta && (
+            <Link
+              href={cta.href}
+              className="inline-block mt-5 rounded-full bg-gradient-to-r from-blue-600 to-red-500 px-6 py-2.5 font-semibold text-white shadow-md transition hover:opacity-90 hover:shadow-lg"
+            >
+              {cta.label} →
+            </Link>
+          )}
         </div>
       </header>
       {children}

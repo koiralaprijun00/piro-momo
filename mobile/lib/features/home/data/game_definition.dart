@@ -240,7 +240,9 @@ const List<GameDefinition> homeGames = <GameDefinition>[
     routePath: LogoQuizScreen.routePath,
     title: 'Logo Quiz',
     eyebrow: 'Brand Master',
-    description: 'Guess famous Nepali brands from their logos.',
+    // The second sentence keeps the trademark notice visible before playing.
+    description: 'Guess famous Nepali brands from their logos. '
+        'Logos belong to their owners; Piromomo is not affiliated with these brands.',
     assetPath: 'assets/images/logo-quiz.png',
     accentColors: <Color>[
       AppPalette.primaryBlue,

@@ -15,6 +15,7 @@ import { auth } from '@/lib/firebase';
 import { FirebaseError } from 'firebase/app';
 import GameButton from '@/components/ui/GameButton';
 import { useRequest } from '@/lib/requestStatus';
+import { Link } from '@/i18n/navigation';
 import { FaGoogle, FaFacebook } from 'react-icons/fa';
 
 interface AuthFormProps {
@@ -233,6 +234,13 @@ export default function AuthForm({ locale, defaultMode = 'signin' }: AuthFormPro
           {loading ? 'Processing...' : mode === 'signup' ? 'Sign Up' : 'Sign In'}
         </GameButton>
       </form>
+      <p className="text-center text-xs text-gray-500">
+        See our{' '}
+        <Link href="/privacy" className="underline hover:text-gray-700">
+          privacy policy
+        </Link>{' '}
+        for what we store and how to delete your account.
+      </p>
     </div>
   );
 }

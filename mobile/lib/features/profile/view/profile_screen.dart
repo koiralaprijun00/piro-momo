@@ -7,6 +7,7 @@ import '../../auth/data/auth_service.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../../../data/providers.dart';
 import '../../../core/persistence/progress_store.dart';
+import '../../../core/links/external_links.dart';
 import '../../../core/validation/input_validator.dart';
 
 class ProfileStats {
@@ -92,7 +93,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           errorMessage = 'No account found with this email address.';
           break;
         case 'wrong-password':
-          errorMessage = 'Incorrect password. Please try again.';
+        case 'invalid-credential':
+          errorMessage = 'Incorrect email or password. Please try again.';
+          break;
+        case 'requires-recent-login':
+          errorMessage =
+              'For your security, please sign out, sign in again, and then delete your account.';
           break;
         case 'email-already-in-use':
           errorMessage = 'An account already exists with this email address.';
@@ -200,6 +206,59 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
     if (mounted) {
       setState(() => _showSignUp = false);
+    }
+  }
+
+  /// Asks for confirmation (and the password for email accounts), then deletes
+  /// the account and its cloud progress.
+  Future<void> _confirmDeleteAccount(AuthService authService, User user) async {
+    final bool needsPassword = AuthService.usesPassword(user);
+    String password = '';
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) => AlertDialog(
+        title: const Text('Delete your account?'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Text(
+              'This permanently deletes your Piromomo account and the scores saved '
+              'in the cloud. It cannot be undone. Progress saved only on this phone stays.',
+            ),
+            if (needsPassword) ...<Widget>[
+              const SizedBox(height: 16),
+              TextField(
+                onChanged: (String value) => password = value,
+                obscureText: true,
+                autofocus: true,
+                decoration: const InputDecoration(labelText: 'Your password'),
+              ),
+            ],
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: Colors.red.shade700),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Delete account'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    await _guard(() => authService.deleteAccount(
+          password: needsPassword ? password : null,
+        ));
+    if (mounted && _error == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Your account has been deleted.')),
+      );
     }
   }
 
@@ -431,6 +490,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             const SizedBox(height: 14),
             _ErrorBanner(message: _error!),
           ],
+          const SizedBox(height: 24),
+          TextButton.icon(
+            style: TextButton.styleFrom(foregroundColor: Colors.white),
+            icon: const Icon(Icons.delete_forever_rounded, size: 18),
+            label: const Text('Delete account'),
+            onPressed: _busy ? null : () => _confirmDeleteAccount(authService, user),
+          ),
+          const _PrivacyLink(),
         ],
       );
     }
@@ -757,7 +824,26 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ],
           ),
         ),
+        const SizedBox(height: 12),
+        const _PrivacyLink(),
       ],
+    );
+  }
+}
+
+/// "Privacy policy" link shown under the account screens.
+class _PrivacyLink extends StatelessWidget {
+  const _PrivacyLink();
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: TextButton.styleFrom(foregroundColor: Colors.white70),
+      onPressed: () => ExternalLinks.open(ExternalLinks.privacyPolicy),
+      child: const Text(
+        'Privacy policy',
+        style: TextStyle(decoration: TextDecoration.underline, decorationColor: Colors.white70),
+      ),
     );
   }
 }

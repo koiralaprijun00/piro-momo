@@ -1,0 +1,6 @@
+# Copy this file to key.properties (same folder) and fill in your upload key.
+# key.properties is ignored by git: never commit it or the .jks file.
+storeFile=../upload-keystore.jks
+storePassword=CHANGE_ME
+keyAlias=upload
+keyPassword=CHANGE_ME

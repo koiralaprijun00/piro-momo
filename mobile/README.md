@@ -42,3 +42,18 @@ For developers using `jenv`/`asdf`, the repo now contains a `.java-version` file
 1. Fill the festival quiz flow (question engine, streaks, fact panels).
 2. Bring Gau Khane Katha riddles with Nepali/English toggles and progress tracking.
 3. Hook up persistence (local first) and analytics, then prepare for app store assets.
+
+## Releasing to Google Play
+
+1. **Toolchain:** use a current stable Flutter (`flutter upgrade`) and JDK 17. The app targets Android 16 (API 36), which Google Play requires for new apps and updates since 31 August 2026.
+2. **Version:** raise `version:` in `pubspec.yaml` (e.g. `1.0.4+31`). The number after `+` is the versionCode and must be higher than every build you have uploaded before.
+3. **Signing:** copy `android/key.properties.example` to `android/key.properties` and fill in your upload key. Both `key.properties` and the `.jks` file are git-ignored; never commit them. Without `key.properties` the release build is unsigned and Play rejects it.
+4. **Build:** `flutter pub get && flutter build appbundle --release`, then upload `build/app/outputs/bundle/release/app-release.aab`.
+5. **Google sign-in:** add the SHA-1 and SHA-256 of the *App signing key* (Play Console → Test and release → App integrity) to the Android app in Firebase, or Google sign-in fails for people who install from Play.
+6. **Play Console listing:**
+   - Privacy policy URL: `https://piromomo.com/en/privacy`
+   - Data safety: account info (email, name, photo, user ID) and app activity (game progress) are collected for account management and app functionality, encrypted in transit, and users can request deletion. No ads, no analytics, nothing shared or sold.
+   - Account deletion URL: `https://piromomo.com/en/delete-account` (users can also delete in the app: Profile → Delete account).
+   - Target audience: 13 and over (the app is not made for children). Ads: none.
+   - App access: the games need no login; sign-in is optional.
+

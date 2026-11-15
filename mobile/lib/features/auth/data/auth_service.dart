@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
@@ -32,6 +33,77 @@ class AuthService {
     if (user == null) return false;
     await user.reload();
     return _auth.currentUser?.emailVerified ?? false;
+  }
+
+  /// True when the account signs in with an email and password (not only Google).
+  static bool usesPassword(User? user) =>
+      user?.providerData.any((UserInfo info) => info.providerId == 'password') ?? false;
+
+  /// Permanently deletes the signed-in account and the progress saved for it in
+  /// the cloud (this app's `users/{uid}` data and the website's `user_stats/{uid}`).
+  /// Google Play requires apps that let people sign up to offer this in the app.
+  ///
+  /// Firebase only deletes accounts that signed in recently, so this signs in
+  /// again first: with [password] for email accounts, or with Google.
+  /// Throws [FirebaseAuthException] (e.g. `wrong-password`, `requires-recent-login`).
+  Future<void> deleteAccount({String? password}) async {
+    final User? user = _auth.currentUser;
+    if (user == null) return;
+
+    await _reauthenticate(user, password: password);
+
+    final FirebaseFirestore db = FirebaseFirestore.instance;
+    final DocumentReference<Map<String, dynamic>> userDoc =
+        db.collection('users').doc(user.uid);
+    final QuerySnapshot<Map<String, dynamic>> progress =
+        await userDoc.collection('progress').get();
+    final WriteBatch batch = db.batch();
+    for (final QueryDocumentSnapshot<Map<String, dynamic>> doc in progress.docs) {
+      batch.delete(doc.reference);
+    }
+    batch.delete(userDoc);
+    await batch.commit();
+
+    // Stats saved by the website, if this account also played there.
+    final DocumentReference<Map<String, dynamic>> webStats =
+        db.collection('user_stats').doc(user.uid);
+    if ((await webStats.get()).exists) {
+      await webStats.delete();
+    }
+
+    await user.delete();
+    if (!kIsWeb) {
+      await _googleSignIn.signOut();
+    }
+  }
+
+  Future<void> _reauthenticate(User user, {String? password}) async {
+    if (usesPassword(user)) {
+      final String? email = user.email;
+      if (email == null || password == null || password.isEmpty) {
+        throw ArgumentError('Enter your password to delete your account.');
+      }
+      await user.reauthenticateWithCredential(
+        EmailAuthProvider.credential(email: email, password: password),
+      );
+      return;
+    }
+    final bool usesGoogle = user.providerData
+        .any((UserInfo info) => info.providerId == 'google.com');
+    if (usesGoogle && !kIsWeb) {
+      final GoogleSignInAccount? account =
+          await _googleSignIn.signInSilently() ?? await _googleSignIn.signIn();
+      if (account == null) {
+        throw ArgumentError('Account deletion was cancelled.');
+      }
+      final GoogleSignInAuthentication googleAuth = await account.authentication;
+      await user.reauthenticateWithCredential(
+        GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        ),
+      );
+    }
   }
 
   Future<void> signOut() async {

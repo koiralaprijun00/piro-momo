@@ -87,6 +87,11 @@ const AboutPage = () => {
 
         <footer className="mt-12 pt-6 border-t border-gray-200 text-left text-gray-600">
         <p>Crafted with passion, humor, and a deep love for Nepal, Piromomo is created by Nepalis who wanted to make learning about our rich culture and history as engaging as a friendly debate over the best football team.</p>
+        <p className="mt-4 text-sm">
+          <Link href="/privacy" className="text-blue-700 underline">Privacy policy</Link>
+          {' · '}
+          <Link href="/delete-account" className="text-blue-700 underline">Delete your account</Link>
+        </p>
         </footer>
       </div>
     </>

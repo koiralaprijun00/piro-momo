@@ -28,7 +28,14 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
 
   Future<void> _loadLatestGame() async {
     final ProgressStore store = ref.read(progressStoreProvider);
-    final Map<String, dynamic>? data = await store.loadLatestGame();
+    // A broken saved value must not leave the screen loading forever:
+    // it simply shows "no recent games".
+    Map<String, dynamic>? data;
+    try {
+      data = await store.loadLatestGame();
+    } catch (error) {
+      debugPrint('Could not read the latest game: $error');
+    }
     if (mounted) {
       setState(() {
         _latestGame = data;
