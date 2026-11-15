@@ -176,7 +176,13 @@ export default function Home() {
   const festivals = useMemo(() => getFestivalsByLocale(locale) as Festival[], [locale]);
   const festivalIds = useMemo(() => festivals.map((festival: Festival) => festival.id), [festivals]);
 
-  const [game, dispatch] = useReducer(festivalReducer, initialFestivalState);
+  // The first render (also what search engines see) shows the first festival with fixed
+  // options, so the page has real content before JavaScript runs. A random round replaces it
+  // right after loading.
+  const [game, dispatch] = useReducer(festivalReducer, festivals, (list: Festival[]) => ({
+    ...initialFestivalState,
+    round: list.length > 0 ? { festivalId: list[0].id, options: list.slice(0, 4).map((f) => f.name) } : null,
+  }));
   const { phase, mode: gameMode, round, outcome, pointsAwarded, timeLeft, score, streak, bestStreak, history } = game;
 
   // Builds a round (festival + 4 shuffled options). Randomness stays out of the reducer.

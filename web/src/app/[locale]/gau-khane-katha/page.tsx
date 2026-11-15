@@ -52,7 +52,12 @@ export default function RiddlesGamePage() {
   const riddles: RiddlesData = riddlesData;
   const maxAttempts = MAX_RIDDLE_ATTEMPTS;
 
-  const [game, dispatch] = useReducer(riddleReducer, initialRiddleState);
+  // The first render (also what search engines see) shows riddles in their stored order, so the
+  // page has real content before JavaScript runs. They are shuffled right after loading.
+  const [game, dispatch] = useReducer(riddleReducer, (riddles[locale] ?? []).length, (count: number) => ({
+    ...initialRiddleState,
+    order: Array.from({ length: count }, (_, i) => i),
+  }));
   const { phase, attempts, outcome, score, streak, bestStreak, answeredIds } = game;
   const [userAnswer, setUserAnswer] = useState<string>('');
 

@@ -5,6 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import Script from "next/script";
 import { AuthProvider } from '@/context/AuthContext';
 import { pageMetadata } from '@/lib/seo';
+import { SiteJsonLd } from '@/components/PageSeo';
 
 // Home page search metadata; each game's own layout.tsx overrides it for that page.
 export const generateMetadata = pageMetadata('');
@@ -101,6 +102,7 @@ export default async function LocaleLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
           crossOrigin="anonymous"
         />
+        <SiteJsonLd locale={resolvedLocale} />
         <NavBar />
         {children}
         <SpeedInsights/>
