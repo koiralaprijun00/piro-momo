@@ -28,7 +28,10 @@ export const PUBLIC_PATHS: { path: string; priority: number }[] = [
   { path: '/life-checklist', priority: 0.9 },
   { path: '/spend', priority: 0.9 },
   { path: '/date-converter', priority: 0.8 },
-  { path: '/kings-of-nepal/about', priority: 0.7 },
+  { path: '/kings-of-nepal/about', priority: 0.8 },
+  { path: '/gau-khane-katha-with-answers', priority: 0.8 },
+  { path: '/nepal-gk-questions', priority: 0.8 },
+  { path: '/districts-of-nepal', priority: 0.8 },
   { path: '/about', priority: 0.6 },
   { path: '/about-binod', priority: 0.6 },
 ];

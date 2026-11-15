@@ -226,11 +226,15 @@ export const ABOUT_COPY: Record<string, Record<SiteLocale, AboutCopy>> = {
 
 /** Up to three other games linked from each page ("You might also like"). */
 export const RELATED: Record<string, string[]> = {
+  // The list pages link to each other and back to their games.
+  '/gau-khane-katha-with-answers': ['/gau-khane-katha', '/nepal-gk-questions', '/yo-ki-tyo'],
+  '/nepal-gk-questions': ['/general-knowledge', '/districts-of-nepal', '/kings-of-nepal/about'],
+  '/districts-of-nepal': ['/name-districts', '/nepal-gk-questions', '/mandir-chineu'],
   '/guess-festival': ['/mandir-chineu', '/gau-khane-katha', '/general-knowledge'],
-  '/gau-khane-katha': ['/yo-ki-tyo', '/guess-the-word', '/guess-festival'],
-  '/general-knowledge': ['/kings-of-nepal', '/name-districts', '/first-of-nepal'],
+  '/gau-khane-katha': ['/gau-khane-katha-with-answers', '/yo-ki-tyo', '/guess-the-word'],
+  '/general-knowledge': ['/nepal-gk-questions', '/kings-of-nepal', '/name-districts'],
   '/kings-of-nepal': ['/kings-of-nepal/about', '/first-of-nepal', '/general-knowledge'],
-  '/name-districts': ['/mandir-chineu', '/general-knowledge', '/kings-of-nepal'],
+  '/name-districts': ['/districts-of-nepal', '/mandir-chineu', '/general-knowledge'],
   '/mandir-chineu': ['/guess-festival', '/name-districts', '/general-knowledge'],
   '/chineu-ta': ['/spend', '/yo-ki-tyo', '/life-checklist'],
   '/yo-ki-tyo': ['/life-checklist', '/gau-khane-katha', '/spend'],

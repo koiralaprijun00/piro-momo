@@ -75,14 +75,14 @@ export const PAGE_SEO: Record<string, PageSeo> = {
   },
   '/kings-of-nepal/about': {
     en: {
-      title: 'Kings of Nepal – History of the Shah Dynasty',
+      title: 'List of Kings of Nepal (Shah Dynasty, 1768–2008)',
       description:
-        'A short history of the kings of Nepal, from Prithvi Narayan Shah to the last king of the Shah dynasty, with reign dates.',
+        'All 12 Shah kings of Nepal in order, from Prithvi Narayan Shah to Gyanendra Shah, with exact reign dates in AD and BS and a short history of each.',
     },
     np: {
-      title: 'नेपालका राजाहरू – शाह वंशको इतिहास',
+      title: 'नेपालका राजाहरूको सूची (शाह वंश, वि.सं. १८२५–२०६५)',
       description:
-        'पृथ्वीनारायण शाहदेखि शाह वंशका अन्तिम राजासम्म, शासनकालसहित नेपालका राजाहरूको छोटो इतिहास।',
+        'पृथ्वीनारायण शाहदेखि ज्ञानेन्द्र शाहसम्म शाह वंशका १२ राजा क्रमैसँग, वि.सं. र ई.सं. शासनकाल र हरेकको छोटो इतिहाससहित।',
     },
   },
   '/name-districts': {
@@ -181,6 +181,42 @@ export const PAGE_SEO: Record<string, PageSeo> = {
         'नेपालका एक मात्र अर्बपतिको पैसा तपाईंको हातमा। मोमो, बस र भवन किन्नुहोस् र कति छिटो सकिन्छ हेर्नुहोस्।',
     },
   },
+  '/gau-khane-katha-with-answers': {
+    en: {
+      title: 'Riddles with Answers – Gau Khane Katha List',
+      description:
+        'Hundreds of riddles in English with answers, plus the Nepali word for each answer. Tap a riddle to reveal its answer.',
+    },
+    np: {
+      title: 'गाउँखाने कथा उत्तरसहित – पूरा सूची',
+      description:
+        'हजारभन्दा बढी नेपाली गाउँखाने कथा उत्तरसहित, अंग्रेजी अर्थ पनि। उत्तर हेर्न कथामा थिच्नुहोस्।',
+    },
+  },
+  '/nepal-gk-questions': {
+    en: {
+      title: 'Nepal GK Questions and Answers (MCQ)',
+      description:
+        'More than 250 Nepal general knowledge questions with answers, by topic: geography, history, politics, culture, sports, science and more.',
+    },
+    np: {
+      title: 'नेपाल सामान्य ज्ञान प्रश्नोत्तर (MCQ)',
+      description:
+        'नेपालसम्बन्धी २५० भन्दा बढी सामान्य ज्ञान प्रश्न उत्तरसहित, विषय अनुसार: भूगोल, इतिहास, राजनीति, संस्कृति, खेलकुद, विज्ञान र अन्य।',
+    },
+  },
+  '/districts-of-nepal': {
+    en: {
+      title: 'List of 77 Districts of Nepal by Province',
+      description:
+        'All 77 districts of Nepal grouped by its 7 provinces, with the district headquarters, the Nepali name and a map outline of each district.',
+    },
+    np: {
+      title: 'नेपालका ७७ जिल्लाको सूची – प्रदेश अनुसार',
+      description:
+        'नेपालका सातै प्रदेशका ७७ जिल्ला, सदरमुकाम, अंग्रेजी नाम र हरेक जिल्लाको नक्सा आकारसहित।',
+    },
+  },
   '/date-converter': {
     en: {
       title: 'Nepali Date Converter – BS to AD and AD to BS',
@@ -236,19 +272,31 @@ export function alternatesFor(path: string, locale: SiteLocale): Metadata['alter
   };
 }
 
+interface PageMetadataOptions {
+  /** URL path when it differs from the copy key, e.g. '/gau-khane-katha-with-answers/2'. */
+  urlPath?: string;
+  /** Added to the title, e.g. ' – Page 2'. */
+  titleSuffix?: string;
+  /** Set false when the other language has no matching page (e.g. page 5 of a list). */
+  hreflang?: boolean;
+}
+
 /** Builds the metadata for a public page. Used by each route's layout.tsx. */
-export function buildPageMetadata(path: string, localeParam: string): Metadata {
+export function buildPageMetadata(path: string, localeParam: string, options: PageMetadataOptions = {}): Metadata {
   const locale: SiteLocale = isLocale(localeParam) ? localeParam : 'en';
-  const copy = PAGE_SEO[path]?.[locale] ?? PAGE_SEO[''][locale];
+  const base = PAGE_SEO[path]?.[locale] ?? PAGE_SEO[''][locale];
+  const copy = { ...base, title: `${base.title}${options.titleSuffix ?? ''}` };
+  const urlPath = options.urlPath ?? path;
   return {
     // `absolute` so nested layouts can't drop the brand suffix.
     title: { absolute: `${copy.title} | Piromomo` },
     description: copy.description,
-    alternates: alternatesFor(path, locale),
+    alternates:
+      options.hreflang === false ? { canonical: `/${locale}${urlPath}` } : alternatesFor(urlPath, locale),
     openGraph: {
       title: copy.title,
       description: copy.description,
-      url: `/${locale}${path}`,
+      url: `/${locale}${urlPath}`,
       siteName: 'Piromomo',
       locale: locale === 'np' ? 'ne_NP' : 'en_US',
       type: 'website',

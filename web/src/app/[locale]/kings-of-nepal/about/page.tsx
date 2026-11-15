@@ -1,6 +1,7 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { KING_REIGNS } from '@/lib/kings';
 import Image from 'next/image';
 import { useState } from 'react';
 import AdSenseGoogle from '@/components/AdSenseGoogle';
@@ -11,6 +12,7 @@ import { Link } from '@/i18n/navigation';
 
 export default function KingsOfNepalBlog() {
   const [activeKing, setActiveKing] = useState<string | null>(null);
+  const isNepali = useLocale() === 'np';
   
   // Get all kings IDs in chronological order
   const kingsIds = [
@@ -123,6 +125,50 @@ export default function KingsOfNepalBlog() {
               </div>
             </div>
             
+            {/* Summary table: all 12 kings with exact reign dates (lib/kings.ts) */}
+            <section aria-labelledby="kings-table" className="mb-14">
+              <h2 id="kings-table" className="text-2xl font-bold text-gray-900 mb-3">
+                {isNepali ? 'शाह वंशका १२ राजा (वि.सं. १८२५–२०६५)' : 'All 12 Shah kings of Nepal (1768–2008)'}
+              </h2>
+              <div className="overflow-x-auto rounded-xl border border-gray-200">
+                <table className="min-w-full text-left text-sm">
+                  <thead className="bg-gray-50 text-gray-600">
+                    <tr>
+                      <th scope="col" className="px-3 py-2 font-semibold">#</th>
+                      <th scope="col" className="px-3 py-2 font-semibold">{isNepali ? 'राजा' : 'King'}</th>
+                      <th scope="col" className="px-3 py-2 font-semibold">{isNepali ? 'शासनकाल (वि.सं.)' : 'Reign (AD)'}</th>
+                      <th scope="col" className="px-3 py-2 font-semibold">{isNepali ? 'शासनकाल (ई.सं.)' : 'Reign (BS)'}</th>
+                      <th scope="col" className="px-3 py-2 font-semibold">{isNepali ? 'टिप्पणी' : 'Note'}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 bg-white">
+                    {KING_REIGNS.map((reign, index) => {
+                      const ad = `${reign.startAd} – ${reign.endAd}`;
+                      const bs = reign.startBs === reign.endBs ? `वि.सं. ${reign.startBs}` : `वि.सं. ${reign.startBs}–${reign.endBs}`;
+                      return (
+                        <tr key={reign.id}>
+                          <td className="px-3 py-2 text-gray-500">{isNepali ? '०१२३४५६७८९'.split('').reduce((s, d, i) => s.replaceAll(String(i), d), String(index + 1)) : index + 1}</td>
+                          <th scope="row" className="px-3 py-2 font-medium">
+                            <a href={`#${reign.id}`} className="text-blue-700 hover:underline">
+                              {kingTranslations[reign.id]?.title}
+                            </a>
+                          </th>
+                          <td className="px-3 py-2 text-gray-700 whitespace-nowrap">{isNepali ? bs : ad}</td>
+                          <td className="px-3 py-2 text-gray-700 whitespace-nowrap">{isNepali ? ad : bs}</td>
+                          <td className="px-3 py-2 text-gray-600">{reign.note ? (isNepali ? reign.note.np : reign.note.en) : ''}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-2 text-xs text-gray-500">
+                {isNepali
+                  ? 'ई.सं. मितिहरू: विकिपिडिया, १६ नोभेम्बर २०२६ मा हेरिएको। वि.सं. वर्ष ती मितिबाट निकालिएका।'
+                  : 'AD dates: Wikipedia, checked 16 November 2026. BS years are worked out from those dates.'}
+              </p>
+            </section>
+
             {/* Kings List */}
             <div className="space-y-16">
               {kingsIds.map((kingId, index) => (
