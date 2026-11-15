@@ -222,21 +222,22 @@ export default function GuessTempleGame() {
 
   // Initialize temples when category or templeIds change
   // Initialize temples when category or templeIds change
+  // (An empty category also counts as initialized, so it shows "No temples found"
+  // instead of loading forever.)
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       const firstTempleId = initializeShuffledTemples();
       if (firstTempleId) {
         setCurrentTempleId(firstTempleId);
         setCurrentShuffleIndex(1); // Already showing first temple
         setRound((prev) => (prev.phase === 'won' ? prev : { phase: 'asking' }));
         setCurrentGuess('');
-        // We need to check isInitialized here, but we can't depend on stale state inside timeout easily without ref? 
-        // Actually for this logic, just setting isInitialized(true) is fine.
-        setIsInitialized(true);
       } else {
         setCurrentTempleId(null);
       }
+      setIsInitialized(true);
     }, 0);
+    return () => clearTimeout(timer);
   }, [templeIds, initializeShuffledTemples]);
 
   useEffect(() => {

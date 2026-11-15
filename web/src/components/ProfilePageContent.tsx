@@ -14,18 +14,14 @@ import BadgeDisplay from './BadgeDisplay';
 export default function ProfilePageContent() {
   const { user } = useAuth();
   const [stats, setStats] = useState<UserStats | null>(null);
-  const [isSyncing, setIsSyncing] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (user) {
-      // 1. Initial Sync
-      const syncData = async () => {
-        setIsSyncing(true);
-        await syncLocalDataToFirestore(user.uid);
-        setIsSyncing(false);
-      };
-      syncData();
+      // 1. Initial sync. If it fails, the stats below still come from the cloud copy.
+      syncLocalDataToFirestore(user.uid).catch((error) => {
+        console.error('Could not sync local progress:', error);
+      });
 
       // 2. Subscribe to real-time updates
       const unsubscribe = subscribeToUserStats(user.uid, (data) => {

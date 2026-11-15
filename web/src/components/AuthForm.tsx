@@ -14,6 +14,7 @@ import {
 import { auth } from '@/lib/firebase';
 import { FirebaseError } from 'firebase/app';
 import GameButton from '@/components/ui/GameButton';
+import { useRequest } from '@/lib/requestStatus';
 import { FaGoogle, FaFacebook } from 'react-icons/fa';
 
 interface AuthFormProps {
@@ -27,77 +28,60 @@ export default function AuthForm({ locale, defaultMode = 'signin' }: AuthFormPro
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  // idle → submitting → success (stays busy while the next page loads) | error
+  const request = useRequest();
+  const error = request.errorMessage;
+  const loading = request.isSubmitting || request.isSuccess;
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // A message from the other tab (e.g. "Passwords do not match.") doesn't belong here.
+  const switchMode = (next: 'signin' | 'signup') => {
+    if (loading) return;
+    setMode(next);
+    request.reset();
+  };
+
+  /** Turns Firebase errors into a message the form can show. */
+  const toFormError = (err: unknown) =>
+    new Error(err instanceof FirebaseError ? getErrorMessage(err.code) : 'An unexpected error occurred.');
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setLoading(true);
+    if (loading) return;
+    void request.run(async () => {
+      if (mode === 'signup' && password !== confirmPassword) {
+        throw new Error('Passwords do not match.');
+      }
+      try {
+        if (mode === 'signup') {
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          await updateProfile(userCredential.user, { displayName });
+          await sendEmailVerification(userCredential.user);
+          router.push(`/${locale}/auth/verify-email`);
+        } else {
+          await signInWithEmailAndPassword(auth, email, password);
+          router.push(`/${locale}/profile`);
+        }
+      } catch (err) {
+        throw toFormError(err);
+      }
+    });
+  };
 
-    if (mode === 'signup' && password !== confirmPassword) {
-      setError('Passwords do not match.');
-      setLoading(false);
-      return;
-    }
-
-    try {
-      if (mode === 'signup') {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(userCredential.user, { displayName });
-        await sendEmailVerification(userCredential.user);
-        router.push(`/${locale}/auth/verify-email`);
-      } else {
-        await signInWithEmailAndPassword(auth, email, password);
+  const signInWith = (provider: GoogleAuthProvider | FacebookAuthProvider) => {
+    if (loading) return;
+    void request.run(async () => {
+      try {
+        await signInWithPopup(auth, provider);
         router.push(`/${locale}/profile`);
+      } catch (err) {
+        throw toFormError(err);
       }
-    } catch (err) {
-      if (err instanceof FirebaseError) {
-        setError(getErrorMessage(err.code));
-      } else {
-        setError('An unexpected error occurred.');
-      }
-    } finally {
-      setLoading(false);
-    }
+    });
   };
 
-  const handleGoogleSignIn = async () => {
-    setError(null);
-    setLoading(true);
-    try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      router.push(`/${locale}/profile`);
-    } catch (err) {
-      if (err instanceof FirebaseError) {
-        setError(getErrorMessage(err.code));
-      } else {
-        setError('An unexpected error occurred.');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleFacebookSignIn = async () => {
-    setError(null);
-    setLoading(true);
-    try {
-      const provider = new FacebookAuthProvider();
-      await signInWithPopup(auth, provider);
-      router.push(`/${locale}/profile`);
-    } catch (err) {
-      if (err instanceof FirebaseError) {
-        setError(getErrorMessage(err.code));
-      } else {
-        setError('An unexpected error occurred.');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleGoogleSignIn = () => signInWith(new GoogleAuthProvider());
+  const handleFacebookSignIn = () => signInWith(new FacebookAuthProvider());
 
   const getErrorMessage = (code: string) => {
     switch (code) {
@@ -125,7 +109,7 @@ export default function AuthForm({ locale, defaultMode = 'signin' }: AuthFormPro
       {/* Tab Headers */}
       <div className="flex border-b border-gray-200">
         <button
-          onClick={() => setMode('signin')}
+          onClick={() => switchMode('signin')}
           className={`flex-1 py-3 text-sm font-medium transition-colors ${
             mode === 'signin'
               ? 'text-orange-600 border-b-2 border-orange-600'
@@ -135,7 +119,7 @@ export default function AuthForm({ locale, defaultMode = 'signin' }: AuthFormPro
           Sign In
         </button>
         <button
-          onClick={() => setMode('signup')}
+          onClick={() => switchMode('signup')}
           className={`flex-1 py-3 text-sm font-medium transition-colors ${
             mode === 'signup'
               ? 'text-orange-600 border-b-2 border-orange-600'

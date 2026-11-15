@@ -14,6 +14,12 @@ interface DateState {
   day: string;
 }
 
+type Conversion = { key: string } & (
+  | { status: 'converting' }
+  | { status: 'done'; result: ConversionResult }
+  | { status: 'failed'; message: string }
+);
+
 interface DropdownOption {
   id: string;
   name: string;
@@ -327,10 +333,18 @@ export default function DateConverterPage() {
     }
   });
 
-  const [conversionResult, setConversionResult] = useState<ConversionResult | null>(null);
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'toNepali' | 'toEnglish'>('toNepali');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // One conversion at a time: converting → done | failed. Each one remembers the
+  // direction and date it was made for, so changing either makes it stale: an old
+  // answer is never shown next to a new date, and a late result is dropped.
+  const [conversion, setConversion] = useState<Conversion | null>(null);
+  const inputDate = activeTab === 'toNepali' ? englishDate : nepaliDate;
+  const inputKey = `${activeTab}:${inputDate.year}-${inputDate.month}-${inputDate.day}`;
+  const current = conversion?.key === inputKey ? conversion : null;
+  const isAnimating = current?.status === 'converting';
+  const conversionResult = current?.status === 'done' ? current.result : null;
+  const errorMessage = current?.status === 'failed' ? current.message : null;
   
   // Memoized dropdown options
   const englishYearOptions = useMemo(
@@ -483,51 +497,27 @@ export default function DateConverterPage() {
     }
   }, [nepaliDate.year, nepaliDate.month, nepaliDate.day, getDaysInMonth]);
 
-  // Clear error on tab or date change
-  useEffect(() => {
-    setTimeout(() => setErrorMessage(null), 0);
-  }, [activeTab, englishDate, nepaliDate]);
-
-  // Conversion functions
-  const convertToNepali = (): void => {
-    setIsAnimating(true);
-    setErrorMessage(null);
+  // Conversion functions (the short pause lets the "processing" animation play)
+  const convert = (): void => {
+    const key = inputKey;
+    const tab = activeTab;
+    const date = inputDate;
+    setConversion({ key, status: 'converting' });
 
     setTimeout(() => {
-      const result = englishToNepali(englishDate);
-      
-      if (result.success) {
-        setConversionResult(result);
-      } else {
-        setErrorMessage(result.error || t('conversionError'));
-      }
-      
-      setIsAnimating(false);
+      const result = tab === 'toNepali' ? englishToNepali(date) : nepaliToEnglish(date);
+      const finished: Conversion = result.success
+        ? { key, status: 'done', result }
+        : { key, status: 'failed', message: result.error || t('conversionError') };
+      setConversion((prev) => (prev?.key === key && prev.status === 'converting' ? finished : prev));
     }, 800);
   };
-
-  const convertToEnglish = (): void => {
-    setIsAnimating(true);
-    setErrorMessage(null);
-
-    setTimeout(() => {
-      const result = nepaliToEnglish(nepaliDate);
-      
-      if (result.success) {
-        setConversionResult(result);
-      } else {
-        setErrorMessage(result.error || t('conversionError'));
-      }
-      
-      setIsAnimating(false);
-    }, 800);
-  };
+  const convertToNepali = convert;
+  const convertToEnglish = convert;
 
   // Handle tab change with reset to default values
   const handleTabChange = (tab: 'toNepali' | 'toEnglish') => {
     setActiveTab(tab);
-    setConversionResult(null);
-    setErrorMessage(null);
 
     if (tab === 'toNepali') {
       const today = new Date();

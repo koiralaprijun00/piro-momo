@@ -167,7 +167,7 @@ const [fullName, setFullName] = useState('');
         await navigator.share({
           title: t('wouldYouRather.title'),
           text: shareText,
-          url: 'https://piromomo.com/would-you-rather'
+          url: `https://piromomo.com/${locale}/yo-ki-tyo`
         });
       } else {
         await navigator.clipboard.writeText(shareText);

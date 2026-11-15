@@ -13,12 +13,15 @@ interface BadgeCardProps {
   canUnlock: boolean;
   unlockedAt?: string;
   stats: UserStats;
-  onUnlock: () => void;
+  onUnlock: () => void | Promise<void>;
 }
 
 function BadgeCard({ badge, isUnlocked, canUnlock, unlockedAt, stats, onUnlock }: BadgeCardProps) {
-  const [isUnlocking, setIsUnlocking] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  // idle → unlocking (spinner) → celebrating (checkmark) → idle. One at a time, so the
+  // spinner and the checkmark are never drawn on top of each other.
+  const [phase, setPhase] = useState<'idle' | 'unlocking' | 'celebrating'>('idle');
+  const isUnlocking = phase === 'unlocking';
+  const showSuccess = phase === 'celebrating';
   const progress = !isUnlocked && badge.progress ? badge.progress(stats) : null;
   const progressPercent = progress ? Math.min((progress.current / progress.target) * 100, 100) : 0;
 
@@ -31,21 +34,16 @@ function BadgeCard({ badge, isUnlocked, canUnlock, unlockedAt, stats, onUnlock }
   const handleUnlock = async () => {
     if (!canUnlock || isUnlocked || isUnlocking) return;
     
-    setIsUnlocking(true);
-    
-    // Trigger unlock
-    await onUnlock();
-    
-    // Show success state
-    setTimeout(() => {
-      setShowSuccess(true);
-    }, 400);
-    
-    // Reset animation states
-    setTimeout(() => {
-      setIsUnlocking(false);
-      setShowSuccess(false);
-    }, 1500);
+    setPhase('unlocking');
+    try {
+      await onUnlock();
+    } catch (error) {
+      console.error('Could not unlock badge:', error);
+      setPhase('idle');
+      return;
+    }
+    setTimeout(() => setPhase('celebrating'), 400);
+    setTimeout(() => setPhase('idle'), 1500);
   };
 
   return (
@@ -194,6 +192,7 @@ export default function BadgeDisplay({ stats }: BadgeDisplayProps) {
       // Show celebration (optional - could add confetti here)
     } catch (error) {
       console.error('Error unlocking badge:', error);
+      throw error; // the card goes back to "ready to unlock" instead of celebrating
     }
   };
 

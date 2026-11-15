@@ -18,13 +18,17 @@ import { allGameStorageKeys, clearSaved } from '@/lib/storage';
 
 const Navbar = () => {
     const t = useTranslations('Translations');
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    // Only one menu is open at a time: the mobile menu, the "More games" dropdown or the
+    // account menu. Opening one closes the others; Escape or a click outside closes it.
+    const [openMenu, setOpenMenu] = useState<'main' | 'games' | 'user' | null>(null);
+    const isMenuOpen = openMenu === 'main';
+    const isDropdownOpen = openMenu === 'games';
+    const isUserMenuOpen = openMenu === 'user';
+    const closeMenus = () => setOpenMenu(null);
     const menuRef = useRef<HTMLDivElement | null>(null);
     const buttonRef = useRef<HTMLButtonElement | null>(null);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const dropdownButtonRef = useRef<HTMLButtonElement | null>(null);
-    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const userMenuRef = useRef<HTMLDivElement | null>(null);
     const userMenuButtonRef = useRef<HTMLButtonElement | null>(null);
     const { user } = useAuth();
@@ -35,17 +39,9 @@ const Navbar = () => {
         setIsMounted(true);
     }, []);
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
-
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
-
-    const toggleUserMenu = () => {
-        setIsUserMenuOpen(!isUserMenuOpen);
-    };
+    const toggleMenu = () => setOpenMenu((current) => (current === 'main' ? null : 'main'));
+    const toggleDropdown = () => setOpenMenu((current) => (current === 'games' ? null : 'games'));
+    const toggleUserMenu = () => setOpenMenu((current) => (current === 'user' ? null : 'user'));
 
     const handleSignOut = async () => {
         try {
@@ -54,79 +50,38 @@ const Navbar = () => {
             allGameStorageKeys().forEach(clearSaved);
             
             await signOut(auth);
-            setIsUserMenuOpen(false);
+            closeMenus();
             window.location.reload(); // Reload to ensure clean state
         } catch (error) {
             console.error('Error signing out:', error);
         }
     };
 
-    // Close menu when clicking outside
+    // Close the open menu on a click outside it (or its button), or on Escape.
     useEffect(() => {
-        if (!isMenuOpen) return;
-        
+        if (!openMenu) return;
+        const [panel, button] = {
+            main: [menuRef, buttonRef],
+            games: [dropdownRef, dropdownButtonRef],
+            user: [userMenuRef, userMenuButtonRef],
+        }[openMenu];
+
         const handleClickOutside = (event: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node) && 
-                buttonRef.current && !buttonRef.current.contains(event.target as Node)) {
-                setIsMenuOpen(false);
-            }
+            const target = event.target as Node;
+            if (panel.current?.contains(target) || button.current?.contains(target)) return;
+            setOpenMenu(null);
         };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isMenuOpen]);
-
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        if (!isDropdownOpen) return;
-        
-        const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && 
-                dropdownButtonRef.current && !dropdownButtonRef.current.contains(event.target as Node)) {
-                setIsDropdownOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isDropdownOpen]);
-
-    // Close user menu when clicking outside
-    useEffect(() => {
-        if (!isUserMenuOpen) return;
-        
-        const handleClickOutside = (event: MouseEvent) => {
-            if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node) && 
-                userMenuButtonRef.current && !userMenuButtonRef.current.contains(event.target as Node)) {
-                setIsUserMenuOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isUserMenuOpen]);
-
-    // Handle escape key to close menu
-    useEffect(() => {
         const handleEscKey = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                if (isMenuOpen) setIsMenuOpen(false);
-                if (isDropdownOpen) setIsDropdownOpen(false);
-                if (isUserMenuOpen) setIsUserMenuOpen(false);
-            }
+            if (event.key === 'Escape') setOpenMenu(null);
         };
 
+        document.addEventListener('mousedown', handleClickOutside);
         document.addEventListener('keydown', handleEscKey);
         return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
             document.removeEventListener('keydown', handleEscKey);
         };
-    }, [isMenuOpen, isDropdownOpen, isUserMenuOpen]);
+    }, [openMenu]);
 
     // Focus management for mobile menu
     useEffect(() => {
@@ -235,7 +190,7 @@ const Navbar = () => {
                                             <Link
                                                 href="/profile"
                                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500"
-                                                onClick={() => setIsUserMenuOpen(false)}
+                                                onClick={closeMenus}
                                             >
                                                 Profile
                                             </Link>
@@ -320,7 +275,7 @@ const Navbar = () => {
                                             key={index}
                                             href={link.href}
                                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500"
-                                            onClick={() => setIsDropdownOpen(false)}
+                                            onClick={closeMenus}
                                         >
                                             {link.label}
                                         </Link>
@@ -347,7 +302,7 @@ const Navbar = () => {
                                     <Link 
                                         href="/profile"
                                         className="flex items-center text-gray-700 hover:text-orange-500 hover:bg-orange-50 px-3 py-3 rounded-lg text-base font-medium transition-all duration-200"
-                                        onClick={() => setIsMenuOpen(false)}
+                                        onClick={closeMenus}
                                     >
                                         <FaUser className="mr-3 text-gray-400" />
                                         Profile
@@ -355,7 +310,7 @@ const Navbar = () => {
                                     <button
                                         onClick={() => {
                                             handleSignOut();
-                                            setIsMenuOpen(false);
+                                            closeMenus();
                                         }}
                                         className="flex items-center text-left text-gray-700 hover:text-orange-500 hover:bg-orange-50 px-3 py-3 rounded-lg text-base font-medium transition-all duration-200"
                                     >
@@ -371,7 +326,7 @@ const Navbar = () => {
                                     <Link 
                                         href="/auth/signin"
                                         className="flex items-center text-gray-700 hover:text-orange-500 hover:bg-orange-50 px-3 py-3 rounded-lg text-base font-medium transition-all duration-200"
-                                        onClick={() => setIsMenuOpen(false)}
+                                        onClick={closeMenus}
                                     >
                                         <FaUser className="mr-3 text-gray-400" />
                                         Sign In / Sign Up
@@ -385,7 +340,7 @@ const Navbar = () => {
                                     key={index}
                                     href={link.href} 
                                     className="text-gray-700 hover:text-orange-500 hover:bg-orange-50 px-3 py-3 rounded-lg text-base font-medium transition-all duration-200"
-                                    onClick={() => setIsMenuOpen(false)}
+                                    onClick={closeMenus}
                                 >
                                     {link.label}
                                 </Link>
