@@ -57,35 +57,59 @@ export default function PageSeo({ path, locale: localeParam, isGame = true }: { 
     <>
       <JsonLd data={breadcrumb} />
       {isGame && <JsonLd data={webApp} />}
-      {about && (
-        <section aria-labelledby="about-this-page" className="max-w-4xl mx-auto px-4 py-10 text-gray-700">
-          <h2 id="about-this-page" className="text-xl font-semibold text-gray-900 mb-3">
-            {about.heading}
-          </h2>
-          {about.paragraphs.map((text) => (
-            <p key={text.slice(0, 24)} className="mb-3 leading-relaxed">
-              {text}
-            </p>
-          ))}
-          {related.length > 0 && (
-            <nav aria-label={RELATED_HEADING[locale]} className="mt-6">
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500 mb-2">
-                {RELATED_HEADING[locale]}
-              </h3>
-              <ul className="flex flex-wrap gap-2">
-                {related.map((p) => (
-                  <li key={p}>
-                    <Link
-                      href={p}
-                      className="inline-block rounded-full border border-gray-200 px-3 py-1 text-sm text-blue-700 hover:bg-blue-50"
-                    >
-                      {PAGE_SEO[p][locale].title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          )}
+      {(about || related.length > 0) && (
+        <section
+          aria-labelledby={about ? 'about-this-page' : undefined}
+          aria-label={about ? undefined : RELATED_HEADING[locale]}
+          data-page-about=""
+          className="max-w-4xl mx-auto w-full px-4 pt-2 pb-12"
+        >
+          <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+            {/* Same blue-to-red accent as the game cards above. */}
+            <div className="h-1.5 bg-gradient-to-r from-blue-600 to-red-500" aria-hidden="true" />
+            <div className="p-5 sm:p-8">
+              {about && (
+                <>
+                  <h2 id="about-this-page" className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">
+                    {about.heading}
+                  </h2>
+                  <div className="space-y-3 text-base leading-relaxed text-gray-600">
+                    {about.paragraphs.map((text) => (
+                      <p key={text.slice(0, 24)}>{text}</p>
+                    ))}
+                  </div>
+                </>
+              )}
+              {related.length > 0 && (
+                <nav aria-label={RELATED_HEADING[locale]} className={about ? 'mt-8 border-t border-gray-100 pt-6' : ''}>
+                  <h3 className="text-lg font-bold text-gray-900 mb-4">{RELATED_HEADING[locale]}</h3>
+                  <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {related.map((p) => {
+                      const [name, ...rest] = PAGE_SEO[p][locale].title.split(' – ');
+                      return (
+                        <li key={p}>
+                          <Link
+                            href={p}
+                            className="group flex h-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 transition hover:border-transparent hover:bg-gradient-to-r hover:from-blue-600 hover:to-red-500 hover:shadow-md"
+                          >
+                            <span className="min-w-0">
+                              <span className="block font-semibold text-gray-900 group-hover:text-white">{name}</span>
+                              {rest.length > 0 && (
+                                <span className="block text-sm text-gray-500 group-hover:text-white/90">{rest.join(' – ')}</span>
+                              )}
+                            </span>
+                            <span aria-hidden="true" className="shrink-0 text-lg text-blue-600 transition group-hover:translate-x-0.5 group-hover:text-white">
+                              →
+                            </span>
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </nav>
+              )}
+            </div>
+          </div>
         </section>
       )}
     </>

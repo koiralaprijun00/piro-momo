@@ -19,19 +19,26 @@ export default function ContentPage({
   children: ReactNode;
 }) {
   return (
-    <main className="max-w-4xl mx-auto px-4 py-10">
-      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{title}</h1>
-      {intro.map((text) => (
-        <p key={text.slice(0, 24)} className="text-lg text-gray-700 leading-relaxed mb-3">
-          {text}
-        </p>
-      ))}
-      <Link
-        href={cta.href}
-        className="inline-block mt-2 mb-8 rounded-full bg-gradient-to-r from-blue-600 to-red-500 px-5 py-2 font-semibold text-white hover:opacity-90"
-      >
-        {cta.label}
-      </Link>
+    <main className="max-w-4xl mx-auto w-full px-4 py-8 sm:py-12">
+      {/* Same gradient card header as the game pages. */}
+      <header className="bg-gradient-to-br from-blue-600 to-red-500 p-1 rounded-xl shadow-lg mb-8">
+        <div className="px-4 py-6 sm:px-6 sm:py-8 text-white">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">{title}</h1>
+        </div>
+        <div className="bg-white rounded-b-lg p-5 sm:p-8">
+          <div className="space-y-3 text-base sm:text-lg leading-relaxed text-gray-600">
+            {intro.map((text) => (
+              <p key={text.slice(0, 24)}>{text}</p>
+            ))}
+          </div>
+          <Link
+            href={cta.href}
+            className="inline-block mt-5 rounded-full bg-gradient-to-r from-blue-600 to-red-500 px-6 py-2.5 font-semibold text-white shadow-md transition hover:opacity-90 hover:shadow-lg"
+          >
+            {cta.label} →
+          </Link>
+        </div>
+      </header>
       {children}
     </main>
   );

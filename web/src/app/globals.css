@@ -428,3 +428,9 @@ a {
 .gradient-btn:hover {
   opacity: 0.9; /* Slightly reduced opacity for better visibility */
 }
+
+/* A page followed by its "About" section (components/PageSeo.tsx) does not need to fill
+   the whole screen: the section follows straight after the game instead of below a gap. */
+.min-h-screen:has(~ [data-page-about]) {
+  min-height: 0;
+}
